@@ -14,4 +14,5 @@ import lombok.*;
 public class Member {
     @Id
     Long id;
+    String name;
 }
