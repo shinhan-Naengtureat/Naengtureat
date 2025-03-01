@@ -15,4 +15,5 @@ import lombok.*;
 public class Cart {
     @Id
     Long id;
+    int count;
 }
