@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"memberId", "productId"})
 public class Cart extends SuperEntity {
     @Id
     @Column(name = "cart_item_id")
