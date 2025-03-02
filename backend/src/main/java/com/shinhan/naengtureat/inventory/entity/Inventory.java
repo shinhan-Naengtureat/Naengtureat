@@ -33,7 +33,7 @@ public class Inventory extends SuperEntity {
     @Column(nullable = false)
     LocalDateTime inputDate;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     Member memberId;
 
