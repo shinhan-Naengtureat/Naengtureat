@@ -27,7 +27,7 @@ public class SuperEntity {
     private LocalDateTime updateDate;
 
     /**
-     * @@CreateBy, @LastModifiedBy:
+     * {@code @CreatedBy},  {@code @LastModifiedBy}:
      * springSecurity를 통해 현재 로그인한 사용자 정보 기록
      */
     @CreatedBy
