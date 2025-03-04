@@ -30,10 +30,10 @@ public class Member extends SuperEntity {
     @Column(nullable = false, length = 60)
     private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String roadAddressName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String detailAddress;
 
     @Column(nullable = false)
