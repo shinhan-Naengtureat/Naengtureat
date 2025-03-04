@@ -25,10 +25,10 @@ public class Store extends SuperEntity {
     @Column(nullable = false)
     private String placeName; // 스토어 이름
     
-    @Column(name = "x_longitude", nullable = false)
+    @Column(nullable = false)
     private double x; // x 좌표(경도)
     
-    @Column(name = "y_latitude", nullable = false)
+    @Column(nullable = false)
     private double y; // y 좌표(위도)
     
     private String phone; // 전화번호
