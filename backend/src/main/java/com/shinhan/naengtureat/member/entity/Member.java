@@ -18,16 +18,16 @@ public class Member extends SuperEntity {
     private Long id;
     private String image;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 90)
     private String loginId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 90)
     private String loginPw;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String phone;
 
     @Column(nullable = false)

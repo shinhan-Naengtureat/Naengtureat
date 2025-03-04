@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"memberId", "ingredientId"})
+@ToString(exclude = {"member", "ingredient"})
 public class Inventory extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
