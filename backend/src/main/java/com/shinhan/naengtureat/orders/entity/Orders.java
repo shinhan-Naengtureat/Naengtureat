@@ -41,8 +41,8 @@ public class Orders extends SuperEntity {
 	private String method;
 	
 	@Column(nullable = false)
-	private int point_pay;
+	private int pointPay;
 	
 	@Column(nullable = false)
-	private LocalDateTime payment_date;	
+	private LocalDateTime paymentDate;	
 }

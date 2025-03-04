@@ -39,5 +39,5 @@ public class Pay extends SuperEntity {
 	private int balance;
 	
 	@Column(nullable = false)
-	private String customer_uid;
+	private String customerUid;
 }
