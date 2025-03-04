@@ -15,29 +15,29 @@ public class Member extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    Long id;
-    String image;
+    private Long id;
+    private String image;
 
     @Column(nullable = false)
-    String loginId;
+    private String loginId;
 
     @Column(nullable = false)
-    String loginPw;
+    private String loginPw;
 
     @Column(nullable = false)
-    String name;
+    private String name;
 
     @Column(nullable = false)
-    String phone;
+    private String phone;
 
     @Column(nullable = false)
-    String roadAddressName;
+    private String roadAddressName;
 
     @Column(nullable = false)
-    String detailAddress;
+    private String detailAddress;
 
     @Column(nullable = false)
-    int point;
+    private int point;
 
-    int budget;
+    private int budget;
 }
