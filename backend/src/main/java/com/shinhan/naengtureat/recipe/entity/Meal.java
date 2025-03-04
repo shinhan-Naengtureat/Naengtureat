@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "meal")
 public class Meal extends SuperEntity{
 
     @Id

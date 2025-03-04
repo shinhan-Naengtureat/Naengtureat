@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "recipe")
 public class Recipe extends SuperEntity{
 
     @Id

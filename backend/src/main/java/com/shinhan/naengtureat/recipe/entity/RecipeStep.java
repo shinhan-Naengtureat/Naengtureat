@@ -12,7 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "recipe_step")
 public class RecipeStep extends SuperEntity{
 
     @Id
