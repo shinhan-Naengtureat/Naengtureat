@@ -38,7 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web' //gpt
     implementation 'com.squareup.okhttp3:okhttp:4.9.3' //gpt
     implementation 'com.fasterxml.jackson.core:jackson-databind' //gpt
-	
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

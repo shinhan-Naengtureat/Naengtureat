@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.ingredient.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,5 +12,21 @@ import lombok.*;
 @ToString
 public class Ingredient {
     @Id
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 90)
+    private String bigCategory;
+
+    @Column(nullable = false, length = 90)
+    private String smallCategory;
+
+    @Column(nullable = false, length = 30)
+    private String amountUnit;
+
+    @Column(nullable = false)
+    private int standardPrice;
+
+    @Column(nullable = false)
+    private int standardExpDate;
 }
