@@ -19,25 +19,27 @@ public class Inventory extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
-    Long id;
+    private Long id;
 
     @Column(nullable = false)
-    int quantity;
+    private int quantity;
+
+    @Column(nullable = false, length = 30)
+    private String nickName;
+
+    @Column(length = 300)
+    private String memo;
+
+    private LocalDateTime inventoryExpDate;
 
     @Column(nullable = false)
-    String nickName;
-
-    String memo;
-    LocalDateTime inventoryExpDate;
-
-    @Column(nullable = false)
-    LocalDateTime inputDate;
+    private LocalDateTime inputDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    Member memberId;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id")
-    Ingredient ingredientId;
+    private Ingredient ingredient;
 }
