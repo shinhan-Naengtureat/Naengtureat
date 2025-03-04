@@ -24,7 +24,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"member", "recipe"})
 public class Likes extends SuperEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "likes_id")
