@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.ingredient.entity;
 
+import com.shinhan.naengtureat.common.entities.SuperEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Ingredient {
+public class Ingredient extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ingredient_id")
