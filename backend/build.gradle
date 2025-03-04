@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.2.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -33,6 +34,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:1.0.0-M5' //gpt
+    implementation 'org.springframework.boot:spring-boot-starter-web' //gpt
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3' //gpt
+    implementation 'com.fasterxml.jackson.core:jackson-databind' //gpt
+	
 }
 
 tasks.named('test') {
