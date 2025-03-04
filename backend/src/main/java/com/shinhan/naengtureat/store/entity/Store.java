@@ -33,7 +33,7 @@ public class Store extends SuperEntity {
     
     private String phone; // 전화번호
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String roadAddressName; // 도로명 주소
     
     @Column(nullable = false)
