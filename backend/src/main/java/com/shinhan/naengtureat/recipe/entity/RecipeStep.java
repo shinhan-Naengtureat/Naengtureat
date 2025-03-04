@@ -1,7 +1,8 @@
 package com.shinhan.naengtureat.recipe.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.shinhan.naengtureat.common.entities.SuperEntity;
+
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -11,7 +12,20 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class RecipeStep {
+public class RecipeStep extends SuperEntity{
+
     @Id
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recipe_step_id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
+
+    @Column(nullable = false, columnDefinition = "TEXT", length = 1000)
+    private String content;
+
+    @Column
+    private String image;
 }
