@@ -46,7 +46,7 @@ public class Mealplan extends SuperEntity {
     @Column(nullable = false)
     private LocalDateTime date; // 식단일자
     
-    @Column(nullable = false)
+    @Column(length =10, nullable = false)
     private String type; //식단분류
     
     @Column(nullable = false)

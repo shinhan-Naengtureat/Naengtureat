@@ -27,7 +27,7 @@ public class Hashtag extends SuperEntity {
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 Long id;
 	 
-	 @Column(nullable = false)
+	 @Column(length =30 ,nullable = false)
 	 private String keyword;//해시태그ID
 	    
 	    
