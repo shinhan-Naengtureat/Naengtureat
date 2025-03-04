@@ -23,7 +23,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"recipe","hashtag"})
 public class RecipeHashtag extends SuperEntity{
 	 	@Id
 	    @Column(name = "recipe_hashtag_id")
