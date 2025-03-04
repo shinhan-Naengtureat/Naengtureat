@@ -1,7 +1,7 @@
 ---
-name: "[FEAT] 이슈 템플릿"
+name: "[feat] 이슈 템플릿"
 about: 기능 구현 이슈
-title: "[FEAT]"
+title: "[feat]"
 labels: ''
 assignees: ''
 
