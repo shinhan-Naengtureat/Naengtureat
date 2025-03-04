@@ -25,10 +25,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"member", "recipe"})
-public class Comment extends SuperEntity {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id; // 댓글ID
+public class Likes extends SuperEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "likes_id")
+    private Long id; // 좋아요ID
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -37,7 +37,4 @@ public class Comment extends SuperEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe; // 레시피ID
-    
-    @Column(length = 500, nullable = false)
-    private String content; // 댓글내용
 }

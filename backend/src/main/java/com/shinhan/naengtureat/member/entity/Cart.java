@@ -11,24 +11,24 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"memberId", "productId"})
+@ToString(exclude = {"member", "product"})
 public class Cart extends SuperEntity {
     @Id
     @Column(name = "cart_item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(nullable = false)
-    int count;
+    private int count;
 
     @Column(nullable = false)
-    boolean isCheck;
+    private boolean isCheck;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    StoreProduct productId;
+    private StoreProduct product;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    Member memberId;
+    private Member member;
 }
