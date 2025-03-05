@@ -24,11 +24,17 @@ public class Ingredient extends SuperEntity {
     private String smallCategory;
 
     @Column(nullable = false, length = 30)
-    private String amountUnit;
+    private String ingredientUnit;
+
+    @Column(nullable = false, length = 30)
+    private String recipeUnit;
 
     @Column(nullable = false)
-    private int standardPrice;
+    private double standardPrice;
 
     @Column(nullable = false)
     private int standardExpDate;
+
+    @Column(nullable = false)
+    private String standardImage;
 }
