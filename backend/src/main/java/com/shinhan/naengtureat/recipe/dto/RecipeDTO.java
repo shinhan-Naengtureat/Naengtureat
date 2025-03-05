@@ -1,5 +1,8 @@
 package com.shinhan.naengtureat.recipe.dto;
 
+import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.recipe.entity.Meal;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +19,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RecipeDTO {
+    private Long id;
+    private Meal meal;
+    private Member member;
+    private String name;
+    private int price;
+    private String level;
+    private String cookingTime;
+    private String serving;
+    private String image;
+    private String category;
+    private Boolean isDelete;
 }

@@ -1,5 +1,8 @@
 package com.shinhan.naengtureat.pay.vo;
 
+import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.orders.dto.OrdersDTO;
+import com.shinhan.naengtureat.pay.dto.PayDTO;
 import lombok.ToString;
 import lombok.Value;
 
@@ -10,4 +13,18 @@ import lombok.Value;
 @Value
 @ToString
 public class PayVO {
+    Long id;
+    Member member;
+    int balance;
+    String customerUid;
+
+    /**
+     * DTO를 받아서 VO를 생성하는 생성자 추가
+     */
+    public PayVO(PayDTO dto) {
+        this.id = dto.getId();
+        this.member = dto.getMember();
+        this.balance = dto.getBalance();
+        this.customerUid = dto.getCustomerUid();
+    }
 }
