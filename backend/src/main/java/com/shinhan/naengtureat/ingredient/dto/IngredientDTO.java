@@ -1,7 +1,9 @@
 package com.shinhan.naengtureat.ingredient.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Data: Getter, Setter, toString, equals, hashCode, RequiredArgsConstructor 자동 생성
@@ -10,6 +12,16 @@ import lombok.Data;
  * @Builder: 빌더 패턴 지원
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class IngredientDTO {
+    private Long id;
+    private String bigCategory;
+    private String smallCategory;
+    private String ingredientUnit;
+    private String recipeUnit;
+    private double standardPrice;
+    private int standardExpDate;
+    private String standardImage;
 }

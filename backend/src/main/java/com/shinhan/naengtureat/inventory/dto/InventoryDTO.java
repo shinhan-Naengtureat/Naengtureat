@@ -1,7 +1,13 @@
 package com.shinhan.naengtureat.inventory.dto;
 
+import com.shinhan.naengtureat.ingredient.entity.Ingredient;
+import com.shinhan.naengtureat.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 /**
  * @Data: Getter, Setter, toString, equals, hashCode, RequiredArgsConstructor 자동 생성
@@ -10,6 +16,16 @@ import lombok.Data;
  * @Builder: 빌더 패턴 지원
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class InventoryDTO {
+    private Long id;
+    private int quantity;
+    private String nickName;
+    private String memo;
+    private LocalDate inventoryExpDate;
+    private LocalDate inputDate;
+    private Member member;
+    private Ingredient ingredient;
 }

@@ -50,7 +50,7 @@ public class RecipeService {
 
 		// Meal 설정
 		Meal meal = new Meal();
-		meal.setId(recipeDto.getMealId());
+		meal.setId(recipeDto.getMeal().getId());
 		recipe.setMeal(meal);
 
 		// Member 설정
