@@ -18,7 +18,6 @@ public class OrdersDetail extends SuperEntity {
     @Column(name = "orders_detail_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private StoreProduct product;
