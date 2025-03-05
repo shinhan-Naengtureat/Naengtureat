@@ -1,8 +1,8 @@
 package com.shinhan.naengtureat.pay.vo;
 
 import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.orders.dto.OrdersDTO;
 import com.shinhan.naengtureat.pay.dto.PayDTO;
+
 import lombok.ToString;
 import lombok.Value;
 

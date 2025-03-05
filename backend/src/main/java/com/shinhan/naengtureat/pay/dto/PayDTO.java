@@ -1,7 +1,7 @@
 package com.shinhan.naengtureat.pay.dto;
 
 import com.shinhan.naengtureat.member.entity.Member;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

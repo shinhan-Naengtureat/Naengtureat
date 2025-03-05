@@ -1,13 +1,12 @@
 package com.shinhan.naengtureat.orders.vo;
 
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
+import java.time.LocalDateTime;
+
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.orders.dto.OrdersDTO;
+
 import lombok.ToString;
 import lombok.Value;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * @Value: 모든 필드를 private final로 설정 (불변 객체)

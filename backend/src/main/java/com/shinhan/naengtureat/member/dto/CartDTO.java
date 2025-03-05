@@ -2,7 +2,7 @@ package com.shinhan.naengtureat.member.dto;
 
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

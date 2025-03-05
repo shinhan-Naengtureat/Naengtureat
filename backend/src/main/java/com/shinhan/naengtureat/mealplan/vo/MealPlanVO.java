@@ -1,13 +1,13 @@
 package com.shinhan.naengtureat.mealplan.vo;
 
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
+import java.time.LocalDate;
+
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
+
 import lombok.ToString;
 import lombok.Value;
-
-import java.time.LocalDate;
 
 /**
  * @Value: 모든 필드를 private final로 설정 (불변 객체)
