@@ -1,4 +1,4 @@
-package com.shinhan.naengtureat.store.vo;
+package com.shinhan.naengtureat.inventory.vo;
 
 import lombok.ToString;
 import lombok.Value;
@@ -9,5 +9,5 @@ import lombok.Value;
  */
 @Value
 @ToString
-public class StoreVO {
+public class InventoryVO {
 }
