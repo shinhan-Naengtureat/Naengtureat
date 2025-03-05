@@ -14,7 +14,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class Recipe extends SuperEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recipe_id")
@@ -50,5 +49,5 @@ public class Recipe extends SuperEntity{
     private String category;
 
     @Column
-    private Boolean isDelete;
+    private Boolean isDelete;  //null값 저장을 위해 Wrapper class 사용
 }

@@ -1,6 +1,7 @@
 package com.shinhan.naengtureat.recipe.dto;
 
 
+
 import java.util.List;
 
 import com.shinhan.naengtureat.member.entity.Member;
@@ -36,5 +37,6 @@ public class RecipeDTO {
 	private List<RecipeIngredientDTO> ingredients; // 레시피 재료
 	private List<RecipeStepDTO> steps; // 레시피 순서
 	private List<Long> hashtagIds; // 해시태그 ID 리스트
+
 }
 
