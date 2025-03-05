@@ -1,5 +1,7 @@
 package com.shinhan.naengtureat.store.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +18,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class StoreDTO {
+    private Long id; // 카카오 지도 API에서 제공하는 값 사용
+    private String image; // 이미지 URL(또는 default)
+    private String placeName; // 스토어 이름
+    private double x; // x 좌표(경도)
+    private double y; // y 좌표(위도)
+    private String phone; // 전화번호
+    private String roadAddressName; // 도로명 주소
+    private String placeUrl; // http://place.map.kakao.com/16618597
 }
