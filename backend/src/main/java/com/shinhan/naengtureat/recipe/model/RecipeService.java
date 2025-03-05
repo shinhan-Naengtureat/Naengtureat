@@ -1,5 +1,9 @@
 package com.shinhan.naengtureat.recipe.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
@@ -19,14 +23,19 @@ import jakarta.transaction.Transactional;
 @Service
 public class RecipeService {
 
+	@Autowired
 	private RecipeRepository recipeRepository;
-
+	
+	@Autowired
 	private RecipeStepRepository recipeStepRepository;
 
+	@Autowired
 	private RecipeIngredientRepository recipeIngredientRepository;
-
+	
+	@Autowired
 	private RecipeHashtagRepository recipeHashtagRepository;
-
+	
+	 
 	@Transactional
 	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
 		// 1. Recipe 생성 및 저장
@@ -73,7 +82,11 @@ public class RecipeService {
 		}
 
 		// 4. RecipeHashtag 저장
-		for (Long hashtagId : recipeDto.getHashtagIds()) {
+		 List<Long> hashtagIds = recipeDto.getHashtagIds();
+		    if (hashtagIds == null) {
+		        hashtagIds = new ArrayList<>(); // null일 경우 빈 리스트로 처리
+		    }
+		for (Long hashtagId : hashtagIds) {
 			RecipeHashtag recipeHashtag = new RecipeHashtag();
 			Hashtag hashtag = new Hashtag();
 			hashtag.setId(hashtagId);
