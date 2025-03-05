@@ -18,68 +18,68 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class RecipeService {
-	
+
 	private RecipeRepository recipeRepository;
-	
+
 	private RecipeStepRepository recipeStepRepository;
-	
+
 	private RecipeIngredientRepository recipeIngredientRepository;
-	
+
 	private RecipeHashtagRepository recipeHashtagRepository;
-	
-	 @Transactional
-	    public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
-	        // 1. Recipe 생성 및 저장
-	        Recipe recipe = new Recipe();
-	        recipe.setName(recipeDto.getName());
-	        recipe.setPrice(recipeDto.getPrice());
-	        recipe.setLevel(recipeDto.getLevel());
-	        recipe.setCookingTime(recipeDto.getCookingTime());
-	        recipe.setServing(recipeDto.getServing());
-	        recipe.setImage(recipeDto.getImage());
-	        recipe.setCategory(recipeDto.getCategory());
 
-	        // Meal 설정
-	        Meal meal = new Meal();
-	        meal.setId(recipeDto.getMealId());
-	        recipe.setMeal(meal);
+	@Transactional
+	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
+		// 1. Recipe 생성 및 저장
+		Recipe recipe = new Recipe();
+		recipe.setName(recipeDto.getName());
+		recipe.setPrice(recipeDto.getPrice());
+		recipe.setLevel(recipeDto.getLevel());
+		recipe.setCookingTime(recipeDto.getCookingTime());
+		recipe.setServing(recipeDto.getServing());
+		recipe.setImage(recipeDto.getImage());
+		recipe.setCategory(recipeDto.getCategory());
 
-	        // Member 설정
-	        Member member = new Member();
-	        member.setId(memberId);
-	        recipe.setMember(member);
+		// Meal 설정
+		Meal meal = new Meal();
+		meal.setId(recipeDto.getMealId());
+		recipe.setMeal(meal);
 
-	        // 레시피 저장
-	        recipeRepository.save(recipe);
+		// Member 설정
+		Member member = new Member();
+		member.setId(memberId);
+		recipe.setMember(member);
 
-	        // 2. RecipeIngredient 저장
-	        for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
-	            RecipeIngredient recipeIngredient = new RecipeIngredient();
-	            Ingredient ingredient = new Ingredient();
-	            ingredient.setId(ingredientDto.getIngredientId());
-	            recipeIngredient.setIngredient(ingredient);
-	            recipeIngredient.setRecipe(recipe);
-	            recipeIngredient.setQuantity(ingredientDto.getQuantity());
-	            recipeIngredientRepository.save(recipeIngredient);
-	        }
+		// 레시피 저장
+		recipeRepository.save(recipe);
 
-	        // 3. RecipeStep 저장
-	        for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
-	            RecipeStep recipeStep = new RecipeStep();
-	            recipeStep.setRecipe(recipe);
-	            recipeStep.setContent(stepDto.getContent());
-	            recipeStep.setImage(stepDto.getImage());
-	            recipeStepRepository.save(recipeStep);
-	        }
+		// 2. RecipeIngredient 저장
+		for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
+			RecipeIngredient recipeIngredient = new RecipeIngredient();
+			Ingredient ingredient = new Ingredient();
+			ingredient.setId(ingredientDto.getIngredientId());
+			recipeIngredient.setIngredient(ingredient);
+			recipeIngredient.setRecipe(recipe);
+			recipeIngredient.setQuantity(ingredientDto.getQuantity());
+			recipeIngredientRepository.save(recipeIngredient);
+		}
 
-	        // 4. RecipeHashtag 저장
-	        for (Long hashtagId : recipeDto.getHashtagIds()) {
-	            RecipeHashtag recipeHashtag = new RecipeHashtag();
-	            Hashtag hashtag = new Hashtag();
-	            hashtag.setId(hashtagId);
-	            recipeHashtag.setRecipe(recipe);
-	            recipeHashtag.setHashtag(hashtag);
-	            recipeHashtagRepository.save(recipeHashtag);
-	        }
-	    }
+		// 3. RecipeStep 저장
+		for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
+			RecipeStep recipeStep = new RecipeStep();
+			recipeStep.setRecipe(recipe);
+			recipeStep.setContent(stepDto.getContent());
+			recipeStep.setImage(stepDto.getImage());
+			recipeStepRepository.save(recipeStep);
+		}
+
+		// 4. RecipeHashtag 저장
+		for (Long hashtagId : recipeDto.getHashtagIds()) {
+			RecipeHashtag recipeHashtag = new RecipeHashtag();
+			Hashtag hashtag = new Hashtag();
+			hashtag.setId(hashtagId);
+			recipeHashtag.setRecipe(recipe);
+			recipeHashtag.setHashtag(hashtag);
+			recipeHashtagRepository.save(recipeHashtag);
+		}
+	}
 }
