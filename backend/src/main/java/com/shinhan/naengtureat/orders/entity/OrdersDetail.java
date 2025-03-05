@@ -3,6 +3,7 @@ package com.shinhan.naengtureat.orders.entity;
 import com.shinhan.naengtureat.common.entities.SuperEntity;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.pay.entity.Pay;
+import com.shinhan.naengtureat.store.entity.StoreProduct;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,19 +26,18 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"orders"})
-public class OrdersDetail extends SuperEntity {   
+@ToString(exclude = { "orders" })
+public class OrdersDetail extends SuperEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column (name = "orders_detail_id")
+	@Column(name = "orders_detail_id")
 	private Long id;
-	
-	/*
-	 * @ManyToOne(fetch = FetchType.LAZY)
-	 * 
-	 * @JoinColumn(name = "product_id") Store_Product product_id;
-	 */
-	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+
+	@JoinColumn(name = "product_id")
+	private StoreProduct storeProduct;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orders_id")
 	private Orders orders;
@@ -48,5 +48,3 @@ public class OrdersDetail extends SuperEntity {
 	@Column(nullable = false)
 	private int price;
 }
-
-
