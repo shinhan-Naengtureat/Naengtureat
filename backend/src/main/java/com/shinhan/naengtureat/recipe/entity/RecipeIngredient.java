@@ -26,7 +26,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude = {"ingredient", "recipe"})
 public class RecipeIngredient extends SuperEntity {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recipe_ingredient_id", nullable = false)
     private Long id; // 레시피재료ID
 
