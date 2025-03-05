@@ -29,7 +29,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(exclude= {"member","recipe"})
 
-public class Mealplan extends SuperEntity {
+public class MealPlan extends SuperEntity {
     @Id
     @Column(name="meal_plan_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY )
