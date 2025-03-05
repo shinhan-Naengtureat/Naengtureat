@@ -8,6 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/mealplan")
-public class MealplanController {
+public class MealPlanController {
 
 }

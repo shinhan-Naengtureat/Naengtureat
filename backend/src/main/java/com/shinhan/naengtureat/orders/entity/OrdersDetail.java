@@ -15,8 +15,8 @@ import lombok.*;
 public class OrdersDetail extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orders_detail_id")
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
