@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.member.entity.Member;
@@ -42,13 +41,12 @@ public class RecipeService {
 
 	@Autowired
 	private IngredientRepository ingredientRepository;
-	
+
 	// 전체 레시피 조회
 	public List<RecipeVO> getAllRecipes() {
-	    List<Recipe> recipes = recipeRepository.findAll();
-	    return recipes.stream()
-	                  .map(recipe -> new RecipeVO(entityToDTO(recipe))) // DTO를 VO로 변환
-	                  .collect(Collectors.toList());
+		List<Recipe> recipes = recipeRepository.findAll();
+		return recipes.stream().map(recipe -> new RecipeVO(entityToDTO(recipe))) // DTO를 VO로 변환
+				.collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -84,23 +82,21 @@ public class RecipeService {
 
 			double ingredientPrice = (double) ingredient.getStandardPrice();
 			double quantity = ingredientDto.getQuantity();
-			
 
-			totalPrice += (double)(ingredientPrice * quantity);
+			totalPrice += (double) (ingredientPrice * quantity);
 
 			recipeIngredient.setIngredient(ingredient);
-			recipeIngredient.setRecipe(recipe); //Recipe 저장된 객체 사용
+			recipeIngredient.setRecipe(recipe); // Recipe 저장된 객체 사용
 			recipeIngredient.setQuantity((double) quantity);
 
 			recipeIngredientRepository.save(recipeIngredient);
 		}
-		
-		
+
 		// 최종 price 설정 후 업데이트
 		int roundedTotalPrice = (int) Math.round(totalPrice);
 		recipe.setPrice(roundedTotalPrice);
 		recipeRepository.save(recipe); // 최종 가격 저장
-		
+
 		// 3. RecipeStep 저장
 		for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
 			RecipeStep recipeStep = new RecipeStep();
@@ -124,7 +120,7 @@ public class RecipeService {
 			recipeHashtagRepository.save(recipeHashtag);
 		}
 	}
-	
+
 	public RecipeDTO entityToDTO(Recipe recipe) {
 		ModelMapper mapper = new ModelMapper();
 		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);

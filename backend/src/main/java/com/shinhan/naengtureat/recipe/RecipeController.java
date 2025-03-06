@@ -27,23 +27,22 @@ public class RecipeController {
 
 	@Autowired
 	RecipeService recipeService;
-	
+
 	// 전체 레시피 조회
 	@GetMapping
 	public ResponseEntity<Object> getAllRecipes() {
 		try {
-	    List<RecipeVO> recipes = recipeService.getAllRecipes();
-	    return ResponseEntity.ok(recipes);
-		}catch (Exception e) {
-	        e.printStackTrace();
-	        Map<String, String> errorResponse = new HashMap<>();
-	        errorResponse.put("error", "레시피 조회 중 오류 발생");
-	        errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+			List<RecipeVO> recipes = recipeService.getAllRecipes();
+			return ResponseEntity.ok(recipes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "레시피 조회 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-	    }
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
 	}
-
 
 	@PostMapping("/new")
 	public ResponseEntity<String> insertRecipe(@RequestBody RecipeDTO recipeDto, HttpSession session) {
