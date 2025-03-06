@@ -1,6 +1,5 @@
 package com.shinhan.naengtureat.inventory.model;
 
-import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import lombok.extern.slf4j.Slf4j;
