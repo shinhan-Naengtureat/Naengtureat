@@ -1,5 +1,7 @@
 package com.shinhan.naengtureat.chat.openai;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/mealplan")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CustomBotController {
 	@Value("${spring.ai.openai.chat.options.model}")
@@ -30,32 +34,40 @@ public class CustomBotController {
 
 	@Autowired
 	private RestTemplate template;
+//
+//	@GetMapping("/getchat")
+//	public String chat(@RequestParam("prompt") String prompt) {
+//		ChatGPTRequest request = new ChatGPTRequest(model, prompt);
+//		ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
+//		return chatGptResponse.getChoices().get(0).getMessage().getContent();
+//	}
 
-	@GetMapping("/getchat")
-	public String chat(@RequestParam("prompt") String prompt) {
-		ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-		ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
-		return chatGptResponse.getChoices().get(0).getMessage().getContent();
-	}
-
-	@PostMapping(value = "/chat", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> chat(@RequestBody ChatGPTRequest request) {
+	@PostMapping( consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> chat(@RequestBody ChatGPTRequest request) {
 		try {
+			// 1️⃣ 요청 객체 검증
+	        if (request == null || request.getMessages() == null || request.getMessages().isEmpty()) {
+	            return ResponseEntity.badRequest().body("{\"error\": \"잘못된 요청 데이터입니다.\"}");
+	        }
 			// 1. HTTP 헤더 설정 (API 키 추가)
-			System.out.println(request);
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("Authorization", "Bearer " + apiKey);
 			headers.setContentType(MediaType.APPLICATION_JSON);
-			// headers.set("Content-Type", "application/json");
-
+			
 			// 2. 요청 객체 생성 (모델 값 추가)
 			request.setModel(model);
-			//request.setResponse_format("json");
-
-			// 3. HTTP 요청 생성
+			request.setResponse_format(Map.of("type", "json_object"));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+	        System.out.println("🔍 OpenAI 요청 JSON: " + objectMapper.writeValueAsString(request));
+			
+	        // 3. HTTP 요청 생성
 			HttpEntity<ChatGPTRequest> entity = new HttpEntity<>(request);
+			 System.out.println("🛠️ entity 생성 완료: " + entity);
 			// 4. API 호출
 			ResponseEntity<ChatGptResponse> response = template.postForEntity(apiURL, entity, ChatGptResponse.class);
+			 System.out.println("✅ OpenAI API 응답 성공: " + response);
+			
 			// 5. 응답 처리
 			ChatGptResponse responseBody = response.getBody();
 			
@@ -75,6 +87,7 @@ public class CustomBotController {
 						.body("{\"error\": \"No response from OpenAI API\"}");
 			}
 		} catch (Exception e) {
+			 System.out.println("❌ OpenAI API 호출 실패: " + e.getMessage());
 			return ResponseEntity.internalServerError().contentType(MediaType.APPLICATION_JSON)
 					.body("{\"error\": \"" + e.getMessage() + "\"}");
 		}
