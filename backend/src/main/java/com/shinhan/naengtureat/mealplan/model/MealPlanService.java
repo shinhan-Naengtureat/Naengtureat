@@ -12,17 +12,17 @@ import com.shinhan.naengtureat.recipe.model.RecipeRepository;
 public class MealPlanService {
 
 	@Autowired
-	RecipeRepository recipeRepo;
+	RecipeRepository recipeRepository;
 	
 	@Autowired
-	RecipeHashtagRepository recipeHashRepo;
+	RecipeHashtagRepository recipeHashRepository;
 
 	public List<String> getCategoryAll() {
-		return recipeRepo.findCategoryAll();
+		return recipeRepository.findCategoryAll();
 	}
 
 	public List<String> getThemeAll() {
-		return recipeHashRepo.findThemeAll();
+		return recipeHashRepository.findThemeAll();
 	}
 	
 }
