@@ -74,9 +74,10 @@ public class RecipeController {
 	
 	
 	@GetMapping("/myrecipe/{mid}")
-	public List<Recipe> getMethodName(@PathVariable("mid") Long mid ) {
+	public ResponseEntity<Object> getMethodName(@PathVariable("mid") Long mid ) {
 		Member member = Member.builder().id(mid).build();
-		return recipeService.findRecipeByMember(member);
+		List<Recipe> recipeList = recipeService.findRecipeByMember(member);
+		return ResponseEntity.ok(recipeList);
 	}
 	
 }
