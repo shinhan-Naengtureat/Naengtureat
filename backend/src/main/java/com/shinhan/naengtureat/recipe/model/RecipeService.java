@@ -41,6 +41,14 @@ public class RecipeService {
 
 	@Autowired
 	private IngredientRepository ingredientRepository;
+	
+	// 상세 레시피 조회
+	public RecipeVO getRecipeDetail(Long recipeId) {
+		Recipe recipe = recipeRepository.findById(recipeId).orElse(null);
+		RecipeDTO recipeDTO = entityToDTO(recipe);
+		RecipeVO recipeVO = new RecipeVO(recipeDTO);
+		return recipeVO;
+	}
 
 	// 전체 레시피 조회
 	public List<RecipeVO> getAllRecipes() {

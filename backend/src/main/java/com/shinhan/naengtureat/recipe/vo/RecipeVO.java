@@ -1,11 +1,9 @@
 package com.shinhan.naengtureat.recipe.vo;
 
-import java.util.List;
-
 import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.pay.dto.PayDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.entity.Meal;
+
 import lombok.ToString;
 import lombok.Value;
 

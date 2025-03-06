@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,22 @@ public class RecipeController {
 
 	@Autowired
 	RecipeService recipeService;
+	
+	// 상세 레시피 조회
+	@GetMapping("/{recipe_id}")
+	public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipe_id") Long recipeId){
+		try {
+			RecipeVO recipe = recipeService.getRecipeDetail(recipeId);
+			return ResponseEntity.ok(recipe);
+		}catch(Exception e){
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "레시피 조회 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+	}
 
 	// 전체 레시피 조회
 	@GetMapping
