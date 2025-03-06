@@ -1,4 +1,8 @@
 package com.shinhan.naengtureat.inventory.model;
 
-public class InventoryRepository {
+import com.shinhan.naengtureat.inventory.entity.Inventory;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+
 }
