@@ -41,10 +41,10 @@ public class OrdersDetail extends SuperEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orders_id")
 	private Orders orders;
-	
+
 	@Column(nullable = false)
 	private int count;
-	
+
 	@Column(nullable = false)
 	private int price;
 }
