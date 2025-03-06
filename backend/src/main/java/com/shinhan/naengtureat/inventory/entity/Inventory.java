@@ -22,7 +22,8 @@ public class Inventory extends SuperEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Double quantity;
+
+    private double quantity;
 
     @Column(nullable = false, length = 30)
     private String nickName;
