@@ -2,9 +2,12 @@ package com.shinhan.naengtureat.recipe.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
@@ -18,6 +21,7 @@ import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.entity.RecipeHashtag;
 import com.shinhan.naengtureat.recipe.entity.RecipeIngredient;
 import com.shinhan.naengtureat.recipe.entity.RecipeStep;
+import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
 import jakarta.transaction.Transactional;
 
@@ -38,6 +42,14 @@ public class RecipeService {
 
 	@Autowired
 	private IngredientRepository ingredientRepository;
+	
+	// 전체 레시피 조회
+	public List<RecipeVO> getAllRecipes() {
+	    List<Recipe> recipes = recipeRepository.findAll();
+	    return recipes.stream()
+	                  .map(recipe -> new RecipeVO(entityToDTO(recipe))) // DTO를 VO로 변환
+	                  .collect(Collectors.toList());
+	}
 
 	@Transactional
 	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
@@ -111,5 +123,11 @@ public class RecipeService {
 			recipeHashtag.setHashtag(hashtag);
 			recipeHashtagRepository.save(recipeHashtag);
 		}
+	}
+	
+	public RecipeDTO entityToDTO(Recipe recipe) {
+		ModelMapper mapper = new ModelMapper();
+		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
+		return dto;
 	}
 }
