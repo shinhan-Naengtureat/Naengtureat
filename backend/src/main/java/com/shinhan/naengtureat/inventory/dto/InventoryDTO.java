@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Builder
 public class InventoryDTO {
     private Long id;
-    private int quantity;
+    private double quantity;
     private String nickName;
     private String memo;
     private LocalDate inventoryExpDate;

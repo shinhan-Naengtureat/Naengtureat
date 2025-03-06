@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @ToString
 public class InventoryVO {
     Long id;
-    int quantity;
+    double quantity;
     String nickName;
     String memo;
     LocalDate inventoryExpDate;
