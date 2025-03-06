@@ -30,11 +30,11 @@ public class Comment extends SuperEntity {
     @Column(name = "comment_id")
     private Long id; // 댓글ID
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member; // 멤버번호
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe; // 레시피ID
     

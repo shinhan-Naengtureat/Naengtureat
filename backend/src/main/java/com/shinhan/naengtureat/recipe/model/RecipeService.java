@@ -159,6 +159,6 @@ public class RecipeService {
 	}
 	
 	public List<Comment> getComments(Long recipeId){
-		return commentRepository.findByRecipeId(recipeId);
+		return commentRepository.findCommentsByRecipeId(recipeId);
 	}
 }
