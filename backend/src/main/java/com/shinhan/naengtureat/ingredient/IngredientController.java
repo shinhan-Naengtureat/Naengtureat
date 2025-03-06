@@ -1,10 +1,8 @@
 package com.shinhan.naengtureat.ingredient;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
-import com.shinhan.naengtureat.ingredient.vo.IngredientVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,13 +29,13 @@ public class IngredientController {
 
     @GetMapping("/{ingredientId}")
     public ResponseEntity<Object> getIngredientById(@PathVariable Long ingredientId) {
-        IngredientVO ingredient = ingredientService.getStandardIngredientById(ingredientId);
+        Ingredient ingredient = ingredientService.getStandardIngredientById(ingredientId);
 
         if (ingredient != null) {
             return ResponseEntity.ok(ingredient);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Ingredient with ID " + ingredientId + " not found");
+                    .body("재료 ID: " + ingredientId + "를 찾을 수 없습니다.");
         }
     }
 }
