@@ -49,5 +49,5 @@ public class Recipe extends SuperEntity{
     private String category;
 
     @Column
-    private Boolean isDelete;  //null값 저장을 위해 Wrapper class 사용
+    private boolean isDelete;
 }
