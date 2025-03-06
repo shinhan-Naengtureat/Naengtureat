@@ -39,5 +39,5 @@ public class RecipeIngredient extends SuperEntity {
     private Recipe recipe; // 레시피ID
     
     @Column(nullable = false)
-    private int quantity; // 수량
+    private Double quantity; // 수량
 }

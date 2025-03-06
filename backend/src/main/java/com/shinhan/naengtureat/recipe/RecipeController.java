@@ -28,7 +28,7 @@ public class RecipeController {
 			// 세션에서 로그인된 사용자 정보 가져오기
 			Long memberId = (Long) session.getAttribute("memberId");
 			if (memberId == null) {
-				memberId = 1L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
+				memberId = 2L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
 			}
 
 			// 서비스에 DTO와 memberId를 넘김

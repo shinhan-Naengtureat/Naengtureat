@@ -26,86 +26,90 @@ public class RecipeService {
 
 	@Autowired
 	private RecipeRepository recipeRepository;
-	
+
 	@Autowired
 	private RecipeStepRepository recipeStepRepository;
 
 	@Autowired
 	private RecipeIngredientRepository recipeIngredientRepository;
-	
+
 	@Autowired
 	private RecipeHashtagRepository recipeHashtagRepository;
-	
+
 	@Autowired
 	private IngredientRepository ingredientRepository;
-	 
-    @Transactional
-    public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
-        // 1. Recipe 생성 및 저장
-        Recipe recipe = new Recipe();
-        recipe.setName(recipeDto.getName());
-        recipe.setLevel(recipeDto.getLevel());
-        recipe.setCookingTime(recipeDto.getCookingTime());
-        recipe.setServing(recipeDto.getServing());
-        recipe.setImage(recipeDto.getImage());
-        recipe.setCategory(recipeDto.getCategory());
 
-        // Meal 설정
-        Meal meal = new Meal();
-        meal.setId(recipeDto.getMeal().getId());
-        recipe.setMeal(meal);
+	@Transactional
+	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
+		// 1. Recipe 생성 및 저장
+		Recipe recipe = new Recipe();
+		recipe.setName(recipeDto.getName());
+		recipe.setLevel(recipeDto.getLevel());
+		recipe.setCookingTime(recipeDto.getCookingTime());
+		recipe.setServing(recipeDto.getServing());
+		recipe.setImage(recipeDto.getImage());
+		recipe.setCategory(recipeDto.getCategory());
 
-        // Member 설정
-        Member member = new Member();
-        member.setId(memberId);
-        recipe.setMember(member);
+		// Meal 설정
+		Meal meal = new Meal();
+		meal.setId(recipeDto.getMeal().getId());
+		recipe.setMeal(meal);
 
-        // **가격 계산 로직**
-        int totalPrice = 0;
+		// Member 설정
+		Member member = new Member();
+		member.setId(memberId);
+		recipe.setMember(member);
 
-        // 2. RecipeIngredient 저장 및 가격 계산
-        for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
-            RecipeIngredient recipeIngredient = new RecipeIngredient();
-            Ingredient ingredient = ingredientRepository.findById(ingredientDto.getIngredientId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 재료 ID: " + ingredientDto.getIngredientId()));
+		// **레시피 먼저 저장**
+		recipe = recipeRepository.save(recipe);
 
-            int ingredientPrice = (int) ingredient.getStandardPrice(); // 재료 가격 가져오기
-            int quantity = ingredientDto.getQuantity();
-            
+		// **2. RecipeIngredient 저장 및 가격 계산**
+		double totalPrice = 0;
+		for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
+			RecipeIngredient recipeIngredient = new RecipeIngredient();
+			Ingredient ingredient = ingredientRepository.findById(ingredientDto.getIngredientId()).orElseThrow(
+					() -> new IllegalArgumentException("존재하지 않는 재료 ID: " + ingredientDto.getIngredientId()));
 
-            totalPrice += ingredientPrice * quantity; // 가격 합산
+			double ingredientPrice = (double) ingredient.getStandardPrice();
+			double quantity = ingredientDto.getQuantity();
+			
 
-            recipeIngredient.setIngredient(ingredient);
-            recipeIngredient.setRecipe(recipe);
-            recipeIngredient.setQuantity(ingredientDto.getQuantity());
-            recipeIngredientRepository.save(recipeIngredient);
-        }
+			totalPrice += (double)(ingredientPrice * quantity);
 
-        // 최종 price 설정 후 저장
-        recipe.setPrice(totalPrice);
-        recipeRepository.save(recipe);
+			recipeIngredient.setIngredient(ingredient);
+			recipeIngredient.setRecipe(recipe); // 🔹 Recipe 저장된 객체 사용
+			recipeIngredient.setQuantity((double) quantity);
 
-        // 3. RecipeStep 저장
-        for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
-            RecipeStep recipeStep = new RecipeStep();
-            recipeStep.setRecipe(recipe);
-            recipeStep.setContent(stepDto.getContent());
-            recipeStep.setImage(stepDto.getImage());
-            recipeStepRepository.save(recipeStep);
-        }
+			recipeIngredientRepository.save(recipeIngredient);
+		}
+		
+		
+		// **최종 price 설정 후 업데이트**
+		int roundedTotalPrice = (int) Math.round(totalPrice);
+		recipe.setPrice(roundedTotalPrice);
+		recipeRepository.save(recipe); // 🔹 최종 가격 저장
+		
+		// 3. RecipeStep 저장
+		for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
+			RecipeStep recipeStep = new RecipeStep();
+			recipeStep.setRecipe(recipe);
+			recipeStep.setContent(stepDto.getContent());
+			recipeStep.setImage(stepDto.getImage());
+			recipeStepRepository.save(recipeStep);
+		}
 
-        // 4. RecipeHashtag 저장
-        List<Long> hashtagIds = recipeDto.getHashtagIds();
-        if (hashtagIds == null) {
-            hashtagIds = new ArrayList<>(); // null 방지
-        }
-        for (Long hashtagId : hashtagIds) {
-            RecipeHashtag recipeHashtag = new RecipeHashtag();
-            Hashtag hashtag = new Hashtag();
-            hashtag.setId(hashtagId);
-            recipeHashtag.setRecipe(recipe);
-            recipeHashtag.setHashtag(hashtag);
-            recipeHashtagRepository.save(recipeHashtag);
-        }
-    }
+		// 4. RecipeHashtag 저장
+		List<Long> hashtagIds = recipeDto.getHashtagIds();
+		if (hashtagIds == null) {
+			hashtagIds = new ArrayList<>(); // null 방지
+		}
+		for (Long hashtagId : hashtagIds) {
+			RecipeHashtag recipeHashtag = new RecipeHashtag();
+			Hashtag hashtag = new Hashtag();
+			hashtag.setId(hashtagId);
+			recipeHashtag.setRecipe(recipe);
+			recipeHashtag.setHashtag(hashtag);
+			recipeHashtagRepository.save(recipeHashtag);
+		}
+	}
 }
