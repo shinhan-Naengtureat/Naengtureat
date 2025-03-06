@@ -7,13 +7,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
 import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
@@ -62,4 +67,47 @@ public class RecipeController {
 			return new ResponseEntity<>("레시피 등록 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PostMapping("/{recipe_id}/comment")
+	public ResponseEntity<Object> insertComment(@PathVariable("recipe_id") Long recipeId,
+			@RequestBody CommentDTO commentDto, HttpSession session) {
+		try {
+			Long memberId = (Long) session.getAttribute("memberId");
+			// 로그인 설정이 되면 아래 코드 제거
+			if (memberId == null) {
+				memberId = 1L; // 임시 사용자 ID 설정
+			}
+			
+			// 댓글 등록 서비스 호출
+			CommentDTO savedComment = recipeService.addComment(recipeId, memberId, commentDto.getContent());
+
+			return ResponseEntity.ok(savedComment);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 등록에 실패하였습니다.");
+		}
+	}
+
+	@PutMapping("/comment/{comment_id}")
+	public ResponseEntity<Object> updateComment(@PathVariable("comment_id") Long commentId,
+			@RequestBody CommentDTO commentDto) {
+		try {
+			Comment updatedComment = recipeService.updateComment(commentId, commentDto);
+			return ResponseEntity.ok(updatedComment); // 수정된 댓글 반환
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 수정에 실패하였습니다.");
+		}
+	}
+	
+	@DeleteMapping("/comment/{comment_id}")
+	public ResponseEntity<String> deleteComment(@PathVariable("comment_id") Long commentId){
+		recipeService.deleteComment(commentId);
+		return ResponseEntity.ok("delete ok");
+	}
+	
+	@GetMapping("/{recipe_id}/comment")
+	public ResponseEntity<Object> getComment(@PathVariable("recipe_id") Long recipeId){
+		List<Comment> comments = recipeService.getComments(recipeId);
+        return ResponseEntity.ok(comments);
+	}
+
 }

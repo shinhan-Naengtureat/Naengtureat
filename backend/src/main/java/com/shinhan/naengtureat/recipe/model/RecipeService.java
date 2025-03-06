@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.recipe.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Service;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.member.model.MemberRepository;
+import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
+import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
 import com.shinhan.naengtureat.recipe.entity.Meal;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
@@ -41,6 +45,12 @@ public class RecipeService {
 
 	@Autowired
 	private IngredientRepository ingredientRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	// 전체 레시피 조회
 	public List<RecipeVO> getAllRecipes() {
@@ -125,5 +135,30 @@ public class RecipeService {
 		ModelMapper mapper = new ModelMapper();
 		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
 		return dto;
+	}
+
+	@Transactional
+	public CommentDTO addComment(Long recipeId, Long memberId, String content) {
+		Recipe recipe = recipeRepository.findById(recipeId).orElse(null);
+		Member member = memberRepository.findById(memberId).orElse(null);
+		Comment comment = Comment.builder().recipe(recipe).member(member).content(content).build();
+		commentRepository.save(comment);
+
+		return new CommentDTO(comment.getContent()); // 댓글 내용만 반환
+	}
+
+	@Transactional
+	public Comment updateComment(Long commentId, CommentDTO commentDto) {
+		Comment comment = commentRepository.findById(commentId).orElse(null);
+		comment.setContent(commentDto.getContent());
+		return commentRepository.save(comment);
+	}
+	
+	public void deleteComment(Long commentId) {
+		commentRepository.deleteById(commentId);
+	}
+	
+	public List<Comment> getComments(Long recipeId){
+		return commentRepository.findByRecipeId(recipeId);
 	}
 }
