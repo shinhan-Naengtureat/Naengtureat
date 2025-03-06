@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.inventory;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
