@@ -15,5 +15,5 @@ import lombok.ToString;
 @ToString
 public class RecipeIngredientDTO {
 	private Long ingredientId; // Ingredient ID
-	private int quantity; // 수량
+	private double quantity; // 수량
 }

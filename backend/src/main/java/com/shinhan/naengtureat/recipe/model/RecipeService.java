@@ -60,10 +60,10 @@ public class RecipeService {
 		member.setId(memberId);
 		recipe.setMember(member);
 
-		// **레시피 먼저 저장**
+		// 레시피 먼저 저장
 		recipe = recipeRepository.save(recipe);
 
-		// **2. RecipeIngredient 저장 및 가격 계산**
+		// 2. RecipeIngredient 저장 및 가격 계산
 		double totalPrice = 0;
 		for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
 			RecipeIngredient recipeIngredient = new RecipeIngredient();
@@ -77,17 +77,17 @@ public class RecipeService {
 			totalPrice += (double)(ingredientPrice * quantity);
 
 			recipeIngredient.setIngredient(ingredient);
-			recipeIngredient.setRecipe(recipe); // 🔹 Recipe 저장된 객체 사용
+			recipeIngredient.setRecipe(recipe); //Recipe 저장된 객체 사용
 			recipeIngredient.setQuantity((double) quantity);
 
 			recipeIngredientRepository.save(recipeIngredient);
 		}
 		
 		
-		// **최종 price 설정 후 업데이트**
+		// 최종 price 설정 후 업데이트
 		int roundedTotalPrice = (int) Math.round(totalPrice);
 		recipe.setPrice(roundedTotalPrice);
-		recipeRepository.save(recipe); // 🔹 최종 가격 저장
+		recipeRepository.save(recipe); // 최종 가격 저장
 		
 		// 3. RecipeStep 저장
 		for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
