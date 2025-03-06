@@ -4,6 +4,11 @@ import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 
+import lombok.ToString;
+import lombok.Value;
+
+@Value
+@ToString
 public class StoreProductVO {
 	
 	Long id; // 스토어 상품 번호
