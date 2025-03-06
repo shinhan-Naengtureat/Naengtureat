@@ -3,23 +3,19 @@ package com.shinhan.naengtureat.inventory;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
-import com.shinhan.naengtureat.ingredient.vo.IngredientVO;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.inventory.vo.InventoryVO;
 import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.member.model.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -34,8 +30,6 @@ public class InventoryController {
 
     @Autowired
     IngredientService ingredientService;
-    @Autowired
-    private IngredientRepository ingredientRepository;
 
     @PostMapping("/new")
     public ResponseEntity<Object> createInventory(HttpSession session,
