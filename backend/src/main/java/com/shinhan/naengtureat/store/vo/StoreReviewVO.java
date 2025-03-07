@@ -17,15 +17,4 @@ public class StoreReviewVO {
     Store store;
     Member member;
 
-    /**
-     * DTO를 받아서 VO를 생성하는 생성자 추가
-     */
-    public StoreReviewVO(StoreReviewDTO dto) {
-        this.id = dto.getId();
-        this.rate = dto.getRate();
-        this.comment = dto.getComment();
-        this.store = dto.getStore();
-        this.member = dto.getMember();
-    }
-
 }

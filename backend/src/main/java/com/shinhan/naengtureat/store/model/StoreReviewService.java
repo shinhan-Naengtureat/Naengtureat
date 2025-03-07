@@ -10,6 +10,9 @@ import com.shinhan.naengtureat.store.dto.StoreReviewDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreReview;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class StoreReviewService {
 	

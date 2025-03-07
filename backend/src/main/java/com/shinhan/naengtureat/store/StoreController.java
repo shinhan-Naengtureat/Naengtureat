@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/store")
 public class StoreController {
 	
-//	private final StoreService storeService;
 	private final StoreReviewService storeReviewService;
 	
 	// 스토어 후기 조회
@@ -35,7 +34,6 @@ public class StoreController {
 			Store storeEntity = Store.builder().id(storeId).build();
 			
 			List<StoreReviewDTO> storeReviewDTOList = storeReviewService.getReviewByStore(storeEntity);
-			log.info("[storeReviewDTOList] : " + storeReviewDTOList);
 			
 			return ResponseEntity.ok(storeReviewDTOList);
 		} catch (Exception e) {
