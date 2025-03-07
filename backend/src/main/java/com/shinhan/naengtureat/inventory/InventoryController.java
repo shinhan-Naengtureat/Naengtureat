@@ -1,11 +1,7 @@
 package com.shinhan.naengtureat.inventory;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.member.model.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class InventoryController {
 
     @Autowired
-    MemberService memberService;
-
-    @Autowired
     InventoryService inventoryService;
-
-    @Autowired
-    IngredientService ingredientService;
 
     @PostMapping("/new")
     public ResponseEntity<Object> createInventory(HttpSession session,
                                                   @RequestBody InventoryDTO inventoryDTO) {
+        // todo: memberDTO, IngredientDTO 수정 및 로직 수정
         // Member member = (Member) session.getAttribute("member");
-        Member member = memberService.getMemberById(1L);
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인 필요합니다.");
-        }
-
-        if (inventoryDTO.getIngredient().getId() == null) {
+        if (inventoryDTO.getIngredientId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("ingredientId 값이 필요합니다.");
         }
 
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredient().getId());
-
-        inventoryDTO.setMember(member);
-        inventoryDTO.setIngredient(ingredient);
-
+        inventoryDTO.setMemberId(1L);
         String resultMessage = inventoryService.createInventory(inventoryDTO);
         return ResponseEntity.ok(resultMessage);
     }
+
 }

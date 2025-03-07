@@ -26,6 +26,6 @@ public class InventoryDTO {
     private String memo;
     private LocalDate inventoryExpDate;
     private LocalDate inputDate;
-    private Member member;
-    private Ingredient ingredient;
+    private Long memberId;
+    private Long ingredientId;
 }
