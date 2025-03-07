@@ -1,10 +1,8 @@
 package com.shinhan.naengtureat.inventory;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class InventoryController {
 
     @Autowired
-    MemberService memberService;
-
-    @Autowired
     InventoryService inventoryService;
-
-    @Autowired
-    IngredientService ingredientService;
 
     @PostMapping("/new")
     public ResponseEntity<Object> createInventory(HttpSession session,

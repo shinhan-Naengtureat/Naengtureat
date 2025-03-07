@@ -5,7 +5,6 @@ import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
-import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.member.model.MemberService;
 import jakarta.transaction.Transactional;
@@ -15,19 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Slf4j
 public class InventoryService {
     @Autowired
     InventoryRepository inventoryRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private IngredientRepository ingredientRepository;
-    @Autowired
-    private MemberService memberService;
+
     @Autowired
     private IngredientService ingredientService;
 

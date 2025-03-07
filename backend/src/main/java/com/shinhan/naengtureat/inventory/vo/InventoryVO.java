@@ -1,8 +1,6 @@
 package com.shinhan.naengtureat.inventory.vo;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
-import com.shinhan.naengtureat.member.entity.Member;
 import lombok.ToString;
 import lombok.Value;
 
