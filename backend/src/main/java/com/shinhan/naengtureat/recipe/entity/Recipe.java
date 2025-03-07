@@ -19,11 +19,11 @@ public class Recipe extends SuperEntity{
     @Column(name = "recipe_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
     private Meal meal;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
