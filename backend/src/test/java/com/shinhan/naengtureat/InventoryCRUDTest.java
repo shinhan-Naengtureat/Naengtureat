@@ -6,14 +6,10 @@ import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.model.InventoryRepository;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
@@ -68,7 +64,7 @@ public class InventoryCRUDTest {
 
         //then
         Inventory newInventory = inventoryRepository.findById(2L).orElse(null);
-        assertEquals(newInventory.getNickName(), "으억 내가 먹을거야");
-        assertEquals(newInventory.getMember().getId(), 1L);
+        assertEquals("으억 내가 먹을거야", newInventory.getNickName());
+        assertEquals(1L, newInventory.getMember().getId());
     }
 }
