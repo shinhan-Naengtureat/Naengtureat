@@ -1,7 +1,7 @@
 package com.shinhan.naengtureat.store.vo;
 
-import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.store.dto.StoreDTO;
+
 import lombok.ToString;
 import lombok.Value;
 

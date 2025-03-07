@@ -1,7 +1,5 @@
 package com.shinhan.naengtureat.inventory.dto;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +24,6 @@ public class InventoryDTO {
     private String memo;
     private LocalDate inventoryExpDate;
     private LocalDate inputDate;
-    private Member member;
-    private Ingredient ingredient;
+    private Long memberId;
+    private Long ingredientId;
 }
