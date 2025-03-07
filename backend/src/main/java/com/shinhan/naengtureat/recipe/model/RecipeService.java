@@ -130,18 +130,7 @@ public class RecipeService {
 		}
 	}
 	
-	  // 카테고리별 레시피 조회
-    public List<RecipeDTO> getRecipesByCategory(String category) {
-        // 카테고리에 해당하는 레시피 목록 조회
-        List<Recipe> recipes = recipeRepository.findByCategory(category);
-
-        // Recipe 엔티티를 RecipeDTO로 변환하여 반환
-        return recipes.stream()
-                .map(recipe -> entityToDTO(recipe)
-                		)
-                .collect(Collectors.toList());
-    }
-	
+	 
 	
 	//Member의 Recipe 조회	
 	public List<Recipe> findRecipeByMember(Member member) {

@@ -15,7 +15,4 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	
 	@Query("select distinct category from #{#entityName}")
 	List<String> findCategoryAll();
-
-	// 카테고리별 레시피 조회
-    public List<Recipe> findByCategory(String category);
 }
