@@ -34,4 +34,16 @@ public class MealPlanController {
 		
 	}
 
+	// 테마조회
+	@GetMapping("/theme")
+	public ResponseEntity<Object> getTheme() {
+			List<String> theme = mealPlanService.getThemeAll();
+			if (theme == null || theme.isEmpty()) {
+				throw new NoSuchElementException("해당 테마를 찾을 수 없습니다.");
+			}
+			return ResponseEntity.ok(theme);
+
+		
+
+	}
 }
