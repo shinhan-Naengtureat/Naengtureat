@@ -1,6 +1,5 @@
 package com.shinhan.naengtureat.recipe;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +23,9 @@ import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
-import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
@@ -37,7 +34,7 @@ public class RecipeController {
 
 	@Autowired
 	RecipeService recipeService;
-	
+
 	@Autowired
 	LikesService likesService;
 
@@ -45,7 +42,7 @@ public class RecipeController {
 	@GetMapping
 	public ResponseEntity<Object> getAllRecipes() {
 		try {
-			List<RecipeVO> recipes = recipeService.getAllRecipes();
+			List<RecipeDTO> recipes = recipeService.getAllRecipes();
 			return ResponseEntity.ok(recipes);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,15 +53,13 @@ public class RecipeController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
-
+	
+	// 레시피 등록
 	@PostMapping("/new")
-	public ResponseEntity<String> insertRecipe(@RequestBody RecipeDTO recipeDto, HttpSession session) {
+	public ResponseEntity<String> insertRecipe(@RequestBody RecipeDTO recipeDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = (Long) session.getAttribute("memberId");
-			if (memberId == null) {
-				memberId = 2L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
-			}
+			Long memberId = 2L; // security 적용시 코드 수정 필요
 
 			// 서비스에 DTO와 memberId를 넘김
 			recipeService.registerRecipe(recipeDto, memberId);
@@ -75,17 +70,15 @@ public class RecipeController {
 			return new ResponseEntity<>("레시피 등록 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	// 댓글 등록
 	@PostMapping("/{recipe_id}/comment")
-	public ResponseEntity<Object> insertComment(@PathVariable("recipe_id") Long recipeId,
-			@RequestBody CommentDTO commentDto, HttpSession session) {
+	public ResponseEntity<Object> createComment(@PathVariable("recipe_id") Long recipeId,
+			@RequestBody CommentDTO commentDto) {
 		try {
-			Long memberId = (Long) session.getAttribute("memberId");
-			// 로그인 설정이 되면 아래 코드 제거
-			if (memberId == null) {
-				memberId = 1L; // 임시 사용자 ID 설정
-			}
-			
+			// 세션에서 로그인된 사용자 정보 가져오기
+			Long memberId = 2L; // security 적용시 코드 수정 필요
+
 			// 댓글 등록 서비스 호출
 			CommentDTO savedComment = recipeService.addComment(recipeId, memberId, commentDto.getContent());
 
@@ -95,47 +88,48 @@ public class RecipeController {
 		}
 	}
 
-	@PutMapping("/comment/{comment_id}")
-	public ResponseEntity<Object> updateComment(@PathVariable("comment_id") Long commentId,
-			@RequestBody CommentDTO commentDto) {
-		try {
-			Comment updatedComment = recipeService.updateComment(commentId, commentDto);
-			return ResponseEntity.ok(updatedComment); // 수정된 댓글 반환
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 수정에 실패하였습니다.");
-		}
-	}
-	
+	 // 댓글 수정
+    @PutMapping("/comment/{comment_id}")
+    public ResponseEntity<Object> updateComment(@PathVariable("comment_id") Long commentId,
+            @RequestBody CommentDTO commentDto) {
+        try {
+            // 댓글 수정 서비스 호출
+            CommentDTO updatedComment = recipeService.updateComment(commentId, commentDto);
+            return ResponseEntity.ok(updatedComment); // 수정된 댓글 반환
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 수정에 실패하였습니다.");
+        }
+    }
+    
+    // 댓글 삭제
 	@DeleteMapping("/comment/{comment_id}")
-	public ResponseEntity<String> deleteComment(@PathVariable("comment_id") Long commentId){
+	public ResponseEntity<String> deleteComment(@PathVariable("comment_id") Long commentId) {
 		recipeService.deleteComment(commentId);
 		return ResponseEntity.ok("delete ok");
 	}
 	
+	// 댓글 조회
 	@GetMapping("/{recipe_id}/comment")
-	public ResponseEntity<Object> getComment(@PathVariable("recipe_id") Long recipeId){
-		List<Comment> comments = recipeService.getComments(recipeId);
-        return ResponseEntity.ok(comments);
+	public ResponseEntity<List<CommentDTO>> getComment(@PathVariable("recipe_id") Long recipeId) {
+	    List<CommentDTO> comments = recipeService.getComments(recipeId);
+	    return ResponseEntity.ok(comments);
 	}
 
-	
 	@GetMapping("/myrecipe/{mid}")
-	public ResponseEntity<Object> getMethodName(@PathVariable("mid") Long mid ) {
+	public ResponseEntity<Object> getMethodName(@PathVariable("mid") Long mid) {
 		Member member = Member.builder().id(mid).build();
 		List<Recipe> recipeList = recipeService.findRecipeByMember(member);
 		return ResponseEntity.ok(recipeList);
 	}
-	
-	// 좋아요 토글 API
-    @PostMapping("/like/{recipe_id}")
-    public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId, HttpSession session) {
-        Long memberId = (Long) session.getAttribute("memberId");
-        if (memberId == null) {
-			memberId = 2L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
-        }
 
-        likesService.toggleLikes(recipeId, memberId);
-        return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
-    }
-	
+	// 좋아요 토글 API
+	@PostMapping("/like/{recipe_id}")
+	public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId) {
+		// 세션에서 로그인된 사용자 정보 가져오기
+		Long memberId = 2L; // security 적용시 코드 수정 필요
+
+		likesService.toggleLikes(recipeId, memberId);
+		return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
+	}
+
 }

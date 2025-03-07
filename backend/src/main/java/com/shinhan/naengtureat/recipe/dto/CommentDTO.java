@@ -14,5 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CommentDTO {
+	private Long id;
     private String content;
+    private String memberName;
 }

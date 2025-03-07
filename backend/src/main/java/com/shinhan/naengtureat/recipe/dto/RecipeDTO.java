@@ -24,8 +24,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RecipeDTO {
 	private Long id;
-    private Meal meal;
-    private Member member;
+	private Long mealId;
+    private String mealMealname;
+    private Long memberId;
+    private String memberName;
+    private String memberImage;
     private String name;
     private int price;
     private String level;

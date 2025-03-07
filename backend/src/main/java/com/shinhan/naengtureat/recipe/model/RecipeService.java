@@ -1,6 +1,5 @@
 package com.shinhan.naengtureat.recipe.model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.entity.RecipeHashtag;
 import com.shinhan.naengtureat.recipe.entity.RecipeIngredient;
 import com.shinhan.naengtureat.recipe.entity.RecipeStep;
-import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
 import jakarta.transaction.Transactional;
 
@@ -53,9 +51,10 @@ public class RecipeService {
 	private MemberRepository memberRepository;
 
 	// 전체 레시피 조회
-	public List<RecipeVO> getAllRecipes() {
+	public List<RecipeDTO> getAllRecipes() {
 		List<Recipe> recipes = recipeRepository.findAll();
-		return recipes.stream().map(recipe -> new RecipeVO(entityToDTO(recipe))) // DTO를 VO로 변환
+		System.out.println(recipes);
+		return recipes.stream().map(recipe -> entityToDTO(recipe))
 				.collect(Collectors.toList());
 	}
 
@@ -72,7 +71,7 @@ public class RecipeService {
 
 		// Meal 설정
 		Meal meal = new Meal();
-		meal.setId(recipeDto.getMeal().getId());
+		meal.setId(recipeDto.getMealId());
 		recipe.setMeal(meal);
 
 		// Member 설정
@@ -136,36 +135,57 @@ public class RecipeService {
 	public List<Recipe> findRecipeByMember(Member member) {
 		return recipeRepository.findByMember(member);
 	} 
-	
-
-	public RecipeDTO entityToDTO(Recipe recipe) {
-		ModelMapper mapper = new ModelMapper();
-		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
-		return dto;
-	}
 
 	@Transactional
 	public CommentDTO addComment(Long recipeId, Long memberId, String content) {
-		Recipe recipe = recipeRepository.findById(recipeId).orElse(null);
-		Member member = memberRepository.findById(memberId).orElse(null);
-		Comment comment = Comment.builder().recipe(recipe).member(member).content(content).build();
-		commentRepository.save(comment);
+	    Recipe recipe = recipeRepository.findById(recipeId)
+	        .orElseThrow(() -> new RuntimeException("Recipe not found"));
+	    Member member = memberRepository.findById(memberId)
+	        .orElseThrow(() -> new RuntimeException("Member not found"));
 
-		return new CommentDTO(comment.getContent()); // 댓글 내용만 반환
+	    Comment comment = Comment.builder()
+	        .recipe(recipe)
+	        .member(member)
+	        .content(content)
+	        .build();
+	    
+	    commentRepository.save(comment);
+
+	    return new CommentDTO(comment.getId(),comment.getContent(), comment.getMember().getName()); // memberName 추가
 	}
 
 	@Transactional
-	public Comment updateComment(Long commentId, CommentDTO commentDto) {
-		Comment comment = commentRepository.findById(commentId).orElse(null);
-		comment.setContent(commentDto.getContent());
-		return commentRepository.save(comment);
+	public CommentDTO updateComment(Long commentId, CommentDTO commentDto) {
+	    Comment comment = commentRepository.findById(commentId).orElse(null);
+	    comment.setContent(commentDto.getContent());
+	    commentRepository.save(comment);
+
+	    // CommentDTO로 변환하여 반환
+	    return new CommentDTO(comment.getId(),comment.getContent(), comment.getMember().getName());
 	}
 	
 	public void deleteComment(Long commentId) {
 		commentRepository.deleteById(commentId);
 	}
 	
-	public List<Comment> getComments(Long recipeId){
-		return commentRepository.findCommentsByRecipeId(recipeId);
+	@Transactional
+	public List<CommentDTO> getComments(Long recipeId) {
+	    List<Comment> comments = commentRepository.findByRecipeId(recipeId);
+	    
+	    return comments.stream()
+	            .map(comment -> new CommentDTO(comment.getId(),comment.getContent(), comment.getMember().getName())) 
+	            .collect(Collectors.toList());
+	}
+	
+	public RecipeDTO entityToDTO(Recipe recipe) {
+		ModelMapper mapper = new ModelMapper();
+		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
+		return dto;
+	}
+	
+	public CommentDTO entityToDTO(Comment comment) {
+		ModelMapper mapper = new ModelMapper();
+		CommentDTO dto = mapper.map(comment, CommentDTO.class);
+		return dto;
 	}
 }
