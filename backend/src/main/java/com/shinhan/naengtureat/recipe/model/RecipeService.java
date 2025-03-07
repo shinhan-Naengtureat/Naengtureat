@@ -14,6 +14,8 @@ import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
 import com.shinhan.naengtureat.recipe.entity.Comment;
@@ -130,6 +132,7 @@ public class RecipeService {
 		}
 	}
 	
+	 
 	
 	//Member의 Recipe 조회	
 	public List<Recipe> findRecipeByMember(Member member) {
@@ -185,6 +188,30 @@ public class RecipeService {
         // Recipe 엔티티를 RecipeDTO로 변환하여 반환
         return recipes.stream().map(recipe -> entityToDTO(recipe)).collect(Collectors.toList());
     }
+    
+    @Transactional
+    public RecipeDetailDTO getRecipeDetail(Long recipeId) {
+    	
+    	ModelMapper mapper = new ModelMapper();
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+
+        RecipeDetailDTO recipeDetailDTO = mapper.map(recipe, RecipeDetailDTO.class);
+
+        recipeDetailDTO.setIngredients(recipe.getIngredients().stream()
+                .map(ri -> mapper.map(ri, RecipeIngredientDTO.class))
+                .collect(Collectors.toList()));
+
+        recipeDetailDTO.setSteps(recipe.getSteps().stream()
+                .map(step -> mapper.map(step, RecipeStepDTO.class))
+                .collect(Collectors.toList()));
+
+        recipeDetailDTO.setHashtags(recipe.getHashtags().stream()
+                .map(ht -> mapper.map(ht, RecipeHashtagDTO.class))
+                .collect(Collectors.toList()));
+
+        return recipeDetailDTO;
+    }
 	
 	public RecipeDTO entityToDTO(Recipe recipe) {
 		ModelMapper mapper = new ModelMapper();
@@ -197,4 +224,6 @@ public class RecipeService {
 		CommentDTO dto = mapper.map(comment, CommentDTO.class);
 		return dto;
 	}
+	
+	
 }
