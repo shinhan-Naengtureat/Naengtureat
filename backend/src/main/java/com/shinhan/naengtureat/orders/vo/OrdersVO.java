@@ -5,7 +5,6 @@ import com.shinhan.naengtureat.orders.dto.OrdersDTO;
 import lombok.ToString;
 import lombok.Value;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
