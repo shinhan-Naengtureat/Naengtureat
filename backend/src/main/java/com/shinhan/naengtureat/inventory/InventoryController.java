@@ -36,10 +36,8 @@ public class InventoryController {
 	}
 
     @PostMapping("/new")
-    public ResponseEntity<Object> createInventory(HttpSession session,
-                                                  @RequestBody InventoryRequestDTO inventoryRequestDTO) {
+    public ResponseEntity<Object> createInventory(@RequestBody InventoryRequestDTO inventoryRequestDTO) {
         // todo: memberDTO, IngredientDTO 수정 및 로직 수정
-        // Member member = (Member) session.getAttribute("member");
         if (inventoryRequestDTO.getIngredientId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("ingredientId 값이 필요합니다.");

@@ -1,14 +1,12 @@
 package com.shinhan.naengtureat.inventory.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.inventory.entity.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.shinhan.naengtureat.inventory.entity.Inventory;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 	 @Query(value = """
