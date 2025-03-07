@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
+import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
 import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
@@ -36,6 +38,9 @@ public class RecipeController {
 
 	@Autowired
 	RecipeService recipeService;
+	
+	@Autowired
+	LikesService likesService;
 
 	// 전체 레시피 조회
 	@GetMapping
@@ -79,5 +84,17 @@ public class RecipeController {
 		List<Recipe> recipeList = recipeService.findRecipeByMember(member);
 		return ResponseEntity.ok(recipeList);
 	}
+	
+	// 좋아요 토글 API
+    @PostMapping("/like/{recipe_id}")
+    public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId, HttpSession session) {
+        Long memberId = (Long) session.getAttribute("memberId");
+        if (memberId == null) {
+			memberId = 2L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
+        }
+
+        likesService.toggleLikes(recipeId, memberId);
+        return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
+    }
 	
 }
