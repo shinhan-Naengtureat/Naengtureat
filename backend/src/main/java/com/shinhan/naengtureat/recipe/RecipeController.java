@@ -85,20 +85,16 @@ public class RecipeController {
 		return ResponseEntity.ok(recipeList);
 	}
 	
-	@PostMapping("/like/{recipe_id}")
-	public ResponseEntity<Object> insertLikes(@PathVariable("recipe_id") Long recipdId,HttpSession session){
-		Long memberId = (Long) session.getAttribute("memberId");
-		if (memberId == null) {
+	// 좋아요 토글 API
+    @PostMapping("/{recipe_id}/like")
+    public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId, HttpSession session) {
+        Long memberId = (Long) session.getAttribute("memberId");
+        if (memberId == null) {
 			memberId = 2L; // 임시값 설정 (예: 0L) 로그인설정되면 지워야함
-		}
-		likesService.insertLikes(recipdId, memberId);
-		return ResponseEntity.ok("좋아요등록");
-	}
-	
-	@DeleteMapping("/like/{like_id}")
-	public ResponseEntity<Object> deleteLikes(@PathVariable("like_id") Long likeId){
-		likesService.deleteLikes(likeId);
-		return ResponseEntity.ok("좋아요삭제");
-	}
+        }
+
+        likesService.toggleLikes(recipeId, memberId);
+        return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
+    }
 	
 }

@@ -24,26 +24,29 @@ public class LikesService {
 	@Autowired
 	private MemberRepository memberRepository;
 	
-	@Transactional
-	public void insertLikes(Long recipeId, Long memberId) {
-		
-		Recipe recipe = recipeRepository.findById(recipeId).orElse(null);
-		Member member = memberRepository.findById(memberId).orElse(null);
-		
-        Optional<Likes> likesCheck = likeRepository.findByRecipeIdAndMemberId(recipeId,memberId);
-        if(likesCheck.isPresent()) {
-        	throw new IllegalArgumentException("이미 좋아요를 누른 레시피입니다.");
+	 // 좋아요 여부 체크 (Optional 반환)
+    public Optional<Likes> checkLikes(Long recipeId, Long memberId) {
+        return likeRepository.findByRecipeIdAndMemberId(recipeId, memberId);
+    }
+
+    // 좋아요 추가,삭제
+    @Transactional
+    public void toggleLikes(Long recipeId, Long memberId) {
+        Optional<Likes> likesCheck = checkLikes(recipeId, memberId);
+
+        if (likesCheck.isPresent()) {
+            // 좋아요 삭제
+            likeRepository.deleteById(likesCheck.get().getId());
+        } else {
+            // 좋아요 추가
+            Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+            Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+            Likes like = new Likes();
+            like.setRecipe(recipe);
+            like.setMember(member);
+            likeRepository.save(like);
         }
-		
-		Likes like = new Likes();
-		like.setRecipe(recipe);
-		like.setMember(member);
-		
-		likeRepository.save(like);
-	}
-	
-	public void deleteLikes(Long likeId) {
-		likeRepository.deleteById(likeId);
-	}
+    }
 
 }
