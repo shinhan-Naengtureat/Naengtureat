@@ -1,8 +1,10 @@
 package com.shinhan.naengtureat.mealplan.model;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +62,20 @@ public class MealPlanService {
 		return monthlyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
 	}
 
+	// 식단 주간 조회
+	public List<MealPlanDTO> getWeeklyMealPlanList(Long memberId, String day) {
+		LocalDate localDateDay = LocalDate.parse(day, DateTimeFormatter.ofPattern("yyyyMMdd"));
+		
+        
+        LocalDate startOfWeek = localDateDay.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)); // 이번 주의 시작일 (월요일)
+        LocalDate endOfWeek = localDateDay.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)); // 이번 주의 종료일 (일요일)
+		Member newMember = Member.builder().id(memberId).build();
+		
+		List<MealPlan> weeklyMealPlanList = mealPlanRepository.findByMemberAndDateBetween(newMember, startOfWeek, endOfWeek);
+		
+		return weeklyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
+	}
+	
 	public MealPlanDTO entityToDTO(MealPlan mealPlan) {
 		ModelMapper mapper = new ModelMapper();
 		MealPlanDTO dto = mapper.map(mealPlan, MealPlanDTO.class);
