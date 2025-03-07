@@ -55,9 +55,14 @@ public class RecipeController {
 	
 	// 상세 레시피 조회
 	@GetMapping("/{recipeId}")
-    public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
+    public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
+		try {
         RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
         return ResponseEntity.ok(recipeDetail);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("레시피 상세조회 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 	
 	// 레시피 등록
