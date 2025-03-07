@@ -3,6 +3,7 @@ package com.shinhan.naengtureat.inventory.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.shinhan.naengtureat.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,4 +46,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 		        @Param("start_date") LocalDate start_date,
 		        @Param("end_date") LocalDate end_date
 		    );
+
+    List<Inventory> findAllByMemberId(Long memberId);
 }
