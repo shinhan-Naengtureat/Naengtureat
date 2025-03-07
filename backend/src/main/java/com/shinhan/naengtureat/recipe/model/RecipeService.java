@@ -130,6 +130,13 @@ public class RecipeService {
 			recipeHashtagRepository.save(recipeHashtag);
 		}
 	}
+	
+	
+	//Member의 Recipe 조회	
+	public List<Recipe> findRecipeByMember(Member member) {
+		return recipeRepository.findByMember(member);
+	} 
+	
 
 	public RecipeDTO entityToDTO(Recipe recipe) {
 		ModelMapper mapper = new ModelMapper();
