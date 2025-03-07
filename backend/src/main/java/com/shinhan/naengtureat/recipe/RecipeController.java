@@ -70,8 +70,8 @@ public class RecipeController {
 	}
 	
 	// 댓글 등록
-	@PostMapping("/{recipe_id}/comment")
-	public ResponseEntity<Object> createComment(@PathVariable("recipe_id") Long recipeId,
+	@PostMapping("/{recipeId}/comment")
+	public ResponseEntity<Object> createComment(@PathVariable("recipeId") Long recipeId,
 			@RequestBody CommentDTO commentDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
@@ -87,8 +87,8 @@ public class RecipeController {
 	}
 
 	 // 댓글 수정
-    @PutMapping("/comment/{comment_id}")
-    public ResponseEntity<Object> updateComment(@PathVariable("comment_id") Long commentId,
+    @PutMapping("/comment/{commentId}")
+    public ResponseEntity<Object> updateComment(@PathVariable("commentId") Long commentId,
             @RequestBody CommentDTO commentDto) {
         try {
             // 댓글 수정 서비스 호출
@@ -100,21 +100,21 @@ public class RecipeController {
     }
     
     // 댓글 삭제
-	@DeleteMapping("/comment/{comment_id}")
-	public ResponseEntity<String> deleteComment(@PathVariable("comment_id") Long commentId) {
+	@DeleteMapping("/comment/{commentId}")
+	public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
 		recipeService.deleteComment(commentId);
 		return ResponseEntity.ok("delete ok");
 	}
 	
 	// 댓글 조회
-	@GetMapping("/{recipe_id}/comment")
-	public ResponseEntity<List<CommentDTO>> getComment(@PathVariable("recipe_id") Long recipeId) {
+	@GetMapping("/{recipeId}/comment")
+	public ResponseEntity<List<CommentDTO>> getComment(@PathVariable("recipeId") Long recipeId) {
 	    List<CommentDTO> comments = recipeService.getComments(recipeId);
 	    return ResponseEntity.ok(comments);
 	}
 
-	@GetMapping("/myrecipe/{mid}")
-	public ResponseEntity<Object> getMethodName(@PathVariable("mid") Long mid) {
+	@GetMapping("/myrecipe/{memberId}")
+	public ResponseEntity<Object> getMethodName(@PathVariable("memberId") Long mid) {
 		Member member = Member.builder().id(mid).build();
 		List<Recipe> recipeList = recipeService.findRecipeByMember(member);
 		return ResponseEntity.ok(recipeList);
@@ -123,13 +123,24 @@ public class RecipeController {
     
 	
 	// 좋아요 토글 API
-	@PostMapping("/like/{recipe_id}")
-	public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId) {
+	@PostMapping("/like/{recipeId}")
+	public ResponseEntity<String> toggleLikes(@PathVariable("recipeId") Long recipeId) {
 		// 세션에서 로그인된 사용자 정보 가져오기
 		Long memberId = 2L; // security 적용시 코드 수정 필요
 
 		likesService.toggleLikes(recipeId, memberId);
 		return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
 	}
-
+	
+	// 카테고리별 레시피 조회
+    @GetMapping("/{category}")
+    public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
+        try {
+            // 카테고리에 해당하는 레시피 목록 조회
+            List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
+            return ResponseEntity.ok(recipes); // 성공적으로 레시피 목록 반환
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 예외 발생 시 BAD_REQUEST 반환
+        }
+    }
 }
