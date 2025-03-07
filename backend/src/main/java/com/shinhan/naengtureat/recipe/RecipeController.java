@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
@@ -51,6 +52,18 @@ public class RecipeController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
+	
+	// 상세 레시피 조회
+	@GetMapping("/{recipeId}")
+    public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
+		try {
+        RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
+        return ResponseEntity.ok(recipeDetail);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("레시피 상세조회 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+    }
 	
 	// 레시피 등록
 	@PostMapping("/new")
@@ -120,6 +133,8 @@ public class RecipeController {
 		return ResponseEntity.ok(recipeList);
 	}
 
+    
+	
 	// 좋아요 토글 API
 	@PostMapping("/like/{recipeId}")
 	public ResponseEntity<String> toggleLikes(@PathVariable("recipeId") Long recipeId) {
@@ -131,7 +146,7 @@ public class RecipeController {
 	}
 	
 	// 카테고리별 레시피 조회
-    @GetMapping("/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
         try {
             // 카테고리에 해당하는 레시피 목록 조회
