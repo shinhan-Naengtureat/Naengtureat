@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
-import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
