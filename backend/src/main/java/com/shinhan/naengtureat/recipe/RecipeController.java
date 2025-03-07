@@ -129,5 +129,16 @@ public class RecipeController {
 		likesService.toggleLikes(recipeId, memberId);
 		return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
 	}
-
+	
+	// 카테고리별 레시피 조회
+    @GetMapping("/{category}")
+    public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
+        try {
+            // 카테고리에 해당하는 레시피 목록 조회
+            List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
+            return ResponseEntity.ok(recipes); // 성공적으로 레시피 목록 반환
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 예외 발생 시 BAD_REQUEST 반환
+        }
+    }
 }
