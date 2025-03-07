@@ -27,8 +27,8 @@ public class StoreController {
 	private final StoreReviewService storeReviewService;
 	
 	// 스토어 후기 조회
-	@GetMapping("/{store_id}/review")
-	public ResponseEntity<Object> getStoreReviewByStoreId(@PathVariable("store_id") Long storeId) {
+	@GetMapping("/{storeId}/review")
+	public ResponseEntity<Object> getStoreReviewByStoreId(@PathVariable("storeId") Long storeId) {
 		
 		try {
 			Store storeEntity = Store.builder().id(storeId).build();
