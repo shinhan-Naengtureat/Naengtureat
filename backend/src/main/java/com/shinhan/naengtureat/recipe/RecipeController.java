@@ -86,7 +86,7 @@ public class RecipeController {
 	}
 	
 	// 좋아요 토글 API
-    @PostMapping("/{recipe_id}/like")
+    @PostMapping("/like/{recipe_id}")
     public ResponseEntity<String> toggleLikes(@PathVariable("recipe_id") Long recipeId, HttpSession session) {
         Long memberId = (Long) session.getAttribute("memberId");
         if (memberId == null) {
