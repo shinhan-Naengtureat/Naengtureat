@@ -15,26 +15,20 @@ import java.time.LocalDate;
 @Value
 @ToString
 public class InventoryVO {
-    Long id;
     double quantity;
     String nickName;
     String memo;
     LocalDate inventoryExpDate;
     LocalDate inputDate;
-    Member member;
-    Ingredient ingredient;
 
     /**
      * DTO를 받아서 VO를 생성하는 생성자 추가
      */
     public InventoryVO(InventoryDTO dto) {
-        this.id = dto.getId();
         this.quantity = dto.getQuantity();
         this.nickName = dto.getNickName();
         this.memo = dto.getMemo();
         this.inventoryExpDate = dto.getInventoryExpDate();
         this.inputDate = dto.getInputDate();
-        this.member = dto.getMember();
-        this.ingredient = dto.getIngredient();
     }
 }

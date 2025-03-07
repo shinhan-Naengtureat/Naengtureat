@@ -30,23 +30,14 @@ public class InventoryController {
     @PostMapping("/new")
     public ResponseEntity<Object> createInventory(HttpSession session,
                                                   @RequestBody InventoryDTO inventoryDTO) {
+        // todo: memberDTO, IngredientDTO 수정 및 로직 수정
         // Member member = (Member) session.getAttribute("member");
-        Member member = memberService.getMemberById(1L);
-        if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인 필요합니다.");
-        }
-
-        if (inventoryDTO.getIngredient().getId() == null) {
+        if (inventoryDTO.getIngredientId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("ingredientId 값이 필요합니다.");
         }
 
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredient().getId());
-
-        inventoryDTO.setMember(member);
-        inventoryDTO.setIngredient(ingredient);
-
+        inventoryDTO.setMemberId(1L);
         String resultMessage = inventoryService.createInventory(inventoryDTO);
         return ResponseEntity.ok(resultMessage);
     }
