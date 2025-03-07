@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
@@ -51,6 +52,13 @@ public class RecipeController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
+	
+	// 상세 레시피 조회
+	@GetMapping("/{recipeId}")
+    public ResponseEntity<RecipeDetailDTO> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
+        RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
+        return ResponseEntity.ok(recipeDetail);
+    }
 	
 	// 레시피 등록
 	@PostMapping("/new")
@@ -133,7 +141,7 @@ public class RecipeController {
 	}
 	
 	// 카테고리별 레시피 조회
-    @GetMapping("/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
         try {
             // 카테고리에 해당하는 레시피 목록 조회
