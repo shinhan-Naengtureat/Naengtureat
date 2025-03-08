@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.store.vo;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 
 import lombok.ToString;
@@ -18,18 +17,5 @@ public class StoreProductVO {
     String image; // 상품 이미지
     Store store;
     Ingredient ingredient;
-
-    /**
-     * DTO를 받아서 VO를 생성하는 생성자 추가
-     */
-    public StoreProductVO(StoreProductDTO dto) {
-        this.id = dto.getId();
-        this.name = dto.getName();
-        this.productPrice = dto.getProductPrice();
-        this.discountPrice = dto.getDiscountPrice();
-        this.image = dto.getImage();
-        this.store = dto.getStore();
-        this.ingredient = dto.getIngredient();
-    }
 
 }
