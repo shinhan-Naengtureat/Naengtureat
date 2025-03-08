@@ -3,6 +3,7 @@ package com.shinhan.naengtureat.inventory;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
+
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,18 @@ public class InventoryController {
         String resultMessage = inventoryService.createInventory(inventoryRequestDTO);
         return ResponseEntity.ok(resultMessage);
     }
+
+	@PutMapping
+	public ResponseEntity<Object> updateInventory(@RequestBody InventoryRequestDTO inventoryRequestDTO) {
+		if (inventoryRequestDTO.getIngredientId() == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("ingredientId 값이 필요합니다.");
+		}
+
+		inventoryRequestDTO.setMemberId(1L);
+		String resultMessage = inventoryService.updateInventory(inventoryRequestDTO);
+		return ResponseEntity.ok(resultMessage);
+	}
 
 	// 식단 재료 - 멤버 보유 재료 목록 조회
 	@GetMapping("/gap")

@@ -4,6 +4,7 @@ package com.shinhan.naengtureat.inventory.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -62,7 +63,29 @@ public class InventoryService {
 
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
         inventoryRepository.save(inventory);
-        return "재료 저장이 완료되었습니다.";
+        return "재료 저장이 완료 되었습니다.";
+    }
+
+    @Transactional
+    public String updateInventory(InventoryDTO inventoryDTO) {
+        if (inventoryDTO.getQuantity() <= 0) {
+            throw new IllegalArgumentException("재료 수량은 0 이상 이여야 합니다.");
+        }
+        // 기존 재고 조회
+        Inventory inventory = inventoryRepository.findById(inventoryDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료 입니다."));
+
+        //재료 검증
+        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredientId());
+
+        inventory.setQuantity(inventoryDTO.getQuantity());  //변경된 수량 등록
+        inventory.setNickName(inventoryDTO.getNickName());  //변경된 닉네임 등록
+        inventory.setMemo(inventoryDTO.getMemo());  //변경된 메모 등록
+        inventory.setInventoryExpDate(inventoryDTO.getInventoryExpDate());  //변경된 유효기간 등록
+        inventory.setInputDate(inventoryDTO.getInputDate());  //변경된 인입일 등록
+        inventory.setIngredient(ingredient);  // 유효한 재료 등록
+
+        return "재료 수정이 완료 되었습니다.";
     }
 
     public InventoryResponseDTO convertDto(Inventory inventory) {
