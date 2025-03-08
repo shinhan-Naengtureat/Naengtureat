@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shinhan.naengtureat.store.dto.StoreDTO;
+import com.shinhan.naengtureat.store.dto.StorePriceDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreReview;
 
@@ -19,6 +20,9 @@ public class StoreService {
 	
 	@Autowired
 	StoreRepository storeRepository;
+
+	@Autowired
+	StoreProductRepository storeProductRepository;
 
 	// 스토어 상세 조회
 	@Transactional
@@ -55,6 +59,9 @@ public class StoreService {
 		StoreDTO dto = mapper.map(entity, StoreDTO.class); // 이름이 같은 필드들은 자동으로 매핑
 		
 		return dto;
+	}
+	public List<StorePriceDTO> getStorePriceList(List<Long> ingredientIds){
+	 return	storeProductRepository.findStorePricesByIngredients(ingredientIds);
 	}
 
 }
