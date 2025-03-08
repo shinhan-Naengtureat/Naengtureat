@@ -1,27 +1,16 @@
 package com.shinhan.naengtureat.inventory;
 
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientService;
-
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,10 +21,7 @@ public class InventoryController {
     InventoryService inventoryService;
 
     @PostMapping("/new")
-    public ResponseEntity<Object> createInventory(HttpSession session,
-                                                  @RequestBody InventoryDTO inventoryDTO) {
-        // todo: memberDTO, IngredientDTO 수정 및 로직 수정
-        // Member member = (Member) session.getAttribute("member");
+    public ResponseEntity<Object> createInventory(@RequestBody InventoryDTO inventoryDTO) {
         if (inventoryDTO.getIngredientId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("ingredientId 값이 필요합니다.");
@@ -46,7 +32,18 @@ public class InventoryController {
         return ResponseEntity.ok(resultMessage);
     }
 
-    
+	@PutMapping
+	public ResponseEntity<Object> updateInventory(@RequestBody InventoryDTO inventoryDTO) {
+		if (inventoryDTO.getIngredientId() == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("ingredientId 값이 필요합니다.");
+		}
+
+		inventoryDTO.setMemberId(1L);
+		String resultMessage = inventoryService.updateInventory(inventoryDTO);
+		return ResponseEntity.ok(resultMessage);
+	}
+
 	// 식단 재료 - 멤버 보유 재료 목록 조회
 	@GetMapping("/gap")
 	public ResponseEntity<Object> getNotEnoughIngredientList(@RequestParam("start_date") LocalDate start_date,
