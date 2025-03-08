@@ -1,7 +1,9 @@
 package com.shinhan.naengtureat.inventory;
 
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
+
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +22,34 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
+	@GetMapping
+	public ResponseEntity<Object> getAllInventory() {
+		List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(1L);
+		return ResponseEntity.ok(allInventory);
+	}
+
     @PostMapping("/new")
-    public ResponseEntity<Object> createInventory(@RequestBody InventoryDTO inventoryDTO) {
-        if (inventoryDTO.getIngredientId() == null) {
+    public ResponseEntity<Object> createInventory(@RequestBody InventoryRequestDTO inventoryRequestDTO) {
+        // todo: memberDTO, IngredientDTO 수정 및 로직 수정
+        if (inventoryRequestDTO.getIngredientId() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("ingredientId 값이 필요합니다.");
         }
 
-        inventoryDTO.setMemberId(1L);
-        String resultMessage = inventoryService.createInventory(inventoryDTO);
+        inventoryRequestDTO.setMemberId(1L);
+        String resultMessage = inventoryService.createInventory(inventoryRequestDTO);
         return ResponseEntity.ok(resultMessage);
     }
 
 	@PutMapping
-	public ResponseEntity<Object> updateInventory(@RequestBody InventoryDTO inventoryDTO) {
-		if (inventoryDTO.getIngredientId() == null) {
+	public ResponseEntity<Object> updateInventory(@RequestBody InventoryRequestDTO inventoryRequestDTO) {
+		if (inventoryRequestDTO.getIngredientId() == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body("ingredientId 값이 필요합니다.");
 		}
 
-		inventoryDTO.setMemberId(1L);
-		String resultMessage = inventoryService.updateInventory(inventoryDTO);
+		inventoryRequestDTO.setMemberId(1L);
+		String resultMessage = inventoryService.updateInventory(inventoryRequestDTO);
 		return ResponseEntity.ok(resultMessage);
 	}
 
