@@ -2,6 +2,7 @@ package com.shinhan.naengtureat.inventory.model;
 
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -9,7 +10,8 @@ import java.util.stream.Collectors;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +31,36 @@ public class InventoryService {
     @Autowired
     IngredientService ingredientService;
 
+    public List<InventoryResponseDTO> getAllInventory(Long memberId) {
+        List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
+        LocalDate nowDate = LocalDate.now();
+
+        List<InventoryResponseDTO> inventoryDtos = inventoryList.stream().map((eachInventory) -> {
+            //entity -> DTO
+            InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+
+            //남은 기간 계산 및 저장
+            int remainingDays = (int) ChronoUnit.DAYS.between(nowDate, inventoryResponseDTO.getInventoryExpDate());
+            inventoryResponseDTO.setRemainingDays(remainingDays);
+
+            //재료 닉네임 저장
+            inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+            return inventoryResponseDTO;
+        }).toList();
+
+        return inventoryDtos;
+    }
+
     @Transactional
-    public String createInventory(InventoryDTO inventoryDTO) {
-        if (inventoryDTO.getQuantity() <= 0) {
+    public String createInventory(InventoryRequestDTO inventoryRequestDTO) {
+        if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0이상 이여야 합니다.");
         }
-
         // 유효성 검사를 위해 재료 검색
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredientId());
-        Inventory inventory = convertEntity(inventoryDTO);
+        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
+
+        Inventory inventory = convertEntity(inventoryRequestDTO);
+
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
         inventoryRepository.save(inventory);
         return "재료 저장이 완료 되었습니다.";
@@ -65,15 +88,16 @@ public class InventoryService {
         return "재료 수정이 완료 되었습니다.";
     }
 
-    public InventoryDTO convertDto(Inventory inventory) {
+    public InventoryResponseDTO convertDto(Inventory inventory) {
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(inventory, InventoryDTO.class);
+        return mapper.map(inventory, InventoryResponseDTO.class);
     }
 
-    public Inventory convertEntity(InventoryDTO inventoryDTO) {
+    public Inventory convertEntity(InventoryRequestDTO inventoryRequestDTO) {
         ModelMapper mapper = new ModelMapper();
-        return mapper.map(inventoryDTO, Inventory.class);
+        return mapper.map(inventoryRequestDTO, Inventory.class);
     }
+
     public List<IngredientComparisonDTO> getListNotEnoughIngredient(Long memberId,LocalDate start_date, LocalDate end_date) {
     	//날짜 두개를 입력 받고 , 그 사이에 있는 식단(레시피)를 조회
     	List<Object[]> results = inventoryRepository.compareInventoryWithMealPlan(memberId,start_date,end_date);
