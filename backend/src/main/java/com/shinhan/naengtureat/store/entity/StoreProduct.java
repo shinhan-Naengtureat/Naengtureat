@@ -32,7 +32,7 @@ public class StoreProduct extends SuperEntity {
     @Column(nullable = false)
     private int productPrice; // 상품 가격
     
-    private int discountPrice; // 할인 가격
+    private Integer discountPrice; // 할인 가격
     
     @Column(name = "product_image")
     private String image; // 상품 이미지
