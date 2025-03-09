@@ -1,20 +1,21 @@
 package com.shinhan.naengtureat;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientService;
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
-import com.shinhan.naengtureat.inventory.entity.Inventory;
-import com.shinhan.naengtureat.inventory.model.InventoryRepository;
-import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.member.model.MemberService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.shinhan.naengtureat.ingredient.entity.Ingredient;
+import com.shinhan.naengtureat.ingredient.model.IngredientService;
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
+import com.shinhan.naengtureat.inventory.entity.Inventory;
+import com.shinhan.naengtureat.inventory.model.InventoryRepository;
+import com.shinhan.naengtureat.inventory.model.InventoryService;
+import com.shinhan.naengtureat.member.model.MemberService;
 
 @SpringBootTest
 public class InventoryCRUDTest {
@@ -34,7 +35,7 @@ public class InventoryCRUDTest {
         Long ingredientId = 92L;
         Long memberId = 1L;
 
-        InventoryDTO inventoryDTO = InventoryDTO.builder()
+        InventoryRequestDTO inventoryDTO = InventoryRequestDTO.builder()
                 .id(2L)
                 .memo("내가 산 재료")
                 .inventoryExpDate(LocalDate.parse("2025-03-15"))

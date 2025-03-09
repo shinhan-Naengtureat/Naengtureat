@@ -61,6 +61,19 @@ public class MealPlanService {
 		
 		return monthlyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
 	}
+	
+	// 저장된 식단 단건 삭제
+	public String deleteMealPlan(Long memberId, Long mealPlanId) {
+		Member newMember = Member.builder().id(memberId).build();
+		
+		int result = mealPlanRepository.deleteByMemberAndId(newMember, mealPlanId);
+		
+		if(result == 1) {
+			return "재료 삭제가 완료되었습니다.";
+		} else {
+			return "재료 삭제에 실패하였습니다.";
+		}
+	}
 
 	// 식단 주간 조회
 	public List<MealPlanDTO> getWeeklyMealPlanList(Long memberId, String day) {
