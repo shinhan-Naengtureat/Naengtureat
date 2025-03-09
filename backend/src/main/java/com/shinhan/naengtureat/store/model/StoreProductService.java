@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.store.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -33,6 +34,15 @@ public class StoreProductService {
 		List<StoreProduct> storeProductList = storeProductRepository.findProductByKeyword(keyword);
 		
 		// Entity를 DTO로 변환 후 List 형태로 리턴
+		return storeProductList.stream().map(storeProduct -> entityToDTO(storeProduct)).toList();
+	}
+	
+	// 스토어 재료 카테고리 별 필터링
+	public List<StoreProductDTO> getProductByIngredientBigCategory(String bigCategory) {
+		List<String> bigCategoryList = Arrays.asList(bigCategory.split(",")); // ex) "과일,고기"를 ["과일", "고기"]로 변환
+		
+		List<StoreProduct> storeProductList = storeProductRepository.findByIngredient_BigCategoryIn(bigCategoryList);
+		
 		return storeProductList.stream().map(storeProduct -> entityToDTO(storeProduct)).toList();
 	}
 	

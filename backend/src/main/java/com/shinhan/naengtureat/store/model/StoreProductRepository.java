@@ -19,5 +19,8 @@ public interface StoreProductRepository extends JpaRepository<StoreProduct, Long
 			+ "JOIN sp.ingredient i "
 			+ "WHERE sp.name LIKE CONCAT('%', :keyword, '%') OR i.smallCategory LIKE CONCAT('%', :keyword, '%')")
 	List<StoreProduct> findProductByKeyword(@Param("keyword") String keyword);
+	
+	// 스토어 재료 카테고리 별 필터링
+	List<StoreProduct> findByIngredient_BigCategoryIn(List<String> bigCategory);
 
 }
