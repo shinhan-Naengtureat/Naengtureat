@@ -13,6 +13,6 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Long> {
 	// 식단 일간 조회
 	public List<MealPlan> findByMemberAndDate(Member member, LocalDate day);
 	
-	// 식단 월간 조회
+	// 식단 주간, 월간 조회
 	public List<MealPlan> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
 };
