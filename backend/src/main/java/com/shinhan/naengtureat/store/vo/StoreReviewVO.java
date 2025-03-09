@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.store.vo;
 
 import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.store.dto.StoreReviewDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 
 import lombok.ToString;

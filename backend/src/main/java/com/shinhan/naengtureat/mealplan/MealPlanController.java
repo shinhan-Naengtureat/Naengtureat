@@ -109,6 +109,26 @@ public class MealPlanController {
 		}
 	}
 	
+	// 식단 주간 조회
+	@GetMapping("/week/{day}")
+	public ResponseEntity<Object> getWeeklyMealPlanList(@PathVariable("day") String day) {
+		try {
+			// 세션에서 로그인된 사용자 정보 가져오기
+			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			
+			List<MealPlanDTO> weeklyMealPlanList = mealPlanService.getWeeklyMealPlanList(memberId, day);
+			
+			return ResponseEntity.ok(weeklyMealPlanList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "식단 주간 조회 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+	}
+
 	// 저장된 식단 단건 삭제
 	@DeleteMapping("/{mealPlanId}")
 	public ResponseEntity<Object> deleteMealPlan(@PathVariable("mealPlanId") Long mealPlanId){
