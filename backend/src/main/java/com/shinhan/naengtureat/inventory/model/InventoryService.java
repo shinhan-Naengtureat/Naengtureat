@@ -67,22 +67,22 @@ public class InventoryService {
     }
 
     @Transactional
-    public String updateInventory(InventoryDTO inventoryDTO) {
-        if (inventoryDTO.getQuantity() <= 0) {
+    public String updateInventory(InventoryRequestDTO inventoryRequestDTO) {
+        if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0 이상 이여야 합니다.");
         }
         // 기존 재고 조회
-        Inventory inventory = inventoryRepository.findById(inventoryDTO.getId())
+        Inventory inventory = inventoryRepository.findById(inventoryRequestDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료 입니다."));
 
         //재료 검증
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredientId());
+        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
 
-        inventory.setQuantity(inventoryDTO.getQuantity());  //변경된 수량 등록
-        inventory.setNickName(inventoryDTO.getNickName());  //변경된 닉네임 등록
-        inventory.setMemo(inventoryDTO.getMemo());  //변경된 메모 등록
-        inventory.setInventoryExpDate(inventoryDTO.getInventoryExpDate());  //변경된 유효기간 등록
-        inventory.setInputDate(inventoryDTO.getInputDate());  //변경된 인입일 등록
+        inventory.setQuantity(inventoryRequestDTO.getQuantity());  //변경된 수량 등록
+        inventory.setNickName(inventoryRequestDTO.getNickName());  //변경된 닉네임 등록
+        inventory.setMemo(inventoryRequestDTO.getMemo());  //변경된 메모 등록
+        inventory.setInventoryExpDate(inventoryRequestDTO.getInventoryExpDate());  //변경된 유효기간 등록
+        inventory.setInputDate(inventoryRequestDTO.getInputDate());  //변경된 인입일 등록
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
 
         return "재료 수정이 완료 되었습니다.";
