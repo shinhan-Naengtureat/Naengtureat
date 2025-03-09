@@ -6,6 +6,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -87,6 +88,24 @@ public class MealPlanService {
 		List<MealPlan> weeklyMealPlanList = mealPlanRepository.findByMemberAndDateBetween(newMember, startOfWeek, endOfWeek);
 		
 		return weeklyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
+	}
+	
+	// 저장된 식단 이동
+	public String updateMealPlan(Long memberId, MealPlanDTO mealPlanDTO) {
+		Member newMember = Member.builder().id(memberId).build();
+		
+		Optional<MealPlan> optionalMealPlan = mealPlanRepository.findById(mealPlanDTO.getId());
+
+        if (optionalMealPlan.isPresent()) {
+            MealPlan mealPlan = optionalMealPlan.get();
+            
+            mealPlan.setDate(mealPlanDTO.getDate());   // 날짜 변경
+            mealPlan.setType(mealPlanDTO.getType());   // 식단 타입 변경
+
+            mealPlanRepository.save(mealPlan); // 변경 사항 저장
+            return "저장된 식단 이동이 완료되었습니다.";
+        }
+        return "저장된 식단 이동에 실패하였습니다.";
 	}
 	
 	public MealPlanDTO entityToDTO(MealPlan mealPlan) {
