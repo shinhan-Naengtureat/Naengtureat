@@ -22,6 +22,12 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
+	@GetMapping("/{inventoryId}")
+	public ResponseEntity<Object> getInventoryById(@PathVariable("inventoryId") Long inventoryId) {
+		InventoryResponseDTO inventoryById = inventoryService.getInventoryById(inventoryId);
+		return ResponseEntity.ok(inventoryById);
+	}
+
 	@GetMapping
 	public ResponseEntity<Object> getAllInventory() {
 		List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(1L);
@@ -64,9 +70,9 @@ public class InventoryController {
 			if (gapList.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("부족한 재료가 없습니다.");
 			}
-			
+
 			return ResponseEntity.ok(gapList);
-		
+
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청: " + e.getMessage());
 		} catch (Exception e) {
