@@ -1,14 +1,5 @@
 package com.shinhan.naengtureat;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.time.LocalDate;
-import java.util.NoSuchElementException;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
@@ -16,6 +7,14 @@ import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.model.InventoryRepository;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import com.shinhan.naengtureat.member.model.MemberService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class InventoryCRUDTest {
