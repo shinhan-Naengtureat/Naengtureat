@@ -1,14 +1,14 @@
 .home-container {
   width: 430px;  /* iPhone 13 Pro Max 너비 */
-  height: calc(100vh - 70px); /* ✅ 네비게이션 바 높이 제외 */
-  margin: 0 auto;  /* ✅ 중앙 정렬 */
+  height: calc(100vh - 70px); /* 네비게이션 바 높이 제외 */
+  margin: 0 auto;  /* 중앙 정렬 */
   padding: 20px;
   font-family: "Arial", sans-serif;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: center; /* ✅ 내부 컨텐츠도 중앙 정렬 */
-  text-align: center; /* ✅ 텍스트 중앙 정렬 */
+  align-items: center; /* 내부 컨텐츠도 중앙 정렬 */
+  text-align: center; /* 텍스트 중앙 정렬 */
 }
 
 /* 헤더 영역 */
