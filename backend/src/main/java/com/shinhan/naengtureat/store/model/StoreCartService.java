@@ -61,4 +61,16 @@ public class StoreCartService {
 		return response;
 	}
 
+	// 장바구니 재료 삭제(단건, 여러 건 둘 다 가능)
+	public String deleteCartItems(List<Long> cartIdList) {
+		if (cartIdList == null || cartIdList.isEmpty()) {
+	        throw new IllegalArgumentException("삭제할 장바구니 아이템 ID가 없습니다.");
+	    }
+		
+		// 리스트 형태인 cartId들을 한 번에 삭제
+		storeCartRepository.deleteAllByIdInBatch(cartIdList);
+		
+		return "장바구니에서 " + cartIdList.size() + "개의 상품이 삭제되었습니다.";
+	}
+
 }
