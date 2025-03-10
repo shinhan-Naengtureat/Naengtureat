@@ -129,12 +129,10 @@ public class InventoryService {
     }
 
     public InventoryResponseDTO convertDto(Inventory inventory) {
-        ModelMapper mapper = new ModelMapper();
         return mapper.map(inventory, InventoryResponseDTO.class);
     }
 
     public Inventory convertEntity(InventoryRequestDTO inventoryRequestDTO) {
-        ModelMapper mapper = new ModelMapper();
         return mapper.map(inventoryRequestDTO, Inventory.class);
     }
 

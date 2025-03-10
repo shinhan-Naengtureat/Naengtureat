@@ -19,7 +19,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 
 	default Predicate searchInventoryByKeyword(String keyword) {
 		QInventory inventory = QInventory.inventory;
-		QIngredient ingredient = QIngredient.ingredient;
 
 		BooleanExpression predicate = Expressions.asBoolean(true).isTrue();
 
