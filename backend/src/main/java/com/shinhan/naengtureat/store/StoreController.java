@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.store.dto.StoreDTO;
-
 import com.shinhan.naengtureat.store.dto.StorePriceDTO;
-
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.dto.StoreReviewDTO;
 import com.shinhan.naengtureat.store.entity.Store;
@@ -30,8 +28,6 @@ import com.shinhan.naengtureat.store.model.StoreService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 

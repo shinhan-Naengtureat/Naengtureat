@@ -32,26 +32,32 @@ public class StoreCartService {
 
 	// 장바구니에 재료(상품) 추가
 	public Map<String, Object> createCartItem(Long memberId, Long productId, StoreProductDTO storeProductDTO) {
-		// 로그인 한 사용자의 장바구니에 추가하기 위해
-		Member member = Member.builder().id(memberId).build();
-		
-		// 어떤 재료(상품)를 장바구니에 추가할 것인지
-		StoreProduct storeProduct = StoreProduct.builder().id(productId).build();
-		
-		// 로그인 한 사용자의 장바구니에 재료(상품) 추가
-		Cart cartEntity = Cart.builder().count(1)
-										.isCheck(false)
-										.member(member)
-										.product(storeProduct).build();
-		Cart savedCart = storeCartRepository.save(cartEntity);
-		
-		// 장바구니 추가 성공 여부에 대한 결과 문구
-		String message = "";
-		if (savedCart != null) {
+		// 로그인 한 사용자의 장바구니에서 해당 상품이 존재하는지 확인
+	    Cart existingCartItem = storeCartRepository.findByMemberIdAndProductId(memberId, productId);
+	    
+	    Cart savedCart;
+	    String message;
+	    
+	    if (existingCartItem != null) {
+	    	// 중복된 재료(상품)가 존재하면 count만 +1
+	    	existingCartItem.setCount(existingCartItem.getCount() + 1);
+	    	savedCart = storeCartRepository.save(existingCartItem);
+	    	message = "장바구니에 동일한 상품이 있어 수량을 증가시켰습니다.";
+	    } else {
+	    	// 존재하지 않으면 새로운 로우로 추가
+			Member member = Member.builder().id(memberId).build(); // 로그인 한 사용자의 장바구니에 추가하기 위해
+			StoreProduct storeProduct = StoreProduct.builder().id(productId).build(); // 어떤 재료(상품)를 장바구니에 추가할 것인지
+			
+			// 로그인 한 사용자의 장바구니에 재료(상품) 추가
+			Cart cartEntity = Cart.builder().count(1)
+					.isCheck(false)
+					.member(member)
+					.product(storeProduct)
+					.build();
+			
+			savedCart = storeCartRepository.save(cartEntity);
 			message = "해당 상품이 장바구니에 추가되었습니다.";
-		} else {
-			message = "장바구니 추가에 실패했습니다.";
-		}
+	    }
 		
 		// 장바구니 추가 성공 여부에 대한 결과 문구와 추가된 내역 정보(savedCart) 리턴
 		Map<String, Object> response = new HashMap<>();
