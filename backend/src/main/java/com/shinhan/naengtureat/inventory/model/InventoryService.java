@@ -136,9 +136,9 @@ public class InventoryService {
         return mapper.map(inventoryRequestDTO, Inventory.class);
     }
 
-    public List<IngredientComparisonDTO> getListNotEnoughIngredient(Long memberId,LocalDate start_date, LocalDate end_date) {
+    public List<IngredientComparisonDTO> getListNotEnoughIngredient(Long memberId,LocalDate startDate, LocalDate endDate) {
     	//날짜 두개를 입력 받고 , 그 사이에 있는 식단(레시피)를 조회
-    	List<Object[]> results = inventoryRepository.compareInventoryWithMealPlan(memberId,start_date,end_date);
+    	List<Object[]> results = inventoryRepository.compareInventoryWithMealPlan(memberId,startDate,endDate);
     	 return results.stream()
                  .map(row -> new IngredientComparisonDTO(
                          row[0] != null ? ((Number) row[0]).longValue() : null, // memberIngredientId 사용자가 가지고 있는 재료 ID (nullable)

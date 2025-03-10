@@ -54,7 +54,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		            LEFT JOIN recipe r ON mp.recipe_id = r.recipe_id
 		            LEFT JOIN recipe_ingredient ri ON r.recipe_id = ri.recipe_id
 		            LEFT JOIN ingredient ing ON ri.ingredient_id = ing.ingredient_id
-		            WHERE mp.date BETWEEN :start_date AND :end_date
+		            WHERE mp.date BETWEEN :startDate AND :endDate
 		            AND mp.member_id = :memberId
 		            GROUP BY ing.ingredient_id
 		        ) B
@@ -62,8 +62,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		        """, nativeQuery = true)
 		    List<Object[]> compareInventoryWithMealPlan(
 		        @Param("memberId") Long memberId,
-		        @Param("start_date") LocalDate start_date,
-		        @Param("end_date") LocalDate end_date
+		        @Param("startDate") LocalDate startDate,
+		        @Param("endDate") LocalDate endDate
 		    );
 
     List<Inventory> findAllByMemberId(Long memberId);
