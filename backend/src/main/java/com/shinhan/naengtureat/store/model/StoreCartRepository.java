@@ -22,4 +22,8 @@ public interface StoreCartRepository extends JpaRepository<Cart, Long> {
 			+ "WHERE c.member.id = :memberId")
 	List<CartDTO> findCartDetailsByMemberId(@Param("memberId") Long memberId);
 
+	// 로그인 한 사용자의 장바구니에서 해당 상품이 존재하는지 확인(중복 확인)
+	@Query("SELECT c FROM Cart c WHERE c.member.id = :memberId AND c.product.id = :productId")
+	Cart findByMemberIdAndProductId(@Param("memberId") Long memberId, @Param("productId") Long productId);
+
 }
