@@ -13,8 +13,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class RecipeStepDTO {
+public class CommentDTO {
 	private Long id;
-	private String content; // 내용
-    private String image; // 이미지
+    private String content;
+    private String memberName;
 }

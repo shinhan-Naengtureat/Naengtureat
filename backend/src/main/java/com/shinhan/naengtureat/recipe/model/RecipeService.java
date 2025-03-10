@@ -13,16 +13,20 @@ import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
+import com.shinhan.naengtureat.member.model.MemberRepository;
+import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
+import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
 import com.shinhan.naengtureat.recipe.entity.Meal;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.entity.RecipeHashtag;
 import com.shinhan.naengtureat.recipe.entity.RecipeIngredient;
 import com.shinhan.naengtureat.recipe.entity.RecipeStep;
-import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
 import jakarta.transaction.Transactional;
 
@@ -44,10 +48,17 @@ public class RecipeService {
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private MemberRepository memberRepository;
+
 	// 전체 레시피 조회
-	public List<RecipeVO> getAllRecipes() {
+	public List<RecipeDTO> getAllRecipes() {
 		List<Recipe> recipes = recipeRepository.findAll();
-		return recipes.stream().map(recipe -> new RecipeVO(entityToDTO(recipe))) // DTO를 VO로 변환
+		System.out.println(recipes);
+		return recipes.stream().map(recipe -> entityToDTO(recipe))
 				.collect(Collectors.toList());
 	}
 
@@ -64,7 +75,7 @@ public class RecipeService {
 
 		// Meal 설정
 		Meal meal = new Meal();
-		meal.setId(recipeDto.getMeal().getId());
+		meal.setId(recipeDto.getMealId());
 		recipe.setMeal(meal);
 
 		// Member 설정
@@ -123,6 +134,7 @@ public class RecipeService {
 		}
 	}
 
+
 	public List<MyRecipeDTO> getMyRecipe(Long memberId) {
 	    // 특정 memberId를 가진 레시피 목록 조회
 	    List<Recipe> recipeList = recipeRepository.findByMemberId(memberId);
@@ -156,10 +168,92 @@ public class RecipeService {
 	}
 
 
+
+	@Transactional
+	public CommentDTO addComment(Long recipeId, Long memberId, String content) {
+	    Recipe recipe = recipeRepository.findById(recipeId)
+	        .orElseThrow(() -> new RuntimeException("Recipe not found"));
+	    Member member = memberRepository.findById(memberId)
+	        .orElseThrow(() -> new RuntimeException("Member not found"));
+
+	    Comment comment = Comment.builder()
+	        .recipe(recipe)
+	        .member(member)
+	        .content(content)
+	        .build();
+	    
+	    commentRepository.save(comment);
+
+	    return new CommentDTO(comment.getId(),comment.getContent(), comment.getMember().getName()); // memberName 추가
+	}
+
+	@Transactional
+	public CommentDTO updateComment(Long commentId, CommentDTO commentDto) {
+	    Comment comment = commentRepository.findById(commentId).orElse(null);
+	    comment.setContent(commentDto.getContent());
+	    commentRepository.save(comment);
+
+	    // CommentDTO로 변환하여 반환
+	    return new CommentDTO(comment.getId(),comment.getContent(), comment.getMember().getName());
+	}
+	
+	public void deleteComment(Long commentId) {
+		commentRepository.deleteById(commentId);
+	}
+	
+	@Transactional
+	public List<CommentDTO> getComments(Long recipeId) {
+	    List<Comment> comments = commentRepository.findByRecipeId(recipeId);
+	    
+	    return comments.stream()
+	            .map(comment -> entityToDTO(comment)) 
+	            .collect(Collectors.toList());
+	}
+	
+	// 카테고리별 레시피 조회
+    public List<RecipeDTO> getRecipesByCategory(String category) {
+        // 카테고리에 해당하는 레시피 목록 조회
+        List<Recipe> recipes = recipeRepository.findByCategory(category);
+
+        // Recipe 엔티티를 RecipeDTO로 변환하여 반환
+        return recipes.stream().map(recipe -> entityToDTO(recipe)).collect(Collectors.toList());
+    }
+    
+    @Transactional
+    public RecipeDetailDTO getRecipeDetail(Long recipeId) {
+    	
+    	ModelMapper mapper = new ModelMapper();
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+
+        RecipeDetailDTO recipeDetailDTO = mapper.map(recipe, RecipeDetailDTO.class);
+
+        recipeDetailDTO.setIngredients(recipe.getIngredients().stream()
+                .map(ri -> mapper.map(ri, RecipeIngredientDTO.class))
+                .collect(Collectors.toList()));
+
+        recipeDetailDTO.setSteps(recipe.getSteps().stream()
+                .map(step -> mapper.map(step, RecipeStepDTO.class))
+                .collect(Collectors.toList()));
+
+        recipeDetailDTO.setHashtags(recipe.getHashtags().stream()
+                .map(ht -> mapper.map(ht, RecipeHashtagDTO.class))
+                .collect(Collectors.toList()));
+
+        return recipeDetailDTO;
+    }
+	
 	public RecipeDTO entityToDTO(Recipe recipe) {
 		ModelMapper mapper = new ModelMapper();
 		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
 		return dto;
 	}
-
+	
+	public CommentDTO entityToDTO(Comment comment) {
+		ModelMapper mapper = new ModelMapper();
+		CommentDTO dto = mapper.map(comment, CommentDTO.class);
+		return dto;
+	}
+	
+	
 }

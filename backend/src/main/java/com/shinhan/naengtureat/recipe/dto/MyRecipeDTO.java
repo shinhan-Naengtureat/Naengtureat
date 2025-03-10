@@ -1,5 +1,7 @@
 package com.shinhan.naengtureat.recipe.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +15,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class RecipeStepDTO {
-	private Long id;
-	private String content; // 내용
-    private String image; // 이미지
+public class MyRecipeDTO {
+    private Long id;
+    private String name;
+    private String image;
+    private String category;
+
 }

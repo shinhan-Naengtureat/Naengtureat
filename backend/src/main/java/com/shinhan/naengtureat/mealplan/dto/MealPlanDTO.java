@@ -1,13 +1,11 @@
 package com.shinhan.naengtureat.mealplan.dto;
 
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.recipe.entity.Recipe;
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 /**
  * @Data: Getter, Setter, toString, equals, hashCode, RequiredArgsConstructor 자동 생성
@@ -20,14 +18,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class MealPlanDTO {
-    private Long id;//식단ID
-    private Member member; //멤버번호
-    private Recipe recipe; // 레시피ID
-    private LocalDate date; // 식단일자
-    private String type; //식단분류
-    private boolean isCheck; //이행여부
+	private Long id; // 식단ID
 
-    public boolean getIsCheck() {
-        return this.isCheck;
-    }
+	private Long recipeId; // 레시피ID
+	private String recipeName; // 레시피이름
+
+	private LocalDate date; // 식단일자
+	private String type; // 식단분류
+	private boolean isCheck; // 이행여부
 }
