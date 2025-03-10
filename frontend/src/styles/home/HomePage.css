@@ -41,8 +41,9 @@
 }
 
 .recipe-image {
-  width: 120px; /* 아이폰 12 Pro 기준으로 크기 조정 */
-  border-radius: 8px;
+  width: 132px; /* 아이폰 13 Pro 기준으로 크기 조정 */
+  border-radius: 10px; /* 살짝 둥글게 */
+  max-width: 100%; /* 반응형 */
 }
 
 .recipe-info {
