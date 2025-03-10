@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Router, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import HomePage from "pages/home/HomePage";
 import RecipeList from "pages/recipe/RecipeList";
 import InventoryList from "pages/inventory/InventoryList";
