@@ -22,8 +22,12 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Long> {
 	public List<MealPlan> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
 
 	// 저장된 식단 단건 삭제
-	@Transactional
     @Modifying
     @Query("DELETE FROM MealPlan m WHERE m.id = :mealPlanId AND m.member = :member")
 	public int deleteByMemberAndId(@Param("member") Member member, @Param("mealPlanId") Long mealPlanId);
+
+	// 식단 이행여부 체크
+	@Modifying
+    @Query("UPDATE MealPlan m SET m.isCheck = true WHERE m.id = :mealPlanId AND m.member = :member")
+	public int updateMealPlanCheckStatus(@Param("member") Member member, @Param("mealPlanId") Long mealPlanId);
 };
