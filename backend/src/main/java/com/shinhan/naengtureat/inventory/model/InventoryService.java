@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
+import com.querydsl.core.types.Predicate;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
@@ -32,6 +33,8 @@ public class InventoryService {
     IngredientService ingredientService;
 
     LocalDate nowDate = LocalDate.now();
+
+    ModelMapper mapper = new ModelMapper();
 
     public InventoryResponseDTO getInventoryById(Long inventoryId) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
@@ -107,6 +110,22 @@ public class InventoryService {
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
 
         return "재료 수정이 완료 되었습니다.";
+    }
+
+    public List<InventoryResponseDTO> searchInventoryByKeyword(String keyword) {
+        Predicate predicate = inventoryRepository.searchInventoryByKeyword(keyword);
+        List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
+
+        return inventoryList.stream()
+                .map((inventory) -> {
+                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventory.getIngredient().getId());
+
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
+                    setCalculateDday(inventoryResponseDTO);
+                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    return inventoryResponseDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     public InventoryResponseDTO convertDto(Inventory inventory) {
