@@ -31,7 +31,7 @@ public class StoreCartService {
 	}
 
 	// 장바구니에 재료(상품) 추가
-	public Map<String, Object> addCartItem(Long memberId, Long productId, StoreProductDTO storeProductDTO) {
+	public Map<String, Object> createCartItem(Long memberId, Long productId, StoreProductDTO storeProductDTO) {
 		// 로그인 한 사용자의 장바구니에 추가하기 위해
 		Member member = Member.builder().id(memberId).build();
 		
