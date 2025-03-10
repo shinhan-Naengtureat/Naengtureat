@@ -23,7 +23,16 @@ public class StoreProductService {
 	public List<StoreProductDTO> getProductByStoreId(Store store) {
 		List<StoreProduct> storeProductList = storeProductRepository.findAllByStore(store);
 		
-		// Entity를 DTO로 변환 후 리턴
+		// Entity를 DTO로 변환 후 List 형태로 리턴
+		return storeProductList.stream().map(storeProduct -> entityToDTO(storeProduct)).toList();
+	}
+	
+	// 스토어 재료 검색
+	public List<StoreProductDTO> searchProductByKeyword(String keyword) {
+		// store 테이블의 name, store_product 테이블의 small_category에 keyword가 포함된 목록 조회
+		List<StoreProduct> storeProductList = storeProductRepository.findProductByKeyword(keyword);
+		
+		// Entity를 DTO로 변환 후 List 형태로 리턴
 		return storeProductList.stream().map(storeProduct -> entityToDTO(storeProduct)).toList();
 	}
 	

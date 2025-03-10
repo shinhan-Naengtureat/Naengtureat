@@ -127,6 +127,25 @@ public class StoreController {
 		}
 		
 	}
+	
+	// 스토어 재료 검색
+	@GetMapping("/product/{keyword}")
+	public ResponseEntity<Object> searchStoreProductByKeyword(@PathVariable("keyword") String keyword) {
+		
+		try {
+			List<StoreProductDTO> storeProductDTOList = storeProductService.searchProductByKeyword(keyword);
+			
+			return ResponseEntity.ok(storeProductDTOList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "스토어 재료 검색 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+		
+	}
 
 
 }
