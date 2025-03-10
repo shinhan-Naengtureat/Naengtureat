@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,9 +80,11 @@ public class StoreController {
 	
 
 	// 스토어 조회 (부족한 재료 리스트 기반)
-    @GetMapping("/emptyproduct")
-    public ResponseEntity<?> getStoreListEmptyProduct(@RequestBody List<Long> ingredientIds) {
+    @PostMapping("/emptyproduct")
+    public ResponseEntity<?> getStoreListEmptyProduct(@RequestBody Map<String,List<Long>> requestBody) {
         try {
+        	
+        	List<Long> ingredientIds = requestBody.get("ingredientIds");
             // 1. 요청된 ingredientIds가 비어있거나 null 확인
             if (ingredientIds == null || ingredientIds.isEmpty()) {
                 return ResponseEntity.badRequest().body("재료 ID 리스트가 비어 있습니다.");
