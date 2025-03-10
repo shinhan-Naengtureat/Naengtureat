@@ -1,33 +1,27 @@
 package com.shinhan.naengtureat.recipe;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.PathVariable;
-
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
-import com.shinhan.naengtureat.recipe.entity.Recipe;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
 import com.shinhan.naengtureat.recipe.vo.RecipeVO;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
 
 @Slf4j
 @RestController
@@ -71,13 +65,60 @@ public class RecipeController {
 			return new ResponseEntity<>("레시피 등록 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	@GetMapping("/myrecipe/{mid}")
-	public ResponseEntity<Object> getMethodName(@PathVariable("mid") Long mid ) {
-		Member member = Member.builder().id(mid).build();
-		List<Recipe> recipeList = recipeService.findRecipeByMember(member);
-		return ResponseEntity.ok(recipeList);
+
+	// 마이페이지- 내 레시피 전체 목록 조회
+	@GetMapping("/myrecipeList")
+	public ResponseEntity<Object> getMyRecipe() {
+
+		try {
+			// SecurityContext에서 로그인된 사용자 정보 가져오기
+			Long memberId = 1L;
+
+			if (memberId == null) {
+				Map<String, String> errorResponse = new HashMap<>();
+				errorResponse.put("error", "로그인이 필요합니다.");
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+			}
+
+			// 로그인된 사용자의 레시피 조회
+			List<MyRecipeDTO> recipeList = recipeService.getMyRecipe(memberId);
+			return ResponseEntity.ok(recipeList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "마이 레시피 조회 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
 	}
-	
+
+	// 마이페이지- 내 레시피 단건 삭제
+	@DeleteMapping("/{recipeId}")
+	public ResponseEntity<Object> deleteMyRecipe(@PathVariable("recipeId") Long recipeId) {
+		try {
+			// SecurityContext에서 로그인된 사용자 정보 가져오기
+			// Long memberId = getLoggedInMemberId();
+			Long memberId = 1L;
+
+			if (memberId == null) {
+				Map<String, String> errorResponse = new HashMap<>();
+				errorResponse.put("error", "로그인이 필요합니다.");
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+			}
+
+			// 레시피 삭제 서비스 호출
+			String result = recipeService.deleteMyRecipe(memberId, recipeId);
+
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "레시피 삭제 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+	}
+
 }

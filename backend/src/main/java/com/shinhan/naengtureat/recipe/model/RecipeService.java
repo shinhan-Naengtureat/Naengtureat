@@ -2,6 +2,7 @@ package com.shinhan.naengtureat.recipe.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
@@ -120,13 +122,39 @@ public class RecipeService {
 			recipeHashtagRepository.save(recipeHashtag);
 		}
 	}
-	
-	
-	//Member의 Recipe 조회	
-	public List<Recipe> findRecipeByMember(Member member) {
-		return recipeRepository.findByMember(member);
-	} 
-	
+
+	public List<MyRecipeDTO> getMyRecipe(Long memberId) {
+	    // 특정 memberId를 가진 레시피 목록 조회
+	    List<Recipe> recipeList = recipeRepository.findByMemberId(memberId);
+
+	    // Recipe → MyRecipeDTO 변환
+	    return recipeList.stream()
+	            .map(recipe -> new MyRecipeDTO(
+	                    recipe.getId(),
+	                    recipe.getName(),
+	                    recipe.getImage(),
+	                    recipe.getCategory()
+	            ))
+	            .collect(Collectors.toList());
+	}
+
+	// Member의 나의 Recipe 삭제
+	public String deleteMyRecipe(Long memberId, Long recipeId) {
+	    // 해당 recipeId로 레시피 조회
+	    Recipe recipe = recipeRepository.findById(recipeId)
+	            .orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없습니다."));
+
+	    // 해당 레시피의 작성자와 로그인된 사용자가 일치하는지 확인
+	    if (!recipe.getMember().getId().equals(memberId)) {
+	        throw new RuntimeException("본인의 레시피만 삭제할 수 있습니다.");
+	    }
+
+	    // 레시피 삭제
+	    recipeRepository.deleteById(recipeId);
+
+	    return "레시피 삭제 성공";
+	}
+
 
 	public RecipeDTO entityToDTO(Recipe recipe) {
 		ModelMapper mapper = new ModelMapper();
