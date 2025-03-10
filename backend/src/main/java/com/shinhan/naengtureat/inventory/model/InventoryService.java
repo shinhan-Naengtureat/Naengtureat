@@ -31,17 +31,32 @@ public class InventoryService {
     @Autowired
     IngredientService ingredientService;
 
+    LocalDate nowDate = LocalDate.now();
+
+    public InventoryResponseDTO getInventoryById(Long inventoryId) {
+        Inventory inventory = inventoryRepository.findById(inventoryId)
+                .orElseThrow(() -> new NoSuchElementException("재료가 없습니다."));
+
+        //entity -> DTO
+        InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
+
+        //남은 기간 계산 및 저장
+        setCalculateDday(inventoryResponseDTO);
+
+        //재료 닉네임 저장
+        inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+        return inventoryResponseDTO;
+    }
+
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
-        LocalDate nowDate = LocalDate.now();
 
         List<InventoryResponseDTO> inventoryDtos = inventoryList.stream().map((eachInventory) -> {
             //entity -> DTO
             InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
 
             //남은 기간 계산 및 저장
-            int remainingDays = (int) ChronoUnit.DAYS.between(nowDate, inventoryResponseDTO.getInventoryExpDate());
-            inventoryResponseDTO.setRemainingDays(remainingDays);
+            setCalculateDday(inventoryResponseDTO);
 
             //재료 닉네임 저장
             inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
@@ -50,6 +65,12 @@ public class InventoryService {
 
         return inventoryDtos;
     }
+
+    private void setCalculateDday (InventoryResponseDTO inventoryResponseDTO) {
+        int remainingDays = (int) ChronoUnit.DAYS.between(nowDate, inventoryResponseDTO.getInventoryExpDate());
+        inventoryResponseDTO.setRemainingDays(remainingDays);
+    }
+
 
     @Transactional
     public String createInventory(InventoryRequestDTO inventoryRequestDTO) {
@@ -98,9 +119,9 @@ public class InventoryService {
         return mapper.map(inventoryRequestDTO, Inventory.class);
     }
 
-    public List<IngredientComparisonDTO> getListNotEnoughIngredient(Long memberId,LocalDate start_date, LocalDate end_date) {
+    public List<IngredientComparisonDTO> getListNotEnoughIngredient(Long memberId,LocalDate startDate, LocalDate endDate) {
     	//날짜 두개를 입력 받고 , 그 사이에 있는 식단(레시피)를 조회
-    	List<Object[]> results = inventoryRepository.compareInventoryWithMealPlan(memberId,start_date,end_date);
+    	List<Object[]> results = inventoryRepository.compareInventoryWithMealPlan(memberId,startDate,endDate);
     	 return results.stream()
                  .map(row -> new IngredientComparisonDTO(
                          row[0] != null ? ((Number) row[0]).longValue() : null, // memberIngredientId 사용자가 가지고 있는 재료 ID (nullable)

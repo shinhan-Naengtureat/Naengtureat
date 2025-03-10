@@ -22,6 +22,12 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
+	@GetMapping("/{inventoryId}")
+	public ResponseEntity<Object> getInventoryById(@PathVariable("inventoryId") Long inventoryId) {
+		InventoryResponseDTO inventoryById = inventoryService.getInventoryById(inventoryId);
+		return ResponseEntity.ok(inventoryById);
+	}
+
 	@GetMapping
 	public ResponseEntity<Object> getAllInventory() {
 		List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(1L);
@@ -55,18 +61,18 @@ public class InventoryController {
 
 	// 식단 재료 - 멤버 보유 재료 목록 조회
 	@GetMapping("/gap")
-	public ResponseEntity<Object> getNotEnoughIngredientList(@RequestParam("start_date") LocalDate start_date,
-															 @RequestParam("end_date") LocalDate end_date) {
+	public ResponseEntity<Object> getNotEnoughIngredientList(@RequestParam("startDate") LocalDate startDate,
+															 @RequestParam("endDate") LocalDate endDate) {
 		Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 		try {
-			List<IngredientComparisonDTO> gapList = inventoryService.getListNotEnoughIngredient(memberId, start_date,end_date);
+			List<IngredientComparisonDTO> gapList = inventoryService.getListNotEnoughIngredient(memberId, startDate,endDate);
 			// 결과가 비어 있으면 204 No Content 반환
 			if (gapList.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("부족한 재료가 없습니다.");
 			}
-			
+
 			return ResponseEntity.ok(gapList);
-		
+
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청: " + e.getMessage());
 		} catch (Exception e) {
