@@ -3,7 +3,6 @@ package com.shinhan.naengtureat.inventory.model;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.shinhan.naengtureat.ingredient.entity.QIngredient;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.entity.QInventory;
 import org.springframework.data.jpa.repository.JpaRepository;
