@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -210,6 +211,26 @@ public class StoreController {
 			e.printStackTrace();
 			Map<String, String> errorResponse = new HashMap<>();
 			errorResponse.put("error", "스토어 장바구니 추가 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+		
+	}
+	
+	// 장바구니 재료 삭제(단건, 여러 건 둘 다 가능)
+	@DeleteMapping("/cart")
+	public ResponseEntity<Object> deleteCart(@RequestBody List<Long> cartIdList) {
+		
+		try {
+			// 삭제할 재료(상품)의 cartId를 리스트 형태로 전달
+			String result = storeCartService.deleteCartItems(cartIdList);
+			
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "스토어 장바구니 재료 삭제 중 오류 발생");
 			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
