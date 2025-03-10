@@ -3,7 +3,9 @@ package com.shinhan.naengtureat.store.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.member.entity.Cart;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
+import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,12 @@ public class StoreCartService {
 	@Autowired
 	StoreCartRepository storeCartRepository;
 	
+	@Autowired
+	StoreProductRepository storeProductRepository;
+	
+	@Autowired
+	StoreRepository storeRepository;
+	
 	// 장바구니 조회
 	public List<CartDTO> getCartByMemberId(Long memberId) {
 		List<CartDTO> cartDTOList = storeCartRepository.findCartDetailsByMemberId(memberId);
@@ -31,7 +40,7 @@ public class StoreCartService {
 	}
 
 	// 장바구니에 재료(상품) 추가
-	public Map<String, Object> createCartItem(Long memberId, Long productId, StoreProductDTO storeProductDTO) {
+	public Map<String, Object> createCartItem(Long memberId, Long productId) {
 		// 로그인 한 사용자의 장바구니에서 해당 상품이 존재하는지 확인
 	    Cart existingCartItem = storeCartRepository.findByMemberIdAndProductId(memberId, productId);
 	    
@@ -49,7 +58,8 @@ public class StoreCartService {
 			StoreProduct storeProduct = StoreProduct.builder().id(productId).build(); // 어떤 재료(상품)를 장바구니에 추가할 것인지
 			
 			// 로그인 한 사용자의 장바구니에 재료(상품) 추가
-			Cart cartEntity = Cart.builder().count(1)
+			Cart cartEntity = Cart.builder()
+					.count(1)
 					.isCheck(false)
 					.member(member)
 					.product(storeProduct)
@@ -58,10 +68,20 @@ public class StoreCartService {
 			savedCart = storeCartRepository.save(cartEntity);
 			message = "해당 상품이 장바구니에 추가되었습니다.";
 	    }
+	    
+	    // 반환을 CartDTO 타입으로 하기 위해 cartDTO 생성
+	    CartDTO cartDTO = entityToDTO(savedCart);
+	    StoreProduct storeProduct = storeProductRepository.findById(productId)
+	    		.orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다."));
+	    Store store = storeRepository.findById(storeProduct.getStore().getId())
+	    		.orElseThrow(() -> new NoSuchElementException("해당 스토어를 찾을 수 없습니다."));
+	    cartDTO.setStoreId(store.getId());
+	    cartDTO.setStoreImage(store.getImage());
+	    cartDTO.setStorePlaceName(store.getPlaceName());
 		
 		// 장바구니 추가 성공 여부에 대한 결과 문구와 추가된 내역 정보(savedCart) 리턴
 		Map<String, Object> response = new HashMap<>();
-		response.put("savedCart", savedCart);
+		response.put("cartDTO", cartDTO);
 		response.put("message", message);
 		
 		return response;
@@ -77,6 +97,25 @@ public class StoreCartService {
 		storeCartRepository.deleteAllByIdInBatch(cartIdList);
 		
 		return "장바구니에서 " + cartIdList.size() + "개의 상품이 삭제되었습니다.";
+	}
+	
+	// Entity를 DTO로 변환
+	public CartDTO entityToDTO(Cart entity) {
+		CartDTO dto = CartDTO.builder()
+				.id(entity.getId())
+				.count(entity.getCount())
+				.isCheck(entity.isCheck())
+				.productId(entity.getProduct().getId())
+				.productName(entity.getProduct().getName())
+				.productPrice(entity.getProduct().getProductPrice())
+				.discountPrice(entity.getProduct().getDiscountPrice())
+				.productImage(entity.getProduct().getImage())
+				.storeId(null)
+				.storeImage(null)
+				.storePlaceName(null)
+				.build();
+		
+		return dto;
 	}
 
 }
