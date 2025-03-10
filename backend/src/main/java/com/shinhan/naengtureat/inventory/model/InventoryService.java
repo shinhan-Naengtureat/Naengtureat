@@ -31,17 +31,32 @@ public class InventoryService {
     @Autowired
     IngredientService ingredientService;
 
+    LocalDate nowDate = LocalDate.now();
+
+    public InventoryResponseDTO getInventoryById(Long inventoryId) {
+        Inventory inventory = inventoryRepository.findById(inventoryId)
+                .orElseThrow(() -> new NoSuchElementException("재료가 없습니다."));
+
+        //entity -> DTO
+        InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
+
+        //남은 기간 계산 및 저장
+        setCalculateDday(inventoryResponseDTO);
+
+        //재료 닉네임 저장
+        inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+        return inventoryResponseDTO;
+    }
+
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
-        LocalDate nowDate = LocalDate.now();
 
         List<InventoryResponseDTO> inventoryDtos = inventoryList.stream().map((eachInventory) -> {
             //entity -> DTO
             InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
 
             //남은 기간 계산 및 저장
-            int remainingDays = (int) ChronoUnit.DAYS.between(nowDate, inventoryResponseDTO.getInventoryExpDate());
-            inventoryResponseDTO.setRemainingDays(remainingDays);
+            setCalculateDday(inventoryResponseDTO);
 
             //재료 닉네임 저장
             inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
@@ -50,6 +65,12 @@ public class InventoryService {
 
         return inventoryDtos;
     }
+
+    private void setCalculateDday (InventoryResponseDTO inventoryResponseDTO) {
+        int remainingDays = (int) ChronoUnit.DAYS.between(nowDate, inventoryResponseDTO.getInventoryExpDate());
+        inventoryResponseDTO.setRemainingDays(remainingDays);
+    }
+
 
     @Transactional
     public String createInventory(InventoryRequestDTO inventoryRequestDTO) {

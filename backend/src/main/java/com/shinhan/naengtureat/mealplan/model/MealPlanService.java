@@ -19,6 +19,8 @@ import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.model.RecipeHashtagRepository;
 import com.shinhan.naengtureat.recipe.model.RecipeRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MealPlanService {
 
@@ -64,6 +66,7 @@ public class MealPlanService {
 	}
 	
 	// 저장된 식단 단건 삭제
+	@Transactional
 	public String deleteMealPlan(Long memberId, Long mealPlanId) {
 		Member newMember = Member.builder().id(memberId).build();
 		
@@ -90,15 +93,29 @@ public class MealPlanService {
 		return weeklyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
 	}
 	
+	// 식단 이행여부 체크
+	@Transactional
+	public String checkMealPlan(Long memberId, Long mealPlanId) {
+		Member newMember = Member.builder().id(memberId).build();
+		
+		int result = mealPlanRepository.updateMealPlanCheckStatus(newMember, mealPlanId);
+		
+		if(result == 1) {
+			return "식단 이행여부 체크가 완료되었습니다.";
+		} else {
+			return "식단 이행여부 체크에 실패하였습니다.";
+		}
+	}
+	
 	// 저장된 식단 이동
 	public String updateMealPlan(Long memberId, MealPlanDTO mealPlanDTO) {
 		Member newMember = Member.builder().id(memberId).build();
-		
+
 		Optional<MealPlan> optionalMealPlan = mealPlanRepository.findById(mealPlanDTO.getId());
 
         if (optionalMealPlan.isPresent()) {
             MealPlan mealPlan = optionalMealPlan.get();
-            
+
             mealPlan.setDate(mealPlanDTO.getDate());   // 날짜 변경
             mealPlan.setType(mealPlanDTO.getType());   // 식단 타입 변경
 
@@ -107,7 +124,6 @@ public class MealPlanService {
         }
         return "저장된 식단 이동에 실패하였습니다.";
 	}
-	
 	public MealPlanDTO entityToDTO(MealPlan mealPlan) {
 		ModelMapper mapper = new ModelMapper();
 		MealPlanDTO dto = mapper.map(mealPlan, MealPlanDTO.class);
