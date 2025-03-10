@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -57,6 +59,17 @@ public class InventoryController {
 		inventoryRequestDTO.setMemberId(1L);
 		String resultMessage = inventoryService.updateInventory(inventoryRequestDTO);
 		return ResponseEntity.ok(resultMessage);
+	}
+
+	@GetMapping("/search/{keyword}")
+	public ResponseEntity<Object> searchInventoryByKeyword(@PathVariable("keyword") String keyword) {
+		List<InventoryResponseDTO> inventoryResponseDTOS = inventoryService.searchInventoryByKeyword(keyword);
+		if (inventoryResponseDTOS.isEmpty()) {
+			Map<String, String> response = new HashMap<>();
+			response.put("message", "찾는 재료가 없어요.");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+		}
+		return ResponseEntity.ok(inventoryService.searchInventoryByKeyword(keyword));
 	}
 
 	// 식단 재료 - 멤버 보유 재료 목록 조회
