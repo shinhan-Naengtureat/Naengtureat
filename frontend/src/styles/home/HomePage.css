@@ -1,0 +1,78 @@
+.home-container {
+  width: 430px;  /* iPhone 13 Pro Max 너비 */
+  height: calc(100vh - 70px); /* 네비게이션 바 높이 제외 */
+  margin: 0 auto;  /* 중앙 정렬 */
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 내부 컨텐츠도 중앙 정렬 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* 헤더 영역 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.user-icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* 추천 요리 섹션 */
+.recipe-section p {
+  font-size: 14px;
+  color: #666;
+}
+
+.recipe-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.recipe-image {
+  width: 132px; /* 아이폰 13 Pro 기준으로 크기 조정 */
+  border-radius: 10px; /* 살짝 둥글게 */
+  max-width: 100%; /* 반응형 */
+}
+
+.recipe-info {
+  padding-left: 10px;
+}
+
+.recipe-info h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.recipe-info p {
+  font-size: 12px;
+  color: #888;
+}
+
+/* 오늘의 식단 */
+.meal-plan-section {
+  margin-top: 20px;
+}
+
+.meal-plan {
+  display: flex;
+  justify-content: space-around;
+  background: #f8f8f8;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.meal-item {
+  font-size: 14px;
+}
