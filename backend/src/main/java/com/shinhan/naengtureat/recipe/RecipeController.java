@@ -52,6 +52,12 @@ public class RecipeController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 	}
+
+	@GetMapping("/like")
+	public ResponseEntity<Object> getLikeRecipeList() {
+		Long memberId = 1L;
+		return ResponseEntity.ok(likesService.getLikeRecipeList(memberId));
+	}
 	
 	// 상세 레시피 조회
 	@GetMapping("/{recipeId}")
