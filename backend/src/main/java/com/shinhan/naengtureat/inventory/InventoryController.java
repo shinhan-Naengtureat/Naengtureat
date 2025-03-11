@@ -3,7 +3,6 @@ package com.shinhan.naengtureat.inventory;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
-
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,13 @@ public class InventoryController {
 		}
 		return ResponseEntity.ok(inventoryService.searchInventoryByKeyword(keyword));
 	}
+
+	@GetMapping("/filter")
+	public ResponseEntity<Object> filterInventory(@RequestParam("keyword") List<String> keywords) {
+		Long memberId = 1L;
+		return ResponseEntity.ok(inventoryService.getInventoriesByKeywordsCategory(keywords, memberId));
+	}
+
 
 	// 식단 재료 - 멤버 보유 재료 목록 조회
 	@GetMapping("/gap")
