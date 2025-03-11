@@ -1,33 +1,21 @@
 package com.shinhan.naengtureat.store;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.shinhan.naengtureat.member.dto.CartDTO;
-import com.shinhan.naengtureat.store.dto.StoreDTO;
-import com.shinhan.naengtureat.store.dto.StorePriceDTO;
-import com.shinhan.naengtureat.store.dto.StoreProductDTO;
-import com.shinhan.naengtureat.store.dto.StoreReviewDTO;
+import com.shinhan.naengtureat.store.dto.*;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.model.StoreCartService;
 import com.shinhan.naengtureat.store.model.StoreProductService;
 import com.shinhan.naengtureat.store.model.StoreReviewService;
 import com.shinhan.naengtureat.store.model.StoreService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -61,6 +49,16 @@ public class StoreController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
 		
+	}
+
+	// 스토어 리뷰 등록
+	@PostMapping("/review")
+	public ResponseEntity<Object> createStoreReview(@RequestBody StoreReviewRequestDTO storeReviewRequestDTO) {
+		Long memberId = 1L;
+		storeReviewRequestDTO.setMemberId(memberId);
+		log.info(storeReviewRequestDTO.toString());
+		Map<String, String> responseMap = storeReviewService.createStoreReview(storeReviewRequestDTO);
+		return ResponseEntity.ok(responseMap);
 	}
 	
 	// 스토어 상세 조회
