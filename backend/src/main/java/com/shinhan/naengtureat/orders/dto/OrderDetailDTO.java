@@ -1,5 +1,4 @@
 package com.shinhan.naengtureat.orders.dto;
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,14 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrdersDTO {
+public class OrderDetailDTO {
 	
-    private Long id; // 주문 번호
-    
-    private Long memberId; // 멤버 번호
-    
-    private String method; // 결제 수단
-    private int pointPay; // 포인트 사용액
-    private LocalDateTime paymentDate; // 주문일시
-    
+	private String id; // 주문 상세 번호
+
+    private Long productId; // 스토어 상품 번호
+
+    private Long ordersId; // 주문 번호
+
+    private int count; // 주문할 상품 개수
+    private int price; // 주문할 상품 가격
+
 }
