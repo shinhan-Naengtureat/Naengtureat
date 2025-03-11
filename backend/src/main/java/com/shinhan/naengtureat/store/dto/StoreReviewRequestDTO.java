@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * @Data: Getter, Setter, toString, equals, hashCode, RequiredArgsConstructor 자동 생성
  * @NoArgsConstructor: 기본 생성자 생성
