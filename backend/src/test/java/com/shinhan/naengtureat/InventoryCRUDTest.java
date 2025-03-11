@@ -15,7 +15,6 @@ import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.model.InventoryRepository;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
-import com.shinhan.naengtureat.member.model.MemberService;
 
 @SpringBootTest
 public class InventoryCRUDTest {

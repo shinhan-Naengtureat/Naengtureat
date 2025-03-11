@@ -30,9 +30,6 @@ public class InventoryService {
     @Autowired
     private IngredientService ingredientService;
 
-    @Autowired
-    private IngredientRepository ingredientRepository;
-
     private final LocalDate nowDate = LocalDate.now();
 
     private final ModelMapper mapper = new ModelMapper();
