@@ -1,40 +1,42 @@
 package com.shinhan.naengtureat.inventory.model;
 
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-
-
 import com.querydsl.core.types.Predicate;
+import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
+import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class InventoryService {
     @Autowired
-    InventoryRepository inventoryRepository;
+    private InventoryRepository inventoryRepository;
 
     @Autowired
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
 
-    LocalDate nowDate = LocalDate.now();
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
-    ModelMapper mapper = new ModelMapper();
+    private final LocalDate nowDate = LocalDate.now();
+
+    private final ModelMapper mapper = new ModelMapper();
+
 
     public InventoryResponseDTO getInventoryById(Long inventoryId) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
@@ -116,6 +118,22 @@ public class InventoryService {
         Predicate predicate = inventoryRepository.searchInventoryByKeyword(keyword);
         List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
 
+        return convertDtoList(inventoryList);
+    }
+
+    @Transactional
+    public List<InventoryResponseDTO> getInventoriesByKeywordsCategory(List<String> keywords, Long memberId) {
+        Predicate predicate = inventoryRepository.searchInventoryByBigCategories(keywords, memberId);
+        List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
+
+        return convertDtoList(inventoryList);
+    }
+
+    public InventoryResponseDTO convertDto(Inventory inventory) {
+        return mapper.map(inventory, InventoryResponseDTO.class);
+    }
+
+    public List<InventoryResponseDTO> convertDtoList(List<Inventory> inventoryList) {
         return inventoryList.stream()
                 .map((inventory) -> {
                     Ingredient ingredient = ingredientService.getStandardIngredientById(inventory.getIngredient().getId());
@@ -126,10 +144,6 @@ public class InventoryService {
                     return inventoryResponseDTO;
                 })
                 .collect(Collectors.toList());
-    }
-
-    public InventoryResponseDTO convertDto(Inventory inventory) {
-        return mapper.map(inventory, InventoryResponseDTO.class);
     }
 
     public Inventory convertEntity(InventoryRequestDTO inventoryRequestDTO) {

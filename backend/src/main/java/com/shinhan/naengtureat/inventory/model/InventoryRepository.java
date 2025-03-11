@@ -30,6 +30,18 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		return predicate;
 	}
 
+	default Predicate searchInventoryByBigCategories(List<String> keywords, Long memberId) {
+		QInventory inventory = QInventory.inventory;
+		BooleanExpression predicate = inventory.member.id.eq(memberId);
+
+		if (keywords != null || !keywords.isEmpty()) {
+			predicate = predicate.and(inventory.ingredient.bigCategory.in(keywords));
+		}
+
+		return predicate;
+
+	}
+
 		@Query(value = """
 		        SELECT 
 		            A.a_ingredient_id, 
