@@ -3,6 +3,7 @@ package com.shinhan.naengtureat.inventory;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
+import com.shinhan.naengtureat.inventory.dto.ResponseMapDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -44,8 +43,7 @@ public class InventoryController {
         }
 
         inventoryRequestDTO.setMemberId(1L);
-        String resultMessage = inventoryService.createInventory(inventoryRequestDTO);
-        return ResponseEntity.ok(resultMessage);
+        return ResponseEntity.ok(inventoryService.createInventory(inventoryRequestDTO));
     }
 
 	@PutMapping
@@ -56,17 +54,15 @@ public class InventoryController {
 		}
 
 		inventoryRequestDTO.setMemberId(1L);
-		String resultMessage = inventoryService.updateInventory(inventoryRequestDTO);
-		return ResponseEntity.ok(resultMessage);
+		return ResponseEntity.ok(inventoryService.updateInventory(inventoryRequestDTO));
 	}
 
 	@GetMapping("/search/{keyword}")
 	public ResponseEntity<Object> searchInventoryByKeyword(@PathVariable("keyword") String keyword) {
 		List<InventoryResponseDTO> inventoryResponseDTOS = inventoryService.searchInventoryByKeyword(keyword);
 		if (inventoryResponseDTOS.isEmpty()) {
-			Map<String, String> response = new HashMap<>();
-			response.put("message", "찾는 재료가 없어요.");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(ResponseMapDTO.builder().message("찾는 재료가 없어요.").build());
 		}
 		return ResponseEntity.ok(inventoryService.searchInventoryByKeyword(keyword));
 	}
@@ -97,7 +93,5 @@ public class InventoryController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생: " + e.getMessage());
 		}
-
 	}
-
 }

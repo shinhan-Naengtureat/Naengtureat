@@ -8,6 +8,7 @@ import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
+import com.shinhan.naengtureat.inventory.dto.ResponseMapDTO;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class InventoryService {
 
 
     @Transactional
-    public String createInventory(InventoryRequestDTO inventoryRequestDTO) {
+    public ResponseMapDTO createInventory(InventoryRequestDTO inventoryRequestDTO) {
         if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0이상 이여야 합니다.");
         }
@@ -86,11 +87,13 @@ public class InventoryService {
 
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
         inventoryRepository.save(inventory);
-        return "재료 저장이 완료 되었습니다.";
+        return ResponseMapDTO.builder()
+                .message("재료 저장이 완료되었습니다")
+                .build();
     }
 
     @Transactional
-    public String updateInventory(InventoryRequestDTO inventoryRequestDTO) {
+    public ResponseMapDTO updateInventory(InventoryRequestDTO inventoryRequestDTO) {
         if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0 이상 이여야 합니다.");
         }
@@ -108,7 +111,9 @@ public class InventoryService {
         inventory.setInputDate(inventoryRequestDTO.getInputDate());  //변경된 인입일 등록
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
 
-        return "재료 수정이 완료 되었습니다.";
+        return ResponseMapDTO.builder()
+                .message("재료 수정이 완료 되었습니다.")
+                .build();
     }
 
     public List<InventoryResponseDTO> searchInventoryByKeyword(String keyword) {
