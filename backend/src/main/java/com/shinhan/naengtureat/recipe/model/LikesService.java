@@ -1,25 +1,19 @@
 package com.shinhan.naengtureat.recipe.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
-import com.shinhan.naengtureat.inventory.entity.Inventory;
+import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.recipe.dto.LikesRequestDTO;
 import com.shinhan.naengtureat.recipe.dto.LikesResponseDTO;
-import com.shinhan.naengtureat.recipe.entity.Hashtag;
+import com.shinhan.naengtureat.recipe.entity.Likes;
+import com.shinhan.naengtureat.recipe.entity.Recipe;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.member.model.MemberRepository;
-import com.shinhan.naengtureat.recipe.entity.Likes;
-import com.shinhan.naengtureat.recipe.entity.Recipe;
-
-import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class LikesService {
@@ -98,9 +92,4 @@ public class LikesService {
             likeRepository.save(like);
         }
     }
-
-    private LikesRequestDTO convertDto(Likes likeRecipe) {
-        return mapper.map(likeRecipe, LikesRequestDTO.class);
-    }
-
 }
