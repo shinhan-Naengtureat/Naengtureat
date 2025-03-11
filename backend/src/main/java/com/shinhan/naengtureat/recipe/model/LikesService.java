@@ -34,10 +34,6 @@ public class LikesService {
         return likeRepository.findByRecipeIdAndMemberId(recipeId, memberId);
     }
 
-    /**
-     * 1. 좋아요에 있는 멤버아이디와 매칭되는 레시피 id 모두 불러오기
-     * 2. List<Recipe> 형태로 반환하기
-     * */
     public List<LikesResponseDTO> getLikeRecipeList(Long memberId) {
 
         Member member = memberRepository.findById(memberId)
