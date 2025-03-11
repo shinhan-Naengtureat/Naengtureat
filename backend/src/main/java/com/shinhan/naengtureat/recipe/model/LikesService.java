@@ -2,7 +2,6 @@ package com.shinhan.naengtureat.recipe.model;
 
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
-import com.shinhan.naengtureat.recipe.dto.LikesRequestDTO;
 import com.shinhan.naengtureat.recipe.dto.LikesResponseDTO;
 import com.shinhan.naengtureat.recipe.entity.Likes;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
