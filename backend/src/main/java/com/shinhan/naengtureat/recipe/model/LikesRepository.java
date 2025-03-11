@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.recipe.entity.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.shinhan.naengtureat.recipe.entity.Likes;
