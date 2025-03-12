@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.store;
 
+import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.store.dto.*;
 import com.shinhan.naengtureat.store.entity.Store;
@@ -63,11 +64,9 @@ public class StoreController {
 			return ResponseEntity.ok(responseMap);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "스토어 리뷰 등록 중 오류 발생");
-			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
-
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("스토어 리뷰 등록 중 오류 발생: " + e.getMessage()).build());
 		}
 		
 	}
@@ -229,17 +228,12 @@ public class StoreController {
 			// 삭제할 재료(상품)의 cartId를 리스트 형태로 전달
 			String resultMsg = storeCartService.deleteCartItems(cartIdList);
 			
-			Map<String, String> result = new HashMap<>();
-			result.put("message", resultMsg);
-			
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(BaseResponse.builder().message(resultMsg).build());
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "스토어 장바구니 재료 삭제 중 오류 발생");
-			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("스토어 장바구니 재료 삭제 중 오류 발생: " + e.getMessage()).build());
 		}
 		
 	}
