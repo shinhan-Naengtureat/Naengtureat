@@ -2,11 +2,13 @@ package com.shinhan.naengtureat.store.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shinhan.naengtureat.orders.dto.OrdersResponseDTO;
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
@@ -44,6 +46,22 @@ public class StoreProductService {
 		List<StoreProduct> storeProductList = storeProductRepository.findByIngredient_BigCategoryIn(bigCategoryList);
 		
 		return storeProductList.stream().map(storeProduct -> entityToDTO(storeProduct)).toList();
+	}
+	
+	// productId로 상품 이름과 스토어 이름 조회(OrdersController에서 사용)
+	public OrdersResponseDTO getProductNameAndStoreNameById(Long productId) {
+		StoreProduct storeProduct = storeProductRepository.findById(productId)
+				.orElseThrow(() -> new NoSuchElementException(productId + "번(productId)의 상품을 찾을 수 없습니다."));
+		
+		String productName = storeProduct.getName();
+		String storePlaceName = storeProduct.getStore().getPlaceName();
+		
+		OrdersResponseDTO responseDTO = OrdersResponseDTO.builder()
+				.productName(productName)
+				.storePlaceName(storePlaceName)
+				.build();
+		
+		return responseDTO;
 	}
 	
 	// Entity를 DTO로 변환(Data 전송을 위함, controller, service, view에서 작업)
