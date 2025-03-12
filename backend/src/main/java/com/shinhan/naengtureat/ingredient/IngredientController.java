@@ -28,7 +28,7 @@ public class IngredientController {
     }
 
     @GetMapping("/{ingredientId}")
-    public ResponseEntity<Object> getIngredientById(@PathVariable Long ingredientId) {
+    public ResponseEntity<Object> getIngredientById(@PathVariable("ingredientId") Long ingredientId) {
         Ingredient ingredient = ingredientService.getStandardIngredientById(ingredientId);
 
         if (ingredient != null) {

@@ -1,8 +1,5 @@
 package com.shinhan.naengtureat.member.dto;
 
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.store.entity.StoreProduct;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,13 +16,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CartDTO {
-    private Long id;
-    private int count;
-    private boolean isCheck;
-    private StoreProduct product;
-    private Member member;
+	
+    private Long id; // 장바구니 번호
+    private int count; // 개수
+    private boolean isCheck; // 삭제 시 사용되는 체크 여부
+    
+    private Long productId; // 상품 번호
+    private String productName; // 상품 이름
+    private int productPrice; // 상품 가격
+    private Integer discountPrice; // 할인 가격
+    private String productImage; // 상품 이미지
+    
+    private Long storeId; // 스토어 번호
+    private String storeImage; // 스토어 사진
+    private String storePlaceName; // 스토어 이름
 
     public boolean getIsCheck() {
         return this.isCheck;
     }
+    
 }

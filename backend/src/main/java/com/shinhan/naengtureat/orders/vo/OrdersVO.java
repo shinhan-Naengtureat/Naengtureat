@@ -1,12 +1,10 @@
 package com.shinhan.naengtureat.orders.vo;
 
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.orders.dto.OrdersDTO;
 import lombok.ToString;
 import lombok.Value;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**

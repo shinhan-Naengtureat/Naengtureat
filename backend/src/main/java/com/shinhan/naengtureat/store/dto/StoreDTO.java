@@ -26,4 +26,7 @@ public class StoreDTO {
     private String roadAddressName; // 도로명 주소
     private String placeUrl; // http://place.map.kakao.com/16618597
     
+    private double rateAvg; // 스토어 리뷰 별점 평균
+    private int reviewCount; // 스토어 리뷰 갯수
+    
 }

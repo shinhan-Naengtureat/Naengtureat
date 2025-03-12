@@ -1,6 +1,6 @@
 package com.shinhan.naengtureat.inventory.vo;
 
-import com.shinhan.naengtureat.inventory.dto.InventoryDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import lombok.ToString;
 import lombok.Value;
 
@@ -23,7 +23,7 @@ public class InventoryVO {
     /**
      * DTO를 받아서 VO를 생성하는 생성자 추가
      */
-    public InventoryVO(InventoryDTO dto) {
+    public InventoryVO(InventoryRequestDTO dto) {
         this.id = dto.getId();
         this.quantity = dto.getQuantity();
         this.nickName = dto.getNickName();
