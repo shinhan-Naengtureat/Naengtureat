@@ -1,7 +1,10 @@
 package com.shinhan.naengtureat.recipe.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
+import com.shinhan.naengtureat.mealplan.entity.MealPlan;
+import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
@@ -51,6 +56,9 @@ public class RecipeService {
 
 	@Autowired
 	private MemberRepository memberRepository;
+	
+	@Autowired
+	private MealPlanRepository mealPlanRepository;
 
 	// 전체 레시피 조회
 	public List<RecipeDTO> getAllRecipes() {
@@ -225,5 +233,25 @@ public class RecipeService {
 		return dto;
 	}
 	
-	
+	@Transactional
+    public MealPlan createOrUpdateMealPlan(Long memberId, Long recipeId, LocalDate date, String type) {
+        Optional<MealPlan> existingMealPlan = mealPlanRepository.findByMemberIdAndDateAndType(memberId, date, type);
+
+        existingMealPlan.ifPresent(mealPlanRepository::delete);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+
+        MealPlan newMealPlan = MealPlan.builder()
+                .member(member)
+                .recipe(recipe)
+                .date(date)
+                .type(type)
+                .isCheck(false)
+                .build();
+
+        return mealPlanRepository.save(newMealPlan);
+    }
 }
