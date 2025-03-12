@@ -24,7 +24,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"product", "orders"})
+@ToString(exclude = {"orders"})
 public class OrdersDetail extends SuperEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -20,6 +20,7 @@ import com.shinhan.naengtureat.orders.entity.Orders;
 import com.shinhan.naengtureat.orders.entity.OrdersDetail;
 import com.shinhan.naengtureat.orders.model.OrdersDetailService;
 import com.shinhan.naengtureat.orders.model.OrdersService;
+import com.shinhan.naengtureat.store.model.StoreProductService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,9 @@ public class OrdersController {
 	
 	@Autowired
 	OrdersDetailService ordersDetailService;
+	
+	@Autowired
+	StoreProductService storeProductService;
 	
 	// 장바구니에서 주문하기 클릭 시 주문할 상품 정보 세션에 저장
 	@PostMapping("/session")
@@ -66,10 +70,10 @@ public class OrdersController {
 			// ordersDTO : memberId, method, point_pay를 Front 단에서 받아야 함
 			
 			// 세션에 저장되어 있는 주문할 상품 정보(productId, count, price)
-//			List<OrdersDetailDTO> orderDetailDTOList = (List<OrdersDetailDTO>) session.getAttribute("orderDetailDTOList");
-			List<OrdersDetailDTO> orderDetailDTOList = new ArrayList<>();
-			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(1L).count(1).price(3000).build());
-			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(2L).count(2).price(10000).build());
+			List<OrdersDetailDTO> orderDetailDTOList = (List<OrdersDetailDTO>) session.getAttribute("orderDetailDTOList");
+//			List<OrdersDetailDTO> orderDetailDTOList = new ArrayList<>();
+//			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(1L).count(1).price(3000).build());
+//			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(2L).count(2).price(10000).build());
 			log.info("[orderDetailDTOList] : " + orderDetailDTOList);
 			 
 	        if (orderDetailDTOList == null) {
@@ -78,16 +82,19 @@ public class OrdersController {
 	 
 	        // 주문할 상품 정보를 각 테이블에 저장
 	        Orders savedOrders = ordersService.saveOrderInfo(ordersDTO);
-	        log.info("[savedOrders] : " + savedOrders);
 	        // orderDetailDTOList를 Entity로 변환할 때 ordersId를 set 해주기 위해 savedOrders에서 값 가져오기
 	        String ordersId = savedOrders.getId();
 	        List<OrdersDetail> savedOrdersDetail = ordersDetailService.saveOrderDetailInfo(orderDetailDTOList, ordersId);
-	        log.info("[savedOrdersDetail] : " + savedOrdersDetail);
 	        
 	        // 각 OrdersDetail에 대해 응답 DTO 생성
 	        List<OrdersResponseDTO> responseDtos = new ArrayList<>();
 	        for (OrdersDetail ordersDetail : savedOrdersDetail) {
-	            String productName = ordersDetail.getProduct().getName();
+	        	Long productId = ordersDetail.getProduct().getId();
+	        	// productId로 상품 이름과 스토어 이름 조회
+	        	OrdersResponseDTO responseDTO = storeProductService.getProductNameAndStoreNameById(productId);
+	        	String storePlaceName = responseDTO.getStorePlaceName();
+	        	String productName = responseDTO.getProductName();
+	        	
 	            int ordersDetailCount = ordersDetail.getCount();
 	            int ordersDetailPrice = ordersDetail.getPrice();
 	            
@@ -97,6 +104,7 @@ public class OrdersController {
 
 	            // OrdersResponseDTO 생성
 	            OrdersResponseDTO orderResponseDto = OrdersResponseDTO.builder()
+	            		.storePlaceName(storePlaceName)
 	                    .ordersPaymentDate(savedOrders.getPaymentDate())
 	                    .productName(productName)
 	                    .ordersDetailCount(ordersDetailCount)

@@ -2,6 +2,8 @@ package com.shinhan.naengtureat.orders.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +21,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrdersResponseDTO {
 	
-//	private String storePlaceName; // 스토어 이름
+	private String storePlaceName; // 스토어 이름
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy년 M월 d일 HH:mm", timezone = "Asia/Seoul")
 	private LocalDateTime ordersPaymentDate; // 주문일시
 	
 	private String productName; // 상품 이름

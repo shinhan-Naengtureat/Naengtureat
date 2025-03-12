@@ -33,4 +33,5 @@ public interface StoreProductRepository extends JpaRepository<StoreProduct, Long
 			+ " GROUP BY s.placeName, s.image "
 			+ " ORDER BY SUM(COALESCE(p.discountPrice,0)) ")
 	List<StorePriceDTO> findStorePricesByIngredients(@Param("ingredientIds") List<Long> ingredientIds);
+	
 }
