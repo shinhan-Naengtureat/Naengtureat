@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shinhan.naengtureat.mealplan.dto.MealPlanCheckDTO;
+import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
@@ -176,5 +178,14 @@ public class RecipeController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 예외 발생 시 BAD_REQUEST 반환
         }
+    }
+    
+    @PostMapping("/{recipeId}/meal-plan")
+    public ResponseEntity<MealPlanDTO> addMealPlan(@PathVariable("recipeId") Long recipeId,
+                                                    @RequestBody MealPlanCheckDTO requestDTO) {
+        MealPlanDTO mealPlanDTO = recipeService.createOrUpdateMealPlan(
+                requestDTO.getMemberId(), recipeId, requestDTO.getDate(), requestDTO.getType()
+        );
+        return ResponseEntity.ok(mealPlanDTO);
     }
 }
