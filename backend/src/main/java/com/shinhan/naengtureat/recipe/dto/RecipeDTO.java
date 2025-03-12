@@ -4,11 +4,6 @@ package com.shinhan.naengtureat.recipe.dto;
 
 import java.util.List;
 
-import org.hibernate.annotations.DynamicUpdate;
-
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.recipe.entity.Meal;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

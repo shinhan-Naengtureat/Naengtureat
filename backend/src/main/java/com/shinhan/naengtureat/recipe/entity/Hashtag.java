@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.recipe.entity;
 
 import com.shinhan.naengtureat.common.entities.SuperEntity;
-import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
