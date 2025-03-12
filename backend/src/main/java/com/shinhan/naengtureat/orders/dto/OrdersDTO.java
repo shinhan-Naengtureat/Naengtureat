@@ -1,4 +1,5 @@
 package com.shinhan.naengtureat.orders.dto;
+
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OrdersDTO {
 	
-    private Long id; // 주문 번호
+    private String id; // 주문 번호
     
     private Long memberId; // 멤버 번호
     

@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 @ToString(exclude = {"member"})
 public class Orders extends SuperEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "orders_id")
-	private Long id;
+	private String id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")

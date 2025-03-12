@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDetailDTO {
+public class OrdersDetailDTO {
 	
-	private String id; // 주문 상세 번호
+	private Long id; // 주문 상세 번호
 
     private Long productId; // 스토어 상품 번호
 
