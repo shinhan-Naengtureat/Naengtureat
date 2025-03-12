@@ -20,8 +20,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	public List<Recipe> findByCategory(String category);
 
 	public Optional<Recipe> findById(Long recipeId);
-	
+
 	// 대분류 필터
 	public List<Recipe> findDistinctByIngredients_Ingredient_BigCategoryIn(List<String> bigCategories);
 
+	// 추천순 정렬
+	@Query("SELECT r FROM Recipe r LEFT JOIN Likes l ON l.recipe = r GROUP BY r ORDER BY COUNT(l) DESC")
+	List<Recipe> findAllOrderByLikesCountDesc();
 }

@@ -2,12 +2,14 @@ package com.shinhan.naengtureat.recipe.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
@@ -248,4 +250,55 @@ public class RecipeService {
 		List<Recipe> recipes = recipeRepository.findDistinctByIngredients_Ingredient_BigCategoryIn(bigCategories);
 		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
 	}
+
+	@Transactional
+	public List<RecipeDTO> getRecipesSorted(String sortType) {
+		List<Recipe> recipes;
+
+		switch (sortType.toLowerCase()) {
+		case "recommend":
+			// 추천순: 좋아요 수 기준 내림차순
+			recipes = recipeRepository.findAllOrderByLikesCountDesc();
+			break;
+		case "latest":
+			// 최신순(등록일순): id가 순차적으로 생기기때문에 id내림차순으로 정렬함
+			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+			break;
+		case "difficulty":
+			// 난이도순: level 필드 기준 오름차순
+			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
+			break;
+		case "cookingtime":
+            // 조리시간순: 커스텀 정렬 로직을 통해 cookingTime을 실제 분 단위로 변환하여 오름차순 정렬
+            recipes = recipeRepository.findAll();
+            recipes.sort(Comparator.comparingInt(r -> convertCookingTimeToMinutes(r.getCookingTime())));
+            break;
+		default:
+			// sortType이 올바르지 않으면 전체 조회
+			recipes = recipeRepository.findAll();
+			break;
+		}
+
+		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+	}
+	
+	// 조리시간순으로 정렬하기 위해 15분이내, 2시간이내 같이 저장되어있는 데이터를 int로 바꿔주는 함수
+	private int convertCookingTimeToMinutes(String cookingTime) {
+        if (cookingTime == null || cookingTime.isEmpty()) {
+            return Integer.MAX_VALUE; // 정렬 시 뒤로 배치
+        }
+        try {
+            if (cookingTime.contains("분 이내")) {
+                String numStr = cookingTime.replace("분 이내", "").trim();
+                return Integer.parseInt(numStr);
+            } else if (cookingTime.contains("시간 이내")) {
+                String numStr = cookingTime.replace("시간 이내", "").trim();
+                return Integer.parseInt(numStr) * 60;
+            } else {
+                return Integer.MAX_VALUE;
+            }
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE;
+        }
+    }
 }

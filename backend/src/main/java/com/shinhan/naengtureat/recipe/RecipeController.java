@@ -76,19 +76,19 @@ public class RecipeController {
 			throw new IllegalArgumentException("해당 멤버로 좋아요한 레시피가 아닙니다.");
 		}
 	}
-	
+
 	// 상세 레시피 조회
 	@GetMapping("/{recipeId}")
-    public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
+	public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
 		try {
-        RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
-        return ResponseEntity.ok(recipeDetail);
-		}catch(Exception e) {
+			RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
+			return ResponseEntity.ok(recipeDetail);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("레시피 상세조회 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-    }
-	
+	}
+
 	// 레시피 등록
 	@PostMapping("/new")
 	public ResponseEntity<String> insertRecipe(@RequestBody RecipeDTO recipeDto) {
@@ -105,7 +105,7 @@ public class RecipeController {
 			return new ResponseEntity<>("레시피 등록 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	// 댓글 등록
 	@PostMapping("/{recipeId}/comment")
 	public ResponseEntity<Object> createComment(@PathVariable("recipeId") Long recipeId,
@@ -123,31 +123,31 @@ public class RecipeController {
 		}
 	}
 
-	 // 댓글 수정
-    @PutMapping("/comment/{commentId}")
-    public ResponseEntity<Object> updateComment(@PathVariable("commentId") Long commentId,
-            @RequestBody CommentDTO commentDto) {
-        try {
-            // 댓글 수정 서비스 호출
-            CommentDTO updatedComment = recipeService.updateComment(commentId, commentDto);
-            return ResponseEntity.ok(updatedComment); // 수정된 댓글 반환
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 수정에 실패하였습니다.");
-        }
-    }
-    
-    // 댓글 삭제
+	// 댓글 수정
+	@PutMapping("/comment/{commentId}")
+	public ResponseEntity<Object> updateComment(@PathVariable("commentId") Long commentId,
+			@RequestBody CommentDTO commentDto) {
+		try {
+			// 댓글 수정 서비스 호출
+			CommentDTO updatedComment = recipeService.updateComment(commentId, commentDto);
+			return ResponseEntity.ok(updatedComment); // 수정된 댓글 반환
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 수정에 실패하였습니다.");
+		}
+	}
+
+	// 댓글 삭제
 	@DeleteMapping("/comment/{commentId}")
 	public ResponseEntity<String> deleteComment(@PathVariable("commentId") Long commentId) {
 		recipeService.deleteComment(commentId);
 		return ResponseEntity.ok("delete ok");
 	}
-	
+
 	// 댓글 조회
 	@GetMapping("/{recipeId}/comment")
 	public ResponseEntity<List<CommentDTO>> getComment(@PathVariable("recipeId") Long recipeId) {
-	    List<CommentDTO> comments = recipeService.getComments(recipeId);
-	    return ResponseEntity.ok(comments);
+		List<CommentDTO> comments = recipeService.getComments(recipeId);
+		return ResponseEntity.ok(comments);
 	}
 
 	@GetMapping("/myrecipe/{memberId}")
@@ -157,8 +157,6 @@ public class RecipeController {
 		return ResponseEntity.ok(recipeList);
 	}
 
-    
-	
 	// 좋아요 토글 API
 	@PostMapping("/like/{recipeId}")
 	public ResponseEntity<String> toggleLikes(@PathVariable("recipeId") Long recipeId) {
@@ -168,37 +166,48 @@ public class RecipeController {
 		likesService.toggleLikes(recipeId, memberId);
 		return ResponseEntity.ok("좋아요 상태가 변경되었습니다.");
 	}
-	
+
 	// 카테고리별 레시피 조회
-    @GetMapping("/category/{category}")
-    public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
-        try {
-            // 카테고리에 해당하는 레시피 목록 조회
-            List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
-            return ResponseEntity.ok(recipes); // 성공적으로 레시피 목록 반환
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 예외 발생 시 BAD_REQUEST 반환
-        }
-    }
-    
-    @PostMapping("/{recipeId}/meal-plan")
-    public ResponseEntity<MealPlanDTO> addMealPlan(@PathVariable("recipeId") Long recipeId,
-                                                    @RequestBody MealPlanCheckDTO requestDTO) {
-        MealPlanDTO mealPlanDTO = recipeService.createOrUpdateMealPlan(
-                requestDTO.getMemberId(), recipeId, requestDTO.getDate(), requestDTO.getType()
-        );
-        return ResponseEntity.ok(mealPlanDTO);
-    }
-    
-    @GetMapping("/bigcategory")
-    public ResponseEntity<Object> getRecipesByBigCategory(@RequestParam("bigCategory") List<String> bigCategory) {
-        try {
-            List<RecipeDTO> recipes = recipeService.getRecipesByBigCategory(bigCategory);
-            return ResponseEntity.ok(recipes);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                 .body("빅카테고리 필터링 중 오류가 발생했습니다. " + e.getMessage());
-        }
-    }
+	@GetMapping("/category/{category}")
+	public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
+		try {
+			// 카테고리에 해당하는 레시피 목록 조회
+			List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
+			return ResponseEntity.ok(recipes); // 성공적으로 레시피 목록 반환
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // 예외 발생 시 BAD_REQUEST 반환
+		}
+	}
+
+	@PostMapping("/{recipeId}/meal-plan")
+	public ResponseEntity<Object> addMealPlan(@PathVariable("recipeId") Long recipeId,
+			@RequestBody MealPlanCheckDTO requestDTO) {
+		MealPlanDTO mealPlanDTO = recipeService.createOrUpdateMealPlan(requestDTO.getMemberId(), recipeId,
+				requestDTO.getDate(), requestDTO.getType());
+		return ResponseEntity.ok(mealPlanDTO);
+	}
+
+	@GetMapping("/bigcategory")
+	public ResponseEntity<Object> getRecipesByBigCategory(@RequestParam("bigCategory") List<String> bigCategory) {
+		try {
+			List<RecipeDTO> recipes = recipeService.getRecipesByBigCategory(bigCategory);
+			return ResponseEntity.ok(recipes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("빅카테고리 필터링 중 오류가 발생했습니다. " + e.getMessage());
+		}
+	}
+
+	@GetMapping("/sort")
+	public ResponseEntity<Object> getSortedRecipes(@RequestParam("sortType") String sortType) {
+		try {
+			List<RecipeDTO> recipes = recipeService.getRecipesSorted(sortType);
+			return ResponseEntity.ok(recipes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("레시피 정렬 중 오류가 발생했습니다. " + e.getMessage());
+		}
+	}
 }
