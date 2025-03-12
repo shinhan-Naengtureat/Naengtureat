@@ -77,6 +77,11 @@ public class InventoryController {
 		return ResponseEntity.ok(inventoryService.getInventoriesByKeywordsCategory(keywords, memberId));
 	}
 
+	@GetMapping("/wastebasket")
+	public ResponseEntity<Object> getExpiredInventory() {
+		Long memberId = 1L;
+		return ResponseEntity.ok(inventoryService.getExpiredInventory(memberId));
+	}
 
 	// 식단 재료 - 멤버 보유 재료 목록 조회
 	@GetMapping("/gap")
