@@ -4,7 +4,6 @@ package com.shinhan.naengtureat.inventory.model;
 import com.querydsl.core.types.Predicate;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.ingredient.dto.IngredientDTO;
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
