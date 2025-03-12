@@ -11,13 +11,17 @@ import com.shinhan.naengtureat.recipe.entity.Recipe;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-	List<Recipe> findByMember(Member member);
+	public List<Recipe> findByMember(Member member);
 
 	@Query("select distinct category from #{#entityName}")
-	List<String> findCategoryAll();
+	public List<String> findCategoryAll();
 
 	// 카테고리별 레시피 조회
 	public List<Recipe> findByCategory(String category);
 
-	Optional<Recipe> findById(Long recipeId);
+	public Optional<Recipe> findById(Long recipeId);
+	
+	// 대분류 필터
+	public List<Recipe> findDistinctByIngredients_Ingredient_BigCategoryIn(List<String> bigCategories);
+
 }
