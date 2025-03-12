@@ -4,9 +4,6 @@ package com.shinhan.naengtureat.recipe.dto;
 
 import java.util.List;
 
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.recipe.entity.Meal;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,7 +36,7 @@ public class RecipeDTO {
     private Boolean isDelete;
 	private List<RecipeIngredientDTO> ingredients; // 레시피 재료
 	private List<RecipeStepDTO> steps; // 레시피 순서
-	private List<Long> hashtagIds; // 해시태그 ID 리스트
+	private List<RecipeHashtagDTO> hashtagIds; // 해시태그 ID 리스트
 
 }
 
