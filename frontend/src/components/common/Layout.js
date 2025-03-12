@@ -1,5 +1,5 @@
-import TopNav from "components/TopNav";
-import BottomNav from "components/BottomNav";
+import TopNav from "components/common/TopNav";
+import BottomNav from "components/common/BottomNav";
 import "styles/common/Layout.css"; // 스타일 적용
 
 const Layout = ({ children }) => {

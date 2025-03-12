@@ -1,0 +1,46 @@
+.inventory-container {
+  width: 100%;
+  flex: 1;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.item-box {
+  width: 80px;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 8px;
+  position: relative;
+}
+
+.badge.bg-warning {
+  position: absolute;
+  top: -8px;
+  left: 5px;
+  font-size: 0.6rem;
+}
+
+.rounded-circle.position-fixed {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.category-btn {
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.category-btn.active {
+  background-color: #ffc58b;
+  color: white;
+  border-color: #f08c00;
+}
