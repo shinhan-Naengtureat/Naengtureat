@@ -2,7 +2,6 @@ package com.shinhan.naengtureat.ingredient;
 
 import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.ingredient.dto.IngredientDTO;
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
