@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "styles/home/HomePage.css"; // 스타일 적용
+import "styles/home/HomePage.css";
 
 const HomePage = () => {
   return (
-    <div className="home-container">
+    <div className="homepage-container">
       {/* 상단 유저 아이콘 */}
       <div className="header">
         <h2>오늘, 이 요리 어때요?</h2>
