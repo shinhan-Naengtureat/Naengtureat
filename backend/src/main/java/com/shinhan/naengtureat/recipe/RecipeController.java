@@ -127,8 +127,8 @@ public class RecipeController {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 			}
 
-			// 레시피 삭제 서비스 호출
-			String result = recipeService.deleteMyRecipe(memberId, recipeId);
+			// 레시피 삭제 서비스 호출 (논리적 삭제)
+	        String result = recipeService.deleteMyRecipe(memberId, recipeId);
 
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
@@ -138,6 +138,30 @@ public class RecipeController {
 			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 		}
+	}
+	
+	// 마이페이지- 내 레시피 수정
+	@PutMapping("/{recipeId}")
+	public ResponseEntity<Object> updateMyRecipe(@PathVariable("recipeId") Long recipeId,  @RequestBody RecipeDTO recipeDTO) {
+		try {
+			
+			Long memberId = 1L;
+			recipeDTO.setId(recipeId);
+			
+			 log.info("📌 레시피 수정 요청: recipeId={}, memberId={}", recipeId, memberId);
+			
+	        String result = recipeService.updateRecipe(memberId, recipeDTO);
+	        log.info("✅ 레시피 수정 완료: {}", result);
+	        
+	        return ResponseEntity.ok(result);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        Map<String, String> errorResponse = new HashMap<>();
+	        errorResponse.put("error", "레시피 수정 중 오류 발생");
+	        errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	    }
 	}
 
 

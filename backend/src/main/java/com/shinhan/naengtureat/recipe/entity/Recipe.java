@@ -2,6 +2,8 @@ package com.shinhan.naengtureat.recipe.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.shinhan.naengtureat.common.entities.SuperEntity;
 import com.shinhan.naengtureat.member.entity.Member;
 
@@ -29,6 +31,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+//@DynamicUpdate //: 수정된 칼람만 업데이트함.
 public class Recipe extends SuperEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
