@@ -28,7 +28,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"ingredients", "steps", "hashtags"})
 public class Recipe extends SuperEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
