@@ -266,7 +266,7 @@ public class RecipeService {
 			break;
 		case "difficulty":
 			// 난이도순: level 필드 기준 오름차순
-			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.ASC, "level"));
+			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
 			break;
 		case "cookingtime":
             // 조리시간순: 커스텀 정렬 로직을 통해 cookingTime을 실제 분 단위로 변환하여 오름차순 정렬
