@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
+import com.shinhan.naengtureat.ingredient.dto.IngredientDTO;
+import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +27,10 @@ public class InventoryCRUDTest {
     IngredientService ingredientService;
     @Autowired
     private InventoryRepository inventoryRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
-//    @Test
+    //    @Test
     public void editInventory() throws Exception {
         //given
         Long ingredientId = 92L;
@@ -51,14 +55,15 @@ public class InventoryCRUDTest {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료 입니다."));
 
         //재료 검증
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryDTO.getIngredientId());
+        IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryDTO.getIngredientId());
 
         inventory.setQuantity(inventoryDTO.getQuantity());  //변경된 수량 등록
         inventory.setNickName(inventoryDTO.getNickName());  //변경된 닉네임 등록
         inventory.setMemo(inventoryDTO.getMemo());  //변경된 메모 등록
         inventory.setInventoryExpDate(inventoryDTO.getInventoryExpDate());  //변경된 유효기간 등록
         inventory.setInputDate(inventoryDTO.getInputDate());  //변경된 인입일 등록
-        inventory.setIngredient(ingredient);  // 유효한 재료 등록
+        inventory.setIngredient(ingredientRepository.findById(ingredientDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료입니다.")));  // 유효한 재료 등록
 
         //then
         Inventory newInventory = inventoryRepository.findById(2L).orElse(null);
