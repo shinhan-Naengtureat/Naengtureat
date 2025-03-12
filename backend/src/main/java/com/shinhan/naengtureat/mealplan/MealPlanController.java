@@ -113,8 +113,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> getWeeklyMealPlanList(@PathVariable("day") String day) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService
-								// 참고)
+			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			List<MealPlanDTO> weeklyMealPlanList = mealPlanService.getWeeklyMealPlanList(memberId, day);
 
