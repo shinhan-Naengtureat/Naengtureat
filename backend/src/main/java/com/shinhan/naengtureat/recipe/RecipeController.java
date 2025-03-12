@@ -146,7 +146,7 @@ public class RecipeController {
 			// 레시피 삭제 서비스 호출 (논리적 삭제)
 	        String result = recipeService.deleteMyRecipe(memberId, recipeId);
 
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 삭제 중 오류 발생").build());
@@ -162,7 +162,7 @@ public class RecipeController {
 			recipeDTO.setId(recipeId);		
 	        String result = recipeService.updateRecipe(memberId, recipeDTO);
 	        
-	        return ResponseEntity.ok(result);
+	        return ResponseEntity.ok(BaseResponse.builder().message(result).build());
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
