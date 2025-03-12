@@ -2,7 +2,6 @@ package com.shinhan.naengtureat.recipe.model;
 
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
-import com.shinhan.naengtureat.recipe.dto.LikesRequestDTO;
 import com.shinhan.naengtureat.recipe.dto.LikesResponseDTO;
 import com.shinhan.naengtureat.recipe.entity.Likes;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
@@ -11,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LikesService {
@@ -45,6 +42,17 @@ public class LikesService {
         return likeRecipeList.stream()
                 .map(like -> mapToResponseDTO(like.getRecipe()))
                 .toList();
+    }
+
+    public Optional<Likes> getLikeById(Long likesId) {
+        return likeRepository.findById(likesId);
+    }
+
+    public Map<String, String> deleteLikeRecipe(Likes likeRecipe) {
+        HashMap<String, String> responseMap = new HashMap<>();
+        likeRepository.deleteById(likeRecipe.getId());
+        responseMap.put("message", "좋아요한 레시피가 삭제되었습니다.");
+        return responseMap;
     }
 
     private LikesResponseDTO mapToResponseDTO(Recipe recipe) {

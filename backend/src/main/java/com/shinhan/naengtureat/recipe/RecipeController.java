@@ -3,7 +3,9 @@ package com.shinhan.naengtureat.recipe;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+import com.shinhan.naengtureat.recipe.entity.Likes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,19 @@ public class RecipeController {
 	public ResponseEntity<Object> getLikeRecipeList() {
 		Long memberId = 1L;
 		return ResponseEntity.ok(likesService.getLikeRecipeList(memberId));
+	}
+
+	@DeleteMapping("/like/{likeId}")
+	public ResponseEntity<Object> deleteLikeRecipe(@PathVariable("likeId") Long likeId) {
+		Long memberId = 1L;
+		Likes likesRecipe = likesService.getLikeById(likeId)
+				.orElseThrow(() -> new NoSuchElementException("좋아요한 레시피가 없습니다."));
+
+		if (likesRecipe.getMember().getId() == memberId) {
+			return ResponseEntity.ok(likesService.deleteLikeRecipe(likesRecipe));
+		} else {
+			throw new IllegalArgumentException("해당 멤버로 좋아요한 레시피가 아닙니다.");
+		}
 	}
 	
 	// 상세 레시피 조회
