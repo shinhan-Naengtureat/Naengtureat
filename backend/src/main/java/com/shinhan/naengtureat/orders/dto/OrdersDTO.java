@@ -1,12 +1,11 @@
 package com.shinhan.naengtureat.orders.dto;
 
-import com.shinhan.naengtureat.member.entity.Member;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * @Data: Getter, Setter, toString, equals, hashCode, RequiredArgsConstructor 자동 생성
@@ -19,9 +18,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class OrdersDTO {
-    private Long id;
-    private Member member;
-    private String method;
-    private int pointPay;
-    private LocalDateTime paymentDate;
+	
+    private String id; // 주문 번호
+    
+    private Long memberId; // 멤버 번호
+    
+    private String method; // 결제 수단
+    private int pointPay; // 포인트 사용액
+    private LocalDateTime paymentDate; // 주문일시
+    
 }

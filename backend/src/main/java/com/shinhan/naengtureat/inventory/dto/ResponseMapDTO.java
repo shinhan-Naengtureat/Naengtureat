@@ -1,4 +1,4 @@
-package com.shinhan.naengtureat.recipe.dto;
+package com.shinhan.naengtureat.inventory.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikesDTO {
-	private Long recipeId;
-	private Long memberId;
+public class ResponseMapDTO {
+    String message;
 }

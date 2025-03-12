@@ -1,37 +1,39 @@
 package com.shinhan.naengtureat.inventory.model;
 
 
+import com.querydsl.core.types.Predicate;
+import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
+import com.shinhan.naengtureat.ingredient.entity.Ingredient;
+import com.shinhan.naengtureat.ingredient.model.IngredientService;
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
+import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
+import com.shinhan.naengtureat.inventory.dto.ResponseMapDTO;
+import com.shinhan.naengtureat.inventory.entity.Inventory;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientService;
-import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
-import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
-import com.shinhan.naengtureat.inventory.entity.Inventory;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
-
 @Service
 @Slf4j
 public class InventoryService {
     @Autowired
-    InventoryRepository inventoryRepository;
+    private InventoryRepository inventoryRepository;
 
     @Autowired
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
 
-    LocalDate nowDate = LocalDate.now();
+    private final LocalDate nowDate = LocalDate.now();
+
+    private final ModelMapper mapper = new ModelMapper();
+
 
     public InventoryResponseDTO getInventoryById(Long inventoryId) {
         Inventory inventory = inventoryRepository.findById(inventoryId)
@@ -43,27 +45,31 @@ public class InventoryService {
         //남은 기간 계산 및 저장
         setCalculateDday(inventoryResponseDTO);
 
-        //재료 닉네임 저장
-        inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+        //재료 조회
+        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+        //재료 이름 저장
+        inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
         return inventoryResponseDTO;
     }
 
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
 
-        List<InventoryResponseDTO> inventoryDtos = inventoryList.stream().map((eachInventory) -> {
+        return inventoryList.stream().map((eachInventory) -> {
             //entity -> DTO
             InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
 
             //남은 기간 계산 및 저장
             setCalculateDday(inventoryResponseDTO);
 
-            //재료 닉네임 저장
-            inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+            //재료 조회
+            Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+            //재료 이름 저장
+            inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
             return inventoryResponseDTO;
         }).toList();
-
-        return inventoryDtos;
     }
 
     private void setCalculateDday (InventoryResponseDTO inventoryResponseDTO) {
@@ -73,7 +79,7 @@ public class InventoryService {
 
 
     @Transactional
-    public String createInventory(InventoryRequestDTO inventoryRequestDTO) {
+    public ResponseMapDTO createInventory(InventoryRequestDTO inventoryRequestDTO) {
         if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0이상 이여야 합니다.");
         }
@@ -84,11 +90,13 @@ public class InventoryService {
 
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
         inventoryRepository.save(inventory);
-        return "재료 저장이 완료 되었습니다.";
+        return ResponseMapDTO.builder()
+                .message("재료 저장이 완료되었습니다")
+                .build();
     }
 
     @Transactional
-    public String updateInventory(InventoryRequestDTO inventoryRequestDTO) {
+    public ResponseMapDTO updateInventory(InventoryRequestDTO inventoryRequestDTO) {
         if (inventoryRequestDTO.getQuantity() <= 0) {
             throw new IllegalArgumentException("재료 수량은 0 이상 이여야 합니다.");
         }
@@ -106,16 +114,64 @@ public class InventoryService {
         inventory.setInputDate(inventoryRequestDTO.getInputDate());  //변경된 인입일 등록
         inventory.setIngredient(ingredient);  // 유효한 재료 등록
 
-        return "재료 수정이 완료 되었습니다.";
+        return ResponseMapDTO.builder()
+                .message("재료 수정이 완료 되었습니다.")
+                .build();
+    }
+
+    public List<InventoryResponseDTO> searchInventoryByKeyword(String keyword) {
+        Predicate predicate = inventoryRepository.searchInventoryByKeyword(keyword);
+        List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
+
+        return convertDtoList(inventoryList);
+    }
+
+    @Transactional
+    public List<InventoryResponseDTO> getInventoriesByKeywordsCategory(List<String> keywords, Long memberId) {
+        Predicate predicate = inventoryRepository.searchInventoryByBigCategories(keywords, memberId);
+        List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
+
+        return convertDtoList(inventoryList);
+    }
+
+    public List<InventoryResponseDTO> getExpiredInventory(Long memberId) {
+        return inventoryRepository.findAllByMemberId(memberId).stream()
+                .map(eachInventory -> {
+                    //entity -> DTO
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+
+                    //남은 기간 계산 및 저장
+                    setCalculateDday(inventoryResponseDTO);
+
+                    //재료 조회
+                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+                    //재료 이름 저장
+                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    return inventoryResponseDTO;
+                })
+                .filter(inventoryResponseDTO -> inventoryResponseDTO.getRemainingDays() < 0)
+                .toList();
     }
 
     public InventoryResponseDTO convertDto(Inventory inventory) {
-        ModelMapper mapper = new ModelMapper();
         return mapper.map(inventory, InventoryResponseDTO.class);
     }
 
+    public List<InventoryResponseDTO> convertDtoList(List<Inventory> inventoryList) {
+        return inventoryList.stream()
+                .map((inventory) -> {
+                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventory.getIngredient().getId());
+
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
+                    setCalculateDday(inventoryResponseDTO);
+                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    return inventoryResponseDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
     public Inventory convertEntity(InventoryRequestDTO inventoryRequestDTO) {
-        ModelMapper mapper = new ModelMapper();
         return mapper.map(inventoryRequestDTO, Inventory.class);
     }
 

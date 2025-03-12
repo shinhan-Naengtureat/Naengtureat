@@ -1,15 +1,49 @@
 package com.shinhan.naengtureat.inventory.model;
 
-import com.shinhan.naengtureat.inventory.entity.Inventory;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import java.time.LocalDate;
 import java.util.List;
 
-public interface InventoryRepository extends JpaRepository<Inventory, Long> {
-	 @Query(value = """
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
+
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.shinhan.naengtureat.inventory.entity.Inventory;
+import com.shinhan.naengtureat.inventory.entity.QInventory;
+
+public interface InventoryRepository extends JpaRepository<Inventory, Long>,
+		QuerydslPredicateExecutor<Inventory> {
+
+	default Predicate searchInventoryByKeyword(String keyword) {
+		QInventory inventory = QInventory.inventory;
+
+		BooleanExpression predicate = Expressions.asBoolean(true).isTrue();
+
+		if (keyword != null && !keyword.isEmpty()) {
+			predicate = inventory.nickName.containsIgnoreCase(keyword)
+					.or(inventory.memo.containsIgnoreCase(keyword))
+					.or(inventory.ingredient.smallCategory.containsIgnoreCase(keyword))
+					.or(inventory.ingredient.bigCategory.containsIgnoreCase(keyword));
+		}
+		return predicate;
+	}
+
+	default Predicate searchInventoryByBigCategories(List<String> keywords, Long memberId) {
+		QInventory inventory = QInventory.inventory;
+		BooleanExpression predicate = inventory.member.id.eq(memberId);
+
+		if (keywords != null || !keywords.isEmpty() ) {
+			predicate = predicate.and(inventory.ingredient.bigCategory.in(keywords));
+		}
+
+		return predicate;
+
+	}
+
+		@Query(value = """
 		        SELECT 
 		            A.a_ingredient_id, 
 		            COALESCE(A.a_quantity, 0) AS a_quantity, 

@@ -1,0 +1,9 @@
+.app {
+  max-width: 430px;  /* iPhone 13 Pro Max 너비 */
+  height: 932px; /* iPhone 13 Pro Max 높이 */
+  margin: 0 auto; /* 중앙 정렬 */
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  font-family: "Arial", sans-serif;
+}

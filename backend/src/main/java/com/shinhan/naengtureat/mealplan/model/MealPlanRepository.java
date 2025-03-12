@@ -1,7 +1,9 @@
 package com.shinhan.naengtureat.mealplan.model;
 
 import java.time.LocalDate;
+
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +19,11 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Long> {
 
 	// 식단 일간 조회
 	public List<MealPlan> findByMemberAndDate(Member member, LocalDate day);
+
+
+	// 내가 선택한 date,type에 이미 data가 있는지 확인
+	public Optional<MealPlan> findByMemberIdAndDateAndType(Long memberId, LocalDate date, String type);
+
 	
 	// 식단 주간, 월간 조회
 	public List<MealPlan> findByMemberAndDateBetween(Member member, LocalDate startDate, LocalDate endDate);
