@@ -1,0 +1,127 @@
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.top-nav .back-button {
+  margin-right: auto;
+}
+
+.top-nav h2 {
+  flex-grow: 1;
+  text-align: center;
+  margin: 0;
+  margin-left: 55px;
+}
+
+.top-nav .nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Category Filter */
+.category-filter {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.category-filter button {
+  background-color: transparent;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.category-filter button.active {
+  background-color: #ccc;
+}
+
+/* Ingredient Sort Filter & Dropdowns */
+.ingredient-sort-filter {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0; /* 또는 오른쪽 정렬이 필요하면 right: 0; */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  z-index: 10;
+}
+
+.dropdown-menu div {
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Search Bar */
+.search-bar {
+  margin: 8px 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Recipe List Grid */
+.recipe-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.recipe-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-image {
+  width: 100%;
+  height: auto;
+}
+
+.recipe-info {
+  padding: 8px;
+}
+
+.recipe-info h3 {
+  margin: 0 0 8px;
+}
+
+.recipe-info p {
+  margin: 0 0 4px;
+}
+
+/* 상태 메시지 (로딩, 오류) */
+.loading,
+.error {
+  padding: 16px;
+}
+
+.error {
+  color: red;
+}
