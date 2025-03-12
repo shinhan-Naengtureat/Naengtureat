@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
-import com.shinhan.naengtureat.recipe.entity.RecipeHashtag;
 
 public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 	

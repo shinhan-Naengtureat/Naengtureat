@@ -117,9 +117,8 @@ public class RecipeController {
 			Long memberId = 1L;
 
 			if (memberId == null) {
-				Map<String, String> errorResponse = new HashMap<>();
-				errorResponse.put("error", "로그인이 필요합니다.");
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+						.body(BaseResponse.builder().message("로그인이 필요합니다.").build());
 			}
 
 			// 로그인된 사용자의 레시피 조회
@@ -128,11 +127,7 @@ public class RecipeController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "마이 레시피 조회 중 오류 발생");
-			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
-
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("마이 레시피 조회 중 오류 발생").build());
 		}
 	}
 
@@ -145,9 +140,7 @@ public class RecipeController {
 			Long memberId = 1L;
 
 			if (memberId == null) {
-				Map<String, String> errorResponse = new HashMap<>();
-				errorResponse.put("error", "로그인이 필요합니다.");
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponse.builder().message("로그인이 필요합니다.").build());
 			}
 
 			// 레시피 삭제 서비스 호출 (논리적 삭제)
@@ -156,10 +149,7 @@ public class RecipeController {
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "레시피 삭제 중 오류 발생");
-			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 삭제 중 오류 발생").build());
 		}
 	}
 	
@@ -169,21 +159,15 @@ public class RecipeController {
 		try {
 			
 			Long memberId = 1L;
-			recipeDTO.setId(recipeId);
-			
-			 log.info("📌 레시피 수정 요청: recipeId={}, memberId={}", recipeId, memberId);
-			
+			recipeDTO.setId(recipeId);		
 	        String result = recipeService.updateRecipe(memberId, recipeDTO);
-	        log.info("✅ 레시피 수정 완료: {}", result);
 	        
 	        return ResponseEntity.ok(result);
+	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        Map<String, String> errorResponse = new HashMap<>();
-	        errorResponse.put("error", "레시피 수정 중 오류 발생");
-	        errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 수정 중 오류 발생"));
 	    }
 	}
 
