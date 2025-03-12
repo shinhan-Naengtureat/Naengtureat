@@ -5,10 +5,10 @@ import RecipeList from "pages/recipe/RecipeList";
 import InventoryList from "pages/inventory/InventoryList";
 import StoreList from "pages/store/StoreList";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
-import BottomNav from "components/BottomNav";
-import Layout from "components/Layout"; // 레이아웃 적용
+import BottomNav from "components/common/BottomNav";
+import Layout from "components/common/Layout"; // 레이아웃 적용
 import RouteConfig from "routes/RouteConfig";
-import TopNav from "components/TopNav";
+import TopNav from "components/common/TopNav";
 
 const AppRouter = () => {
   return (
