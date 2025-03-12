@@ -1,7 +1,6 @@
 package com.shinhan.naengtureat.recipe.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
+import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.mealplan.entity.MealPlan;
 import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
@@ -234,9 +234,8 @@ public class RecipeService {
 	}
 	
 	@Transactional
-    public MealPlan createOrUpdateMealPlan(Long memberId, Long recipeId, LocalDate date, String type) {
+    public MealPlanDTO createOrUpdateMealPlan(Long memberId, Long recipeId, LocalDate date, String type) {
         Optional<MealPlan> existingMealPlan = mealPlanRepository.findByMemberIdAndDateAndType(memberId, date, type);
-
         existingMealPlan.ifPresent(mealPlanRepository::delete);
 
         Member member = memberRepository.findById(memberId)
@@ -252,6 +251,19 @@ public class RecipeService {
                 .isCheck(false)
                 .build();
 
-        return mealPlanRepository.save(newMealPlan);
+        MealPlan savedMealPlan = mealPlanRepository.save(newMealPlan);
+
+        // Hibernate 프록시 초기화 방지
+        Long savedRecipeId = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getId() : null;
+        String savedRecipeName = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getName() : null;
+
+        return new MealPlanDTO(
+                savedMealPlan.getId(),
+                savedRecipeId,
+                savedRecipeName,
+                savedMealPlan.getDate(),
+                savedMealPlan.getType(),
+                savedMealPlan.isCheck()
+        );
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinhan.naengtureat.mealplan.dto.MealPlanCheckDTO;
-import com.shinhan.naengtureat.mealplan.entity.MealPlan;
+import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
@@ -160,11 +160,11 @@ public class RecipeController {
     }
     
     @PostMapping("/{recipeId}/meal-plan")
-    public ResponseEntity<MealPlan> addMealPlan(@PathVariable("recipeId") Long recipeId,
-                                                @RequestBody MealPlanCheckDTO requestDTO) {
-        MealPlan mealPlan = recipeService.createOrUpdateMealPlan(
+    public ResponseEntity<MealPlanDTO> addMealPlan(@PathVariable("recipeId") Long recipeId,
+                                                    @RequestBody MealPlanCheckDTO requestDTO) {
+        MealPlanDTO mealPlanDTO = recipeService.createOrUpdateMealPlan(
                 requestDTO.getMemberId(), recipeId, requestDTO.getDate(), requestDTO.getType()
         );
-        return ResponseEntity.ok(mealPlan);
+        return ResponseEntity.ok(mealPlanDTO);
     }
 }

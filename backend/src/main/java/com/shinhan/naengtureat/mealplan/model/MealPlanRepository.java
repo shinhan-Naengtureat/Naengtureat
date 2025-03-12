@@ -22,10 +22,7 @@ public interface MealPlanRepository extends JpaRepository<MealPlan, Long> {
 
 
 	// 내가 선택한 date,type에 이미 data가 있는지 확인
-	@Query("SELECT m FROM MealPlan m WHERE m.member.id = :memberId AND m.date = :date AND m.type = :type")
-	Optional<MealPlan> findByMemberIdAndDateAndType(@Param("memberId") Long memberId, 
-													@Param("date") LocalDate date,
-													@Param("type") String type);
+	public Optional<MealPlan> findByMemberIdAndDateAndType(Long memberId, LocalDate date, String type);
 
 	
 	// 식단 주간, 월간 조회
