@@ -301,4 +301,12 @@ public class RecipeService {
             return Integer.MAX_VALUE;
         }
     }
+	
+	 @Transactional
+	    public List<RecipeDTO> searchRecipes(String keyword) {
+	        List<Recipe> recipes = recipeRepository.searchRecipes(keyword);
+	        return recipes.stream()
+	                      .map(this::entityToDTO)
+	                      .collect(Collectors.toList());
+	    }
 }

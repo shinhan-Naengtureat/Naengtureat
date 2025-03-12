@@ -210,4 +210,16 @@ public class RecipeController {
 					.body("레시피 정렬 중 오류가 발생했습니다. " + e.getMessage());
 		}
 	}
+	
+	@GetMapping("/search/{keyword}")
+    public ResponseEntity<Object> searchRecipes(@PathVariable("keyword") String keyword) {
+        try {
+            List<RecipeDTO> recipes = recipeService.searchRecipes(keyword);
+            return ResponseEntity.ok(recipes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("레시피 검색 중 오류가 발생했습니다. " + e.getMessage());
+        }
+    }
 }
