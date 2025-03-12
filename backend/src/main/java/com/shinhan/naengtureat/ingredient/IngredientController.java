@@ -1,5 +1,7 @@
 package com.shinhan.naengtureat.ingredient;
 
+import com.shinhan.naengtureat.common.response.BaseResponse;
+import com.shinhan.naengtureat.ingredient.dto.IngredientDTO;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +31,13 @@ public class IngredientController {
 
     @GetMapping("/{ingredientId}")
     public ResponseEntity<Object> getIngredientById(@PathVariable("ingredientId") Long ingredientId) {
-        Ingredient ingredient = ingredientService.getStandardIngredientById(ingredientId);
+        IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(ingredientId);
 
-        if (ingredient != null) {
-            return ResponseEntity.ok(ingredient);
+        if (ingredientDTO != null) {
+            return ResponseEntity.ok(ingredientDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("재료 ID: " + ingredientId + "를 찾을 수 없습니다.");
+                    .body(BaseResponse.builder().message("재료 ID: " + ingredientId + "를 찾을 수 없습니다.").build());
         }
     }
 }
