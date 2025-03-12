@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -54,11 +52,24 @@ public class StoreController {
 	// 스토어 리뷰 등록
 	@PostMapping("/review")
 	public ResponseEntity<Object> createStoreReview(@RequestBody StoreReviewRequestDTO storeReviewRequestDTO) {
-		Long memberId = 1L;
-		storeReviewRequestDTO.setMemberId(memberId);
-		log.info(storeReviewRequestDTO.toString());
-		Map<String, String> responseMap = storeReviewService.createStoreReview(storeReviewRequestDTO);
-		return ResponseEntity.ok(responseMap);
+		
+		try {
+			Long memberId = 1L;
+			storeReviewRequestDTO.setMemberId(memberId);
+			log.info(storeReviewRequestDTO.toString());
+			
+			Map<String, String> responseMap = storeReviewService.createStoreReview(storeReviewRequestDTO);
+			
+			return ResponseEntity.ok(responseMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "스토어 리뷰 등록 중 오류 발생");
+			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+		}
+		
 	}
 	
 	// 스토어 상세 조회
@@ -80,7 +91,6 @@ public class StoreController {
 		
 	}
 	
-
 	// 스토어 조회 (부족한 재료 리스트 기반)
     @PostMapping("/emptyproduct")
     public ResponseEntity<?> getStoreListEmptyProduct(@RequestBody Map<String,List<Long>> requestBody) {
@@ -108,7 +118,6 @@ public class StoreController {
         }
     }
 	
-
 	// 스토어 상품 조회
 	@GetMapping("/{storeId}/product")
 	public ResponseEntity<Object> getStoreProductByStoreId(@PathVariable("storeId") Long storeId) {
@@ -218,7 +227,10 @@ public class StoreController {
 		
 		try {
 			// 삭제할 재료(상품)의 cartId를 리스트 형태로 전달
-			String result = storeCartService.deleteCartItems(cartIdList);
+			String resultMsg = storeCartService.deleteCartItems(cartIdList);
+			
+			Map<String, String> result = new HashMap<>();
+			result.put("message", resultMsg);
 			
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
