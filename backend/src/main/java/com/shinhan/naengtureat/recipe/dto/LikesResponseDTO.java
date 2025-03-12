@@ -20,5 +20,5 @@ public class LikesResponseDTO {
     private String serving;
     private String image;
     private String category;
-    private List<Long> hashtagIds;
+    private List<Long> hashtagIds; //hashtagId
 }
