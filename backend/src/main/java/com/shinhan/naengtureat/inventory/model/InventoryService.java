@@ -4,7 +4,6 @@ package com.shinhan.naengtureat.inventory.model;
 import com.querydsl.core.types.Predicate;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
 import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
@@ -45,27 +44,31 @@ public class InventoryService {
         //남은 기간 계산 및 저장
         setCalculateDday(inventoryResponseDTO);
 
-        //재료 닉네임 저장
-        inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+        //재료 조회
+        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+        //재료 이름 저장
+        inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
         return inventoryResponseDTO;
     }
 
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
 
-        List<InventoryResponseDTO> inventoryDtos = inventoryList.stream().map((eachInventory) -> {
+        return inventoryList.stream().map((eachInventory) -> {
             //entity -> DTO
             InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
 
             //남은 기간 계산 및 저장
             setCalculateDday(inventoryResponseDTO);
 
-            //재료 닉네임 저장
-            inventoryResponseDTO.setIngredientName(inventoryResponseDTO.getNickName());
+            //재료 조회
+            Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+            //재료 이름 저장
+            inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
             return inventoryResponseDTO;
         }).toList();
-
-        return inventoryDtos;
     }
 
     private void setCalculateDday (InventoryResponseDTO inventoryResponseDTO) {
@@ -124,6 +127,26 @@ public class InventoryService {
         List<Inventory> inventoryList = (List<Inventory>) inventoryRepository.findAll(predicate);
 
         return convertDtoList(inventoryList);
+    }
+
+    public List<InventoryResponseDTO> getExpiredInventory(Long memberId) {
+        return inventoryRepository.findAllByMemberId(memberId).stream()
+                .map(eachInventory -> {
+                    //entity -> DTO
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+
+                    //남은 기간 계산 및 저장
+                    setCalculateDday(inventoryResponseDTO);
+
+                    //재료 조회
+                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+
+                    //재료 이름 저장
+                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    return inventoryResponseDTO;
+                })
+                .filter(inventoryResponseDTO -> inventoryResponseDTO.getRemainingDays() < 0)
+                .toList();
     }
 
     public InventoryResponseDTO convertDto(Inventory inventory) {
