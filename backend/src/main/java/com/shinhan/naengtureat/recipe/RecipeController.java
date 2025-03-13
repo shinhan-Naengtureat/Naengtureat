@@ -246,16 +246,16 @@ public class RecipeController {
 	}
 
 	// 카테고리별 레시피 조회
-	@GetMapping("/category/{category}")
-	public ResponseEntity<Object> getRecipesByCategory(@PathVariable("category") String category) {
-		try {
-			// 카테고리에 해당하는 레시피 목록 조회
-			List<RecipeDTO> recipes = recipeService.getRecipesByCategory(category);
-			return ResponseEntity.ok(recipes); // 성공적으로 레시피 목록 반환
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body(BaseResponse.builder().message("카테고리별 레시피 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
-		}
+	@GetMapping("/category")
+	public ResponseEntity<Object> getRecipesByCategory(@RequestParam("category") List<String> categories) {
+	    try {
+	        // 예시: 여러 카테고리 중 하나라도 해당하는 레시피 조회 (서비스 로직 수정 필요)
+	        List<RecipeDTO> recipes = recipeService.getRecipesByCategory(categories);
+	        return ResponseEntity.ok(recipes);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body(BaseResponse.builder().message("카테고리별 레시피 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
+	    }
 	}
 
 	// 마음에드는 레시피를 내 식단에 추가
