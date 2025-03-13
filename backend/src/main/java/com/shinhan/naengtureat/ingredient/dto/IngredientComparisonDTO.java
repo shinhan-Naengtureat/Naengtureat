@@ -14,4 +14,6 @@ public class IngredientComparisonDTO {
 	 private Long mealPlanIngredientId;  // 필요한 재료 ID
 	 private Integer mealPlanQuantity;  // 필요한 재료 개수
 	private String recipeName; // 레시피명 
+	private String image; //이미지 경로
+	private String ingredientUnit; // 인벤토리 단위
 }
