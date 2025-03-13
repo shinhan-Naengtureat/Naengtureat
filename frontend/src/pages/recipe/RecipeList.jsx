@@ -4,7 +4,6 @@ import CategoryFilter from "./CategoryFilter";
 import IngredientSortFilter from "./IngredientSortFilter";
 import SearchBar from "./SearchBar";
 import RecipeListGrid from "./RecipeListGrid";
-import "styles/recipe/Recipe.css";
 
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
