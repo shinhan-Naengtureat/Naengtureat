@@ -1,0 +1,71 @@
+.top-navi {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  width: 100%;
+  height: 25px;
+  z-index: 100;
+  max-width: 430px; /* iPhone 13 Pro Max 너비 */
+}
+
+.top-navi .icons {
+  right: 30px;
+  font-size: 20px;
+}
+
+.top-navi .icon {
+  color: black; /* 원하는 색상으로 지정 */
+  padding: 0 5px;
+}
+
+/* 바텀 네비게이션 아래 배경을 연장하는 가상 요소 */
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* 띄운 만큼 배경을 연장 */
+  left: 0;
+  width: 100%;
+  height: 20px; /* 띄운 만큼 배경을 추가 */
+  background: #ffffff; /* 네비게이션 바와 같은 배경색 */
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  left: 16px; /* 왼쪽 정렬 */
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto; /* 가운데 정렬 */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 16px; /* 오른쪽 정렬 */
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 12px;
+  cursor: pointer;
+}

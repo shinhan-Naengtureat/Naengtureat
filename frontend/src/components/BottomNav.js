@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaUtensils, FaCalendarAlt, FaHome, FaBook, FaStore } from "react-icons/fa";
-import "styles/common/BottomNav.css"; // 스타일 적용
+import "styles/common/bottomNav.css"; // 스타일 적용
 
 const BottomNav = () => {
   return (
