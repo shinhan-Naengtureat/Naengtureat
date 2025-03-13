@@ -1,6 +1,3 @@
-import {FaBars, FaBell, FaPlus, FaSearch, FaShoppingCart} from "react-icons/fa";
-import {FaTrashCan} from "react-icons/fa6";
-
 const BASE_URL = process.env.PUBLIC_URL;
 
 const RouteConfig = {
