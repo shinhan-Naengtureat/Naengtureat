@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/mealplan")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000/*", allowedHeaders = "*")
 public class CustomBotController {
 	@Value("${spring.ai.openai.chat.options.model}")
 	private String model;

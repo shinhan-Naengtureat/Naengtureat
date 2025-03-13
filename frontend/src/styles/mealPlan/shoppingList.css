@@ -1,0 +1,73 @@
+.shopping-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fef6ef;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shopping-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.no-items {
+  text-align: center;
+  color: #777;
+}
+
+.shopping-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.shopping-table th,
+.shopping-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.recipe-header {
+  background-color: #fff2e5;
+  font-weight: bold;
+}
+
+.ingredient-row {
+  background-color: #fff;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #f35c04;
+}
+
+.shopping-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.estimated-cost {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.store-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #f35c04;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
