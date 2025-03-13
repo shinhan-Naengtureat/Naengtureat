@@ -24,6 +24,7 @@ const RouteConfig = {
     preferredIngredients: `${BASE_URL}/preferred-ingredients`,
     excludedIngredients: `${BASE_URL}/exclude-ingredients`,
     notEnoughIngredientList: `${BASE_URL}/shopping-container`,
+    ingredientStoreList: `${BASE_URL}/store-shopping-container`,
     store: `${BASE_URL}/store`,
     notFound: "*",
   },

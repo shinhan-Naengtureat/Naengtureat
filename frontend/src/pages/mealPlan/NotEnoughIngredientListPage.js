@@ -3,7 +3,7 @@ import axios from "axios";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
 
-const ShoppingListPage = () => {
+const NotEnoughIngredientListPage = () => {
   const [ingredients, setIngredients] = useState([]);
 
   // 📌 API 호출: 부족한 재료 리스트 가져오기
@@ -49,8 +49,8 @@ const ShoppingListPage = () => {
         <table className="shopping-table">
           <thead>
             <tr>
-              <th>선택</th>
-              <th>이미지</th>
+              <th></th>
+              <th></th>
               <th>재료명</th>
               <th>현재 보유량</th>
               <th>구매 필요량</th>
@@ -90,4 +90,4 @@ const ShoppingListPage = () => {
   );
 };
 
-export default ShoppingListPage;
+export default NotEnoughIngredientListPage;

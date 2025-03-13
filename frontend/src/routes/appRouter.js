@@ -12,11 +12,13 @@ import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
-import ShoppingListPage from "pages/mealPlan/ShoppingListPage";
+import ShoppingListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
+import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
+import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -83,7 +85,11 @@ const AppRouter = () => {
         />
         <Route
           path={routeConfig.paths.notEnoughIngredientList}
-          element={<ShoppingListPage setUserSelections={setUserSelections} />}
+          element={<NotEnoughIngredientListPage setUserSelections={setUserSelections} />}
+        />
+        <Route
+          path={routeConfig.paths.ingredientStoreList}
+          element={<IngredientStoreListPage setUserSelections={setUserSelections} />}
         />
         <Route
           path={routeConfig.paths.recipeList}
