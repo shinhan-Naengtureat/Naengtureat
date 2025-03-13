@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import RouteConfig from "routes/RouteConfig";
+import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BudgetInput.css";
 
@@ -27,7 +27,7 @@ const BudgetInputPage = ({ setUserSelections }) => {
         console.log("예산 저장 성공", response.data);
         // 상태 업데이트 후 다음 페이지로 이동
         setUserSelections((prev) => ({ ...prev, budget }));
-        navigate(RouteConfig.categorySelection);
+        navigate(RouteConfig.paths.categorySelection);
       } else {
         console.error("예산 업데이트 실패:", response);
         alert("예산 저장에 실패했습니다.");

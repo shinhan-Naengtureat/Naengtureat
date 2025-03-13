@@ -1,4 +1,4 @@
-import {FaBell, FaSearch, FaUser} from "react-icons/fa";
+import { FaBell, FaSearch, FaUser } from "react-icons/fa";
 
 const BASE_URL = process.env.PUBLIC_URL;
 
@@ -11,42 +11,60 @@ const RouteConfig = {
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
-    notFound: '*',
+    budgetInput: `${BASE_URL}/budget`,
+    categorySelection: `${BASE_URL}/category`,
+    themeSelection: `${BASE_URL}/theme`,
+    preferredIngredients: `${BASE_URL}/preferred-ingredients`,
+    excludedIngredients: `${BASE_URL}/exclude-ingredients`,
+    notEnoughIngredientList: `${BASE_URL}/shopping-container`,
+    notFound: "*",
   },
 
   navConfig: {
     [`${BASE_URL}/`]: {
       title: "홈",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaBell/>, alt: "알림" },
-        { to: `${BASE_URL}/mypage`, icon: <FaUser/>, alt: "마이페이지" },
+        { to: `${BASE_URL}/notifications`, icon: <FaBell />, alt: "알림" },
+        { to: `${BASE_URL}/mypage`, icon: <FaUser />, alt: "마이페이지" },
       ],
     },
     [`${BASE_URL}/inventory`]: {
       title: "재료",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaSearch/>, alt: "검색" },
-        { to: `${BASE_URL}/mypage`, icon: <FaUser/>, alt: "마이페이지" },
+        { to: `${BASE_URL}/notifications`, icon: <FaSearch />, alt: "검색" },
+        { to: `${BASE_URL}/mypage`, icon: <FaUser />, alt: "마이페이지" },
       ],
     },
-    [ `${BASE_URL}/recipes` ]: {
+    [`${BASE_URL}/recipes`]: {
       title: "테마별 레시피",
       links: [
-        { to: `${BASE_URL}/bookmarks`, icon: "bookmark-icon.png", alt: "북마크" },
+        {
+          to: `${BASE_URL}/bookmarks`,
+          icon: "bookmark-icon.png",
+          alt: "북마크",
+        },
         { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },
     mealPlanListDaily: {
       title: "식단 관리",
       links: [
-        { to: `${BASE_URL}/calendar`, icon: "calendar-icon.png", alt: "캘린더" },
+        {
+          to: `${BASE_URL}/calendar`,
+          icon: "calendar-icon.png",
+          alt: "캘린더",
+        },
         { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },
     inventory: {
       title: "재료 관리",
       links: [
-        { to: `${BASE_URL}/bookmarks`, icon: "bookmark-icon.png", alt: "북마크" },
+        {
+          to: `${BASE_URL}/bookmarks`,
+          icon: "bookmark-icon.png",
+          alt: "북마크",
+        },
         { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },

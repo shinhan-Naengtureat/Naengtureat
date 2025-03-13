@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RouteConfig from "routes/RouteConfig";
+import RouteConfig from "routes/routeConfig";
 import axios from "axios";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BoxChoice.css";
@@ -54,7 +54,7 @@ const ThemeSelectionPage = ({ setUserSelections }) => {
     }
     setUserSelections((prev) => ({ ...prev, themes: selectedTheme }));
 
-    navigate(RouteConfig.preferredIngredients);
+    navigate(RouteConfig.paths.preferredIngredients);
   };
 
   return (

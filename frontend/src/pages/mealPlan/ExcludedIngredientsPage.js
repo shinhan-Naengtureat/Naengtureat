@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RouteConfig from "routes/RouteConfig";
+import RouteConfig from "routes/routeConfig";
 import "styles/mealPlan/IngredientPage.css"; // 새로운 CSS 파일 추가
 import IngredientCard from "./IngredientCard";
 import FloatingNextButton from "components/FloatingNextButton";
@@ -55,7 +55,7 @@ const ExcludedIngredientsPage = ({ setUserSelections }) => {
   };
   // 뒤로가기기
   const handleBefore = () => {
-    navigate(RouteConfig.themeSelection);
+    navigate(RouteConfig.paths.themeSelection);
   };
 
   return (

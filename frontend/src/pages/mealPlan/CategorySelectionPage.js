@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import RouteConfig from "routes/RouteConfig";
+import RouteConfig from "routes/routeConfig";
 
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
@@ -61,7 +61,7 @@ const CategorySelectionPage = ({ setUserSelections }) => {
       category: selectedCategories, //선택된 카테고리 저장
     }));
 
-    navigate(RouteConfig.themeSelection); //테마 선택 페이지로 이동
+    navigate(RouteConfig.paths.themeSelection); //테마 선택 페이지로 이동
   };
 
   return (

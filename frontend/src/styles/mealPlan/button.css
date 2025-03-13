@@ -37,7 +37,7 @@
 /*  "다음" 버튼 스타일 */
 .floating-next-button {
   position: fixed; /* 항상 화면에 고정 */
-  bottom: 80px; /* 화면 하단에서 20px 띄움 */
+  bottom: 120px; /* 화면 하단에서 20px 띄움 */
   width: 85%; /* 너비 조정 */
   max-width: 400px; /* 최대 너비 */
   padding: 14px;
