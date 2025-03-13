@@ -1,0 +1,19 @@
+.home-container {
+  width: 90%;
+  max-width: 430px;
+  height: calc(100vh - 220px); /* 상단(70px) + 하단(70px) 제외한 높이 */
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px 0px; /* TopNav & BottomNav 공백 조정 */
+  justify-self: center;
+}
+
+.content {
+  flex: 1; /* 내용이 네비게이션에 가려지지 않도록 함 */
+  width: 100%;
+}
