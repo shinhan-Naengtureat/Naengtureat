@@ -5,9 +5,8 @@ import RecipeList from "pages/recipe/RecipeList";
 import InventoryList from "pages/inventory/InventoryList";
 import StoreList from "pages/store/StoreList";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
-import BottomNav from "components/BottomNav";
-import Layout from "components/Layout"; // 레이아웃 적용
 import routeConfig from "routes/routeConfig";
+
 import TopNav from "components/TopNav";
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
@@ -15,6 +14,10 @@ import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import ShoppingListPage from "pages/mealPlan/ShoppingListPage";
+
+import Layout from "components/common/Layout";
+import TopNav from "components/common/TopNav";
+import BottomNav from "components/common/BottomNav";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
