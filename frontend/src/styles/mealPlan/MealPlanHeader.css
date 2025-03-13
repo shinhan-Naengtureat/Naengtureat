@@ -1,0 +1,9 @@
+/* 토글스위치 */
+.custom-switch .form-check-input:checked {
+  background-color: #f35c04 !important; /* 토글 스위치 활성화 색상 */
+  border-color: #f35c04 !important; /* 테두리 색상 */
+}
+
+.custom-switch .form-check-input {
+  cursor: pointer;
+}
