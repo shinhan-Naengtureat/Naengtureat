@@ -3,7 +3,8 @@ package com.shinhan.naengtureat.inventory.model;
 
 import com.querydsl.core.types.Predicate;
 import com.shinhan.naengtureat.ingredient.dto.IngredientComparisonDTO;
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
+import com.shinhan.naengtureat.ingredient.dto.IngredientDTO;
+import com.shinhan.naengtureat.ingredient.model.IngredientRepository;
 import com.shinhan.naengtureat.ingredient.model.IngredientService;
 import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
@@ -33,6 +34,8 @@ public class InventoryService {
     private final LocalDate nowDate = LocalDate.now();
 
     private final ModelMapper mapper = new ModelMapper();
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
 
     public InventoryResponseDTO getInventoryById(Long inventoryId) {
@@ -46,10 +49,10 @@ public class InventoryService {
         setCalculateDday(inventoryResponseDTO);
 
         //재료 조회
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+        IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
 
         //재료 이름 저장
-        inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+        inventoryResponseDTO.setIngredientName(ingredientDTO.getSmallCategory());
         return inventoryResponseDTO;
     }
 
@@ -64,10 +67,10 @@ public class InventoryService {
             setCalculateDday(inventoryResponseDTO);
 
             //재료 조회
-            Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+            IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
 
             //재료 이름 저장
-            inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+            inventoryResponseDTO.setIngredientName(ingredientDTO.getSmallCategory());
             return inventoryResponseDTO;
         }).toList();
     }
@@ -84,11 +87,13 @@ public class InventoryService {
             throw new IllegalArgumentException("재료 수량은 0이상 이여야 합니다.");
         }
         // 유효성 검사를 위해 재료 검색
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
+        IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
 
         Inventory inventory = convertEntity(inventoryRequestDTO);
 
-        inventory.setIngredient(ingredient);  // 유효한 재료 등록
+        inventory.setIngredient(ingredientRepository.findById(ingredientDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("재료를 찾을 수 없습니다.")));  // 유효한 재료 등록
+
         inventoryRepository.save(inventory);
         return ResponseMapDTO.builder()
                 .message("재료 저장이 완료되었습니다")
@@ -105,14 +110,15 @@ public class InventoryService {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료 입니다."));
 
         //재료 검증
-        Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
+        IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryRequestDTO.getIngredientId());
 
         inventory.setQuantity(inventoryRequestDTO.getQuantity());  //변경된 수량 등록
         inventory.setNickName(inventoryRequestDTO.getNickName());  //변경된 닉네임 등록
         inventory.setMemo(inventoryRequestDTO.getMemo());  //변경된 메모 등록
         inventory.setInventoryExpDate(inventoryRequestDTO.getInventoryExpDate());  //변경된 유효기간 등록
         inventory.setInputDate(inventoryRequestDTO.getInputDate());  //변경된 인입일 등록
-        inventory.setIngredient(ingredient);  // 유효한 재료 등록
+        inventory.setIngredient(ingredientRepository.findById(ingredientDTO.getId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료 입니다.")));  // 유효한 재료 등록
 
         return ResponseMapDTO.builder()
                 .message("재료 수정이 완료 되었습니다.")
@@ -144,10 +150,10 @@ public class InventoryService {
                     setCalculateDday(inventoryResponseDTO);
 
                     //재료 조회
-                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
+                    IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventoryResponseDTO.getIngredientId());
 
                     //재료 이름 저장
-                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    inventoryResponseDTO.setIngredientName(ingredientDTO.getSmallCategory());
                     return inventoryResponseDTO;
                 })
                 .filter(inventoryResponseDTO -> inventoryResponseDTO.getRemainingDays() < 0)
@@ -161,11 +167,11 @@ public class InventoryService {
     public List<InventoryResponseDTO> convertDtoList(List<Inventory> inventoryList) {
         return inventoryList.stream()
                 .map((inventory) -> {
-                    Ingredient ingredient = ingredientService.getStandardIngredientById(inventory.getIngredient().getId());
+                    IngredientDTO ingredientDTO = ingredientService.getStandardIngredientById(inventory.getIngredient().getId());
 
                     InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
                     setCalculateDday(inventoryResponseDTO);
-                    inventoryResponseDTO.setIngredientName(ingredient.getSmallCategory());
+                    inventoryResponseDTO.setIngredientName(ingredientDTO.getSmallCategory());
                     return inventoryResponseDTO;
                 })
                 .collect(Collectors.toList());

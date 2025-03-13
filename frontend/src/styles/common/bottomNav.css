@@ -1,17 +1,33 @@
 .bottom-nav {
   position: fixed;
-  bottom: 0;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 430px; /* iPhone 13 Pro Max 너비 */
+  width: 100%; /* iPhone 13 Pro Max 너비 */
+  max-width: 430px; /* iPhone 13 Pro Max 너비 */
+  /*height: 150px;*/
   display: flex;
   justify-content: space-around;
   align-items: center;
   background: #ffffff;
-  padding: 12px 0; /* 네비게이션 바 높이 조정 */
+  padding: 20px 0; /* 네비게이션 바 높이 조정 */
   border-top: 1px solid #ddd;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  border-radius: 20px;
+}
+
+/* 바텀 네비게이션 아래 배경을 연장하는 가상 요소 */
+.bottom-nav::after {
+  content: "";
+  position: absolute;
+  bottom: -20px; /* 띄운 만큼 배경을 연장 */
+  left: 0;
+  width: 100%;
+  height: 20px; /* 띄운 만큼 배경을 추가 */
+  background: #ffffff; /* 네비게이션 바와 같은 배경색 */
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
 .nav-item {
@@ -34,7 +50,7 @@
   padding: 12px;
   border-radius: 50%;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: -15px;
+  margin-top: -10px;
 }
 
 .nav-item.active {
