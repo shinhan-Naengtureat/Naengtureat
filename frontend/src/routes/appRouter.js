@@ -6,6 +6,9 @@ import InventoryList from "pages/inventory/InventoryList";
 import StoreList from "pages/store/StoreList";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import routeConfig from "routes/routeConfig";
+import Layout from "components/common/Layout";
+import TopNav from "components/TopNav";
+import BottomNav from "components/common/BottomNav";
 
 const AppRouter = () => {
   return (
