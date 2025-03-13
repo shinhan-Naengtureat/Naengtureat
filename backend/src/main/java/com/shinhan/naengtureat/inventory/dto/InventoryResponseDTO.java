@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class InventoryResponseDTO {
+    private Long id;
     private double quantity;
     private String nickName;
     private String memo;
