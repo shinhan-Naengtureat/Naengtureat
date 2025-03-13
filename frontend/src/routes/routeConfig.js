@@ -18,7 +18,6 @@ const RouteConfig = {
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
-
     store: `${BASE_URL}/store`,
     notFound: "*",
   },
@@ -59,28 +58,6 @@ const RouteConfig = {
           alt: "레시피 검색",
         },
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
-      ],
-    },
-    mealPlanListDaily: {
-      title: "식단 관리",
-      links: [
-        {
-          to: `${BASE_URL}/calendar`,
-          icon: "calendar-icon.png",
-          alt: "캘린더",
-        },
-        { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
-      ],
-    },
-    inventory: {
-      title: "재료 관리",
-      links: [
-        {
-          to: `${BASE_URL}/bookmarks`,
-          icon: "bookmark-icon.png",
-          alt: "북마크",
-        },
-        { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },
 
