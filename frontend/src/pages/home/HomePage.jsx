@@ -1,16 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "styles/home/HomePage.css"; // 스타일 적용
+import "styles/home/HomePage.css";
 
 const HomePage = () => {
   return (
-    <div className="home-container">
+    <div className="homepage-container">
       {/* 상단 유저 아이콘 */}
       <div className="header">
         <h2>오늘, 이 요리 어때요?</h2>
-        <Link to="/mypage">
-          <img src={`${process.env.PUBLIC_URL}/assets/images/user-icon.png`} alt="유저 아이콘" className="user-icon" />
-        </Link>
       </div>
 
       {/* 추천 요리 섹션 */}

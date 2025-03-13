@@ -15,9 +15,9 @@ public class IngredientService {
     @Autowired
     IngredientRepository ingredientRepository;
 
-    public Ingredient getStandardIngredientById(Long ingredientId) {
-        return ingredientRepository.findById(ingredientId)
-                .orElseThrow(() -> new NoSuchElementException("해당 재료를 찾을 수 없습니다."));
+    public IngredientDTO getStandardIngredientById(Long ingredientId) {
+        return convertDto(ingredientRepository.findById(ingredientId)
+                .orElseThrow(() -> new NoSuchElementException("해당 재료를 찾을 수 없습니다.")));
     }
 
     public IngredientDTO convertDto(Ingredient ingredientEntity) {
