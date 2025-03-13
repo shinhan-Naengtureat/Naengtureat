@@ -1,6 +1,5 @@
 package com.shinhan.naengtureat.mealplan;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -86,8 +85,9 @@ public class MealPlanController {
 		if (updatedRows == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(BaseResponse.builder().message("예산 업데이트를 실패했습니다.").build());
+		} else {
+			return ResponseEntity.ok(BaseResponse.builder().message("예산 업데이트를 성공했습니다.").build());
 		}
-		return ResponseEntity.ok(updatedRows);
 	}
 
 	// 식단 월간 조회
@@ -102,7 +102,7 @@ public class MealPlanController {
 			return ResponseEntity.ok(monthlyMealPlanList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(BaseResponse.builder().message("식단 월간 조회 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
@@ -120,7 +120,7 @@ public class MealPlanController {
 			return ResponseEntity.ok(weeklyMealPlanList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(BaseResponse.builder().message("식단 주간 조회 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
@@ -138,7 +138,7 @@ public class MealPlanController {
 			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(BaseResponse.builder().message("식단 삭제 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
@@ -156,7 +156,7 @@ public class MealPlanController {
 			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(BaseResponse.builder().message("식단 이행여크 체크 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
