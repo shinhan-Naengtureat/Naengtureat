@@ -10,7 +10,7 @@
   transform: translateX(-50%);
   top: 0;
   width: 100%;
-  height: 25px;
+  height: 55px;
   z-index: 100;
   max-width: 430px; /* iPhone 13 Pro Max 너비 */
 }
@@ -21,6 +21,9 @@
 }
 
 .top-navi .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: black; /* 원하는 색상으로 지정 */
   padding: 0 5px;
 }
