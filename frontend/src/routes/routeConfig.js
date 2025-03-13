@@ -1,4 +1,11 @@
-import { FaBell, FaPlus, FaSearch, FaUser } from "react-icons/fa";
+import {
+  FaBars,
+  FaBell,
+  FaPlus,
+  FaSearch,
+  FaShoppingCart,
+} from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
 
 const BASE_URL = process.env.PUBLIC_URL;
 
@@ -11,6 +18,8 @@ const RouteConfig = {
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
+
+    store: `${BASE_URL}/store`,
     notFound: "*",
   },
 
@@ -19,26 +28,37 @@ const RouteConfig = {
       title: "홈",
       links: [
         { to: `${BASE_URL}/notifications`, icon: <FaBell />, alt: "알림" },
-        { to: `${BASE_URL}/mypage`, icon: <FaUser />, alt: "마이페이지" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
     [`${BASE_URL}/inventory`]: {
-      title: "재료",
+      title: "재료 관리",
       links: [
         { to: `${BASE_URL}/notifications`, icon: <FaSearch />, alt: "검색" },
-        { to: `${BASE_URL}/mypage`, icon: <FaUser />, alt: "마이페이지" },
+        { to: `${BASE_URL}/wastebaket`, icon: <FaTrashCan />, alt: "휴지통" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/mealplan`]: {
+      title: "식단 관리",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
     [`${BASE_URL}/recipes`]: {
       title: "테마별 레시피",
       links: [
         {
-          to: `${BASE_URL}/bookmarks`,
+          to: `${BASE_URL}/notifications`,
           icon: <FaPlus />,
-          alt: "북마크",
+          alt: "레시피 추가",
         },
-        { to: `${BASE_URL}/mypage`, icon: <FaUser />, alt: "마이페이지" },
-        { icon: <FaSearch />, alt: "검색페이지" },
+        {
+          to: `${BASE_URL}/search-recipe`,
+          icon: <FaSearch />,
+          alt: "레시피 검색",
+        },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
     mealPlanListDaily: {
@@ -63,11 +83,12 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },
-    store: {
+
+    [`${BASE_URL}/store`]: {
       title: "스토어",
       links: [
-        { to: `${BASE_URL}/cart`, icon: "cart-icon.png", alt: "장바구니" },
-        { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
+        { to: `${BASE_URL}/cart`, icon: <FaShoppingCart />, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
   },
