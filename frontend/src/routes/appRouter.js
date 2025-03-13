@@ -7,7 +7,6 @@ import StoreList from "pages/store/StoreList";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import routeConfig from "routes/routeConfig";
 
-import TopNav from "components/TopNav";
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
