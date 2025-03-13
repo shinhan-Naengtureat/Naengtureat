@@ -7,8 +7,7 @@ import StoreList from "pages/store/StoreList";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import BottomNav from "components/BottomNav";
 import Layout from "components/Layout"; // 레이아웃 적용
-import RouteConfig from "routes/RouteConfig";
-import RecipeDetail from "pages/recipe/RecipeDetail";
+import routeConfig from "routes/routeConfig";
 import TopNav from "components/TopNav";
 
 const AppRouter = () => {
@@ -17,16 +16,15 @@ const AppRouter = () => {
       <TopNav />
       <Routes>
         <Route
-          path={RouteConfig.home}
+          path={routeConfig.paths.home}
           element={
             <Layout>
-              {" "}
-              <HomePage />{" "}
+              <HomePage />
             </Layout>
           }
         />
         <Route
-          path={RouteConfig.inventoryList}
+          path={routeConfig.paths.inventoryList}
           element={
             <Layout>
               <InventoryList />
@@ -34,7 +32,7 @@ const AppRouter = () => {
           }
         />
         <Route
-          path={RouteConfig.mealPlanListDaily}
+          path={routeConfig.paths.mealPlanListDaily}
           element={
             <Layout>
               <MealPlanListDaily />
@@ -42,24 +40,41 @@ const AppRouter = () => {
           }
         />
         <Route
-          path={RouteConfig.recipeList}
+          path={routeConfig.paths.recipeList}
           element={
             <Layout>
               <RecipeList />
             </Layout>
           }
         />
-        <Route path={RouteConfig.recipeDetail} element={<RecipeDetail />} />
         <Route
-          path={RouteConfig.storeList}
+          path={routeConfig.paths.storeList}
           element={
             <Layout>
               <StoreList />
             </Layout>
           }
         />
-        <Route path={RouteConfig.notFound} element={<h1>404 Not Found</h1>} />{" "}
-        {/* 404 페이지 */}
+
+        {/* 필요한 경우 추가할 수 있는 라우트 */}
+        <Route
+          path={routeConfig.paths.login}
+          element={<Layout>Login Page</Layout>}
+        />
+        <Route
+          path={routeConfig.paths.register}
+          element={<Layout>Register Page</Layout>}
+        />
+        <Route
+          path={routeConfig.paths.myPage}
+          element={<Layout>MyPage</Layout>}
+        />
+
+        {/* 404 Not Found */}
+        <Route
+          path={routeConfig.paths.notFound}
+          element={<h1>404 Not Found</h1>}
+        />
       </Routes>
       <BottomNav />
     </div>

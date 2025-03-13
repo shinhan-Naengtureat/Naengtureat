@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TopNavBar from "./TopNavBar";
 import CategoryFilter from "./CategoryFilter";
 import IngredientSortFilter from "./IngredientSortFilter";
 import SearchBar from "./SearchBar";
@@ -72,7 +71,6 @@ function RecipeList() {
 
   return (
     <div>
-      <TopNavBar onSearchButtonClick={handleSearchButtonClick} />
       <CategoryFilter
         categories={categories}
         selectedCategory={selectedCategory}
