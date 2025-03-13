@@ -50,7 +50,10 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		            B.b_name,
 		            B.b_ingredient_id, 
 		            B.b_quantity,
-		            B.b_recipe_name
+		            B.b_recipe_name,
+		            B.b_unit,
+					B.b_image
+		            
 		            
 		        FROM (
 		            SELECT i.ingredient_id AS a_ingredient_id, i.quantity AS a_quantity
@@ -62,7 +65,9 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		            	ing.small_category AS b_name,
 		                ing.ingredient_id AS b_ingredient_id, 
 		                CEIL(SUM(ri.quantity)) AS b_quantity,
-		                r.name AS b_recipe_name
+		                r.name AS b_recipe_name,
+		                ing.ingredient_unit AS b_unit,
+		                ing.standard_image AS b_image
 		            FROM meal_plan mp
 		            LEFT JOIN recipe r ON mp.recipe_id = r.recipe_id
 		            LEFT JOIN recipe_ingredient ri ON r.recipe_id = ri.recipe_id
