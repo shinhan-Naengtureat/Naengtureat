@@ -1,0 +1,84 @@
+/* 예산 입력 페이지 컨테이너 */
+.budget-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 컨테이너는 중앙 정렬 */
+  justify-content: center;
+  min-height: 40vh;
+  text-align: center;
+  background-color: #fff;
+  padding: 40px;
+}
+
+/* 상단 텍스트 */
+.budget-subtitle,
+.budget-title {
+  font-size: 22px;
+  font-weight: 600;
+  width: 100%; /* 전체 너비 차지 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+  align-self: flex-start; /* 부모가 flex일 경우 왼쪽 정렬 */
+}
+
+.budget-subtitle {
+  color: #6b7682;
+  margin-bottom: 0;
+}
+
+.budget-title {
+  color: #343d4c;
+  margin-top: 5px; /* 제목과 부제목이 너무 붙지 않도록 조정 */
+  margin-bottom: 20px;
+  margin-top: 0; /* 위쪽 여백 없애기 */
+}
+
+/* 예산 입력 영역 */
+.budget-input-container {
+  width: 100%;
+  max-width: 350px;
+  text-align: left;
+  color: #343d4c;
+  align-self: flex-start; /* 부모가 flex일 경우 왼쪽 정렬 */
+}
+
+.budget-heading {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6b7682;
+  margin-bottom: 0px;
+}
+
+.budget-label {
+  margin-top: 0; /* 위쪽 여백 없애기 */
+  font-size: 22px;
+  font-weight: 600;
+  color: #343d4c;
+  margin-bottom: 30px;
+}
+
+/* 예산 입력 필드 */
+.budget-input-wrapper {
+  width: 100%; /* 가로 전체 너비 */
+  border-bottom: 3px solid #343d4c; /* 아래쪽 선 추가 */
+  display: flex;
+  justify-content: center; /* 입력 필드 가운데 정렬 */
+  padding-bottom: 3px; /* 입력 필드와 선 사이 간격 */
+}
+
+.budget-input {
+  flex: 1;
+  border: none;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: right;
+  color: #343d4c;
+  outline: none;
+}
+
+.budget-info-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f58634;
+  margin-top: 5px;
+  align-self: flex-end; /* 부모가 flex일 경우 왼쪽 정렬 */
+}
