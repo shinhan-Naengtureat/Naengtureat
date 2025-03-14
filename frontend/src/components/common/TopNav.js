@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import { Offcanvas, Button } from 'react-bootstrap';
 import "styles/common/topNav.css";
 import routeConfig from "routes/routeConfig";
+import MyPage from 'pages/myPage/MyPage';
 
 function TopNav(props) {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Offcanvas 열림/닫힘 상태 관리
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const handleShow = () => setShowOffcanvas(true);
+  const handleClose = () => setShowOffcanvas(false);
 
   // 현재 경로로부터 설정된 navConfig를 찾음
   const currentNav = routeConfig.navConfig[location.pathname] || {
@@ -14,22 +21,50 @@ function TopNav(props) {
   };
 
   return (
-    <div className="top-navi">
-      <button className="back-btn" onClick={() => navigate(-1)}>←</button>
-      <h2 className="title">{currentNav.title}</h2>
-      <div className="icons">
-        {currentNav.links.map((link, idx) => (
-          <Link className="icon" to={link.to} key={idx}>
-            <span>{link.icon}</span>
-            {/*<img*/}
-            {/*  src={`${process.env.PUBLIC_URL}/assets/images/${link.icon}`}*/}
-            {/*  alt={link.alt}*/}
-            {/*  className="icon"*/}
-            {/*/>*/}
-          </Link>
-        ))}
+    <>
+      <div className="top-navi">
+        <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+        <h2 className="title">{currentNav.title}</h2>
+        <div className="icons">
+  {currentNav.links.map((link, idx) => {
+    if (link.alt === "마이페이지") {
+      return (
+        <Button 
+          className="icon" 
+          variant="link" 
+          onClick={handleShow} 
+          key={idx}
+        >
+          <span>{link.icon}</span>
+        </Button>
+      );
+    } else {
+      return (
+        <Link className="icon" to={link.to} key={idx}>
+          <span>{link.icon}</span>
+          {/*<img
+            src={`${process.env.PUBLIC_URL}/assets/images/${link.icon}`}
+            alt={link.alt}
+            className="icon"
+          />*/}
+        </Link>
+      );
+    }
+  })}
+</div>
+
       </div>
-    </div>
+
+      {/* Offcanvas 컴포넌트 */}
+      <Offcanvas show={showOffcanvas} onHide={handleClose} placement="end">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>마이페이지</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <MyPage />
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
   );
 }
 
