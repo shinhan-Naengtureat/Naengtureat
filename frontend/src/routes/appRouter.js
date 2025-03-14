@@ -9,7 +9,8 @@ import routeConfig from "routes/routeConfig";
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
-import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import RecipeSearchPage from 'pages/recipe/RecipeSearchPage';
+import RecipeDetail from 'pages/recipe/RecipeDetail';
 
 const AppRouter = () => {
   return (
@@ -26,7 +27,8 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>} />
         <Route path={routeConfig.paths.register} element={<Layout>Register Page</Layout>} />
         <Route path={routeConfig.paths.myPage} element={<Layout>MyPage</Layout>} />
-        <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
+        <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
+        <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
 
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />

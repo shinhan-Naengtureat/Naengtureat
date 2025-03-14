@@ -13,6 +13,8 @@ const RouteConfig = {
     inventoryList: `${BASE_URL}/inventory`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     store: `${BASE_URL}/store`,
+    searchRecipe: `${BASE_URL}/search-recipe`,
+    recipeDetail: `${BASE_URL}/recipe/:recipeId`,
     notFound: '*',
   },
 
