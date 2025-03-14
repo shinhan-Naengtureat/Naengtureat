@@ -1,4 +1,4 @@
-import {FaBell, FaSearch, FaUser} from "react-icons/fa";
+import { FaBell, FaCartArrowDown, FaSearch, FaUser } from "react-icons/fa";
 
 const BASE_URL = process.env.PUBLIC_URL;
 
@@ -11,6 +11,7 @@ const RouteConfig = {
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
+    storeList: `${BASE_URL}/store`,
     notFound: '*',
   },
 
@@ -50,11 +51,11 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
       ],
     },
-    store: {
+    [ `${BASE_URL}/store` ]: {
       title: "스토어",
       links: [
-        { to: `${BASE_URL}/cart`, icon: "cart-icon.png", alt: "장바구니" },
-        { to: `${BASE_URL}/mypage`, icon: "user-icon.png", alt: "마이페이지" },
+        { to: `${BASE_URL}/cart`, icon: <FaCartArrowDown/>, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaUser/>, alt: "마이페이지" },
       ],
     },
   },
