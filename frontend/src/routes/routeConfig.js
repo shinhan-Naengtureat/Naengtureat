@@ -56,13 +56,6 @@ const RouteConfig = {
       ],
     },
 
-    [ `${BASE_URL}/mypage` ]: {
-      title: "마이페이지",
-      links: [
-        { to: `${BASE_URL}/cart`, icon: <FaShoppingCart/>, alt: "장바구니" },
-        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
-      ],
-    },
   },
 
   notFound: "*",
