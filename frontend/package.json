@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@portone/browser-sdk": "^0.0.13",
+    "@hello-pangea/dnd": "^18.0.1",
     "@reduxjs/toolkit": "^2.6.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.3",
     "bootstrap": "^5.3.3",
+    "date-fns": "^4.1.0",
     "react": "^18.0.0",
     "react-bootstrap": "^2.10.9",
     "react-bootstrap-icons": "^1.11.5",

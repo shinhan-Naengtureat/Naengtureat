@@ -22,7 +22,6 @@ const RouteConfig = {
       links: [
         { to: `${BASE_URL}/notifications`, icon: <FaBell/>, alt: "알림" },
         { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
-        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
       ],
     },
     [`${BASE_URL}/inventory`]: {
