@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
+import axiosInstance from "api/axios";
 
 const NotEnoughIngredientListPage = () => {
   const [ingredients, setIngredients] = useState([]);
@@ -10,8 +11,8 @@ const NotEnoughIngredientListPage = () => {
   useEffect(() => {
     const fetchShoppingList = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8888/inventory/gap?startDate=2025-03-10&endDate=2025-03-16`
+        const response = await axiosInstance.get(
+          `/inventory/gap?startDate=2025-03-10&endDate=2025-03-16`
         );
         if (response.status === 200) {
           setIngredients(response.data);

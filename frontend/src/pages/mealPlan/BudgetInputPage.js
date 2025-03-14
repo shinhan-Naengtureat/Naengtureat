@@ -4,6 +4,7 @@ import axios from "axios";
 import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BudgetInput.css";
+import axiosInstance from "api/axios";
 
 const BudgetInputPage = ({ setUserSelections }) => {
   const [budget, setBudget] = useState("");
@@ -16,8 +17,8 @@ const BudgetInputPage = ({ setUserSelections }) => {
       return;
     }
     try {
-      const response = await axios.put(
-        "http://localhost:8888/mealplan/budget",
+      const response = await axiosInstance.put(
+        "/mealplan/budget",
         {
           budget: parseInt(budget, 10), //숫자로 변환하여 전송
         }

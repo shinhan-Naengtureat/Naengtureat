@@ -5,6 +5,7 @@ import axios from "axios";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BoxChoice.css";
 import BackButton from "components/BackButton";
+import axiosInstance from "api/axios";
 
 const ThemeSelectionPage = ({ setUserSelections }) => {
   const [themes, setThemes] = useState([]);
@@ -14,8 +15,8 @@ const ThemeSelectionPage = ({ setUserSelections }) => {
   useEffect(() => {
     const fetchThemes = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8888/mealplan/theme"
+        const response = await axiosInstance.get(
+          "/mealplan/theme"
         );
         if (response.status === 200) {
           setThemes(response.data);

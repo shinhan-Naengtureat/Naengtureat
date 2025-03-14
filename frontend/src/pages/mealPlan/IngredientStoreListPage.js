@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
+import axiosInstance from "api/axios";
 
 const IngredientStoreListPage = (selectedIngredients) => {
   const [stores, setStores] = useState([]);
@@ -15,8 +16,8 @@ const IngredientStoreListPage = (selectedIngredients) => {
     const fetchShoppingStoreList = async () => {
       try {
         if (!selectedIngredients || selectedIngredients.length === 0) return;
-        const response = await axios.post(
-          `http://localhost:8888/store/emptyproduct`,
+        const response = await axiosInstance.post(
+          `/store/emptyproduct`,
           { ingredientIds: testIngredientIds }, //하드코딩용 
           // { ingredientIds: selectedIngredients.map((item) => item.id) }, // JSON Body로 전달
           { headers: { "Content-Type": "application/json" } }

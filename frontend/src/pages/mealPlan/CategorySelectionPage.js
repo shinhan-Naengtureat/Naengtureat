@@ -6,6 +6,7 @@ import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/BoxChoice.css";
+import axiosInstance from "api/axios";
 
 const CategorySelectionPage = ({ setUserSelections }) => {
   const [categories, setCategories] = useState([]);
@@ -16,8 +17,8 @@ const CategorySelectionPage = ({ setUserSelections }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8888/mealplan/category"
+        const response = await axiosInstance.get(
+          "/mealplan/category"
         );
         if (response.status === 200) {
           setCategories(response.data); // 받아온 카테고리 목록 설정
