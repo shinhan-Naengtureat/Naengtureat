@@ -1,4 +1,4 @@
-import {FaBars, FaBell, FaPlus, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {FaBars, FaBell, FaEdit, FaSearch, FaShoppingCart} from "react-icons/fa";
 import {FaTrashCan} from "react-icons/fa6";
 
 const BASE_URL = process.env.PUBLIC_URL;
@@ -42,7 +42,7 @@ const RouteConfig = {
     [ `${BASE_URL}/recipes` ]: {
       title: "테마별 레시피",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaPlus/>, alt: "레시피 추가" },
+        { to: `${BASE_URL}/notifications`, icon: <FaEdit/>, alt: "레시피 추가" },
         { to: `${BASE_URL}/search-recipe`, icon: <FaSearch/>, alt: "레시피 검색" },
         { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
       ],

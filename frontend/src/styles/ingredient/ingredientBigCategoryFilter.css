@@ -1,0 +1,27 @@
+.horizontal-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none; /* 스크롤바 숨기기 */
+}
+
+.category-btn {
+  flex: 0 0 auto;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.category-btn.active {
+  background-color: #ffc58b;
+  color: white;
+  border-color: #f08c00;
+}
