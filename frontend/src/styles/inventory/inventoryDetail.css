@@ -128,3 +128,17 @@
   font-size: 18px;
   font-weight: bold;
 }
+
+.category-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  text-align: center;
+  background: none;
+}
+
+.category-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}

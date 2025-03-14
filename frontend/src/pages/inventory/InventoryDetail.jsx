@@ -1,30 +1,59 @@
 import React, {useEffect, useState} from 'react';
 import axiosInstance from "api/axios";
 import {API_PATH} from "config/pathConfig";
-import {Button, Col, Container, Form, Row, Spinner} from "react-bootstrap";
+import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
 
 const InventoryDetail = () => {
   const {id} = useParams();
-  const [inventory, setinventory] = useState(null);
+  const [inventory, setInventory] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const [bigCategories, setBigCategories] = useState([]);
-  // const [smallCategories, setSmallCategories] = useState([]);
-
+  const [bigCategories, setBigCategories] = useState([]); // 대분류 목록
+  const [smallCategories, setSmallCategories] = useState({}); // 대분류별 소분류 매핑
+  const [selectedBigCategory, setSelectedBigCategory] = useState(""); // 선택된 대분류
+  const [filteredSmallCategories, setFilteredSmallCategories] = useState([]); // 선택된 대분류에 따른 소분류 목록
+  const [selectedSmallCategory, setSelectedSmallCategory] = useState(""); // 선택된 소분류
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 
   useEffect(() => {
     axiosInstance.get(`${API_PATH}/inventory/${id}`)
       .then(response => {
-        console.log(response.data);
-        setinventory(response.data);
+        setInventory(response.data);
+        setSelectedBigCategory(response.data.ingredientBigCategory);
+        setSelectedSmallCategory(response.data.ingredientSmallCategory);
         setLoading(false);
       })
       .catch(error => {
         console.log("재료 정보를 불러오는 중 오류 발생: ", error);
         setLoading(false);
       });
+
+    axiosInstance.get(`${API_PATH}/ingredient/categories`)
+      .then(response => {
+        const uniqueBigCategories = [...new Set(response.data.map(item => item.bigCategory))];
+        setBigCategories(uniqueBigCategories);
+
+        const groupedSmallCategories = response.data.reduce((acc, item) => {
+          if (!acc[item.bigCategory]) {
+            acc[item.bigCategory] = [];
+          }
+          acc[item.bigCategory].push(item.smallCategory);
+          return acc;
+        }, {});
+        setSmallCategories(groupedSmallCategories);
+      })
+      .catch(error => console.log("카테고리 목록 불러오기 실패: ", error));
   }, [id]);
+
+  useEffect(() => {
+    if (selectedBigCategory) {
+      setFilteredSmallCategories(smallCategories[selectedBigCategory] || []);
+      setSelectedSmallCategory("");
+    } else {
+      setFilteredSmallCategories([]);
+    }
+  }, [selectedBigCategory, smallCategories]);
 
   if (loading) {
     return <Spinner animation="border"/>;
@@ -36,7 +65,6 @@ const InventoryDetail = () => {
 
   return (
     <Container className="inventory-detail-container">
-
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
@@ -47,22 +75,64 @@ const InventoryDetail = () => {
             {/* 대분류 */}
             <Col xs={6} className="text-center">
               <Form.Label className="category-label">대분류</Form.Label>
-              <Form.Select className="category-select">
-                <option>{inventory.ingredientBigCategory}</option>
+              <Form.Select
+                className="category-select"
+                value={selectedBigCategory}
+                onChange={(e) => setSelectedBigCategory(e.target.value)}
+              >
+                <option value="">대분류 선택</option>
+                {bigCategories.map((category, index) => (
+                  <option key={index} value={category}>{category}</option>
+                ))}
               </Form.Select>
             </Col>
             {/* 소분류 */}
             <Col xs={6} className="text-center">
               <Form.Label className="category-label">소분류</Form.Label>
-              <Form.Select className="category-select">
-                <option>{inventory.ingredientSmallCategory}</option>
-              </Form.Select>
+              <Form.Control
+                className="category-select"
+                value={selectedSmallCategory}
+                readOnly
+                onClick={() => setIsModalOpen(true)} // 클릭 시 모달 열기
+              />
+            </Col>
+            {/* 닉네임 입력 */}
+            <Col>
+              <Form.Control type="text" defaultValue={inventory.nickName} className="nickname-input"/>
             </Col>
           </Row>
-          {/* 닉네임 입력 */}
-          <Form.Control type="text" defaultValue={inventory.nickName} className="nickname-input"/>
         </Col>
       </Row>
+
+      {/* 모달 (소분류 선택) */}
+      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>소분류 선택</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Row>
+            {filteredSmallCategories.map((category, index) => (
+              <Col xs={4} key={index} className="text-center">
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    setSelectedSmallCategory(category);
+                    setIsModalOpen(false); // 선택 후 모달 닫기
+                  }}
+                  className="category-btn"
+                >
+                  <img
+                    src={`/images/${category}.png`}
+                    alt={category}
+                    className="category-icon"
+                  />
+                  <div>{category}</div>
+                </Button>
+              </Col>
+            ))}
+          </Row>
+        </Modal.Body>
+      </Modal>
 
       {/* 수량 조절 */}
       <Row className="quantity-row">
@@ -77,33 +147,29 @@ const InventoryDetail = () => {
         </Col>
       </Row>
 
-      {/* 날짜 입력 (yyyy-MM-dd 포맷 적용) */}
+      {/* 날짜 입력 */
+      }
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
-          <Form.Control
-            type="date"
-            defaultValue={inventory.inputDate}
-            className="date-input"
-          />
+          <Form.Control type="date" defaultValue={inventory.inputDate} className="date-input"/>
         </Col>
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">소비기한</Form.Label>
-          <Form.Control
-            type="date"
-            defaultValue={inventory.inventoryExpDate}
-            className="date-input"
-          />
+          <Form.Control type="date" defaultValue={inventory.inventoryExpDate} className="date-input"/>
         </Col>
       </Row>
 
-      {/* 메모 입력 */}
+      {/* 메모 입력 */
+      }
       <Form.Control as="textarea" placeholder="탭해서 메모 남기기" className="memo-input"/>
 
-      {/* 추가 버튼 */}
-      <Button variant="warning" className="add-button">추가</Button>
+      {/* 추가 버튼 */
+      }
+      <Button variant="warning" className="add-button">등록</Button>
     </Container>
-  );
+  )
+    ;
 };
 
 export default InventoryDetail;
