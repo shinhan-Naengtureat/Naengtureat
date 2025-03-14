@@ -43,7 +43,7 @@ const ExcludedIngredientsPage = ({ setUserSelections }) => {
       excludedIngredients: selectedIngredients,
     }));
 
-    navigate(RouteConfig.mealPlanListDaily); // 최종 식단 페이지로 이동
+    navigate(RouteConfig.frequencyMealPlan); // 횟수입력 페이지로 이동
   };
   // 뒤로가기기
   const handleBefore = () => {

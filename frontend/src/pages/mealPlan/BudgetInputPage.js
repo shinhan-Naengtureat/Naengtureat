@@ -1,42 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BudgetInput.css";
 import axiosInstance from "api/axios";
+import { useMealPlan } from "context/MealPlanContext"; 
 
-const BudgetInputPage = ({ setUserSelections }) => {
-  const [budget, setBudget] = useState("");
-  const [memberInfo, setMemberInfo] = useState(null);
+const BudgetInputPage = () => {
+  const { userSelections, setUserSelections } = useMealPlan();
+  const [budget, setBudget] = useState(userSelections.budget || ""); 
+  const [memberInfo, setMemberInfo] = useState(null); // 기존 예산 저장할 상태 추가
   const navigate = useNavigate();
 
- 
-     //회원 정보 API 호출 (기존 예산 가져오기)
-  useEffect(() => {
+
+ //회원 정보 API 호출 (기존 예산 가져오기)
+   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
         const response = await axiosInstance.get("/member/detail");
         if (response.status === 200) {
           console.log("회원 정보 조회 성공", response.data);
-          setMemberInfo(response.data); // 상태 업데이트
+          setMemberInfo(response.data); // 기존 예산 상태 업데이트
         } else {
           console.error("회원 정보 조회 실패:", response);
         }
       } catch (error) {
         console.error("회원 정보 가져오기 실패:", error);
       }
-    };
-
-    fetchMemberInfo();
+     };
+     
+  fetchMemberInfo();
   }, []); // 첫 렌더링 시 한 번 실행됨
 
-  // 예산 저장 API 호출
+  //  예산 저장 후 다음 페이지 이동
   const handleNext = async () => {
     if (!budget) {
       alert("예산을 입력해주세요!");
       return;
     }
+
     try {
       const response = await axiosInstance.put("/mealplan/budget", {
         budget: parseInt(budget, 10), // 숫자로 변환하여 전송
@@ -45,7 +47,7 @@ const BudgetInputPage = ({ setUserSelections }) => {
       if (response.status === 200) {
         console.log("예산 저장 성공", response.data);
 
-        // 상태 업데이트 후 다음 페이지로 이동
+        //  상태 업데이트 후 다음 페이지로 이동
         setUserSelections((prev) => ({ ...prev, budget }));
         navigate(RouteConfig.paths.categorySelection);
       } else {
