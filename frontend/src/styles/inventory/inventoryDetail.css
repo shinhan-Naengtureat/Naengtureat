@@ -1,0 +1,111 @@
+.inventory-detail-container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
+
+.back-button {
+  font-size: 24px;
+  color: black;
+  text-decoration: none;
+}
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* 이미지 & 카테고리 */
+.image-category-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.image-box {
+  text-align: center;
+  border: #6c757d 1px solid;
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+}
+
+.ingredient-image {
+  width: 60px;
+  height: 60px;
+}
+
+.category-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-center {
+  justify-items: left;
+}
+
+.category-label {
+  font-size: 10px;
+}
+
+.category-select {
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+/* 닉네임 입력 */
+.nickname-input {
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid gray;
+  margin-bottom: 15px;
+}
+
+/* 수량 조절 */
+.quantity-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.quantity-button {
+  text-align: center;
+}
+
+.quantity-button button {
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+}
+
+.quantity-value {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 날짜 입력 */
+.date-group {
+  margin-bottom: 15px;
+}
+
+.date-input {
+  width: 100%;
+  text-align: center;
+}
+
+/* 메모 입력 */
+.memo-input {
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+/* 추가 버튼 */
+.add-button {
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+}
