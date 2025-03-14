@@ -31,7 +31,7 @@
   border-radius: 20px;
 }
 
-.ingredient-image {
+.inventory-image {
   width: 60px;
   height: 60px;
 }
@@ -89,12 +89,31 @@
 
 /* 날짜 입력 */
 .date-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
+}
+
+.date-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.date-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
 }
 
 .date-input {
   width: 100%;
   text-align: center;
+  padding: 5px;
+  font-size: 14px;
 }
 
 /* 메모 입력 */

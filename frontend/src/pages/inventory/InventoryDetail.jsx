@@ -7,14 +7,17 @@ import "styles/inventory/inventoryDetail.css";
 
 const InventoryDetail = () => {
   const {id} = useParams();
-  const [ingredient, setIngredient] = useState(null);
+  const [inventory, setinventory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [bigCategories, setBigCategories] = useState([]);
+  const [smallCategories, setSmallCategories] = useState([]);
+
 
   useEffect(() => {
     axiosInstance.get(`${API_PATH}/inventory/${id}`)
       .then(response => {
         console.log(response.data);
-        setIngredient(response.data);
+        setinventory(response.data);
         setLoading(false);
       })
       .catch(error => {
@@ -27,7 +30,7 @@ const InventoryDetail = () => {
     return <Spinner animation="border"/>;
   }
 
-  if (!ingredient) {
+  if (!inventory) {
     return <Container>해당 재료 정보를 찾을 수 없습니다.</Container>;
   }
 
@@ -37,7 +40,7 @@ const InventoryDetail = () => {
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
-          <img src="/images/potato.png" alt="재료 이미지" className="ingredient-image"/>
+          <img src="/images/potato.png" alt="재료 이미지" className="inventory-image"/>
         </Col>
         <Col xs={9} className="category-box">
           <Row className="align-items-center">
@@ -45,23 +48,21 @@ const InventoryDetail = () => {
             <Col xs={6} className="text-center">
               <Form.Label className="category-label">대분류</Form.Label>
               <Form.Select className="category-select">
-                <option>{ingredient.ingredientBigCategory}</option>
+                <option>{inventory.ingredientBigCategory}</option>
               </Form.Select>
             </Col>
             {/* 소분류 */}
             <Col xs={6} className="text-center">
               <Form.Label className="category-label">소분류</Form.Label>
               <Form.Select className="category-select">
-                <option>{ingredient.ingredientSmallCategory}</option>
+                <option>{inventory.ingredientSmallCategory}</option>
               </Form.Select>
             </Col>
           </Row>
           {/* 닉네임 입력 */}
-          <Form.Control type="text" defaultValue={ingredient.nickName} className="nickname-input"/>
+          <Form.Control type="text" defaultValue={inventory.nickName} className="nickname-input"/>
         </Col>
       </Row>
-
-
 
       {/* 수량 조절 */}
       <Row className="quantity-row">
@@ -69,22 +70,32 @@ const InventoryDetail = () => {
           <Button variant="outline-danger">－</Button>
         </Col>
         <Col xs={4} className="quantity-value">
-          {ingredient.quantity}
+          {inventory.quantity}
         </Col>
         <Col xs={4} className="quantity-button">
           <Button variant="outline-primary">＋</Button>
         </Col>
       </Row>
 
-      {/* 날짜 입력 */}
-      <Form.Group className="date-group">
-        <Form.Label>인입일</Form.Label>
-        <Form.Control type="text" defaultValue={ingredient.inputDate} className="date-input"/>
-      </Form.Group>
-      <Form.Group className="date-group">
-        <Form.Label>소비기한</Form.Label>
-        <Form.Control type="text" defaultValue={ingredient.inventoryExpDate} className="date-input"/>
-      </Form.Group>
+      {/* 날짜 입력 (yyyy-MM-dd 포맷 적용) */}
+      <Row className="date-group">
+        <Col xs={6} className="date-item">
+          <Form.Label className="date-label">인입일</Form.Label>
+          <Form.Control
+            type="date"
+            defaultValue={inventory.inputDate}
+            className="date-input"
+          />
+        </Col>
+        <Col xs={6} className="date-item">
+          <Form.Label className="date-label">소비기한</Form.Label>
+          <Form.Control
+            type="date"
+            defaultValue={inventory.inventoryExpDate}
+            className="date-input"
+          />
+        </Col>
+      </Row>
 
       {/* 메모 입력 */}
       <Form.Control as="textarea" placeholder="탭해서 메모 남기기" className="memo-input"/>
