@@ -3,11 +3,12 @@ import axios from "axios";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
 import axiosInstance from "api/axios";
+import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
 
 const NotEnoughIngredientListPage = () => {
   const [ingredients, setIngredients] = useState([]);
 
-  // 📌 API 호출: 부족한 재료 리스트 가져오기
+  // API 호출: 부족한 재료 리스트 가져오기
   useEffect(() => {
     const fetchShoppingList = async () => {
       try {
@@ -71,7 +72,7 @@ const NotEnoughIngredientListPage = () => {
                 {/* 이미지 */}
                 <td>
                   <img 
-                    src={`/assets/images/ingredients/${item.image}`} 
+                    src={`${INGREDIENT_IMAGE_PATH}/${item.image}`} 
                     alt={item.ingredientName}
                     style={{ width: "50px", height: "50px", objectFit: "contain" }}
                    />

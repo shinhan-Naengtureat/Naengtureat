@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import axiosInstance from "api/axios";
 
 const GPTChat = () => {
   const [budget, setBudget] = useState("");
@@ -39,8 +40,8 @@ const GPTChat = () => {
     `;
 
     try {
-      const res = await axios.post(
-        "http://localhost:8888/mealplan",
+      const res = await axiosInstance.post(
+        "/mealplan",
         {
           model: "gpt-4",
           messages: [{ role: "user", content: finalPrompt, temperature: 0.7 }],
@@ -51,18 +52,18 @@ const GPTChat = () => {
 
       console.log("GPT 응답(JSON):", res.data);
       if (!res.data || !res.data.식단표) {
-        console.error("❌ OpenAI API 응답 오류 (식단표 없음):", res.data);
+        console.error(" OpenAI API 응답 오류 (식단표 없음):", res.data);
         return;
       }
 
       setMealPlan(res.data.식단표);
     } catch (error) {
       if (error.response) {
-        console.error("❌ API 응답 오류:", error.response.data);
+        console.error(" API 응답 오류:", error.response.data);
       } else if (error.request) {
-        console.error("❌ 서버 응답 없음:", error.request);
+        console.error(" 서버 응답 없음:", error.request);
       } else {
-        console.error("❌ 요청 설정 오류:", error.message);
+        console.error(" 요청 설정 오류:", error.message);
       }
     }
   };

@@ -6,35 +6,24 @@ import "styles/mealPlan/IngredientPage.css"; // 새로운 CSS 파일 추가
 import IngredientCard from "./IngredientCard";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
+import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
 
 const PreferredIngredientsPage = ({ setUserSelections }) => {
   const ingredientsList = [
-    {
-      name: "돼지고기",
-      image: "/assets/images/ingredients/ingre-card/pork.jpg",
-    },
-    { name: "달걀", image: "/assets/images/ingredients/ingre-card/eggs.jpg" },
-    { name: "치즈", image: "/assets/images/ingredients/ingre-card/cheeze.jpg" },
-    {
-      name: "토마토",
-      image: "/assets/images/ingredients/ingre-card/tomato.jpg",
-    },
-    { name: "참치", image: "/assets/images/ingredients/ingre-card/tuna.jpg" },
-    { name: "소고기", image: "/assets/images/ingredients/ingre-card/beaf.jpg" },
-    { name: "감자", image: "/assets/images/ingredients/ingre-card/potato.jpg" },
-    { name: "양파", image: "/assets/images/ingredients/ingre-card/onion.jpg" },
-    { name: "무", image: "/assets/images/ingredients/ingre-card/radish.jpg" },
-    {
-      name: "요거트",
-      image: "/assets/images/ingredients/ingre-card/yogurt.jpg",
-    },
-    {
-      name: "닭고기",
-      image: "/assets/images/ingredients/ingre-card/chicken.jpg",
-    },
-    { name: "식빵", image: "/assets/images/ingredients/ingre-card/bread.jpg" },
-    { name: "햄", image: "/assets/images/ingredients/ingre-card/ham.jpg" },
-    { name: "우유", image: "/assets/images/ingredients/ingre-card/milk.jpg" },
+    { name: "돼지고기", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/pork.jpg`,},
+    { name: "달걀", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/eggs.jpg` },
+    { name: "치즈", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/cheeze.jpg` },
+    { name: "토마토", image:`${ INGREDIENT_IMAGE_PATH }/ingre-card/tomato.jpg`,},
+    { name: "참치", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/tuna.jpg` },
+    { name: "소고기", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/beaf.jpg` },
+    { name: "감자", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/potato.jpg` },
+    { name: "양파", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/onion.jpg` },
+    { name: "무", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/radish.jpg` },
+    { name: "요거트", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/yogurt.jpg`,},
+    { name: "닭고기", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/chicken.jpg`,},
+    { name: "식빵", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/bread.jpg` },
+    { name: "햄", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/ham.jpg` },
+    { name: "우유", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/milk.jpg` },
   ];
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);

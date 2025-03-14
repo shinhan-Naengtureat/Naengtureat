@@ -3,15 +3,16 @@ import axios from "axios";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
 import axiosInstance from "api/axios";
+import { STORE_IMAGE_PATH } from "config/pathConfig";
 
 const IngredientStoreListPage = (selectedIngredients) => {
   const [stores, setStores] = useState([]);
   const [selectedStore, setSelectedStore] = useState(null);
 
-   // 📌 테스트용 하드코딩된 `ingredientIds`
+   //  테스트용 하드코딩된 `ingredientIds`
   const testIngredientIds = [4, 6, 79]; // 테스트 ID 값
 
-  // 📌 API 호출: 부족 재료 보유한 상점 리스트 가져오기
+  //  API 호출: 부족 재료 보유한 상점 리스트 가져오기
   useEffect(() => {
     const fetchShoppingStoreList = async () => {
       try {
@@ -61,7 +62,7 @@ const IngredientStoreListPage = (selectedIngredients) => {
                   <td><input type="radio" name="store" value={stores.storeName} onChange={() => setSelectedStore(stores)} /></td>
                   {/* 이미지 */}
                   <td>
-                  <img src={`/assets/images/stores/${stores.image}.png`} alt={stores.ingredientName}
+                  <img src={`${STORE_IMAGE_PATH}/${stores.image}.png`} alt={stores.ingredientName}
                     style={{ width: "50px", height: "50px", objectFit: "contain" }}
                    />
                   </td>

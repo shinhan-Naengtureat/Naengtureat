@@ -1,29 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
-import "styles/mealPlan/IngredientPage.css"; // 새로운 CSS 파일 추가
-import IngredientCard from "./IngredientCard";
+import "styles/mealPlan/IngredientPage.css"; 
+import IngredientCard from "pages/mealPlan/IngredientCard";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
+import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
 const ExcludedIngredientsPage = ({ setUserSelections }) => {
   const ingredientsList = [
-    {
-      name: "땅콩",
-      image: "/assets/images/ingredients/hate-card/peanut.jpg",
-    },
-    { name: "복숭아", image: "/assets/images/ingredients/hate-card/pitch.jpg" },
-    {
-      name: "오이",
-      image: "/assets/images/ingredients/hate-card/cucumber.jpg",
-    },
-    {
-      name: "달걀",
-      image: "/assets/images/ingredients/hate-card/egg.jpg",
-    },
-    { name: "밀가루", image: "/assets/images/ingredients/hate-card/wheat.jpg" },
-    { name: "게", image: "/assets/images/ingredients/hate-card/crab.jpg" },
-    { name: "새우", image: "/assets/images/ingredients/hate-card/shrimp.jpg" },
-    { name: "홍합", image: "/assets/images/ingredients/hate-card/shell.jpg" },
+    { name: "땅콩", image: `${ INGREDIENT_IMAGE_PATH }/hate-card/peanut.jpg`},
+    { name: "복숭아", image: `${ INGREDIENT_IMAGE_PATH }/hate-card/pitch.jpg` },
+    { name: "오이", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/cucumber.jpg`,},
+    { name: "달걀", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/egg.jpg`,},
+    { name: "밀가루", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/wheat.jpg` },
+    { name: "게", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/crab.jpg` },
+    { name: "새우", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/shrimp.jpg` },
+    { name: "홍합", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/shell.jpg` },
   ];
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);
