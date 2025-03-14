@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class CategoryResponseDTO {
     String bigCategory;
     String smallCategory;
+    String ingredientUnit;
 }
