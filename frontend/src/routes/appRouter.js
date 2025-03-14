@@ -45,11 +45,14 @@ const AppRouter = () => {
        <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
         <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
         
+
+
         {/* 필요한 경우 추가할 수 있는 라우트 */}
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>}/>
         <Route path={routeConfig.paths.register} element={<Layout>Register Page</Layout>}/>
         <Route path={routeConfig.paths.myPage} element={<Layout>MyPage</Layout>}/>
         <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
+
 
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>}/>
