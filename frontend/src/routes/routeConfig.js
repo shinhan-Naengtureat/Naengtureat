@@ -21,7 +21,9 @@ const RouteConfig = {
     notEnoughIngredientList: `${BASE_URL}/shopping-container`,
     ingredientStoreList: `${BASE_URL}/store-shopping-container`,
     store: `${BASE_URL}/store`,
-    notFound: "*",
+    searchRecipe: `${BASE_URL}/search-recipe`,
+    recipeDetail: `${BASE_URL}/recipe/:recipeId`,
+    notFound: '*',
   },
 
   navConfig: {

@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
-    @Query("SELECT new com.shinhan.naengtureat.ingredient.dto.CategoryResponseDTO(i.bigCategory, i.smallCategory) FROM Ingredient i")
+    @Query("SELECT new com.shinhan.naengtureat.ingredient.dto.CategoryResponseDTO(i.bigCategory, i.smallCategory, i.ingredientUnit) FROM Ingredient i")
     List<CategoryResponseDTO> findAllCategories();
 }

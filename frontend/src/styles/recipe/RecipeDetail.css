@@ -1,0 +1,293 @@
+/* 전체 컨테이너 */
+.recipe-detail {
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* 레시피 대표 이미지 */
+.recipe-detail img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* 레시피 이름 */
+.recipe-detail h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: #222;
+}
+
+/* 일반 텍스트 */
+.recipe-detail p {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+/* 해쉬태그 */
+.recipe-hashtags span {
+  display: inline-block;
+  margin-right: 8px;
+  background: #e0e0e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* 아이콘 */
+.action-icons{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px; /* 아이콘 사이에 간격 추가 (선택 사항) */
+  margin: 16px 0;
+  margin-bottom: 16px;      
+  padding-bottom: 16px;     
+  border-bottom: 2px solid #ddd;  
+}
+
+.action-icons .icon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s;
+}
+
+/* 좋아요 상태일 때 하트 아이콘 색상 변경 */
+.icon.liked {
+  color: red;
+}
+
+/* 섹션 (재료, 조리 단계) 구분 */
+.recipe-section {
+  margin-top: 24px;
+}
+
+.recipe-section h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 4px;
+}
+
+/* =========================
+   재료 테이블 스타일
+   ========================= */
+.ingredient-table {
+  margin-top: 24px;
+}
+
+/* 재료 섹션의 타이틀 */
+.ingredient-table h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+/* 테이블 전체 스타일 */
+.ingredient-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* 각 행 아래 테두리 */
+.ingredient-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+/* 각 셀 패딩 */
+.ingredient-table td {
+  padding: 8px 0;
+  vertical-align: top;
+}
+
+/* 왼쪽 재료명 */
+.ingredient-name {
+  width: 50%;
+  font-weight: bold;
+}
+
+/* 오른쪽 수량 */
+.ingredient-quantity {
+  width: 50%;
+  text-align: left;
+}
+
+/* =========================
+   조리 단계 스타일
+   ========================= */
+.recipe-steps {
+  margin-bottom: 16px;      /* 댓글 섹션과 간격을 벌리기 위함 */
+  padding-bottom: 16px;     /* 테두리 안쪽 여백 */
+  border-bottom: 2px solid #ddd;  /* 구분선 */
+}
+
+.recipe-steps ol {
+  margin-left: 20px;
+  padding-left: 0;
+}
+
+.recipe-steps li {
+  margin-bottom: 12px;
+}
+
+/* 조리 단계 이미지 */
+.recipe-steps img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-section h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+/* 댓글 카드 스타일 */
+.comment-box {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comment-user {
+  font-weight: bold;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.comment-content {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* 댓글 입력 창 */
+.comment-input-container {
+  margin-top: 16px;
+  position: relative;
+}
+
+.comment-input-container textarea {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  resize: none;
+  font-size: 14px;
+}
+
+/* 댓글 등록 버튼 */
+.comment-submit-button {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  background-color: #ff7f50; /* 원하는 색상으로 변경 가능 */
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 오버레이를 흰색으로 처리 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* 가장 위에 표시 */
+}
+
+/* 모달 창 */
+.modal-content {
+  background-color: #fff !important;
+  width: 80%;
+  max-width: 350px;
+  border-radius: 15px !important;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* 모달 제목 */
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+/* 인풋/셀렉트 묶음 */
+.modal-row {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.modal-row label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.modal-row input[type="date"],
+.modal-row select {
+  width: 100%;
+  font-size: 14px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* 취소, 저장 버튼 */
+.modal-buttons button {
+  width: 48%;
+  padding: 12px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal-buttons button:nth-child(1) {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.modal-buttons button:nth-child(2) {
+  background-color: #ff7f50;
+  color: #fff;
+}
