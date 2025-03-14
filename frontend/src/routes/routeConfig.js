@@ -11,6 +11,7 @@ const RouteConfig = {
     myPage: `${BASE_URL}/mypage`,
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
+    inventoryDetail: `${BASE_URL}/inventory/:id`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,

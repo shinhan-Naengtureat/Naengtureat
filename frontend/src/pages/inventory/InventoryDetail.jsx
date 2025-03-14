@@ -9,8 +9,8 @@ const InventoryDetail = () => {
   const {id} = useParams();
   const [inventory, setinventory] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [bigCategories, setBigCategories] = useState([]);
-  const [smallCategories, setSmallCategories] = useState([]);
+  // const [bigCategories, setBigCategories] = useState([]);
+  // const [smallCategories, setSmallCategories] = useState([]);
 
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Route, Routes} from "react-router-dom";
 import HomePage from "pages/home/HomePage";
 import RecipeList from "pages/recipe/RecipeList";
@@ -10,8 +10,24 @@ import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
 import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
+import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
+import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
+import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
+import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
+import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
+import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
+import InventoryDetail from "pages/inventory/InventoryDetail";
 
 const AppRouter = () => {
+  const [userSelections, setUserSelections] = useState({
+    budget: "",
+    category: "",
+    theme: "",
+    preferredIngredients: [],
+    excludedIngredients: [],
+  });
+
   return (
     <div className="app">
       <TopNav />
@@ -35,6 +51,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>}/>
         <Route path={routeConfig.paths.register} element={<Layout>Register Page</Layout>}/>
         <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
+        <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
 
 
         {/* 404 Not Found */}
