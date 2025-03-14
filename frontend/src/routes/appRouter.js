@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import HomePage from "pages/home/HomePage";
 import RecipeList from "pages/recipe/RecipeList";
 import InventoryList from "pages/inventory/InventoryList";
-import StoreList from "pages/store/StoreList";
+import Store from "pages/store/Store";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import routeConfig from "routes/routeConfig";
 import Layout from "components/common/Layout";
@@ -20,7 +20,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.inventoryList} element={<Layout><InventoryList/></Layout>} />
         <Route path={routeConfig.paths.mealPlanListDaily} element={<Layout><MealPlanListDaily/></Layout>} />
         <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
-        <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
+        <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
 
 
         {/* 필요한 경우 추가할 수 있는 라우트 */}
