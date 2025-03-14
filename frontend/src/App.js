@@ -1,6 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { useEffect, useState } from "react";
+import StyledButton from "components/StyleButton";
 
 function App() {
   const [message, setMessage] = useState([]);
@@ -36,6 +37,7 @@ function App() {
           ))}
         </ul>
       </header>
+      <StyledButton>다음</StyledButton>
     </div>
   );
 }
