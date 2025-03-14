@@ -57,6 +57,7 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
       ],
     },
+
   },
 
   notFound: "*",
