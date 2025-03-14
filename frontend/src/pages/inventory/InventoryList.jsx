@@ -2,7 +2,6 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
 import "styles/inventory/inventoryList.css";
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
-import {API_PATH} from "config/pathConfig";
 import axiosInstance from "api/axios";
 import {useNavigate} from "react-router-dom";
 
@@ -17,7 +16,7 @@ const InventoryList = () => {
   useEffect(() => {
     let ignore = false;
 
-    axiosInstance.get(`${API_PATH}/inventory`)
+    axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
           const extractedItems = response.data.map(item => ({

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axiosInstance from "api/axios";
-import {API_PATH} from "config/pathConfig";
 import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
@@ -17,7 +16,7 @@ const InventoryDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 
   useEffect(() => {
-    axiosInstance.get(`${API_PATH}/inventory/${id}`)
+    axiosInstance.get(`/inventory/${id}`)
       .then(response => {
         setInventory(response.data);
         setSelectedBigCategory(response.data.ingredientBigCategory);
@@ -29,7 +28,7 @@ const InventoryDetail = () => {
         setLoading(false);
       });
 
-    axiosInstance.get(`${API_PATH}/ingredient/categories`)
+    axiosInstance.get(`/ingredient/categories`)
       .then(response => {
         const uniqueBigCategories = [...new Set(response.data.map(item => item.bigCategory))];
         setBigCategories(uniqueBigCategories);
