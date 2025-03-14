@@ -25,7 +25,7 @@ const AppRouter = () => {
         {/* 필요한 경우 추가할 수 있는 라우트 */}
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>} />
         <Route path={routeConfig.paths.register} element={<Layout>Register Page</Layout>} />
-        <Route path={routeConfig.paths.myPage} element={<Layout>MyPage</Layout>}
+        <Route path={routeConfig.paths.myPage} element={<Layout>MyPage</Layout>} />
         <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
 
         {/* 404 Not Found */}
