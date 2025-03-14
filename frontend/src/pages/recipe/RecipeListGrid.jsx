@@ -9,7 +9,7 @@ function RecipeListGrid({ recipes }) {
         <div
           key={recipe.id}
           className="recipe-card"
-          onClick={() => navigate(`/recipes/${recipe.id}`)}
+          onClick={() => navigate(`/recipe/${recipe.id}`)}
         >
           <img src={recipe.image} alt={recipe.name} />
           <div className="recipe-info">
