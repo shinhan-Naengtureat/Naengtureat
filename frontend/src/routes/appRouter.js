@@ -44,7 +44,6 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.ingredientStoreList} element={<IngredientStoreListPage setUserSelections={setUserSelections} />}/>
        <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
         <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
-      <TopNav/>
         
         {/* 필요한 경우 추가할 수 있는 라우트 */}
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>}/>
