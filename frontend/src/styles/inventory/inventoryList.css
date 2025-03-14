@@ -6,23 +6,71 @@
 .item-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
 }
 
 .item-box {
-  width: 80px;
-  text-align: center;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 8px;
   position: relative;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
 }
 
-.badge.bg-warning {
+.item-box:hover {
+  transform: scale(1.05);
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-name {
+  font-size: 1.2rem; /* 아이템 이름 크기 증가 */
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.item-image {
+  width: 100px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.fresh {
+  background-color: #ffffff; /* 유통기한이 남아있는 경우 연한 초록색 */
+}
+
+.expired {
+  /*background-color: #fff3f3; !* 유통기한이 지난 경우 연한 빨간색 *!*/
+  border: red solid 1px;
+}
+
+.badge.bg-success {
+  background-color: green!important; /* 뱃지 초록색 */
+}
+
+.badge.bg-danger {
+  background-color: red!important; /* 뱃지 빨간색 */
+}
+
+.badge-position {
   position: absolute;
   top: -8px;
-  left: 5px;
-  font-size: 0.6rem;
+  right: -7px;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+}
+
+h5.text-start {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0; /* 카테고리 제목 아래 여백 추가 */
 }
 
 .rounded-circle.position-fixed {
@@ -40,7 +88,7 @@
 }
 
 .category-btn.active {
-  background-color: #ffc58b;
+  background-color: #F35C04!important;
   color: white;
-  border-color: #f08c00;
+  border-color: #F35C04!important;
 }

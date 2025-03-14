@@ -1,10 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Container, Row, Col, Button, InputGroup, FormControl, Badge, Placeholder} from 'react-bootstrap';
-import {Search} from 'react-bootstrap-icons';
+import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
 import "styles/inventory/inventoryList.css";
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
-import axios from "axios";
 import {API_PATH} from "config/pathConfig";
+import axiosInstance from "api/axios";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
@@ -16,11 +15,9 @@ const InventoryList = () => {
   useEffect(() => {
     let ignore = false;
 
-    console.time("Data Fetching & Processing");
-    axios.get(`${API_PATH}/inventory`)
+    axiosInstance.get(`${API_PATH}/inventory`)
       .then(response => {
         if (!ignore) {
-          console.log(response);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
@@ -29,7 +26,6 @@ const InventoryList = () => {
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
-          console.timeEnd("Data Fetching & Processing");
         }
       })
       .catch(error => {
@@ -45,10 +41,7 @@ const InventoryList = () => {
   //카테고리 목록 동적 생성
   const categories = useMemo(() => {
     if (!rawItems) return ["전체"];
-    console.log(rawItems);
-    const uniqueCategories = Array.from(
-      new Set(rawItems.map(item => item.ingredientBigCategory))
-    );
+    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
     return ["전체", ...uniqueCategories];
   }, [rawItems]);
 
@@ -81,35 +74,14 @@ const InventoryList = () => {
     });
   };
 
-  // //아이템 useMemo
-  // const items = useMemo(() => {
-  //   return (rawItems || []).map(item => ({
-  //     id: item.id,
-  //     nickName: item.nickName,
-  //     remainingDays: item.remainingDays,
-  //     ingredientBigCategory: item.ingredientBigCategory
-  //   }));
-  // }, [JSON.stringify(rawItems)]);
-
-
   return (
     <Container className="inventory-container">
-      {/*category filter*/}
       <IngredientBigCategoryFilter
         items={categories}
         selectedItems={selectedCategories}
         toggleItem={toggleCategory}
       />
 
-      {/*검색 입력창*/}
-      <InputGroup className="mb-4">
-        <FormControl placeholder="Search" aria-label="Search"/>
-        <Button variant="outline-secondary">
-          <Search/>
-        </Button>
-      </InputGroup>
-
-      {/* 데이터 로딩 중일 때 Placeholder 표시 */}
       {loading ? (
         <Row className="item-container">
           {[...Array(6)].map((_, index) => (
@@ -127,24 +99,28 @@ const InventoryList = () => {
       ) : (
         Object.keys(groupedItems).map((category) => (
           <div key={category}>
-            <h5 className="text-start mb-2">| {category} |</h5>
+            <h5 className="text-start mb-4">| {category} |</h5> {/* 마진 추가 */}
             <Row className="item-container">
-              {groupedItems[category].map((item) => (
-                <Col xs={4} key={item.id} className="item-box mb-3">
-                  <Badge pill bg="warning" className="badge.bg-warning mb-1">
-                    {item.remainingDays}
-                  </Badge>
-                  <div className="border rounded p-2">
-                    🥕 <img src="" alt="item" className="img-fluid mb-1"/>
-                    <div>{item.nickName}</div>
-                  </div>
-                </Col>
-              ))}
+              {groupedItems[category].map((item) => {
+                const isExpired = item.remainingDays < 0;
+                return (
+                  <Col xs={4} key={item.id} className="mb-3"> {/* xs=4: 한 줄에 3개 */}
+                    <div className={`item-box ${isExpired ? 'expired' : 'fresh'}`}>
+                      <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
+                        {item.remainingDays}
+                      </Badge>
+                      <div className="item-content">
+                        <img src="" alt="item" className="item-image" />
+                        <div className="item-name">{item.nickName}</div>
+                      </div>
+                    </div>
+                  </Col>
+                );
+              })}
             </Row>
           </div>
         ))
       )}
-
 
       <Button
         variant="warning"
