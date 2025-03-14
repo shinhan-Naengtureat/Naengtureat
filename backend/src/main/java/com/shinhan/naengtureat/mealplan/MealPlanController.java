@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shinhan.naengtureat.common.response.BaseResponse;
+import com.shinhan.naengtureat.mealplan.dto.MonthlyMealPlanDTO;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.mealplan.model.MealPlanService;
 import com.shinhan.naengtureat.member.model.MemberService;
@@ -97,7 +98,7 @@ public class MealPlanController {
 			// 세션에서 로그인된 사용자 정보 가져오기
 			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
-			List<MealPlanDTO> monthlyMealPlanList = mealPlanService.getMonthlyMealPlanList(memberId, month);
+			List<MonthlyMealPlanDTO> monthlyMealPlanList = mealPlanService.getMonthlyMealPlanList(memberId, month);
 
 			return ResponseEntity.ok(monthlyMealPlanList);
 		} catch (Exception e) {
