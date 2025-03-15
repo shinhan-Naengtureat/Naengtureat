@@ -1,9 +1,10 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
-import "styles/inventory/inventoryList.css";
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
 import {useNavigate} from "react-router-dom";
+import "styles/inventory/inventoryList.css";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
@@ -23,14 +24,14 @@ const InventoryList = () => {
             id: item.id,
             nickName: item.nickName,
             remainingDays: item.remainingDays,
-            ingredientBigCategory: item.ingredientBigCategory
+            ingredientBigCategory: item.ingredientBigCategory,
+            ingredientStandardImage: item.ingredientStandardImage
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
         }
       })
       .catch(error => {
-        console.log("데이터를 가져오는 중 에러 발생: " + error);
         setLoading(false);
       });
 
@@ -38,13 +39,6 @@ const InventoryList = () => {
       ignore = true;
     };
   }, []);
-
-  //카테고리 목록 동적 생성
-  const categories = useMemo(() => {
-    if (!rawItems) return ["전체"];
-    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
-    return ["전체", ...uniqueCategories];
-  }, [rawItems]);
 
   //필터링된 아이템 리스트
   const filteredItems = useMemo(() => {
@@ -62,6 +56,13 @@ const InventoryList = () => {
     }, {});
   }, [filteredItems]);
 
+  //카테고리 목록 동적 생성
+  const categories = useMemo(() => {
+    if (!rawItems || rawItems.length === 0) return ["전체"];
+    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
+    return ["전체", ...uniqueCategories];
+  }, [rawItems]);
+
   // 전체 선택 시 다른 카테고리 해제 & 중복 선택 방지
   const toggleCategory = (category) => {
     setSelectedCategories(prev => {
@@ -74,7 +75,11 @@ const InventoryList = () => {
       return prev.includes("전체") ? [category] : [...prev, category];
     });
   };
-
+  // useEffect(() => {
+  //   if (categories.length > 1 && selectedCategories.length === 1 && selectedCategories[0] === "전체") {
+  //     setSelectedCategories(["전체", ...categories.filter(cat => cat !== "전체")]);
+  //   }
+  // }, [categories]);
   return (
     <Container className="inventory-container">
       <IngredientBigCategoryFilter
@@ -114,7 +119,7 @@ const InventoryList = () => {
                         {item.remainingDays}
                       </Badge>
                       <div className="item-content">
-                        <img src="" alt="item" className="item-image" />
+                        <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />
                         <div className="item-name">{item.nickName}</div>
                       </div>
                     </div>

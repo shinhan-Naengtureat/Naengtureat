@@ -16,6 +16,11 @@
   font-weight: bold;
 }
 
+.ingredient-detail-title .ingredient-detail-sub-title {
+  text-align: left!important;
+  font-weight: bold;
+}
+
 /* 이미지 & 카테고리 */
 .image-category-row {
   display: flex;
@@ -24,16 +29,21 @@
 }
 
 .image-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   border: #6c757d 1px solid;
   width: 100px;
   height: 100px;
   border-radius: 20px;
+  overflow: hidden;
 }
 
 .inventory-image {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
 }
 
 .category-box {

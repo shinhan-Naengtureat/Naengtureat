@@ -7,7 +7,7 @@ const IngredientBigCategoryFilter = ({ items, selectedItems, toggleItem }) => {
       {items.map((item, idx) => (
         <button
           key={idx}
-          className={`category-btn ${selectedItems.includes(item) ? "active" : ""}`}
+          className={`inventory-list-category-btn ${selectedItems.includes(item) ? "active" : ""}`}
           onClick={() => toggleItem(item)}
         >
           {item}

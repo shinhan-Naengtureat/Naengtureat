@@ -3,6 +3,7 @@ import axiosInstance from "api/axios";
 import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
 const InventoryDetail = () => {
   const {id} = useParams();
@@ -37,7 +38,10 @@ const InventoryDetail = () => {
           if (!acc[item.bigCategory]) {
             acc[item.bigCategory] = [];
           }
-          acc[item.bigCategory].push(item.smallCategory);
+          acc[item.bigCategory].push({
+            smallCategory: item.smallCategory,
+            ingredientStandardImage: item.standardImage
+          });
           return acc;
         }, {});
         setSmallCategories(groupedSmallCategories);
@@ -64,10 +68,16 @@ const InventoryDetail = () => {
 
   return (
     <Container className="inventory-detail-container">
+      <h2 className="ingredient-detail-title">재료 상세 정보</h2>
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
-          <img src="/images/potato.png" alt="재료 이미지" className="inventory-image"/>
+          <img src={`${INGREDIENT_IMAGE_PATH}/${filteredSmallCategories.find(
+          (category) => category.smallCategory === selectedSmallCategory
+        )?.ingredientStandardImage || "default.png"}`}
+          alt="재료 이미지"
+          className="inventory-image"
+          />
         </Col>
         <Col xs={9} className="category-box">
           <Row className="align-items-center">
@@ -115,17 +125,17 @@ const InventoryDetail = () => {
                 <Button
                   variant="light"
                   onClick={() => {
-                    setSelectedSmallCategory(category);
+                    setSelectedSmallCategory(category.smallCategory);
                     setIsModalOpen(false); // 선택 후 모달 닫기
                   }}
                   className="category-btn"
                 >
                   <img
-                    src={`/images/${category}.png`}
+                    src={`${INGREDIENT_IMAGE_PATH}/${category.ingredientStandardImage}`}
                     alt={category}
                     className="category-icon"
                   />
-                  <div>{category}</div>
+                  <div>{category.smallCategory}</div>
                 </Button>
               </Col>
             ))}
@@ -133,6 +143,7 @@ const InventoryDetail = () => {
         </Modal.Body>
       </Modal>
 
+      <h3 className="ingredient-detail-sub-title">개수</h3>
       {/* 수량 조절 */}
       <Row className="quantity-row">
         <Col xs={4} className="quantity-button">
