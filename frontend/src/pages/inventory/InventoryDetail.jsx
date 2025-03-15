@@ -15,6 +15,9 @@ const InventoryDetail = () => {
   const [filteredSmallCategories, setFilteredSmallCategories] = useState([]); // 선택된 대분류에 따른 소분류 목록
   const [selectedSmallCategory, setSelectedSmallCategory] = useState(""); // 선택된 소분류
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [integerPart, setIntegerPart] = useState(0);  // 정수 부분
+  const [fractionPart, setFractionPart] = useState(0); // 소수 부분
+  const [ingredientUnit, setIngredientUnit] = useState("");  // 재료 단위 저장
 
   useEffect(() => {
     axiosInstance.get(`/inventory/${id}`)
@@ -23,6 +26,16 @@ const InventoryDetail = () => {
         setSelectedBigCategory(response.data.ingredientBigCategory);
         setSelectedSmallCategory(response.data.ingredientSmallCategory);
         setLoading(false);
+
+        // ingredientUnit 가져오기
+        axiosInstance.get(`/ingredient/categories`)
+          .then(categoryResponse => {
+            const matchedCategory = categoryResponse.data.find(item => item.smallCategory === response.data.ingredientSmallCategory);
+            if (matchedCategory) {
+              setIngredientUnit(matchedCategory.ingredientUnit);
+            }
+          })
+          .catch(error => console.log("카테고리 목록 불러오기 실패:", error));
       })
       .catch(error => {
         console.log("재료 정보를 불러오는 중 오류 발생: ", error);
@@ -50,6 +63,14 @@ const InventoryDetail = () => {
   }, [id]);
 
   useEffect(() => {
+    if (inventory && ingredientUnit === "개") {
+      const quantity = inventory.quantity;
+      setIntegerPart(Math.floor(quantity));
+      setFractionPart(quantity - Math.floor(quantity));
+    }
+  }, [inventory, ingredientUnit]);
+
+  useEffect(() => {
     if (selectedBigCategory) {
       setFilteredSmallCategories(smallCategories[selectedBigCategory] || []);
       setSelectedSmallCategory("");
@@ -73,10 +94,10 @@ const InventoryDetail = () => {
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
           <img src={`${INGREDIENT_IMAGE_PATH}/${filteredSmallCategories.find(
-          (category) => category.smallCategory === selectedSmallCategory
-        )?.ingredientStandardImage || "default.png"}`}
-          alt="재료 이미지"
-          className="inventory-image"
+            (category) => category.smallCategory === selectedSmallCategory
+          )?.ingredientStandardImage || "default.png"}`}
+               alt="재료 이미지"
+               className="inventory-image"
           />
         </Col>
         <Col xs={9} className="category-box">
@@ -144,21 +165,36 @@ const InventoryDetail = () => {
       </Modal>
 
       <h3 className="ingredient-detail-sub-title">개수</h3>
-      {/* 수량 조절 */}
-      <Row className="quantity-row">
-        <Col xs={4} className="quantity-button">
-          <Button variant="outline-danger">－</Button>
+      {/* 수량 조절 (정수 + 소수 부분을 가로로 배치) */}
+      <Row className="quantity-row align-items-center">
+        {/* 정수 부분 */}
+        <Col xs={6} className="d-flex align-items-center">
+          <Button variant="outline-danger" onClick={() => setIntegerPart(prev => Math.max(prev - 1, 0))}>－</Button>
+          <Form.Control
+            type="number"
+            value={integerPart}
+            onChange={(e) => setIntegerPart(Math.max(0, parseInt(e.target.value) || 0))}
+            className="mx-2 text-center"
+            style={{width: "50px"}}
+          />
+          <Button variant="outline-primary" onClick={() => setIntegerPart(prev => prev + 1)}>＋</Button>
         </Col>
-        <Col xs={4} className="quantity-value">
-          {inventory.quantity}
-        </Col>
-        <Col xs={4} className="quantity-button">
-          <Button variant="outline-primary">＋</Button>
-        </Col>
+
+        {/* 소수 부분 (ingredientUnit이 "개"일 때만 표시) */}
+        {ingredientUnit === "개" && (
+          <Col xs={4}>
+            <Form.Select value={fractionPart} onChange={(e) => setFractionPart(parseFloat(e.target.value))}>
+              <option value={0.0}>0</option>
+              <option value={0.25}>1/4</option>
+              <option value={0.5}>2/4</option>
+              <option value={0.75}>3/4</option>
+            </Form.Select>
+          </Col>
+        )}
+        <Col xs={2}>개</Col>
       </Row>
 
-      {/* 날짜 입력 */
-      }
+      {/* 날짜 입력 */}
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
@@ -170,12 +206,11 @@ const InventoryDetail = () => {
         </Col>
       </Row>
 
-      {/* 메모 입력 */
-      }
+      {/* 메모 입력 */}
+      <h3 className="ingredient-detail-sub-title">메모</h3>
       <Form.Control as="textarea" placeholder="탭해서 메모 남기기" className="memo-input"/>
 
-      {/* 추가 버튼 */
-      }
+      {/* 추가 버튼 */}
       <Button variant="warning" className="add-button">등록</Button>
     </Container>
   )
