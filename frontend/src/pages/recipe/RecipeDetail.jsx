@@ -7,6 +7,7 @@ import {
   FaRegHeart
 } from "react-icons/fa";
 import "styles/recipe/RecipeDetail.css";
+import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 
 function RecipeDetail() {
   const { recipeId } = useParams();
@@ -155,7 +156,7 @@ function RecipeDetail() {
   return (
     <div className="recipe-detail">
       {/* 레시피 대표 이미지 */}
-      <img src={recipe.image} alt={recipe.name} />
+      <img src={`${RECIPE_IMAGE_PATH}/${recipe.image}`} alt={recipe.name} />
 
       {/* 레시피 기본 정보 */}
       <h1>{recipe.name}</h1>
@@ -207,7 +208,7 @@ function RecipeDetail() {
             <tbody>
               {recipe.ingredients.map((ing, index) => (
                 <tr key={index}>
-                  <td className="ingredient-name">{ing.ingredientSmallCategory}</td>
+                  <td className="ingredient-names">{ing.ingredientSmallCategory}</td>
                   <td className="ingredient-quantity">
                     {ing.quantity}
                     {ing.ingredientRecipeUnit}
@@ -226,7 +227,7 @@ function RecipeDetail() {
           <ol>
             {recipe.steps.map((step, index) => (
               <li key={index}>
-                {step.image && <img src={step.image} alt={`step-${index}`} />}
+                {step.image && <img src={`${RECIPE_IMAGE_PATH}/${step.image}`} alt={`step-${index}`} />}
                 {step.content}
               </li>
             ))}
