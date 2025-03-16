@@ -1,20 +1,17 @@
 package com.shinhan.naengtureat.inventory.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import com.shinhan.naengtureat.inventory.dto.InventoryResponseDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.query.Param;
-
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.entity.QInventory;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		QuerydslPredicateExecutor<Inventory> {
