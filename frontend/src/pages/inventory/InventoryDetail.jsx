@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axiosInstance from "api/axios";
 import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
@@ -18,6 +18,29 @@ const InventoryDetail = () => {
   const [integerPart, setIntegerPart] = useState(0);  // 정수 부분
   const [fractionPart, setFractionPart] = useState(0); // 소수 부분
   const [ingredientUnit, setIngredientUnit] = useState("");  // 재료 단위 저장
+  const [ingredientBigCategory, setIngredientBigCategory] = useState("");
+  const [ingredientSmallCategory, setIngredientSmallCategory] = useState("");
+
+  const [nickName, setNickName] = useState("");
+  const [memo, setMemo] = useState("");
+  const [inventoryExpDate, setInventoryExpDate] = useState("");
+  const [inputDate, setInputDate] = useState("");
+  const [ingredientId, setIngredientId] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState(""); // 🔹 검색어 상태 추가
+  const navigate = useNavigate();
+
+  // 검색어 입력 시 실시간 필터링
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    if (selectedBigCategory) {
+      const newFilteredCategories = smallCategories[selectedBigCategory].filter(category =>
+        category.smallCategory.toLowerCase().includes(query)
+      );
+      setFilteredSmallCategories(newFilteredCategories);
+    }
+  };
 
   useEffect(() => {
     axiosInstance.get(`/inventory/${id}`)
@@ -53,7 +76,8 @@ const InventoryDetail = () => {
           }
           acc[item.bigCategory].push({
             smallCategory: item.smallCategory,
-            ingredientStandardImage: item.standardImage
+            ingredientStandardImage: item.standardImage,
+            ingredientId: item.ingredientId
           });
           return acc;
         }, {});
@@ -71,13 +95,112 @@ const InventoryDetail = () => {
   }, [inventory, ingredientUnit]);
 
   useEffect(() => {
+    if (selectedBigCategory && smallCategories[selectedBigCategory]?.length > 0) {
+      const firstSmallCategory = smallCategories[selectedBigCategory][0]; // 첫 번째 소분류 가져오기
+      setSelectedSmallCategory(firstSmallCategory.smallCategory); // 첫 번째 소분류 선택
+      setIngredientId(firstSmallCategory.ingredientId); // 재료 ID 설정
+      setNickName(firstSmallCategory.smallCategory); // 닉네임 자동 입력
+    }
+  }, [selectedBigCategory, smallCategories]);
+
+  // 소분류 변경 시 해당하는 ingredientUnit을 찾아서 자동으로 업데이트
+  useEffect(() => {
+    if (selectedSmallCategory) {
+      axiosInstance.get(`/ingredient/categories`)
+        .then(response => {
+          const matchedCategory = response.data.find(item => item.smallCategory === selectedSmallCategory);
+          if (matchedCategory) {
+            setIngredientUnit(matchedCategory.ingredientUnit); // ✅ ingredientUnit 업데이트
+          }
+        })
+        .catch(error => console.log("🚨 재료 단위 불러오기 실패:", error));
+    }
+  }, [selectedSmallCategory]);
+
+  // 소분류 선택 시 nickName 자동 입력
+  const handleSelectSmallCategory = (category) => {
+    console.log("🔹 선택한 소분류:", category.smallCategory);
+    console.log("🔹 해당 재료 ID:", category.ingredientId);
+
+    setSelectedSmallCategory(category.smallCategory);
+    setIngredientId(category.ingredientId);
+    setNickName(category.smallCategory);
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
     if (selectedBigCategory) {
-      setFilteredSmallCategories(smallCategories[selectedBigCategory] || []);
-      setSelectedSmallCategory("");
+      const newFilteredCategories = smallCategories[selectedBigCategory] || [];
+      setFilteredSmallCategories(newFilteredCategories);
+
+      // 대분류 선택 시 첫 번째 소분류 자동 선택
+      if (newFilteredCategories.length > 0) {
+        setSelectedSmallCategory(newFilteredCategories[0].smallCategory);
+        setIngredientId(newFilteredCategories[0].ingredientId);
+        setNickName(newFilteredCategories[0].smallCategory);
+      }
     } else {
       setFilteredSmallCategories([]);
     }
   }, [selectedBigCategory, smallCategories]);
+
+  useEffect(() => {
+    if (inventory) {
+      setNickName(inventory.nickName || "");
+      setMemo(inventory.memo || "");
+      setInventoryExpDate(inventory.inventoryExpDate || "");
+      setInputDate(inventory.inputDate || "");
+      setIngredientId(inventory.ingredientId || null);
+      setIngredientBigCategory(inventory.ingredientBigCategory || "");
+      setIngredientSmallCategory(inventory.ingredientSmallCategory || "");
+    }
+  }, [inventory]);
+
+  useEffect(() => {
+    if (ingredientUnit !== "개") {
+      setFractionPart(0); // 개가 아닐 경우 fractionPart를 0으로 초기화
+    }
+  }, [ingredientUnit]);
+
+  const handleUpdateInventory = () => {
+    console.log("🔹 현재 ingredientId:", ingredientId);  // 재료 ID 확인
+    if (!ingredientId) {
+      alert("재료 ID가 없습니다.");
+      return;
+    }
+
+    const updatedInventory = {
+      id: inventory.id,
+      quantity: integerPart + fractionPart,
+      nickName,
+      memo,
+      inventoryExpDate,
+      inputDate,
+      memberId: 1,
+      ingredientId,
+      ingredientBigCategory,
+      ingredientSmallCategory
+    };
+
+    axiosInstance.put("/inventory", updatedInventory)
+      .then(response => {
+        navigate("/inventory");
+      })
+      .catch(error => {
+        console.error("재료 수정 중 오류 발생:", error);
+        alert("수정 중 오류가 발생했습니다.");
+      });
+  };
+
+  const handleChangeIntegerPart = (e) => {
+    const value = e.target.value;
+    // 빈 값이 들어오면 그대로 유지 (0으로 강제하지 않음)
+    if (value === "") {
+      setIntegerPart("");
+    } else {
+      setIntegerPart(Math.max(0, parseInt(value, 10) || 0));
+    }
+  };
 
   if (loading) {
     return <Spinner animation="border"/>;
@@ -105,10 +228,14 @@ const InventoryDetail = () => {
             {/* 대분류 */}
             <Col xs={6} className="text-center">
               <Form.Label className="category-label">대분류</Form.Label>
+              {/* 대분류 선택 */}
               <Form.Select
                 className="category-select"
                 value={selectedBigCategory}
-                onChange={(e) => setSelectedBigCategory(e.target.value)}
+                onChange={(e) => {
+                  setSelectedBigCategory(e.target.value);
+                  setIngredientBigCategory(e.target.value);
+                }}
               >
                 <option value="">대분류 선택</option>
                 {bigCategories.map((category, index) => (
@@ -128,39 +255,60 @@ const InventoryDetail = () => {
             </Col>
             {/* 닉네임 입력 */}
             <Col>
-              <Form.Control type="text" defaultValue={inventory.nickName} className="nickname-input"/>
+              <Form.Control
+                type="text"
+                value={nickName}
+                className="nickname-input"
+                onChange={(e) => setNickName(e.target.value)}
+              />
             </Col>
           </Row>
         </Col>
       </Row>
 
       {/* 모달 (소분류 선택) */}
-      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
+      <Modal show={isModalOpen}
+             onHide={() => setIsModalOpen(false)}
+             centered
+             className="small-category-modal"
+      >
         <Modal.Header closeButton>
-          <Modal.Title>소분류 선택</Modal.Title>
+          {/* 검색 입력창 */}
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="찾고싶은 재료를 검색해주세요 🔍"
+              className="search-input"
+              value={searchQuery}
+              onChange={handleSearch} // 입력 시 실시간 필터링
+            />
+          </div>
         </Modal.Header>
         <Modal.Body>
-          <Row>
-            {filteredSmallCategories.map((category, index) => (
-              <Col xs={4} key={index} className="text-center">
-                <Button
-                  variant="light"
-                  onClick={() => {
-                    setSelectedSmallCategory(category.smallCategory);
-                    setIsModalOpen(false); // 선택 후 모달 닫기
-                  }}
-                  className="category-btn"
-                >
-                  <img
-                    src={`${INGREDIENT_IMAGE_PATH}/${category.ingredientStandardImage}`}
-                    alt={category}
-                    className="category-icon"
-                  />
-                  <div>{category.smallCategory}</div>
-                </Button>
-              </Col>
-            ))}
-          </Row>
+          <div className="small-category-list">
+            <Row className={`filtered-row ${filteredSmallCategories.length <= 2 ? "few-results" : ""}`}>
+              {filteredSmallCategories.length > 0 ? (
+                filteredSmallCategories.map((category, index) => (
+                  <Col xs={4} key={index} className="text-center category-col">
+                    <Button
+                      variant="light"
+                      onClick={() => handleSelectSmallCategory(category)}
+                      className="category-btn"
+                    >
+                      <img
+                        src={`${INGREDIENT_IMAGE_PATH}/${category.ingredientStandardImage}`}
+                        alt={category}
+                        className="category-icon"
+                      />
+                      <div>{category.smallCategory}</div>
+                    </Button>
+                  </Col>
+                ))
+              ) : (
+                <div className="no-results">검색결과가 없습니다</div>
+              )}
+            </Row>
+          </div>
         </Modal.Body>
       </Modal>
 
@@ -172,10 +320,10 @@ const InventoryDetail = () => {
           <Button variant="outline-danger" onClick={() => setIntegerPart(prev => Math.max(prev - 1, 0))}>－</Button>
           <Form.Control
             type="number"
-            value={integerPart}
-            onChange={(e) => setIntegerPart(Math.max(0, parseInt(e.target.value) || 0))}
+            value={integerPart === "" ? "" : integerPart} // 빈 값 유지
+            onChange={handleChangeIntegerPart} // 새로운 핸들러 사용
             className="mx-2 text-center"
-            style={{width: "50px"}}
+            style={{ width: "50px" }}
           />
           <Button variant="outline-primary" onClick={() => setIntegerPart(prev => prev + 1)}>＋</Button>
         </Col>
@@ -183,7 +331,10 @@ const InventoryDetail = () => {
         {/* 소수 부분 (ingredientUnit이 "개"일 때만 표시) */}
         {ingredientUnit === "개" && (
           <Col xs={4}>
-            <Form.Select value={fractionPart} onChange={(e) => setFractionPart(parseFloat(e.target.value))}>
+            <Form.Select
+              value={fractionPart}
+              onChange={(e) => setFractionPart(parseFloat(e.target.value))}
+            >
               <option value={0.0}>0</option>
               <option value={0.25}>1/4</option>
               <option value={0.5}>2/4</option>
@@ -191,27 +342,45 @@ const InventoryDetail = () => {
             </Form.Select>
           </Col>
         )}
-        <Col xs={2}>개</Col>
+        <Col xs={2}>{ingredientUnit}</Col>
       </Row>
 
       {/* 날짜 입력 */}
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
-          <Form.Control type="date" defaultValue={inventory.inputDate} className="date-input"/>
+          <Form.Control
+            type="date"
+            defaultValue={inventory.inputDate}
+            className="date-input"
+            onChange={(e) => setInputDate(e.target.value)}
+          />
         </Col>
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">소비기한</Form.Label>
-          <Form.Control type="date" defaultValue={inventory.inventoryExpDate} className="date-input"/>
+          <Form.Control
+            type="date"
+            defaultValue={inventory.inventoryExpDate}
+            className="date-input"
+            onChange={(e) => setInventoryExpDate(e.target.value)}
+          />
         </Col>
       </Row>
 
       {/* 메모 입력 */}
       <h3 className="ingredient-detail-sub-title">메모</h3>
-      <Form.Control as="textarea" placeholder="탭해서 메모 남기기" className="memo-input"/>
+      <Form.Control
+        as="textarea"
+        defaultValue={inventory.memo}
+        placeholder="탭해서 메모 남기기"
+        className="memo-input"
+        onChange={(e) => setMemo(e.target.value)}
+      />
 
       {/* 추가 버튼 */}
-      <Button variant="warning" className="add-button">등록</Button>
+      <Button variant="warning" className="add-button" onClick={handleUpdateInventory}>
+        등록
+      </Button>
     </Container>
   )
     ;
