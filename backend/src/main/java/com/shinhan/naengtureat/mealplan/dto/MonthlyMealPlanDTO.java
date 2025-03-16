@@ -23,6 +23,7 @@ public class MonthlyMealPlanDTO {
 	private Long recipeId; // 레시피ID
 	private String recipeName; // 레시피이름
 	private int recipePrice; // 레시피가격
+	private String recipeServing; // 레시피 인분
 
 	private LocalDate date; // 식단일자
 	private String type; // 식단분류
