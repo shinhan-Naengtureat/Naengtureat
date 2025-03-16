@@ -23,6 +23,6 @@ public class InventoryResponseDTO {
     private String ingredientBigCategory;  //대분류
     private String ingredientSmallCategory;  //소분류
     private String ingredientStandardImage;  //이미지
-    private String ingredientName;  //인벤토리 이름
+    private String ingredientName;  //재료 이름
     private int remainingDays;  //소비기한 D-day값
 }
