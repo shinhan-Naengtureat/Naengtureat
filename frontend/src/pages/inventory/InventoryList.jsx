@@ -75,11 +75,7 @@ const InventoryList = () => {
       return prev.includes("전체") ? [category] : [...prev, category];
     });
   };
-  // useEffect(() => {
-  //   if (categories.length > 1 && selectedCategories.length === 1 && selectedCategories[0] === "전체") {
-  //     setSelectedCategories(["전체", ...categories.filter(cat => cat !== "전체")]);
-  //   }
-  // }, [categories]);
+
   return (
     <Container className="inventory-container">
       <IngredientBigCategoryFilter
