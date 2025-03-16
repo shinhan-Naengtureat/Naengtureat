@@ -20,8 +20,9 @@ public class InventoryResponseDTO {
     private LocalDate inputDate;
     private Long memberId;  //멤버 아이디
     private Long ingredientId;  //재료 아이디
-    private String ingredientName;  //재료 이름
     private String ingredientBigCategory;  //대분류
     private String ingredientSmallCategory;  //소분류
+    private String ingredientStandardImage;  //이미지
+    private String ingredientName;  //이미지
     private int remainingDays;  //소비기한 D-day값
 }
