@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shinhan.naengtureat.mealplan.dto.MonthlyMealPlanDTO;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.mealplan.entity.MealPlan;
 import com.shinhan.naengtureat.member.entity.Member;
@@ -52,7 +53,7 @@ public class MealPlanService {
 	}
 	
 	// 식단 월간 조회
-	public List<MealPlanDTO> getMonthlyMealPlanList(Long memberId, String month) {
+	public List<MonthlyMealPlanDTO> getMonthlyMealPlanList(Long memberId, String month) {
 		YearMonth ym = YearMonth.parse(month, DateTimeFormatter.ofPattern("yyyyMM"));
         
         
@@ -62,7 +63,7 @@ public class MealPlanService {
 		
 		List<MealPlan> monthlyMealPlanList = mealPlanRepository.findByMemberAndDateBetween(newMember, startDate, endDate);
 		
-		return monthlyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
+		return monthlyMealPlanList.stream().map(mealPlan -> entityToDTO2(mealPlan)).collect(Collectors.toList());
 	}
 	
 	// 저장된 식단 단건 삭제
@@ -124,11 +125,18 @@ public class MealPlanService {
         }
         return "저장된 식단 이동에 실패하였습니다.";
 	}
+	
 	public MealPlanDTO entityToDTO(MealPlan mealPlan) {
 		ModelMapper mapper = new ModelMapper();
 		MealPlanDTO dto = mapper.map(mealPlan, MealPlanDTO.class);
 
 		return dto;
 	}
+	
+	public MonthlyMealPlanDTO entityToDTO2(MealPlan mealPlan) {
+		ModelMapper mapper = new ModelMapper();
+		MonthlyMealPlanDTO dto = mapper.map(mealPlan, MonthlyMealPlanDTO.class);
 
+		return dto;
+	}
 }
