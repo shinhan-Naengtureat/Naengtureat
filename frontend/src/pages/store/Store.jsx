@@ -1,11 +1,12 @@
-import KakaoMap from "pages/store/KakaoMap";
-import StoreList from "pages/store/StoreList";
+import MapWithBottomSheet from "pages/store/MapWithBottomSheet";
+import { useState } from "react";
 
 function Store() {
+  const [places, setPlaces] = useState([]);
+
   return (
     <>
-      <KakaoMap></KakaoMap>
-      <StoreList></StoreList>
+      <MapWithBottomSheet setPlaces={setPlaces} places={places} />
     </>
   );
 }

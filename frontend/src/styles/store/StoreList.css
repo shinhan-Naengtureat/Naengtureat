@@ -4,25 +4,55 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    max-width: 800px;
-    margin: 20px auto;
+    /* max-width: 800px; */
+    /* margin: 20px auto; */
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     background-color: #fff;
 }
 
-.store-image {
-    width: 250px;
-    height: 250px;
-    object-fit: cover;
-    margin-right: 20px;
-    border-radius: 8px;
+.store-detail .gt {
+    color: #ff7f50;
+    margin-left: 10px;
+}
+
+.store-detail:hover {
+    background-color: #f8f9fa;
 }
 
 .store-info {
+    text-align: left;
     flex: 1;
 }
 
-.store-info p {
-    margin-bottom: 10px;
-    font-size: 16px;
+.roadAddress {
+    font-size: 13px;
+    font-weight: bold;
+    color: #919191;
+}
+
+.phone {
+    font-size: 13px;
+}
+
+.store-info .rate {
+    font-size: 14px;
+}
+
+.store-info .rate:hover {
+    cursor: pointer;
+    color: #ff7f50;
+    text-decoration: underline;
+}
+
+.store-info img {
+    width: 10px;
+    height: 10px;
+}
+
+.store-image {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }

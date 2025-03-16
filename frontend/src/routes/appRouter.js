@@ -10,6 +10,8 @@ import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
 import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import StoreReviewDetail from 'pages/store/StoreReviewDetail';
+import StoreDetail from 'pages/store/StoreDetail';
 
 const AppRouter = () => {
   return (
@@ -31,6 +33,10 @@ const AppRouter = () => {
 
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />
+
+        {/* store */}
+        <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
+        <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
       </Routes>
       <BottomNav/>
     </div>
