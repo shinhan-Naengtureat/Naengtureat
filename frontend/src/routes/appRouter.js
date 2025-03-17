@@ -10,6 +10,7 @@ import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
 import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import MyRecipes from 'pages/myPage/MyRecipes';
 
 const AppRouter = () => {
   return (
@@ -27,6 +28,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.login} element={<Layout>Login Page</Layout>} />
         <Route path={routeConfig.paths.register} element={<Layout>Register Page</Layout>} />
         <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
+        <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
 
 
         {/* 404 Not Found */}
