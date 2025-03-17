@@ -26,6 +26,7 @@ const RouteConfig = {
     myRecipeList: `${BASE_URL}/my-recipe-list`,
     searchRecipe: `${BASE_URL}/search-recipe`,
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
+    recipeRegister: `${BASE_URL}/recipe/register`,
     notFound: '*',
   },
 
@@ -54,7 +55,7 @@ const RouteConfig = {
     [`${BASE_URL}/recipes`]: {
       title: "테마별 레시피",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaEdit/>, alt: "레시피 추가" },
+        { to: `${BASE_URL}/recipe/register`, icon: <FaEdit/>, alt: "레시피 추가" },
         { to: `${BASE_URL}/search-recipe`, icon: <FaSearch/>, alt: "레시피 검색" },
         { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
       ],
