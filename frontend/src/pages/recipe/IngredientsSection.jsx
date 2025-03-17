@@ -138,7 +138,7 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
                 onBlur={() => handleIngredientBlur(idx, 'quantity')}
                 className={
                   touched.ingredients[idx] && touched.ingredients[idx].quantity
-                    ? ingredient.quantity.trim() ? "input-valid" : "input-invalid"
+                    ? String(ingredient.quantity).trim() ? "input-valid" : "input-invalid"
                     : ""
                 }
               />
