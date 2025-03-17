@@ -55,7 +55,7 @@ public class StoreController {
 	public ResponseEntity<Object> createStoreReview(@RequestBody StoreReviewRequestDTO storeReviewRequestDTO) {
 		
 		try {
-			Long memberId = 1L;
+			Long memberId = 3L;
 			storeReviewRequestDTO.setMemberId(memberId);
 			log.info(storeReviewRequestDTO.toString());
 			
@@ -182,7 +182,7 @@ public class StoreController {
 		
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 			
 			List<CartDTO> cartDTOList = storeCartService.getCartByMemberId(memberId);
 			
@@ -204,7 +204,7 @@ public class StoreController {
 		
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 			
 			Map<String, Object> result = storeCartService.createCartItem(memberId, productId);
 			
