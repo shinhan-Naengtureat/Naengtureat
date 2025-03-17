@@ -1,4 +1,4 @@
-import {FaBars, FaBell, FaEdit, FaPen, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {FaBars, FaEdit, FaPen, FaSearch, FaShoppingCart} from "react-icons/fa";
 import {FaTrashCan} from "react-icons/fa6";
 
 const BASE_URL = process.env.PUBLIC_URL;

@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Badge, Button, Col, Container, Row } from 'react-bootstrap';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Badge, Button, Col, Container, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "styles/inventory/inventoryList.css";
-import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
 const InventoryMultipleDelete = () => {
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
@@ -73,7 +73,7 @@ const InventoryMultipleDelete = () => {
     });
   };
 
-  // ✅ 삭제 핸들러 (애니메이션 후 삭제)
+  // 삭제 핸들러 (애니메이션 후 삭제)
   const handleDeleteInventory = () => {
     if (selectedItems.size === 0) {
       alert("삭제할 재료가 없습니다.");
@@ -95,6 +95,7 @@ const InventoryMultipleDelete = () => {
             setSelectedItems(new Set());
             setRemovingItems(new Set());
             setRawItems((prev) => prev.filter(item => !selectedItems.has(item.id)));
+            navigate(`/inventory`);
           })
           .catch((error) => {
             console.error("재료 삭제 중 오류 발생:", error);
@@ -161,7 +162,7 @@ const InventoryMultipleDelete = () => {
         ))
       )}
 
-      {/* 🛑 삭제 버튼 (화면 중앙 고정) */}
+      {/* 삭제 버튼 (화면 중앙 고정) */}
       <Button
         variant="danger"
         className="delete-multiple-inventory-button position-fixed"
