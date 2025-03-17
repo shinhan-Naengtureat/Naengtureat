@@ -1,6 +1,6 @@
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { addDays, format } from "date-fns";
 import { ko } from "date-fns/locale/ko";
+import { addDays, format } from "date-fns";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 
 function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDeleteMeal, toggleMealCheck, deleteMeal }) {
