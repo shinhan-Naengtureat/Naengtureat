@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
-import axios from "axios";
 import FloatingNextButton from "components/FloatingNextButton";
 import "styles/mealPlan/BoxChoice.css";
 import BackButton from "components/BackButton";
 import axiosInstance from "api/axios";
+import useMealPlanContext from "hooks/useMealPlanContext";
 
-const ThemeSelectionPage = ({ setUserSelections }) => {
-  const [themes, setThemes] = useState([]);
-  const [selectedTheme, setSelectedTheme] = useState("");
+const ThemeSelectionPage = () => {
+   const { userSelections, setUserSelections } = useMealPlanContext();
+  const [themes, setThemes] = useState([]); //서버 테마목록
+  const [selectedTheme, setSelectedTheme] = useState(userSelections?.theme || []);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,7 +55,7 @@ const ThemeSelectionPage = ({ setUserSelections }) => {
       alert("테마를 선택해주세요!");
       return;
     }
-    setUserSelections((prev) => ({ ...prev, themes: selectedTheme }));
+    setUserSelections((prev) => ({ ...prev, theme: selectedTheme }));
 
     navigate(RouteConfig.paths.preferredIngredients);
   };

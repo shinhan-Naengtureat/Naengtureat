@@ -13,6 +13,7 @@ const RouteConfig = {
     inventoryList: `${BASE_URL}/inventory`,
     inventoryDetail: `${BASE_URL}/inventory/:id`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
+    
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,
     themeSelection: `${BASE_URL}/theme`,

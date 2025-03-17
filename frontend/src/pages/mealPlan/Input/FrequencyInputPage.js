@@ -1,5 +1,7 @@
 import BackButton from "components/BackButton";
+import FloatingNextButton from "components/FloatingNextButton";
 import { ICON_IMAGE_PATH } from "config/pathConfig";
+import useMealPlanContext from "hooks/useMealPlanContext";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
@@ -13,9 +15,11 @@ const meals = [
 ]
 
 const FrequencyInputPage = () => {
-    const navigate = useNavigate();
-  const [selectedMeals, setSelectedMeals] = useState([]);
-  const [selectedDays, setSelectedDays] = useState([]);
+  const { userSelections, setUserSelections } = useMealPlanContext();
+  const navigate = useNavigate();
+  
+  const [selectedMeals, setSelectedMeals] = useState(userSelections?.mealTimes || []);
+  const [selectedDays, setSelectedDays] = useState(userSelections?.days || []);
 
   const toggleMeal = (meal) => {
     setSelectedMeals((prev) =>
@@ -41,14 +45,29 @@ const FrequencyInputPage = () => {
  const totalMeals = selectedMeals.length * (selectedDays.includes("전체") ? 7 : selectedDays.length);
 // 뒤로가기기
   const handleBefore = () => {
-    navigate(RouteConfig.paths.mealPlanListDaily);
+    navigate(RouteConfig.paths.excludedIngredients);
+  };
+
+   // 다음 버튼 클릭 시 Context에 저장 후 이동
+  const handleNext = () => {
+    if (selectedMeals.length === 0 || selectedDays.length === 0) {
+      alert("요일과 끼니를 모두 선택해주세요!");
+      return;
+    }
+setUserSelections((prev) => ({
+      ...prev,
+      mealTimes: selectedMeals, //  선택한 식사 저장
+      days: selectedDays, //  선택한 요일 저장
+    }));
+
+    navigate(RouteConfig.paths.makeMealPlan); //  GPTChat 페이지로 이동
   };
 
     return (
       
       <ContainerFre>
          <div className="preferred-header">
-        <BackButton onClick={handleBefore} />
+        <BackButton onClick={handleBefore}/>
       </div>
           <div>
               
@@ -91,7 +110,10 @@ const FrequencyInputPage = () => {
 
 </div>
       {/* 다음 버튼 */}
-       <NextButton onClick={() => console.log(`총 ${totalMeals} 회`)}>다음</NextButton>
+        <FloatingNextButton
+        onClick={handleNext}
+        disabled={totalMeals.length === 0}
+      />
     </ContainerFre>
     
   );

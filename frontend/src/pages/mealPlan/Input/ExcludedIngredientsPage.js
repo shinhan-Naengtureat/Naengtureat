@@ -6,7 +6,8 @@ import IngredientCard from "pages/mealPlan/IngredientCard";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
 import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
-const ExcludedIngredientsPage = ({ setUserSelections }) => {
+import useMealPlanContext from "hooks/useMealPlanContext";
+const ExcludedIngredientsPage = ( ) => {
   const ingredientsList = [
     { name: "땅콩", image: `${ INGREDIENT_IMAGE_PATH }/hate-card/peanut.jpg`},
     { name: "복숭아", image: `${ INGREDIENT_IMAGE_PATH }/hate-card/pitch.jpg` },
@@ -17,8 +18,8 @@ const ExcludedIngredientsPage = ({ setUserSelections }) => {
     { name: "새우", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/shrimp.jpg` },
     { name: "홍합", image: `${  INGREDIENT_IMAGE_PATH }/hate-card/shell.jpg` },
   ];
-
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const { userSelections, setUserSelections } = useMealPlanContext(); 
+  const [selectedIngredients, setSelectedIngredients] = useState(userSelections?.excludedIngredients || []);
   const navigate = useNavigate();
 
   //  선택/해제 함수
@@ -42,8 +43,9 @@ const ExcludedIngredientsPage = ({ setUserSelections }) => {
       ...prev,
       excludedIngredients: selectedIngredients,
     }));
+    
 
-    navigate(RouteConfig.frequencyMealPlan); // 횟수입력 페이지로 이동
+    navigate(RouteConfig.paths.frequencyMealPlan); // 횟수입력 페이지로 이동
   };
   // 뒤로가기기
   const handleBefore = () => {
