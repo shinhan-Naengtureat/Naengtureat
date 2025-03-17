@@ -15,4 +15,5 @@ public class CategoryResponseDTO {
     private String smallCategory;
     private String ingredientUnit;
     private String standardImage;
+    private Integer standardExpDate;
 }
