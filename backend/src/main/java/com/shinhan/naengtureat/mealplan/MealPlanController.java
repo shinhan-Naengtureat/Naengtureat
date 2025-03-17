@@ -59,7 +59,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> getDailyMealPlanList(@PathVariable("day") String day) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			List<MealPlanDTO> dailyMealPlanList = mealPlanService.getDailyMealPlanList(memberId, day);
 
@@ -75,7 +75,7 @@ public class MealPlanController {
 	// 예산 업데이트
 	@PutMapping("/budget")
 	public ResponseEntity<Object> updateBudget(@RequestBody Map<String, Integer> requestBody) {
-		Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+		Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 		Integer budget = requestBody.get("budget");
 		if (budget == null || budget < 0) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -96,7 +96,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> getMonthlyMealPlanList(@PathVariable("month") String month) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			List<MonthlyMealPlanDTO> monthlyMealPlanList = mealPlanService.getMonthlyMealPlanList(memberId, month);
 
@@ -114,7 +114,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> getWeeklyMealPlanList(@PathVariable("day") String day) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			List<MealPlanDTO> weeklyMealPlanList = mealPlanService.getWeeklyMealPlanList(memberId, day);
 
@@ -132,7 +132,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> deleteMealPlan(@PathVariable("mealPlanId") Long mealPlanId) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			String result = mealPlanService.deleteMealPlan(memberId, mealPlanId);
 
@@ -150,7 +150,7 @@ public class MealPlanController {
 	public ResponseEntity<Object> checkMealPlan(@PathVariable("mealPlanId") Long mealPlanId) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			String result = mealPlanService.checkMealPlan(memberId, mealPlanId);
 
@@ -169,7 +169,7 @@ public class MealPlanController {
 			@RequestBody MealPlanDTO mealPlanDTO) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 
 			mealPlanDTO.setId(mealPlanId);
 			String result = mealPlanService.updateMealPlan(memberId, mealPlanDTO);

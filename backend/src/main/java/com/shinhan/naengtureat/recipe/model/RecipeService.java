@@ -20,6 +20,8 @@ import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
+import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.MealDTO;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
@@ -67,6 +69,11 @@ public class RecipeService {
 
 	@Autowired
 	private MealPlanRepository mealPlanRepository;
+	
+	@Autowired
+	private MealRepository mealRepository;
+	
+	private ModelMapper mapper = new ModelMapper();
 
 	// 전체 레시피 조회
 	public List<RecipeDTO> getAllRecipes() {
@@ -86,10 +93,10 @@ public class RecipeService {
 		recipe.setImage(recipeDto.getImage());
 		recipe.setCategory(recipeDto.getCategory());
 
-		// Meal 설정
-		Meal meal = new Meal();
-		meal.setId(recipeDto.getMealId());
-		recipe.setMeal(meal);
+		// Meal 설정: DB에서 Meal을 조회하여 할당
+	    Meal meal = mealRepository.findById(recipeDto.getMealId())
+	                  .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Meal입니다."));
+	    recipe.setMeal(meal);
 
 		// Member 설정
 		Member member = new Member();
@@ -146,6 +153,20 @@ public class RecipeService {
 			recipeHashtagRepository.save(recipeHashtag);
 		}
 	}
+	
+	public List<HashtagDTO> getAllHashtags() {
+        List<Hashtag> hashtags = hashtagRepository.findAll();
+        return hashtags.stream()
+                       .map(hashtag -> mapper.map(hashtag, HashtagDTO.class))
+                       .collect(Collectors.toList());
+    }
+	
+	public List<MealDTO> getAllMeals() {
+        List<Meal> meals = mealRepository.findAll();
+        return meals.stream()
+                    .map(meal -> mapper.map(meal, MealDTO.class))
+                    .collect(Collectors.toList());
+    }
 
 	public List<MyRecipeDTO> getMyRecipe(Long memberId) {
 		// 특정 memberId를 가진 레시피 목록 조회
