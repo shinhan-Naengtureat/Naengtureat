@@ -23,6 +23,7 @@ import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import RecipeRegister from "pages/recipe/RecipeRegister";
 import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryCreate from "pages/inventory/InventoryCreate";
+import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
 
 
 const AppRouter = () => {
@@ -45,6 +46,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
         <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
+        <Route path={routeConfig.paths.inventoryWastebucket} element={<Layout><InventoryWastebucket/></Layout>} />
 
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
