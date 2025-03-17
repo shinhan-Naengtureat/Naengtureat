@@ -245,7 +245,6 @@ public class RecipeController {
 	
 	@GetMapping("/{recipeId}/like/check")
 	public ResponseEntity<Object> checkRecipeLike(@PathVariable("recipeId") Long recipeId) {
-	    // 로그인 구현이 되어 있지 않으므로, 멤버 아이디는 3L로 하드코딩합니다.
 	    Long memberId = 3L;
 	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
 	    // 좋아요 상태를 JSON 객체로 반환 (예: { "liked": true })
