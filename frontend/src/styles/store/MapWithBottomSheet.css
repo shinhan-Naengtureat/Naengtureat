@@ -1,0 +1,45 @@
+/* 컨테이너: 전체 화면을 차지하며, 내부 요소를 상대적으로 배치 */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 바텀 시트: 지도 하단에 오버레이 */
+.store-bottom-sheet {
+    position: absolute;
+    bottom: 178px;
+    width: 100%;
+    background: #fff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 1; /* 요소들의 쌓임 순서를 조절, z-index가 높은 요소는 낮은 요소보다 앞쪽에 표시 */
+}
+
+/* 드래그 핸들 영역: 사용자가 드래그할 수 있도록 하는 영역 */
+.drag-handle {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+}
+
+/* 드래그 핸들 내부의 막대: 시각적으로 드래그 가능한 핸들을 표시 */
+.handle-bar {
+    width: 50px;
+    height: 6px;
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+/* 콘텐츠 영역: 스크롤 가능하게 처리 */
+.sheet-content {
+    flex: 1;
+    overflow-y: auto;
+}

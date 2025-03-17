@@ -1,0 +1,50 @@
+.event-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 10px solid;
+    height: 50px;
+    width: 350px;
+    margin-bottom: 5px;
+    font-family: var(--font-nanum) !important;
+    border-color: #F35C04;
+    background-color: rgba(228, 228, 227, 0.1);
+}
+
+/* 기존 h3, p 스타일 유지 */
+.event-card h3 {
+    font-size: 14px;
+    font-weight: bold;
+}
+  
+.event-card p {
+    font-size: 12px;
+    color: gray;
+}
+
+/*텍스트들을 한 줄로 정렬*/
+.event-card .event-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;  /*요소 간 간격*/ 
+}
+
+.event-card .event-content div {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.recipe-type {
+    width: 30px;
+}
+
+.recipe-name {
+    width: 200px;
+}
+
+.recipe-check {
+    width: 50px;
+}
