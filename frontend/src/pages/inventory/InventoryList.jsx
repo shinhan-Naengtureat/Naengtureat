@@ -130,7 +130,8 @@ const InventoryList = () => {
       <Button
         variant="warning"
         className="rounded-circle position-fixed"
-        style={{bottom: "90px", right: "30px", width: "50px", height: "50px"}}
+        style={{bottom: "150px", right: "30px", width: "70px", height: "70px"}}
+        onClick={() => navigate("/inventory/new")}  // 새로운 등록 페이지로 이동
       >
         +
       </Button>
