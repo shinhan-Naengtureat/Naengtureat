@@ -25,6 +25,7 @@ import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
 import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
@@ -75,6 +76,11 @@ public class RecipeService {
 		return recipes.stream().map(recipe -> entityToDTO(recipe)).collect(Collectors.toList());
 	}
 
+	// 전체 레시피 조회 simple
+		public List<RecipeSimpleDTO> getRecipes() {
+			return recipeRepository.findRecipes();
+		}
+	
 	@Transactional
 	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
 		// 1. Recipe 생성 및 저장
