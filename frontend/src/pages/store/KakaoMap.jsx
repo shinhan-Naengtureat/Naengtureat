@@ -1,8 +1,8 @@
 import axiosInstance from "api/axios";
-import { API_PATH, STORE_IMAGE_PATH } from "config/pathConfig";
+import { STORE_IMAGE_PATH } from "config/pathConfig";
+import useKakaoLoader from "pages/store/useKakaoLoader";
 import { useEffect, useRef, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-import useKakaoLoader from "pages/store/useKakaoLoader";
 
 function KakaoMap({ setPlaces: setParentPlaces }) {
     const [center, setCenter] = useState(null); // 신한DS 좌표 : { lat: 37.5678148181167, lng: 126.984190577115 }
@@ -16,7 +16,7 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
     useEffect(() => {
         const fetchAndGeocode = async () => {
             try {
-                const response = await axiosInstance.get(`${API_PATH}/member/detail`);
+                const response = await axiosInstance.get(`/member/detail`);
                 const memberDTO = response.data;
                 const roadAddressName = memberDTO.roadAddressName;
 

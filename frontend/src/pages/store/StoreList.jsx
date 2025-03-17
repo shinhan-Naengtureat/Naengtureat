@@ -1,5 +1,5 @@
 import axiosInstance from 'api/axios';
-import { API_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
+import { STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'styles/store/StoreList.css';
@@ -19,7 +19,7 @@ function StoreList({ places }) {
             try {
                 // 각 place.id로 API 호출
                 const detailPromises = places.map(place =>
-                    axiosInstance.get(`${API_PATH}/store/${place.id}/detail`)
+                    axiosInstance.get(`/store/${place.id}/detail`)
                 );
 
                 // 병렬 처리, 모든 API 호출(모든 Promise)이 완료될 때까지 기다림

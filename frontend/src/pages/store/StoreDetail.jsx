@@ -64,19 +64,19 @@ function StoreDetail() {
 
             {/* 카테고리 */}
             <div className='store-category'>
-                <ul class="category-list">
-                    <li class="category-item active">전체</li>
-                    <li class="category-item">과일</li>
-                    <li class="category-item">채소</li>
-                    <li class="category-item">고기</li>
-                    <li class="category-item">수산물</li>
-                    <li class="category-item">유제품</li>
-                    <li class="category-item">음료</li>
-                    <li class="category-item">조미료</li>
-                    <li class="category-item">기타</li>
-                    <li class="category-item">빵류</li>
-                    <li class="category-item">견과류</li>
-                    <li class="category-item">곡물</li>
+                <ul className="category-list">
+                    <li className="category-item active">전체</li>
+                    <li className="category-item">과일</li>
+                    <li className="category-item">채소</li>
+                    <li className="category-item">고기</li>
+                    <li className="category-item">수산물</li>
+                    <li className="category-item">유제품</li>
+                    <li className="category-item">음료</li>
+                    <li className="category-item">조미료</li>
+                    <li className="category-item">기타</li>
+                    <li className="category-item">빵류</li>
+                    <li className="category-item">견과류</li>
+                    <li className="category-item">곡물</li>
                 </ul>
             </div>
 
