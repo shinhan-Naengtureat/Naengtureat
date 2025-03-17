@@ -1,8 +1,7 @@
 package com.shinhan.naengtureat.recipe;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,8 @@ import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanCheckDTO;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
+import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.MealDTO;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
@@ -105,8 +106,20 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("레시피 등록 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
+	
+	// DB에 있는 모든 해시태그를 조회
+    @GetMapping("/hashtag")
+    public ResponseEntity<List<HashtagDTO>> getAllHashtags() {
+        List<HashtagDTO> hashtags = recipeService.getAllHashtags();
+        return ResponseEntity.ok(hashtags);
+    }
 
-
+    // DB에 있는 모든 Meal을 조회하여 DTO 목록으로 반환
+    @GetMapping
+    public ResponseEntity<List<MealDTO>> getAllMeals() {
+        List<MealDTO> meals = recipeService.getAllMeals();
+        return ResponseEntity.ok(meals);
+    }
 
 	// 마이페이지- 내 레시피 전체 목록 조회
 	@GetMapping("/myrecipeList")
@@ -229,7 +242,15 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("댓글 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
-
+	
+	@GetMapping("/{recipeId}/like/check")
+	public ResponseEntity<Object> checkRecipeLike(@PathVariable("recipeId") Long recipeId) {
+	    // 로그인 구현이 되어 있지 않으므로, 멤버 아이디는 3L로 하드코딩합니다.
+	    Long memberId = 3L;
+	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
+	    // 좋아요 상태를 JSON 객체로 반환 (예: { "liked": true })
+	    return ResponseEntity.ok(Collections.singletonMap("liked", liked));
+	}
 
 	// 좋아요 토글 API
 	@PostMapping("/like/{recipeId}")
