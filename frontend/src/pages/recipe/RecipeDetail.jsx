@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { FaHeart, FaPlus, FaRegComment, FaRegHeart } from "react-icons/fa";
 import axiosInstance from "api/axios";
 import "styles/recipe/RecipeDetail.css";
-import CommentsSection from "./CommentsSection";
-import MealPlanModal from "./MealPlanModal";
+import CommentsSection from "pages/recipe/CommentsSection";
+import MealPlanModal from "pages/recipe/MealPlanModal";
 import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 
 function RecipeDetail() {
