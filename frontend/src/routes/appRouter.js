@@ -18,6 +18,7 @@ import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
+import RecipeRegister from "pages/recipe/RecipeRegister";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -53,6 +54,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+        <Route path={routeConfig.paths.recipeRegister} element={<Layout><RecipeRegister/></Layout>} />
         
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>}/>
