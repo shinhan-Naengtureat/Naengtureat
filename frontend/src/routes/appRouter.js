@@ -2,9 +2,10 @@ import BottomNav from "components/common/BottomNav";
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import HomePage from "pages/home/HomePage";
-import InventoryCreate from "pages/inventory/InventoryCreate";
-import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryList from "pages/inventory/InventoryList";
+import InventoryDetail from "pages/inventory/InventoryDetail";
+import InventoryCreate from "pages/inventory/InventoryCreate";
+import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
@@ -24,7 +25,6 @@ import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
-import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
