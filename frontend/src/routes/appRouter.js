@@ -9,7 +9,9 @@ import routeConfig from "routes/routeConfig";
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
-import RecipeSearchPage from 'pages/recipe/RecipeSearchPage';
+
+import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import MyRecipes from 'pages/myPage/MyRecipes';
 import RecipeDetail from 'pages/recipe/RecipeDetail';
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
@@ -19,6 +21,7 @@ import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import InventoryDetail from "pages/inventory/InventoryDetail";
+
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -53,8 +56,14 @@ const AppRouter = () => {
         {/*recipe*/}
         <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
         <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
+
+
+        {/* 필요한 경우 추가할 수 있는 라우트 */}
+        <Route path="/search-recipe" element={<Layout><RecipeSearchPage/></Layout>} />
+        <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+
 
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>}/>
