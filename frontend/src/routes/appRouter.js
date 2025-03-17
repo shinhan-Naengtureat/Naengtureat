@@ -24,6 +24,7 @@ import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
+import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -45,6 +46,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
         <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
+        <Route path={routeConfig.paths.inventoryWastebucket} element={<Layout><InventoryWastebucket/></Layout>} />
 
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
