@@ -1,0 +1,58 @@
+.store-detail {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    /* max-width: 800px; */
+    /* margin: 20px auto; */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+}
+
+.store-detail .gt {
+    color: #ff7f50;
+    margin-left: 10px;
+}
+
+.store-detail:hover {
+    background-color: #f8f9fa;
+}
+
+.store-info {
+    text-align: left;
+    flex: 1;
+}
+
+.roadAddress {
+    font-size: 13px;
+    font-weight: bold;
+    color: #919191;
+}
+
+.phone {
+    font-size: 13px;
+}
+
+.store-info .rate {
+    font-size: 14px;
+}
+
+.store-info .rate:hover {
+    cursor: pointer;
+    color: #ff7f50;
+    text-decoration: underline;
+}
+
+.store-info .phone-img {
+    width: 10px;
+    height: 10px;
+}
+
+.store-image {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
