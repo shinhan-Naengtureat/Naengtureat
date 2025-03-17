@@ -1,18 +1,17 @@
 package com.shinhan.naengtureat.inventory.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.query.Param;
-
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.shinhan.naengtureat.inventory.entity.Inventory;
 import com.shinhan.naengtureat.inventory.entity.QInventory;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		QuerydslPredicateExecutor<Inventory> {
@@ -50,7 +49,10 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		            B.b_name,
 		            B.b_ingredient_id, 
 		            B.b_quantity,
-		            B.b_recipe_name
+		            B.b_recipe_name,
+		            B.b_unit,
+					B.b_image
+		            
 		            
 		        FROM (
 		            SELECT i.ingredient_id AS a_ingredient_id, i.quantity AS a_quantity
@@ -62,12 +64,15 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		            	ing.small_category AS b_name,
 		                ing.ingredient_id AS b_ingredient_id, 
 		                CEIL(SUM(ri.quantity)) AS b_quantity,
-		                r.name AS b_recipe_name
+		                r.name AS b_recipe_name,
+		                ing.ingredient_unit AS b_unit,
+		                ing.standard_image AS b_image
 		            FROM meal_plan mp
 		            LEFT JOIN recipe r ON mp.recipe_id = r.recipe_id
 		            LEFT JOIN recipe_ingredient ri ON r.recipe_id = ri.recipe_id
 		            LEFT JOIN ingredient ing ON ri.ingredient_id = ing.ingredient_id
 		            WHERE mp.date BETWEEN :startDate AND :endDate
+		            AND ing.big_category NOT IN('조미료','견과류','곡물','기타')
 		            AND mp.member_id = :memberId
 		            GROUP BY ing.ingredient_id
 		        ) B

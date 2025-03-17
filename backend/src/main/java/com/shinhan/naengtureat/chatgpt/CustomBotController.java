@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/mealplan")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:3000/", allowedHeaders = "*")
 public class CustomBotController {
 	@Value("${spring.ai.openai.chat.options.model}")
 	private String model;
@@ -34,13 +34,7 @@ public class CustomBotController {
 
 	@Autowired
 	private RestTemplate template;
-//
-//	@GetMapping("/getchat")
-//	public String chat(@RequestParam("prompt") String prompt) {
-//		ChatGPTRequest request = new ChatGPTRequest(model, prompt);
-//		ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
-//		return chatGptResponse.getChoices().get(0).getMessage().getContent();
-//	}
+
 
 	@PostMapping( consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Object> chat(@RequestBody ChatGPTRequest request) {
