@@ -19,6 +19,7 @@ import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import RecipeRegister from "pages/recipe/RecipeRegister";
+import InventoryDetail from "pages/inventory/InventoryDetail";
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -35,10 +36,11 @@ const AppRouter = () => {
       <Routes>
         {/*home*/}
         <Route path={routeConfig.paths.home} element={<Layout><HomePage /></Layout>}/>
-        
+
         {/*inventoty*/}
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
-        
+        <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
+
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
         <Route path={routeConfig.paths.budgetInput} element={<BudgetInputPage setUserSelections={setUserSelections} />}/>
@@ -55,7 +57,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
         <Route path={routeConfig.paths.recipeRegister} element={<Layout><RecipeRegister/></Layout>} />
-        
+
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>}/>
       </Routes>

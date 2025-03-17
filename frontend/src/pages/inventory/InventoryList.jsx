@@ -1,35 +1,37 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
-import "styles/inventory/inventoryList.css";
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
-import {API_PATH} from "config/pathConfig";
 import axiosInstance from "api/axios";
+import {useNavigate} from "react-router-dom";
+import "styles/inventory/inventoryList.css";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [rawItems, setRawItems] = useState();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   //아이템 useEffect
   useEffect(() => {
     let ignore = false;
 
-    axiosInstance.get(`${API_PATH}/inventory`)
+    axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
             remainingDays: item.remainingDays,
-            ingredientBigCategory: item.ingredientBigCategory
+            ingredientBigCategory: item.ingredientBigCategory,
+            ingredientStandardImage: item.ingredientStandardImage
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
         }
       })
       .catch(error => {
-        console.log("데이터를 가져오는 중 에러 발생: " + error);
         setLoading(false);
       });
 
@@ -37,13 +39,6 @@ const InventoryList = () => {
       ignore = true;
     };
   }, []);
-
-  //카테고리 목록 동적 생성
-  const categories = useMemo(() => {
-    if (!rawItems) return ["전체"];
-    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
-    return ["전체", ...uniqueCategories];
-  }, [rawItems]);
 
   //필터링된 아이템 리스트
   const filteredItems = useMemo(() => {
@@ -60,6 +55,13 @@ const InventoryList = () => {
       return acc;
     }, {});
   }, [filteredItems]);
+
+  //카테고리 목록 동적 생성
+  const categories = useMemo(() => {
+    if (!rawItems || rawItems.length === 0) return ["전체"];
+    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
+    return ["전체", ...uniqueCategories];
+  }, [rawItems]);
 
   // 전체 선택 시 다른 카테고리 해제 & 중복 선택 방지
   const toggleCategory = (category) => {
@@ -105,12 +107,15 @@ const InventoryList = () => {
                 const isExpired = item.remainingDays < 0;
                 return (
                   <Col xs={4} key={item.id} className="mb-3"> {/* xs=4: 한 줄에 3개 */}
-                    <div className={`item-box ${isExpired ? 'expired' : 'fresh'}`}>
+                    <div className={`item-box ${isExpired ? 'expired' : 'fresh'}`}
+                         onClick={() => navigate(`/inventory/${item.id}`)} // 클릭 시 이동
+                         style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
+                    >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
                         {item.remainingDays}
                       </Badge>
                       <div className="item-content">
-                        <img src="" alt="item" className="item-image" />
+                        <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />
                         <div className="item-name">{item.nickName}</div>
                       </div>
                     </div>

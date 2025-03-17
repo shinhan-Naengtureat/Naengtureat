@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CategoryResponseDTO {
-    String bigCategory;
-    String smallCategory;
-    String ingredientUnit;
+    private Long ingredientId;
+    private String bigCategory;
+    private String smallCategory;
+    private String ingredientUnit;
+    private String standardImage;
 }
