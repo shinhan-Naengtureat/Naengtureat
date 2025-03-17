@@ -30,7 +30,7 @@ public class InventoryController {
 
     @GetMapping
     public ResponseEntity<Object> getAllInventory() {
-        List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(1L);
+        List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(3L);
         return ResponseEntity.ok(allInventory);
     }
 
@@ -61,14 +61,9 @@ public class InventoryController {
     public ResponseEntity<Object> searchInventoryByKeyword(@PathVariable("keyword") String keyword) {
         List<InventoryResponseDTO> inventoryResponseDTOS = inventoryService.searchInventoryByKeyword(keyword);
         if (inventoryResponseDTOS.isEmpty()) {
-//            return BaseResponse.builder().message("찾는재료가 없습니다.").build();  //BaseResponse 전략 반환값
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(BaseResponse.builder().message("찾는 재료가 없어요.").build());
         }
-//		return BaseResponse.builder()  //BaseResponse 전략 반환값
-//				.result(inventoryService.searchInventoryByKeyword(keyword))
-//				.message("키워드 필터링에 성공했습니다.")
-//				.build();
         return ResponseEntity.ok(inventoryService.searchInventoryByKeyword(keyword));
     }
 
