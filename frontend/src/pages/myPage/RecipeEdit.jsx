@@ -96,6 +96,7 @@ function RecipeEdit() {
 
     // RecipeRegister.jsx와 유사하게 DTO 형태로 변환
     const recipeDto = {
+      id: recipeId,
       name: form.recipeName,
       category: form.categoryBig,
       mealId: form.mealId,
@@ -107,7 +108,7 @@ function RecipeEdit() {
              ? (form.recipeImage.name ? form.recipeImage.name : form.recipeImage)
              : "",
       ingredients: form.ingredients.filter(
-        ing => ing.name.trim() && ing.quantity.toString().trim() && ing.unit.trim()
+      ing => ing.name.trim() && ing.quantity > 0 && ing.unit.trim()
       ),
       steps: form.steps.filter(step => step.content.trim()).map(step => ({
         content: step.content,
@@ -115,7 +116,7 @@ function RecipeEdit() {
       })),
       hashtags: form.hashtags, // react-select의 값 그대로 전송 (백엔드에서 처리 방식에 맞게 조정)
     };
-
+    console.log(recipeDto);
     try {
       const response = await axiosInstance.put(`/recipe/${recipeId}`, recipeDto);
       console.log("수정 결과:", response.data);
