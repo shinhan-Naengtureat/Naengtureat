@@ -1,82 +1,189 @@
-.store-detail-container {
-    padding: 20px;
-    background-color: #f8f8f8;
+/* 상단 스토어 정보 영역 */
+.store-detail-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-h2 {
-    font-size: 20px;
+.store-detail-header {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* 스토어 이미지 스타일 */
+.store-detail-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* 스토어 이름 스타일 */
+.store-detail-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+}
+
+/* 별점 스타일 */
+.store-detail-info .rate {
+    font-size: 1rem;
+}
+
+.store-detail-info .rate:hover {
+    cursor: pointer;
+    color: #ff7f50;
+    text-decoration: underline;
+}
+
+.store-detail-header .gt {
+    color: #ff7f50;
+    margin-left: 10px;
+}
+
+/* 검색바 영역 */
+.store-search-bar {
+    margin-bottom: 20px;
+}
+
+/* 검색바 스타일 */
+.search-ingredient {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 1rem;
+    color: #666;
+}
+
+/* 카테고리 영역 스타일 */
+.store-category {
+    margin-bottom: 20px;
+    overflow-x: auto; /* 가로 스크롤 필요 시 */
+    white-space: nowrap; /* 요소가 줄바꿈되지 않고 가로로 이어지도록 */
+}
+
+/* 카테고리 목록 */
+.category-list {
+    list-style: none;
+    display: inline-flex; /* 가로 방향으로 아이템을 배치 */
+    gap: 8px; /* 아이템 간 간격 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 개별 카테고리 아이템 */
+.category-item {
+    display: inline-block;
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* pill 형태로 둥글게 */
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    white-space: nowrap; /* 글자가 길어도 줄바꿈되지 않고 가로로 유지 */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* hover 시 살짝 배경 변화 */
+.category-item:hover {
+    background-color: #ff7f50;
+    color: white;
+}
+
+/* 활성화된(선택된) 카테고리 아이템 */
+.category-item.active {
+    border-color: #333;
+    font-weight: bold;
+}
+
+/* 상품 카드 그리드 레이아웃 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 고정 */
+    gap: 10px; /* 카드 사이 간격 */
+}
+
+/* 개별 상품 카드 */
+.product-card {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #F2F2F2;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    flex-direction: column; /* 위에서부터 순서대로 배치 */
+    align-items: center;    /* 수평 중앙 정렬 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+/* 이미지 컨테이너 */
+.image-container {
+    position: relative;
+}
+
+/* 상품 이미지 */
+.product-image {
+    width: 90px;
+    height: 90px;
+    object-fit: cover; /* 이미지 비율 유지 후 잘리는 영역은 숨김 */
+    border-radius: 4px;
     margin-bottom: 10px;
 }
 
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.product-card {
-    position: relative;
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    overflow: hidden;
-}
-
-.product-image {
-    width: 100%;
-    border-radius: 8px;
-}
-
-.discount-badge {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    background: red;
-    color: white;
-    padding: 4px 6px;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 4px;
-}
-
-.product-info {
-    margin-top: 8px;
-}
-
-.product-name {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.product-price {
-    font-size: 14px;
-    color: #555;
-}
-
-.original-price {
-    text-decoration: line-through;
-    color: #999;
-    margin-right: 5px;
-}
-
-.discount-price {
-    font-size: 16px;
-    font-weight: bold;
-    color: red;
-}
-
+/* 장바구니 버튼(+) */
 .add-to-cart {
     position: absolute;
     bottom: 10px;
-    right: 10px;
-    background: #ff6600;
-    color: white;
+    right: 0px;
+    width: 32px;
+    height: 32px;
     border: none;
-    width: 30px;
-    height: 30px;
     border-radius: 50%;
-    font-size: 18px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 1.3rem;
     cursor: pointer;
+    color: #e74c3c;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #f0f0f0;
+}
+
+/* 상품명 */
+.product-name {
+    font-size: 0.85rem;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+/* 가격 정보 */
+.prices {
+    font-size: 0.8rem;
+}
+
+/* 정가 */
+.product-price {
+    color: #999;
+}
+
+/* 할인율 */
+.discount-rate {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* 할인가 */
+.discount-price {
+    font-size: 0.85rem;
+    font-weight: bold;
 }

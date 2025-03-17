@@ -1,0 +1,54 @@
+/*  컨테이너 스타일 (화면 중앙 배치) */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /*  중앙 정렬 */
+  justify-content: flex-start; /* 변경 */
+  min-height: 100vh;
+  text-align: center; /*  텍스트도 중앙 정렬 */
+  padding-bottom: 10px; /* 버튼과 네비게이션 간격 확보 */
+}
+/* 버튼을 항상 하단 중앙 정렬*/
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/*  뒤로가기 버튼 스타일 */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /*  왼쪽 정렬 */
+  padding: 10px 20px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #f35c04;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/*  제목 스타일 (중앙 정렬) */
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #f35c04;
+  margin-top: 10px;
+}
+
+.subtitle {
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
