@@ -1,5 +1,6 @@
 // OverviewSection.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axiosInstance from 'api/axios';
 
 function OverviewSection({
   form,
@@ -37,15 +38,26 @@ function OverviewSection({
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  // 폼 상태에서 필요한 값들
-  const { recipeName, categoryBig, categorySmall, cookingInfo, recipeImage } = form;
+  const [meals, setMeals] = useState([]);
+  useEffect(() => {
+    axiosInstance.get(`/recipe/meal`)
+      .then((response) => {
+        setMeals(response.data);
+      })
+      .catch((error) => {
+        console.error("Meal 데이터 가져오기 실패", error);
+      });
+  }, []);
+
+  // 부모 폼 상태에서 필요한 값들
+  const { recipeName, categoryBig, mealId, cookingInfo, recipeImage } = form;
   const { servings, cookingTime, difficulty } = cookingInfo;
 
   // 섹션 전체 터치 여부
   const isSectionTouched =
     touched.recipeName ||
     touched.categoryBig ||
-    touched.categorySmall ||
+    touched.mealId ||
     touched.cookingInfo.servings ||
     touched.cookingInfo.cookingTime ||
     touched.cookingInfo.difficulty ||
@@ -55,7 +67,7 @@ function OverviewSection({
   const isSectionValid =
     recipeName.trim() &&
     categoryBig.trim() &&
-    categorySmall.trim() &&
+    mealId &&
     servings &&
     cookingTime &&
     difficulty &&
@@ -100,7 +112,7 @@ function OverviewSection({
             onBlur={() => onBlurHandler('categoryBig')}
             className={touched.categoryBig ? (categoryBig.trim() !== '' ? 'input-valid' : 'input-invalid') : ''}
           >
-            <option value="">카테고리 대분류 선택</option>
+            <option value="">카테고리 선택</option>
             <option value="채식">채식</option>
             <option value="한식">한식</option>
             <option value="양식">양식</option>
@@ -108,15 +120,21 @@ function OverviewSection({
             <option value="중식">중식</option>
             <option value="퓨전">퓨전</option>
           </select>
-          <input
-            type="text"
-            name="categorySmall"
-            placeholder="소분류"
-            value={categorySmall}
+          {/* 소분류를 DB에서 가져온 Meal 데이터로 dropdown 구성 */}
+          <select
+            name="mealId"
+            value={mealId || ""}
             onChange={handleInputChange}
-            onBlur={() => onBlurHandler('categorySmall')}
-            className={touched.categorySmall ? (categorySmall.trim() !== '' ? 'input-valid' : 'input-invalid') : ''}
-          />
+            onBlur={() => onBlurHandler('mealId')}
+            className={touched.mealId ? (mealId ? 'input-valid' : 'input-invalid') : ''}
+            >
+            <option value="">소분류(메뉴) 선택</option>
+            {meals.map((meal) => (
+                <option key={meal.id} value={meal.id}>
+                {meal.mealName}
+                </option>
+            ))}
+            </select>
           <div className="recipe-cooking-info">
             <input
               type="number"
@@ -130,11 +148,7 @@ function OverviewSection({
                   cookingInfo: { ...prev.cookingInfo, servings: true },
                 }))
               }
-              className={
-                touched.cookingInfo.servings
-                  ? servings ? 'input-valid' : 'input-invalid'
-                  : ''
-              }
+              className={touched.cookingInfo.servings ? (servings ? 'input-valid' : 'input-invalid') : ''}
             />
             <select
               name="cookingTime"
@@ -146,11 +160,7 @@ function OverviewSection({
                   cookingInfo: { ...prev.cookingInfo, cookingTime: true },
                 }))
               }
-              className={
-                touched.cookingInfo.cookingTime
-                  ? cookingTime ? 'input-valid' : 'input-invalid'
-                  : ''
-              }
+              className={touched.cookingInfo.cookingTime ? (cookingTime ? 'input-valid' : 'input-invalid') : ''}
             >
               <option value="">시간 선택</option>
               <option value="15분 이내">15분 이내</option>
@@ -169,11 +179,7 @@ function OverviewSection({
                   cookingInfo: { ...prev.cookingInfo, difficulty: true },
                 }))
               }
-              className={
-                touched.cookingInfo.difficulty
-                  ? difficulty ? 'input-valid' : 'input-invalid'
-                  : ''
-              }
+              className={touched.cookingInfo.difficulty ? (difficulty ? 'input-valid' : 'input-invalid') : ''}
             >
               <option value="">난이도 선택</option>
               <option value="초급">초급</option>

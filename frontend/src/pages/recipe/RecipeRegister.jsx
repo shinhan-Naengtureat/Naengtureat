@@ -6,19 +6,18 @@ import StepsSection from './StepsSection';
 import HashtagsSection from './HashtagsSection';
 import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
-import { API_PATH } from 'config/pathConfig';
 
 function RecipeRegister() {
   const [form, setForm] = useState({
-    recipeName: "",
-    categoryBig: "",
-    categorySmall: "",
-    cookingInfo: { servings: "", cookingTime: "", difficulty: "" },
-    ingredients: [{ name: "", quantity: "", unit: "" }],
-    steps: [{ content: "", image: null, imagePreview: null }],
-    hashtags: "",
-    recipeImage: null,
-  });
+  recipeName: "",
+  categoryBig: "",
+  mealId: "", // 추가: 소분류(메뉴) 선택 시 저장되는 Meal ID
+  cookingInfo: { servings: "", cookingTime: "", difficulty: "" },
+  ingredients: [{ name: "", quantity: "", unit: "" }],
+  steps: [{ content: "", image: null, imagePreview: null }],
+  hashtags: "",
+  recipeImage: null,
+});
 
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -34,7 +33,7 @@ function RecipeRegister() {
   const [touched, setTouched] = useState({
     recipeName: false,
     categoryBig: false,
-    categorySmall: false,
+    mealId: false,
     cookingInfo: { servings: false, cookingTime: false, difficulty: false },
     recipeImage: false,
     ingredients: [{ name: false, quantity: false, unit: false }],
@@ -48,9 +47,10 @@ function RecipeRegister() {
     // 서버에 전송할 DTO 형태로 변환합니다.
     const recipeDto = {
       name: form.recipeName,
-      category: form.categoryBig, // 필요 시 categorySmall과 결합할 수 있음
+      category: form.categoryBig, 
+      mealId: form.mealId,
       cookingTime: form.cookingInfo.cookingTime,
-      serving: form.cookingInfo.servings,
+      serving: form.cookingInfo.servings ? `${form.cookingInfo.servings}인분` : "",
       level: form.cookingInfo.difficulty,
       // 이미지 파일명을 저장 (이미지 프리뷰 URL이 아닌 파일의 이름)
       image: form.recipeImage ? form.recipeImage.name : "",
@@ -66,9 +66,11 @@ function RecipeRegister() {
         })),
       hashtags: form.hashtags,
     };
+    console.log(recipeDto);
 
     try {
-      const response = await axiosInstance.post(`${API_PATH}/recipe/new`, recipeDto);
+      const response = await axiosInstance.post(`/recipe/new`, recipeDto);
+      console.log("등록결과:",response.data);
       alert("레시피 등록 성공");
       // 등록 후 폼 초기화 또는 다른 페이지 이동 로직 추가 가능
     } catch (error) {
