@@ -20,6 +20,8 @@ import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
+import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.MealDTO;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
@@ -68,6 +70,11 @@ public class RecipeService {
 
 	@Autowired
 	private MealPlanRepository mealPlanRepository;
+	
+	@Autowired
+	private MealRepository mealRepository;
+	
+	private ModelMapper mapper = new ModelMapper();
 
 	// 전체 레시피 조회
 	public List<RecipeDTO> getAllRecipes() {
@@ -92,10 +99,10 @@ public class RecipeService {
 		recipe.setImage(recipeDto.getImage());
 		recipe.setCategory(recipeDto.getCategory());
 
-		// Meal 설정
-		Meal meal = new Meal();
-		meal.setId(recipeDto.getMealId());
-		recipe.setMeal(meal);
+		// Meal 설정: DB에서 Meal을 조회하여 할당
+	    Meal meal = mealRepository.findById(recipeDto.getMealId())
+	                  .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Meal입니다."));
+	    recipe.setMeal(meal);
 
 		// Member 설정
 		Member member = new Member();
@@ -152,6 +159,20 @@ public class RecipeService {
 			recipeHashtagRepository.save(recipeHashtag);
 		}
 	}
+	
+	public List<HashtagDTO> getAllHashtags() {
+        List<Hashtag> hashtags = hashtagRepository.findAll();
+        return hashtags.stream()
+                       .map(hashtag -> mapper.map(hashtag, HashtagDTO.class))
+                       .collect(Collectors.toList());
+    }
+	
+	public List<MealDTO> getAllMeals() {
+        List<Meal> meals = mealRepository.findAll();
+        return meals.stream()
+                    .map(meal -> mapper.map(meal, MealDTO.class))
+                    .collect(Collectors.toList());
+    }
 
 	public List<MyRecipeDTO> getMyRecipe(Long memberId) {
 		// 특정 memberId를 가진 레시피 목록 조회
@@ -182,123 +203,68 @@ public class RecipeService {
 	}
 
 	// Member의 나의 Recipe 수정
+	@Transactional
 	public String updateRecipe(Long memberId, RecipeDTO recipeDTO) {
-		Long recipeId = recipeDTO.getId();
-		// System.out.println(memberId +":"+ recipeDTO.getId());
-		// System.out.println(recipeDTO);
-		// ModelMapper mapper = new ModelMapper();
-
-		// 삭제되지 않은 레시피만 조회
-		Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeId)
-				.orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 삭제된 레시피입니다."));
-
-		if (!recipe.getMember().getId().equals(memberId)) {
-			throw new RuntimeException("본인의 레시피만 수정할 수 있습니다.");
+	    Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeDTO.getId())
+	            .orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 삭제된 레시피입니다."));
+	    if (!recipe.getMember().getId().equals(memberId)) {
+	        throw new RuntimeException("본인의 레시피만 수정할 수 있습니다.");
+	    }
+	    
+	    recipe.setName(recipeDTO.getName());
+	    recipe.setLevel(recipeDTO.getLevel());
+	    recipe.setCookingTime(recipeDTO.getCookingTime());
+	    recipe.setServing(recipeDTO.getServing());
+	    recipe.setImage(recipeDTO.getImage());
+	    recipe.setCategory(recipeDTO.getCategory());
+	    
+	    Meal meal = mealRepository.findById(recipeDTO.getMealId())
+	            .orElseThrow(() -> new RuntimeException("존재하지 않는 Meal입니다."));
+	    recipe.setMeal(meal);
+	    
+	    recipeRepository.save(recipe);
+	    
+	    recipeIngredientRepository.deleteByRecipeId(recipe.getId());
+	    recipeIngredientRepository.flush();
+	    double totalPrice = 0;
+	    for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
+	        Ingredient ingredient = ingredientRepository.findById(ingredientDTO.getIngredientId())
+	                .orElseThrow(() -> new RuntimeException("존재하지 않는 ingredientId입니다."));
+	        RecipeIngredient recipeIngredient = new RecipeIngredient();
+	        recipeIngredient.setIngredient(ingredient);
+	        recipeIngredient.setQuantity(ingredientDTO.getQuantity());
+	        recipeIngredient.setRecipe(recipe);
+	        totalPrice += ingredient.getStandardPrice() * ingredientDTO.getQuantity();
+	        recipeIngredientRepository.save(recipeIngredient);
+	    }
+	    int roundedTotalPrice = (int) Math.round(totalPrice);
+	    recipe.setPrice(roundedTotalPrice);
+	    recipeRepository.save(recipe);
+	    
+	    recipeStepRepository.deleteByRecipeId(recipe.getId());
+	    for (RecipeStepDTO stepDTO : recipeDTO.getSteps()) {
+	        RecipeStep step = new RecipeStep();
+	        step.setContent(stepDTO.getContent());
+	        step.setImage(stepDTO.getImage());
+	        step.setRecipe(recipe);
+	        recipeStepRepository.save(step);
+	    }
+	    
+	    recipeHashtagRepository.deleteByRecipeId(recipe.getId());
+	    List<RecipeHashtagDTO> hashtagDTOs = recipeDTO.getHashtagIds();
+		if (hashtagDTOs == null) {
+			hashtagDTOs = new ArrayList<>(); // null 방지
 		}
-
-		// 개별 필드 업데이트
-		if (recipeDTO.getImage() != null)
-			recipe.setImage(recipeDTO.getImage());
-		if (recipeDTO.getMealId() != null) {
-			Recipe mealRecipe = recipeRepository.findByMealId(recipeDTO.getMealId())
-					.orElseThrow(() -> new RuntimeException("존재하지 않는 mealId입니다."));
-			recipe.setMeal(mealRecipe.getMeal()); // Meal 객체 설정
+		for (RecipeHashtagDTO hashtagDTO : hashtagDTOs) {
+			RecipeHashtag recipeHashtag = new RecipeHashtag();
+			Hashtag hashtag = new Hashtag();
+			hashtag.setId(hashtagDTO.getId()); // RecipeHashtagDTO에서 id 가져오기
+			recipeHashtag.setRecipe(recipe);
+			recipeHashtag.setHashtag(hashtag);
+			recipeHashtagRepository.save(recipeHashtag);
 		}
-		if (recipeDTO.getCategory() != null)
-			recipe.setCategory(recipeDTO.getCategory());
-		if (recipeDTO.getLevel() != null)
-			recipe.setLevel(recipeDTO.getLevel());
-		if (recipeDTO.getCookingTime() != null)
-			recipe.setCookingTime(recipeDTO.getCookingTime());
-		if (recipeDTO.getServing() != null)
-			recipe.setServing(recipeDTO.getServing());
-		if (recipeDTO.getName() != null)
-			recipe.setName(recipeDTO.getName());
-
-		// Ingredients 처리
-		if (recipeDTO.getIngredients() != null) {
-			// 기존 재료 삭제
-			recipeIngredientRepository.deleteByRecipeId(recipe.getId()); // DB에서 삭제
-			recipeIngredientRepository.flush(); // 즉시 반영
-			recipe.setIngredients(new ArrayList<>()); // 새로운 리스트 할당하여 완전 초기화
-
-			// 새로운 재료 추가
-			for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
-				// Ingredient ID로 Ingredient 조회
-				Ingredient ingredient = ingredientRepository.findById(ingredientDTO.getIngredientId())
-						.orElseThrow(() -> new RuntimeException("존재하지 않는 ingredientId입니다."));
-
-				// RecipeIngredient 객체 생성
-				RecipeIngredient recipeIngredient = new RecipeIngredient();
-				recipeIngredient.setIngredient(ingredient); // 조회한 Ingredient 설정
-				recipeIngredient.setQuantity(ingredientDTO.getQuantity());
-				recipeIngredient.setRecipe(recipe); // 해당 레시피와 연결
-
-				// 레시피의 재료 목록에 추가
-				recipe.getIngredients().add(recipeIngredient);
-			}
-		}
-
-		// Steps 처리
-		if (recipeDTO.getSteps() != null) {
-			// 기존 단계 삭제
-			recipeStepRepository.deleteByRecipeId(recipe.getId()); // DB에서 삭제
-			recipe.setSteps(new ArrayList<>()); // 새로운 리스트로 변경하여 초기화
-
-			// 새로운 단계 추가
-			for (RecipeStepDTO stepDTO : recipeDTO.getSteps()) {
-				RecipeStep step = new RecipeStep();
-				step.setContent(stepDTO.getContent());
-				step.setImage(stepDTO.getImage());
-				step.setRecipe(recipe); // 해당 레시피와 연결
-				recipe.getSteps().add(step);
-			}
-		}
-
-		// Hashtags 처리
-		if (recipeDTO.getHashtagIds() != null) {
-			// 기존 해시태그 삭제
-			recipeHashtagRepository.deleteByRecipeId(recipe.getId()); // DB에서 기존 해시태그 삭제
-			recipe.setHashtags(new ArrayList<>()); // 새로운 리스트로 변경하여 초기화
-
-			// 새로운 해시태그 추가
-			for (RecipeHashtagDTO hashtagDTO : recipeDTO.getHashtagIds()) {
-				// 해당 해시태그 ID로 Hashtag 엔티티 조회 (영속성 컨텍스트에 포함)
-				// Hashtag updatedHashtag = hashtagRepository.findById(hashtagId)
-				// .orElseThrow(() -> new RuntimeException("해시태그 ID가 존재하지 않습니다."));
-
-				// 기존 RecipeHashtag가 있는지 확인
-//	            Optional<RecipeHashtag> existingRecipeHashtag = recipeHashtagRepository
-//	                    .findByRecipeIdAndHashtagId(recipe.getId(), hashtagId);
-
-				/*
-				 * if (existingRecipeHashtag.isPresent()) { // 이미 존재하는 경우 -> 해시태그 업데이트
-				 * RecipeHashtag recipeHashtag = existingRecipeHashtag.get();
-				 * 
-				 * log.info("🔄 기존 RecipeHashtag 업데이트: recipeHashtagId={}, newHashtagId={}",
-				 * recipeHashtag.getId(), hashtagId);
-				 * recipeHashtagRepository.updateHashtagId(recipeHashtag.getId(), hashtagId);
-				 * 
-				 * //recipeHashtag.setHashtag(updatedHashtag); // 기존 해시태그 변경
-				 * //recipeHashtagRepository.save(recipeHashtag); // 변경된 해시태그 저장 } else { // 새로운
-				 * RecipeHashtag 추가 RecipeHashtag recipeHashtag = new RecipeHashtag();
-				 * recipeHashtag.setRecipe(recipe); recipeHashtag.setHashtag(updatedHashtag);
-				 * 
-				 * log.info("✅ 새로운 RecipeHashtag 추가: recipeId={}, hashtagId={}", recipe.getId(),
-				 * hashtagId);
-				 * 
-				 * recipeHashtagRepository.save(recipeHashtag); }
-				 */
-				recipeHashtagRepository.findById(hashtagDTO.getId()).ifPresent(hash -> {
-					Hashtag hashtag = Hashtag.builder().id(hashtagDTO.getHashtagId()).build();
-					hash.setHashtag(hashtag);
-					recipe.getHashtags().add(hash);
-				});
-
-			}
-		}
-		recipeRepository.save(recipe);
-		return "레시피 수정 성공";
+	    
+	    return "레시피 수정 성공";
 	}
 
 	@Transactional

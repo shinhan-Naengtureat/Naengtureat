@@ -1,22 +1,28 @@
+import BottomNav from "components/common/BottomNav";
 import Layout from "components/common/Layout";
 import { MealPlanProvider } from "context/MealPlanContext";
 import HomePage from "pages/home/HomePage";
+import InventoryCreate from "pages/inventory/InventoryCreate";
 import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryList from "pages/inventory/InventoryList";
+import GPTChat from "pages/mealPlan/GPTchat";
+import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import BudgetInputPage from "pages/mealPlan/Input/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/Input/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/Input/ExcludedIngredientsPage";
 import FrequencyInputPage from "pages/mealPlan/Input/FrequencyInputPage";
-import GPTChat from "pages/mealPlan/GPTchat";
-import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
-import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
-import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import PreferredIngredientsPage from "pages/mealPlan/Input/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/Input/ThemeSelectionPage";
+import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
+import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
+import MyRecipes from 'pages/myPage/MyRecipes';
 import RecipeDetail from 'pages/recipe/RecipeDetail';
 import RecipeList from "pages/recipe/RecipeList";
+import RecipeRegister from "pages/recipe/RecipeRegister";
 import RecipeSearchPage from 'pages/recipe/RecipeSearchPage';
-import StoreList from "pages/store/StoreList";
+import Store from "pages/store/Store";
+import StoreDetail from 'pages/store/StoreDetail';
+import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
 
@@ -32,6 +38,7 @@ const AppRouter = () => {
         {/*inventoty*/}
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
+        <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
 
           {/* MealPlan */}
           <Route path={routeConfig.paths.mealPlanListDaily} element={<Layout><MealPlanListDaily /></Layout>} />
@@ -47,14 +54,23 @@ const AppRouter = () => {
 
         {/*recipe*/}
         <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
-        <Route path={routeConfig.paths.storeList} element={<Layout><StoreList/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+        <Route path={routeConfig.paths.recipeRegister} element={<Layout><RecipeRegister/></Layout>} />
 
-        {/* 404 Not Found */}
-        <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>}/>
+        {/* mypage */}
+        <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
+
+        {/* store */}
+        <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
+        <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
+        <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
+       
+       
+        <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />
         </Routes>
-        </MealPlanProvider>
+         </MealPlanProvider>
+      <BottomNav/>
     </div>
   );
 };

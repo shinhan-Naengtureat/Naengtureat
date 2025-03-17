@@ -98,7 +98,7 @@ function MyPage() {
   // 메뉴 항목 목록 (각 항목에 해당하는 아이콘 포함)
   const menuItems = [
     { title: "좋아요", icon: <FaHeart />, to: "/favorites" },
-    { title: "나의 레시피", icon: <FaUtensils />, to: "/my-recipes" },
+    { title: "나의 레시피", icon: <FaUtensils />, to: "/my-recipe-list" },
     { title: "주문 내역", icon: <FaHistory />, to: "/order-history" },
     { title: "장바구니", icon: <FaShoppingCart />, to: "/cart" },
     { title: "회원 정보 수정", icon: <FaUserEdit />, to: "/edit-profile" },

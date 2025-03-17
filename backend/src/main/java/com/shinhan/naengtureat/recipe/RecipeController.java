@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.recipe;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -20,6 +21,8 @@ import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanCheckDTO;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
 import com.shinhan.naengtureat.recipe.dto.CommentDTO;
+import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.MealDTO;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
@@ -70,14 +73,14 @@ public class RecipeController {
 	
 	@GetMapping("/like")
 	public ResponseEntity<Object> getLikeRecipeList() {
-		Long memberId = 1L;
+		Long memberId = 3L;
 		return ResponseEntity.ok(likesService.getLikeRecipeList(memberId));
 	}
 
 	// 좋아요 삭제
 	@DeleteMapping("/like/{likeId}")
 	public ResponseEntity<Object> deleteLikeRecipe(@PathVariable("likeId") Long likeId) {
-		Long memberId = 1L;
+		Long memberId = 3L;
 		Likes likesRecipe = likesService.getLikeById(likeId)
 				.orElseThrow(() -> new NoSuchElementException("좋아요한 레시피가 없습니다."));
 
@@ -106,7 +109,7 @@ public class RecipeController {
 	public ResponseEntity<Object> insertRecipe(@RequestBody RecipeDTO recipeDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요
+			Long memberId = 3L; // security 적용시 코드 수정 필요
 
 			// 서비스에 DTO와 memberId를 넘김
 			recipeService.registerRecipe(recipeDto, memberId);
@@ -118,8 +121,20 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("레시피 등록 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
+	
+	// DB에 있는 모든 해시태그를 조회
+    @GetMapping("/hashtag")
+    public ResponseEntity<List<HashtagDTO>> getAllHashtags() {
+        List<HashtagDTO> hashtags = recipeService.getAllHashtags();
+        return ResponseEntity.ok(hashtags);
+    }
 
-
+    // DB에 있는 모든 Meal을 조회하여 DTO 목록으로 반환
+    @GetMapping("/meal")
+    public ResponseEntity<List<MealDTO>> getAllMeals() {
+        List<MealDTO> meals = recipeService.getAllMeals();
+        return ResponseEntity.ok(meals);
+    }
 
 	// 마이페이지- 내 레시피 전체 목록 조회
 	@GetMapping("/myrecipeList")
@@ -127,7 +142,7 @@ public class RecipeController {
 
 		try {
 			// SecurityContext에서 로그인된 사용자 정보 가져오기
-			Long memberId = 1L;
+			Long memberId = 3L;
 
 			if (memberId == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -150,7 +165,7 @@ public class RecipeController {
 		try {
 			// SecurityContext에서 로그인된 사용자 정보 가져오기
 			// Long memberId = getLoggedInMemberId();
-			Long memberId = 1L;
+			Long memberId = 3L;
 
 			if (memberId == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponse.builder().message("로그인이 필요합니다.").build());
@@ -171,7 +186,7 @@ public class RecipeController {
 	public ResponseEntity<Object> updateMyRecipe(@PathVariable("recipeId") Long recipeId,  @RequestBody RecipeDTO recipeDTO) {
 		try {
 			
-			Long memberId = 1L;
+			Long memberId = 3L;
 			recipeDTO.setId(recipeId);		
 	        String result = recipeService.updateRecipe(memberId, recipeDTO);
 	        
@@ -191,7 +206,7 @@ public class RecipeController {
 			@RequestBody CommentDTO commentDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요
+			Long memberId = 3L; // security 적용시 코드 수정 필요
 
 			// 댓글 등록 서비스 호출
 			CommentDTO savedComment = recipeService.addComment(recipeId, memberId, commentDto.getContent());
@@ -242,13 +257,20 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("댓글 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
-
+	
+	@GetMapping("/{recipeId}/like/check")
+	public ResponseEntity<Object> checkRecipeLike(@PathVariable("recipeId") Long recipeId) {
+	    Long memberId = 3L;
+	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
+	    // 좋아요 상태를 JSON 객체로 반환 (예: { "liked": true })
+	    return ResponseEntity.ok(Collections.singletonMap("liked", liked));
+	}
 
 	// 좋아요 토글 API
 	@PostMapping("/like/{recipeId}")
 	public ResponseEntity<Object> toggleLikes(@PathVariable("recipeId") Long recipeId) {
 		try {
-			Long memberId = 2L; // security 적용시 수정 필요
+			Long memberId = 3L; // security 적용시 수정 필요
 			likesService.toggleLikes(recipeId, memberId);
 			return ResponseEntity.ok(BaseResponse.builder().message("좋아요 상태 변경 성공").build());
 		} catch (Exception e) {
