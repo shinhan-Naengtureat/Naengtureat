@@ -42,7 +42,7 @@ public class InventoryController {
                     .body(BaseResponse.builder().message("ingredientId 값이 필요합니다.").build());
         }
 
-        inventoryRequestDTO.setMemberId(1L);
+        inventoryRequestDTO.setMemberId(3L);
         return ResponseEntity.ok(inventoryService.createInventory(inventoryRequestDTO));
     }
 
@@ -53,7 +53,7 @@ public class InventoryController {
                     .body(BaseResponse.builder().message("ingredientId 값이 필요합니다.").build());
         }
 
-        inventoryRequestDTO.setMemberId(1L);
+        inventoryRequestDTO.setMemberId(3L);
         return ResponseEntity.ok(inventoryService.updateInventory(inventoryRequestDTO));
     }
 
@@ -74,13 +74,13 @@ public class InventoryController {
 
     @GetMapping("/filter")
     public ResponseEntity<Object> filterInventory(@RequestParam("keyword") List<String> keywords) {
-        Long memberId = 1L;
+        Long memberId = 3L;
         return ResponseEntity.ok(inventoryService.getInventoriesByKeywordsCategory(keywords, memberId));
     }
 
     @GetMapping("/wastebasket")
     public ResponseEntity<Object> getExpiredInventory() {
-        Long memberId = 1L;
+        Long memberId = 3L;
         return ResponseEntity.ok(inventoryService.getExpiredInventory(memberId));
     }
 
@@ -88,7 +88,7 @@ public class InventoryController {
     @GetMapping("/gap")
     public ResponseEntity<Object> getNotEnoughIngredientList(@RequestParam("startDate") LocalDate startDate,
                                                              @RequestParam("endDate") LocalDate endDate) {
-        Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+        Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
         try {
             List<IngredientComparisonDTO> gapList = inventoryService.getListNotEnoughIngredient(memberId, startDate, endDate);
             // 결과가 비어 있으면 204 No Content 반환
