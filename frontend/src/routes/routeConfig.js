@@ -13,6 +13,7 @@ const RouteConfig = {
     inventoryList: `${BASE_URL}/inventory`,
     inventoryDetail: `${BASE_URL}/inventory/:id`,
     inventoryCreate: `${BASE_URL}/inventory/new`,
+    inventoryWastebucket: `${BASE_URL}/wastebucket`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,
@@ -43,7 +44,7 @@ const RouteConfig = {
       title: "재료 관리",
       links: [
         { to: `${BASE_URL}/notifications`, icon: <FaSearch />, alt: "검색" },
-        { to: `${BASE_URL}/wastebaket`, icon: <FaTrashCan />, alt: "휴지통" },
+        { to: `${BASE_URL}/wastebucket`, icon: <FaTrashCan />, alt: "휴지통"},
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
