@@ -160,7 +160,7 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
             </div>
           ))}
           {/* 버튼: 모달 열기 */}
-          <Button variant="primary" onClick={openModal} style={{ marginTop: '10px' }}>
+          <Button variant="primary" onClick={openModal} style={{ marginTop: '10px', backgroundColor: "#ff7f50", borderColor: "#ff7f50" }}>
             재료 선택
           </Button>
 
