@@ -30,7 +30,7 @@ public class InventoryController {
 
     @GetMapping
     public ResponseEntity<Object> getAllInventory() {
-        List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(1L);
+        List<InventoryResponseDTO> allInventory = inventoryService.getAllInventory(3L);
         return ResponseEntity.ok(allInventory);
     }
 
@@ -42,7 +42,7 @@ public class InventoryController {
                     .body(BaseResponse.builder().message("ingredientId 값이 필요합니다.").build());
         }
 
-        inventoryRequestDTO.setMemberId(1L);
+        inventoryRequestDTO.setMemberId(3L);
         return ResponseEntity.ok(inventoryService.createInventory(inventoryRequestDTO));
     }
 
@@ -53,7 +53,7 @@ public class InventoryController {
                     .body(BaseResponse.builder().message("ingredientId 값이 필요합니다.").build());
         }
 
-        inventoryRequestDTO.setMemberId(1L);
+        inventoryRequestDTO.setMemberId(3L);
         return ResponseEntity.ok(inventoryService.updateInventory(inventoryRequestDTO));
     }
 
@@ -61,26 +61,21 @@ public class InventoryController {
     public ResponseEntity<Object> searchInventoryByKeyword(@PathVariable("keyword") String keyword) {
         List<InventoryResponseDTO> inventoryResponseDTOS = inventoryService.searchInventoryByKeyword(keyword);
         if (inventoryResponseDTOS.isEmpty()) {
-//            return BaseResponse.builder().message("찾는재료가 없습니다.").build();  //BaseResponse 전략 반환값
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(BaseResponse.builder().message("찾는 재료가 없어요.").build());
         }
-//		return BaseResponse.builder()  //BaseResponse 전략 반환값
-//				.result(inventoryService.searchInventoryByKeyword(keyword))
-//				.message("키워드 필터링에 성공했습니다.")
-//				.build();
         return ResponseEntity.ok(inventoryService.searchInventoryByKeyword(keyword));
     }
 
     @GetMapping("/filter")
     public ResponseEntity<Object> filterInventory(@RequestParam("keyword") List<String> keywords) {
-        Long memberId = 1L;
+        Long memberId = 3L;
         return ResponseEntity.ok(inventoryService.getInventoriesByKeywordsCategory(keywords, memberId));
     }
 
     @GetMapping("/wastebasket")
     public ResponseEntity<Object> getExpiredInventory() {
-        Long memberId = 1L;
+        Long memberId = 3L;
         return ResponseEntity.ok(inventoryService.getExpiredInventory(memberId));
     }
 
@@ -88,7 +83,7 @@ public class InventoryController {
     @GetMapping("/gap")
     public ResponseEntity<Object> getNotEnoughIngredientList(@RequestParam("startDate") LocalDate startDate,
                                                              @RequestParam("endDate") LocalDate endDate) {
-        Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+        Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
         try {
             List<IngredientComparisonDTO> gapList = inventoryService.getListNotEnoughIngredient(memberId, startDate, endDate);
             // 결과가 비어 있으면 204 No Content 반환

@@ -1,23 +1,5 @@
 package com.shinhan.naengtureat.recipe;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanCheckDTO;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
@@ -28,8 +10,14 @@ import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.entity.Likes;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @RestController
@@ -57,14 +45,14 @@ public class RecipeController {
 
 	@GetMapping("/like")
 	public ResponseEntity<Object> getLikeRecipeList() {
-		Long memberId = 1L;
+		Long memberId = 3L;
 		return ResponseEntity.ok(likesService.getLikeRecipeList(memberId));
 	}
 
 	// 좋아요 삭제
 	@DeleteMapping("/like/{likeId}")
 	public ResponseEntity<Object> deleteLikeRecipe(@PathVariable("likeId") Long likeId) {
-		Long memberId = 1L;
+		Long memberId = 3L;
 		Likes likesRecipe = likesService.getLikeById(likeId)
 				.orElseThrow(() -> new NoSuchElementException("좋아요한 레시피가 없습니다."));
 
@@ -93,7 +81,7 @@ public class RecipeController {
 	public ResponseEntity<Object> insertRecipe(@RequestBody RecipeDTO recipeDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요
+			Long memberId = 3L; // security 적용시 코드 수정 필요
 
 			// 서비스에 DTO와 memberId를 넘김
 			recipeService.registerRecipe(recipeDto, memberId);
@@ -114,7 +102,7 @@ public class RecipeController {
 
 		try {
 			// SecurityContext에서 로그인된 사용자 정보 가져오기
-			Long memberId = 1L;
+			Long memberId = 3L;
 
 			if (memberId == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -137,7 +125,7 @@ public class RecipeController {
 		try {
 			// SecurityContext에서 로그인된 사용자 정보 가져오기
 			// Long memberId = getLoggedInMemberId();
-			Long memberId = 1L;
+			Long memberId = 3L;
 
 			if (memberId == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BaseResponse.builder().message("로그인이 필요합니다.").build());
@@ -158,7 +146,7 @@ public class RecipeController {
 	public ResponseEntity<Object> updateMyRecipe(@PathVariable("recipeId") Long recipeId,  @RequestBody RecipeDTO recipeDTO) {
 		try {
 			
-			Long memberId = 1L;
+			Long memberId = 3L;
 			recipeDTO.setId(recipeId);		
 	        String result = recipeService.updateRecipe(memberId, recipeDTO);
 	        
@@ -178,7 +166,7 @@ public class RecipeController {
 			@RequestBody CommentDTO commentDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요
+			Long memberId = 3L; // security 적용시 코드 수정 필요
 
 			// 댓글 등록 서비스 호출
 			CommentDTO savedComment = recipeService.addComment(recipeId, memberId, commentDto.getContent());
@@ -235,7 +223,7 @@ public class RecipeController {
 	@PostMapping("/like/{recipeId}")
 	public ResponseEntity<Object> toggleLikes(@PathVariable("recipeId") Long recipeId) {
 		try {
-			Long memberId = 2L; // security 적용시 수정 필요
+			Long memberId = 3L; // security 적용시 수정 필요
 			likesService.toggleLikes(recipeId, memberId);
 			return ResponseEntity.ok(BaseResponse.builder().message("좋아요 상태 변경 성공").build());
 		} catch (Exception e) {
