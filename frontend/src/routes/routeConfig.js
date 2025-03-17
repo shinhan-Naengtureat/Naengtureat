@@ -11,7 +11,7 @@ const RouteConfig = {
     myPage: `${BASE_URL}/mypage`,
     recipeList: `${BASE_URL}/recipes`,
     inventoryList: `${BASE_URL}/inventory`,
-    
+    inventoryDetail: `${BASE_URL}/inventory/:id`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,
@@ -24,7 +24,9 @@ const RouteConfig = {
     makeMealPlan: `${BASE_URL}/make-mealplan`,
 
     store: `${BASE_URL}/store`,
-    notFound: "*",
+    searchRecipe: `${BASE_URL}/search-recipe`,
+    recipeDetail: `${BASE_URL}/recipe/:recipeId`,
+    notFound: '*',
   },
 
   navConfig: {

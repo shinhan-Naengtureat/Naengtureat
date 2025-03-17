@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/ingredient")
@@ -22,11 +19,6 @@ public class IngredientController {
 
     @Autowired
     IngredientService ingredientService;
-
-	@GetMapping("/hello")
-    public List<String> hello() {
-        return Arrays.asList("안녕하세요", "Hello");
-    }
 
     @GetMapping("/{ingredientId}")
     public ResponseEntity<Object> getIngredientById(@PathVariable("ingredientId") Long ingredientId) {
@@ -38,5 +30,10 @@ public class IngredientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(BaseResponse.builder().message("재료 ID: " + ingredientId + "를 찾을 수 없습니다.").build());
         }
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<Object> getCategories() {
+        return ResponseEntity.ok(ingredientService.getAllCategory());
     }
 }
