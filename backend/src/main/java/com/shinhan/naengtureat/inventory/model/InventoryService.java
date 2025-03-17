@@ -195,4 +195,9 @@ public class InventoryService {
                  ))
                  .collect(Collectors.toList());
     }
+
+    public String deleteInventoryById(Long inventoryId) {
+        inventoryRepository.deleteById(inventoryId);
+        return "재료가 삭제되었습니다.";
+    }
 }

@@ -46,6 +46,13 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.createInventory(inventoryRequestDTO));
     }
 
+    @DeleteMapping("/{inventoryId}")
+    public ResponseEntity<Object> deleteInventory(@PathVariable("inventoryId") Long inventoryId) {
+        return ResponseEntity.ok(BaseResponse.builder()
+                .message(inventoryService.deleteInventoryById(inventoryId))
+                .build());
+    }
+
     @PutMapping
     public ResponseEntity<Object> updateInventory(@RequestBody InventoryRequestDTO inventoryRequestDTO) {
         if (inventoryRequestDTO.getIngredientId() == null) {
