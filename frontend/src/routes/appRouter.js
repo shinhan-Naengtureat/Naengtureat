@@ -20,6 +20,7 @@ import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
+import RecipeRegister from "pages/recipe/RecipeRegister";
 import InventoryDetail from "pages/inventory/InventoryDetail";
 
 
@@ -63,6 +64,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+        <Route path={routeConfig.paths.recipeRegister} element={<Layout><RecipeRegister/></Layout>} />
 
 
         {/* 404 Not Found */}
