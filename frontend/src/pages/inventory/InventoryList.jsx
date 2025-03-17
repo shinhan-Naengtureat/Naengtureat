@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
+import {Badge, Button, Col, Container, Form, Placeholder, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
 import {useNavigate} from "react-router-dom";
@@ -11,6 +11,7 @@ const InventoryList = () => {
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [rawItems, setRawItems] = useState();
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   //아이템 useEffect
@@ -20,12 +21,15 @@ const InventoryList = () => {
     axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
+          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
             remainingDays: item.remainingDays,
             ingredientBigCategory: item.ingredientBigCategory,
-            ingredientStandardImage: item.ingredientStandardImage
+            ingredientStandardImage: item.ingredientStandardImage,
+            memo: item.memo,
+            ingredientSmallCategory: item.ingredientSmallCategory
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
@@ -46,15 +50,29 @@ const InventoryList = () => {
     return rawItems.filter(item => selectedCategories.includes(item.ingredientBigCategory));
   }, [rawItems, selectedCategories]);
 
+  // 검색어 필터링 추가
+  const searchedItems = useMemo(() => {
+    if (!searchTerm) return filteredItems;
+    return filteredItems.filter(item => {
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      return (
+        item.nickName.toLowerCase().includes(lowerSearchTerm) ||
+        item.ingredientBigCategory.toLowerCase().includes(lowerSearchTerm) ||
+        item.memo?.toLowerCase().includes(lowerSearchTerm) || // memo가 존재하는 경우만 검사
+        item.ingredientSmallCategory.toLowerCase().includes(lowerSearchTerm)
+      );
+    });
+  }, [filteredItems, searchTerm]);
+
   const groupedItems = useMemo(() => {
-    return (filteredItems || [ ]).reduce((acc, item) => {
+    return (searchedItems || []).reduce((acc, item) => {
       if (!acc[item.ingredientBigCategory]) {
-        acc[item.ingredientBigCategory] = [ ];
+        acc[item.ingredientBigCategory] = [];
       }
       acc[item.ingredientBigCategory].push(item);
       return acc;
     }, {});
-  }, [filteredItems]);
+  }, [searchedItems]);
 
   //카테고리 목록 동적 생성
   const categories = useMemo(() => {
@@ -82,6 +100,14 @@ const InventoryList = () => {
         items={categories}
         selectedItems={selectedCategories}
         toggleItem={toggleCategory}
+      />
+
+      <Form.Control
+        type="text"
+        placeholder="찾고싶은 재료를 검색해주세요"
+        className="my-3"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
       {loading ? (
