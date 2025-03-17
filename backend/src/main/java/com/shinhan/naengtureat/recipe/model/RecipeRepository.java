@@ -46,5 +46,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 			+ "OR LOWER(i.smallCategory) LIKE LOWER(CONCAT('%', :keyword, '%')) "
 			+ "OR LOWER(m.mealName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
 	List<Recipe> searchRecipes(@Param("keyword") String keyword);
+	
+	// 카테고리 필터(한식,중식 등)
+	List<Recipe> findByCategoryIn(List<String> categories);
 
 }

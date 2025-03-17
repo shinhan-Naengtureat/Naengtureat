@@ -40,6 +40,7 @@ public class StoreService {
 			rateAvg = storeDetail.getStoreReviewList().stream().mapToInt(StoreReview::getRate) // rate 값만 추출
 					.average() // 평균 계산
 					.orElse(0.0); // 값이 없을 경우 기본값 0.0
+			rateAvg = Math.round(rateAvg * 10.0) / 10.0; // 소수점 첫째 자리까지 반올림
 
 			// 스토어 리뷰 갯수
 			reviewCount = storeDetail.getStoreReviewList().size();
