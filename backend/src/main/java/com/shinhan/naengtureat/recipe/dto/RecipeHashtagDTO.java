@@ -15,4 +15,5 @@ public class RecipeHashtagDTO {
 	private Long id;
 	private Long recipeId; // recipe Id
 	private Long hashtagId; // hashtag ID
+	private String hashtagKeyword; // hashtag 키워드
 }
