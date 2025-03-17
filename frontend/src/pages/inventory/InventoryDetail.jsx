@@ -219,6 +219,26 @@ const InventoryDetail = () => {
     }
   };
 
+  //삭제 핸들러
+  const handleDeleteInventory = () => {
+    if (!inventory?.id) {
+      alert("삭제할 재료가 없습니다.");
+      return;
+    }
+
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axiosInstance.delete(`/inventory/${inventory.id}`)
+        .then(() => {
+          alert("삭제되었습니다.");
+          navigate("/inventory"); // 삭제 후 목록 페이지로 이동
+        })
+        .catch(error => {
+          console.error("재료 삭제 중 오류 발생:", error);
+          alert("삭제 중 오류가 발생했습니다.");
+        });
+    }
+  };
+
   if (loading) {
     return <Spinner animation="border"/>;
   }
@@ -340,7 +360,7 @@ const InventoryDetail = () => {
             value={integerPart === "" ? "" : integerPart} // 빈 값 유지
             onChange={handleChangeIntegerPart} // 새로운 핸들러 사용
             className="mx-2 text-center"
-            style={{ width: "50px" }}
+            style={{width: "50px"}}
           />
           <Button variant="outline-primary" onClick={() => setIntegerPart(prev => prev + 1)}>＋</Button>
         </Col>
@@ -394,10 +414,19 @@ const InventoryDetail = () => {
         onChange={(e) => setMemo(e.target.value)}
       />
 
-      {/* 추가 버튼 */}
-      <Button variant="warning" className="add-button" onClick={handleUpdateInventory}>
-        등록
-      </Button>
+      {/* 수정 삭제 버튼 */}
+      <Row className="mt-3">
+        <Col>
+          <Button variant="warning" className="add-button" onClick={handleUpdateInventory}>
+            수정
+          </Button>
+        </Col>
+        <Col>
+          <Button variant="danger" className="add-button" onClick={handleDeleteInventory}>
+            삭제
+          </Button>
+        </Col>
+      </Row>
     </Container>
   )
     ;
