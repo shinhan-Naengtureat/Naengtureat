@@ -21,6 +21,7 @@ import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import InventoryDetail from "pages/inventory/InventoryDetail";
+import InventoryCreate from "pages/inventory/InventoryCreate";
 
 
 const AppRouter = () => {
@@ -42,6 +43,7 @@ const AppRouter = () => {
         {/*inventoty*/}
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
+        <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
 
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
