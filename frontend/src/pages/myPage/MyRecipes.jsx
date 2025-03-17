@@ -11,7 +11,6 @@ function MyRecipes() {
       .get("/recipe/myrecipeList")
       .then((response) => {
         console.log("API 응답 데이터:", response.data);
-        // 응답 데이터가 배열이면 그대로 사용, 아니면 빈 배열 처리
         const dataArray = Array.isArray(response.data) ? response.data : [];
         setRecipes(dataArray);
       })
@@ -34,7 +33,7 @@ function MyRecipes() {
   // 수정 기능
   const handleEdit = async (recipeId, updatedData) => {
     try {
-      const response = await axiosInstance.put(`recipe/${recipeId}`, updatedData);
+      const response = await axiosInstance.put(`/recipe/${recipeId}`, updatedData);
       console.log("수정 결과:", response.data);
       setRecipes((prevRecipes) =>
         prevRecipes.map((recipe) =>
@@ -46,15 +45,17 @@ function MyRecipes() {
     }
   };
 
+  // 전체 아이템 스타일
   const listItemStyle = {
     position: "relative",
-    padding: "15px",
+    padding: "9px",
     border: "1px solid #ddd",
     borderRadius: "8px",
     marginBottom: "15px",
     backgroundColor: "#fff",
   };
 
+  // 수정/삭제 아이콘 스타일
   const iconsContainerStyle = {
     position: "absolute",
     top: "10px",
@@ -63,34 +64,37 @@ function MyRecipes() {
     gap: "10px",
   };
 
+  // 이미지 스타일
   const imageStyle = {
-    width: "100px",
-    height: "auto",
-    marginBottom: "10px",
+    width: "120px", 
+    //height: "auto",
+    borderRadius: "5px",
+  };
+
+  // 텍스트 컨테이너 (우측)
+  const textContainerStyle = {
+    marginLeft: "35px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center"
   };
 
   return (
-    
-
-
-    <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
-
-
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       {/* 상단 헤더 영역 */}
-      <header style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h2 style={{ margin: '0', fontSize: '1.5rem' }}>나의 레시피</h2>
-        {/* <h3 style={{ margin: '5px 0', fontWeight: 'normal', fontSize: '1.2rem' }}>BOOKMARK LIST</h3> */}
-        <p style={{ margin: '5px 0', color: '#666' }}>
+      <header style={{ textAlign: "center", marginBottom: "60px" }}>
+        <h2 style={{ margin: "0", fontSize: "1.5rem" }}>나의 레시피</h2>
+        <p style={{ margin: "5px 0", color: "#666" }}>
           등록한 나의 레시피를 확인해 보세요.
         </p>
       </header>
 
       {/* 레시피 개수 */}
-      <div style={{ textAlign: 'left', marginBottom: '20px', fontWeight: 'bold' }}>
+      <div style={{ textAlign: "left", marginBottom: "20px", fontWeight: "bold" }}>
         총 {recipes.length}개의 레시피
       </div>
       {recipes.length === 0 ? (
-        <p>데이터가 없습니다.</p>
+        <p>등록된 레시피가 없습니다.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
           {recipes.map((recipe) => (
@@ -110,14 +114,18 @@ function MyRecipes() {
                   onClick={() => handleDelete(recipe.id)}
                 />
               </div>
-              {/* 이미지 경로가 상대 경로라면 백엔드에서 제공하는 이미지 URL을 확인하세요 */}
-              <img
-                src={recipe.image}
-                alt={recipe.name}
-                style={imageStyle}
-              />
-              <h3 style={{ margin: "0 0 8px" }}>{recipe.name}</h3>
-              <p style={{ margin: 0, color: "#555" }}>{recipe.category}</p>
+              {/* 좌측: 이미지, 우측: 텍스트 */}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/assets/images/recipes/${recipe.image}`} 
+                  alt={recipe.name}
+                  style={imageStyle}
+                />
+                <div style={textContainerStyle}>
+                <h3 style={{ margin: "0 0 8px", fontSize: "1.2rem" }}>{recipe.name}</h3>
+                  <p style={{ margin: 0, color: "#555" }}>{recipe.category}</p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
