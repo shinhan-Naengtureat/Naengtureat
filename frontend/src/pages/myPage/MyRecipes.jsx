@@ -1,9 +1,11 @@
 import axiosInstance from "api/axios";
 import React, { useEffect, useState } from "react";
 import { FaPencilAlt, FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // useNavigate 추가
 
 function MyRecipes() {
   const [recipes, setRecipes] = useState([]);
+  const navigate = useNavigate(); // navigate 훅 사용
 
   // 레시피 목록 불러오기
   useEffect(() => {
@@ -30,21 +32,6 @@ function MyRecipes() {
     }
   };
 
-  // 수정 기능
-  const handleEdit = async (recipeId, updatedData) => {
-    try {
-      const response = await axiosInstance.put(`/recipe/${recipeId}`, updatedData);
-      console.log("수정 결과:", response.data);
-      setRecipes((prevRecipes) =>
-        prevRecipes.map((recipe) =>
-          recipe.id === recipeId ? { ...recipe, ...updatedData } : recipe
-        )
-      );
-    } catch (error) {
-      console.error("수정 중 오류 발생:", error);
-    }
-  };
-
   // 전체 아이템 스타일
   const listItemStyle = {
     position: "relative",
@@ -66,8 +53,7 @@ function MyRecipes() {
 
   // 이미지 스타일
   const imageStyle = {
-    width: "120px", 
-    //height: "auto",
+    width: "120px",
     borderRadius: "5px",
   };
 
@@ -76,7 +62,7 @@ function MyRecipes() {
     marginLeft: "35px",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   };
 
   return (
@@ -102,12 +88,7 @@ function MyRecipes() {
               <div style={iconsContainerStyle}>
                 <FaPencilAlt
                   style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    handleEdit(recipe.id, {
-                      // 예시: 수정할 데이터 (실제 수정 폼에서 받아야 합니다)
-                      name: "수정된 레시피 이름",
-                    })
-                  }
+                  onClick={() => navigate(`/recipe/edit/${recipe.id}`)}
                 />
                 <FaTimes
                   style={{ cursor: "pointer" }}
@@ -117,12 +98,12 @@ function MyRecipes() {
               {/* 좌측: 이미지, 우측: 텍스트 */}
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={`${process.env.PUBLIC_URL}/assets/images/recipes/${recipe.image}`} 
+                  src={`${process.env.PUBLIC_URL}/assets/images/recipes/${recipe.image}`}
                   alt={recipe.name}
                   style={imageStyle}
                 />
                 <div style={textContainerStyle}>
-                <h3 style={{ margin: "0 0 8px", fontSize: "1.2rem" }}>{recipe.name}</h3>
+                  <h3 style={{ margin: "0 0 8px", fontSize: "1.2rem" }}>{recipe.name}</h3>
                   <p style={{ margin: 0, color: "#555" }}>{recipe.category}</p>
                 </div>
               </div>
