@@ -2,6 +2,7 @@ import BottomNav from "components/common/BottomNav";
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import HomePage from "pages/home/HomePage";
+import InventoryCreate from "pages/inventory/InventoryCreate";
 import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryList from "pages/inventory/InventoryList";
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
@@ -12,9 +13,11 @@ import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
+import MyRecipes from 'pages/myPage/MyRecipes';
 import RecipeDetail from 'pages/recipe/RecipeDetail';
 import RecipeList from "pages/recipe/RecipeList";
-import RecipeSearchPage from 'pages/recipe/RecipeSearchPage';
+import RecipeRegister from "pages/recipe/RecipeRegister";
+import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
 import Store from "pages/store/Store";
 import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
@@ -41,6 +44,7 @@ const AppRouter = () => {
         {/*inventoty*/}
         <Route path={routeConfig.paths.inventoryList} element={<Layout> <InventoryList /></Layout>}/>
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
+        <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
 
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
@@ -56,6 +60,10 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.recipeList} element={<Layout><RecipeList/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+        <Route path={routeConfig.paths.recipeRegister} element={<Layout><RecipeRegister/></Layout>} />
+
+        {/* mypage */}
+        <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />

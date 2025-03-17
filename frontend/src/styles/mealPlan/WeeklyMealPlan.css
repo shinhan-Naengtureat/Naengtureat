@@ -53,7 +53,7 @@
 }
 
 /* <지난주, 날짜, 다음주> 부분 */
-.meal-plan-weekly-header{
+.meal-plan-weekly-header {
   align-items: center !important;
   justify-content: space-between !important;
   display: flex !important;
@@ -173,6 +173,10 @@
   margin-bottom: 0.5rem !important;
 }
 
+.meal-show-recipe {
+  cursor: pointer;
+}
+
 /* 이행여부 체크 기본 스타일 */
 .meal-status {
   display: block;
@@ -197,4 +201,11 @@
 .delete-meal.disabled-delete {
   color: #6c757d;
   pointer-events: none; /* 클릭 비활성화 */
+}
+
+.mealplan-info {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  color: #6c757d;
+  font-weight: normal;
 }

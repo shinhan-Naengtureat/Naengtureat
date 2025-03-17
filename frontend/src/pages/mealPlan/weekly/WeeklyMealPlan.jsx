@@ -66,7 +66,6 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
           size="sm"
         >
           <IoIosArrowBack style={{ fontSize: '24px' }} />
-          {/* <span>지난주</span> */}
         </button>
         {/* 현재 월 출력 */}
         <span className="current-month-label">{currentMonth}</span>
@@ -76,7 +75,6 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
           size="sm"
           className="next-week-btn"
         >
-          {/* <span>다음주</span> */}
           <IoIosArrowForward style={{ fontSize: '24px' }} />
         </button>
       </div>
@@ -89,6 +87,9 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
         toggleMealCheck={toggleMealCheck}
         deleteMeal={deleteMeal}
       />
+      <span className="mealplan-info">
+        ※ 일요일에는 다음주 식단이 생성됩니다.
+      </span>
     </div>
   );
 }
