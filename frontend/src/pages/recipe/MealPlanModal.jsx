@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axiosInstance from "api/axios";
-import { API_PATH } from "config/pathConfig";
 
 function MealPlanModal({ 
   show, 
@@ -15,8 +14,7 @@ function MealPlanModal({
 }) {
   // 확인 모달 상태
   const [showConfirm, setShowConfirm] = useState(false);
-  // 기존 식단 데이터 (확인을 위해 받아온 데이터; 필요시 로그 확인용)
-  const [existingMealPlans, setExistingMealPlans] = useState([]);
+  // 기존 식단 데이터 변수 제거 (불필요한 변수 삭제)
 
   // 오늘 포함, 이번 주 일요일까지 선택 가능하도록 계산
   const today = new Date();
@@ -27,7 +25,7 @@ function MealPlanModal({
   const minDate = today.toISOString().split("T")[0];
   const maxDate = weekEnd.toISOString().split("T")[0];
 
-  // 날짜 형식 변환: "YYYY-MM-DD" → "YYYYMMDD"
+  // 날짜 형식 변환: "YYYY-MM-DD" -> "YYYYMMDD"
   const formatDateForAPI = (dateStr) => {
     return dateStr.replace(/-/g, "");
   };
@@ -35,14 +33,13 @@ function MealPlanModal({
   // 사용자가 모달 내에서 "저장" 버튼을 누르면, 먼저 해당 날짜의 식단 데이터를 조회
   const handleInitialSave = () => {
     const formattedDate = formatDateForAPI(selectedDate);
-    axiosInstance.get(`${API_PATH}/mealplan/daily/${formattedDate}`)
+    axiosInstance.get(`/mealplan/daily/${formattedDate}`)
       .then((response) => {
         const plans = response.data; // 식단 DTO 배열
         // 선택한 식단 유형과 같은 데이터가 있는지 필터링
         const existing = plans.filter(plan => plan.type === selectedMealType);
         if (existing.length > 0) {
           // 기존 식단이 있으면 확인 모달을 띄움
-          setExistingMealPlans(existing);
           setShowConfirm(true);
         } else {
           // 없으면 바로 저장 API 호출
@@ -51,19 +48,18 @@ function MealPlanModal({
       })
       .catch((error) => {
         console.error("일간 식단 조회 에러:", error);
-        // 에러 발생 시에도 저장을 진행하거나, 에러 메시지를 띄울 수 있음
+        // 에러 발생 시에도 저장 진행
         handleSaveMealPlan();
       });
   };
 
-  // 확인 모달에서 "저장" 버튼을 누르면 기존 식단 삭제 후 저장 API 호출
+  // 확인 모달에서 "저장" 버튼 클릭 시: 기존 식단 삭제 후 저장 API 호출
   const handleConfirmSave = () => {
     setShowConfirm(false);
-    // 기존 식단 삭제 후 저장 로직은 handleSaveMealPlan에 포함되어 있다고 가정
     handleSaveMealPlan();
   };
 
-  // 확인 모달에서 "취소" 버튼을 누르면 확인 모달 닫기
+  // 확인 모달에서 "취소" 버튼 클릭 시: 확인 모달 닫기
   const handleConfirmCancel = () => {
     setShowConfirm(false);
   };
@@ -99,32 +95,32 @@ function MealPlanModal({
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>취소</Button>
-          <Button 
-           variant="primary" 
-           onClick={handleInitialSave}
-           style={{ backgroundColor: "#ff7f50", borderColor: "#ff7f50" }}
-           >
-          저장
-          </Button>
+          <Button variant="primary" onClick={handleInitialSave} style={{ backgroundColor: "#ff7f50", borderColor: "#ff7f50" }}>저장</Button>
         </Modal.Footer>
       </Modal>
 
       {/* 확인 모달 */}
       <Modal show={showConfirm} onHide={handleConfirmCancel} centered className="confirm-modal">
         <Modal.Body>
-          <p style={{color : "red"}}>현재 선택한 날짜에 기존식단이 존재합니다.</p>
+          <p style={{color:"red"}}>현재 선택한 날짜에 기존식단이 존재합니다.</p>
           <p>
-            기존식단을 삭제하고 추가하시려면 <strong style={{ color: "#ff7f50" }}>저장</strong>을, 다른 날짜를 선택하려면 <strong>취소</strong>를 눌러주세요.
+            기존식단을 삭제하고 추가하시려면 <strong style={{ color: "#ff7f50" }}>저장</strong>을,{" "}
+            다른 날짜를 선택하려면 <strong>취소</strong>를 눌러주세요.
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleConfirmCancel}>취소</Button>
           <Button 
-           variant="primary" 
-           onClick={handleConfirmSave}
-           style={{ backgroundColor: "#ff7f50", borderColor: "#ff7f50" }}
-           >
-          저장
+            variant="secondary" 
+            onClick={handleConfirmCancel}
+          >
+            취소
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleConfirmSave}
+            style={{ backgroundColor: "#ff7f50", borderColor: "#ff7f50" }}
+          >
+            저장
           </Button>
         </Modal.Footer>
       </Modal>
