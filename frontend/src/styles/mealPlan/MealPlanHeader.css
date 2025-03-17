@@ -1,0 +1,43 @@
+.toggle-wrapper {
+  width: 100px;
+  height: 40px;
+  background-color: #ddd;
+  border-radius: 30px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px;
+  transition: background 0.3s;
+}
+
+.toggle-label {
+  font-size: 16px;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+
+.toggle-slider {
+  width: 50px;
+  height: 36px;
+  background-color: #FF8A42;
+  border-radius: 30px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: left 0.3s ease;
+}
+
+.toggle-wrapper .toggle-slider.weekly {
+  left: 0px;
+}
+
+.toggle-wrapper .toggle-slider.monthly {
+  left: 50px;
+}
+
+.toggle-label.weekly.active,.toggle-label.monthly.active{
+  color: #FFFFFF;
+}

@@ -59,9 +59,8 @@ public class InventoryService {
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
 
-        return inventoryList.stream().map((eachInventory) -> {
-            //entity -> DTO
-            InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+        return inventoryList.stream().map((inventory) -> {
+            InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
 
             //남은 기간 계산 및 저장
             setCalculateDday(inventoryResponseDTO);
@@ -142,9 +141,8 @@ public class InventoryService {
 
     public List<InventoryResponseDTO> getExpiredInventory(Long memberId) {
         return inventoryRepository.findAllByMemberId(memberId).stream()
-                .map(eachInventory -> {
-                    //entity -> DTO
-                    InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+                .map(inventory -> {
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
 
                     //남은 기간 계산 및 저장
                     setCalculateDday(inventoryResponseDTO);
@@ -191,8 +189,10 @@ public class InventoryService {
                          (String) row[2], // b_name 재료 카테고리명
                          ((Number) row[3]).longValue(), // mealPlanIngredientId  필요한 재료 ID
                          ((Number) row[4]).intValue(),  // mealPlanQuantity 필요한 재료 개수
-                         (String) row[5] // b_recipe_name 레시피명
-                 ))
+                         (String) row[5], // b_recipe_name 레시피명
+                         (String) row[6],// 인벤토리 단위
+                        (String) row[7]//이미지 경로
+                		 ))
                  .collect(Collectors.toList());
     }
 }

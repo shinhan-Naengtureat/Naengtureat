@@ -2,9 +2,11 @@ package com.shinhan.naengtureat.member.model;
 
 import java.util.NoSuchElementException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shinhan.naengtureat.member.dto.MemberDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 
 @Service
@@ -13,8 +15,12 @@ public class MemberService {
 	@Autowired
 	MemberRepository memberRepository;
 
-	public Member getMemberById(Long id) {
-		return memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException("해당 멤버를 찾을 수 없습니다."));
+	// 사용자 정보 조회
+	public MemberDTO getMemberById(Long memberId) {
+		Member memberEntity = memberRepository.findById(memberId)
+				.orElseThrow(() -> new NoSuchElementException("해당 멤버를 찾을 수 없습니다."));
+		
+		return entityToDTO(memberEntity);
 	}
 
 	// 예산 업데이트
@@ -25,4 +31,13 @@ public class MemberService {
 		}
 		return updatedRows;
 	}
+	
+	// Entity를 DTO로 변환
+	public MemberDTO entityToDTO(Member entity) {
+		ModelMapper mapper = new ModelMapper();
+		MemberDTO dto = mapper.map(entity, MemberDTO.class); // 이름이 같은 필드들은 자동으로 매핑
+
+		return dto;
+	}
+	
 }

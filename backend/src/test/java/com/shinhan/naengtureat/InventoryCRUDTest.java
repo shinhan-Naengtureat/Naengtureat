@@ -31,10 +31,10 @@ public class InventoryCRUDTest {
     public void editInventory() throws Exception {
         //given
         Long ingredientId = 92L;
-        Long memberId = 1L;
+        Long memberId = 3L;
 
         InventoryRequestDTO inventoryDTO = InventoryRequestDTO.builder()
-                .id(2L)
+                .id(3L)
                 .memo("내가 산 재료")
                 .inventoryExpDate(LocalDate.parse("2025-03-15"))
                 .inputDate(LocalDate.parse("2025-03-15"))
@@ -63,8 +63,8 @@ public class InventoryCRUDTest {
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 재료입니다.")));  // 유효한 재료 등록
 
         //then
-        Inventory newInventory = inventoryRepository.findById(2L).orElse(null);
+        Inventory newInventory = inventoryRepository.findById(3L).orElse(null);
         assertEquals("으억 내가 먹을거야", newInventory.getNickName());
-        assertEquals(1L, newInventory.getMember().getId());
+        assertEquals(3L, newInventory.getMember().getId());
     }
 }
