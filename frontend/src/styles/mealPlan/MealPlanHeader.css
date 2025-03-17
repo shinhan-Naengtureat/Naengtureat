@@ -1,3 +1,22 @@
+.make-mealplan {
+  font-family: var(--font-nanum) !important;
+  font-weight: bold !important;
+  --bs-btn-color: #ff8a42 !important;
+  --bs-btn-border-color: #ff8a42 !important;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #ff8a42 !important;
+  --bs-btn-hover-border-color: #ff8a42 !important;
+  --bs-btn-focus-shadow-rgb: 13, 110, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #ff8a42 !important;
+  --bs-btn-active-border-color: #ff8a42 !important;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #ff8a42 !important;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #ff8a42 !important;
+  --bs-gradient: none;
+}
+
 .toggle-wrapper {
   width: 100px;
   height: 40px;
@@ -22,7 +41,7 @@
 .toggle-slider {
   width: 50px;
   height: 36px;
-  background-color: #FF8A42;
+  background-color: #ff8a42;
   border-radius: 30px;
   position: absolute;
   top: 50%;
@@ -38,6 +57,54 @@
   left: 50px;
 }
 
-.toggle-label.weekly.active,.toggle-label.monthly.active{
-  color: #FFFFFF;
+.toggle-label.weekly.active,
+.toggle-label.monthly.active {
+  color: #ffffff;
+}
+
+/*
+d-flex justify-content-between align-items-center 
+*/
+.notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-size: 14px;
+  font-weight: bold;
+  /* cursor: pointer; */
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.notification.hide {
+  animation: fadeOut 0.5s ease-in-out forwards;
+}
+
+/* 알림 나타나는 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* 알림 사라지는 애니메이션 */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
 }
