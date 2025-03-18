@@ -5,7 +5,7 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules"; // Autoplay 추가
 import "styles/home/HomePage.css";
 import axiosInstance from "api/axios";
-import {API_PATH, RECIPE_IMAGE_PATH} from "config/pathConfig";
+import {RECIPE_IMAGE_PATH} from "config/pathConfig";
 
 const todaysMeals = [
   { meal: "아침", content: "시저감자 샐러드" },
@@ -18,7 +18,7 @@ const HomePage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`${API_PATH}/recipe/top/like`)
+      .get(`/recipe/top/like`)
       .then((response) => {
         if (response.data) {
           // 🔹 isDelete가 false인 데이터만 필터링
