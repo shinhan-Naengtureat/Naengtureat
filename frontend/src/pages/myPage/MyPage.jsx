@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import bagicprofile from './bagicprofile.png';
+
 import { 
   FaHeart, 
   FaUtensils, 
@@ -12,6 +13,8 @@ import {
 } from 'react-icons/fa';
 
 function MyPage() {
+  const navigate = useNavigate();
+
   // 예시용 사용자 정보
   const userName = '홍길동';
   const userLoginId = 'hong123';
@@ -56,7 +59,8 @@ function MyPage() {
 
   // 카드와 유사한 디자인 스타일
   const payCardStyle = {
-    background: 'linear-gradient(233deg, rgb(255 147 82), rgb(255 163 48))',
+    //background: 'linear-gradient(233deg, rgb(255 147 82), rgb(255 163 48))',
+    background: 'linear-gradient(248deg, rgb(251 108 51), rgb(255 197 108))',
     color: '#fff',
     borderRadius: '12px',
     padding: '40px',
@@ -133,7 +137,7 @@ function MyPage() {
       {/* 냉털잇페이 정보 카드 */}
       <div style={payCardStyle}>
         <div style={cardRowStyle}>
-          <div style={cardLabelStyle}>냉털잇 보유금액</div>
+          <div style={cardLabelStyle}>냉털잇 페이 머니</div>
           <div style={cardValueStyle}>{payBalance}</div>
         </div>
 
@@ -143,7 +147,12 @@ function MyPage() {
         </div>
 
         <div style={paymentActionsStyle}>
-          <button style={buttonStyle}>즉시 충전</button>
+        <button 
+            style={buttonStyle} 
+            onClick={() => navigate('/instant-charge')} 
+          >
+            즉시 충전
+          </button>
           <button style={buttonStyle}>정기 결제</button>
         </div>
       </div>

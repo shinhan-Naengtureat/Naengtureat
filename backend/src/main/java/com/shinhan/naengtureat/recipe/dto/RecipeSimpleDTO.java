@@ -1,4 +1,4 @@
-package com.shinhan.naengtureat.pay.dto;
+package com.shinhan.naengtureat.recipe.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PayDTO {
-    private Long id; // pay id
-    private Long memberId; // member id
-    private int balance; // 잔액
-    private String customerUid; // 빌링키
+public class RecipeSimpleDTO {
+	private Long id;
+    private String name;
+    private int price;
+    private String category;
+    private String smallCategory;
+    private String keyword;
+   
 }
+

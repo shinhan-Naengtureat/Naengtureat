@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
 import "styles/mealPlan/IngredientPage.css"; // 새로운 CSS 파일 추가
 
-import IngredientCard from "./IngredientCard";
+import IngredientCard from "../IngredientCard";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
 import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import useMealPlanContext from "hooks/useMealPlanContext";
 
-const PreferredIngredientsPage = ({ setUserSelections }) => {
+const PreferredIngredientsPage = () => {
   const ingredientsList = [
     { name: "돼지고기", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/pork.jpg`,},
     { name: "달걀", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/eggs.jpg` },
@@ -26,8 +27,9 @@ const PreferredIngredientsPage = ({ setUserSelections }) => {
     { name: "우유", image: `${ INGREDIENT_IMAGE_PATH }/ingre-card/milk.jpg` },
   ];
 
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const { userSelections, setUserSelections } = useMealPlanContext();
   const navigate = useNavigate();
+  const [selectedIngredients, setSelectedIngredients] = useState(userSelections?.preferredIngredients || []);
 
   const toggleIngredient = (ingredient) => {
     setSelectedIngredients((prev) =>

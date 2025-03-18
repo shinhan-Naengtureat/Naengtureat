@@ -13,10 +13,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shinhan.naengtureat.mealplan.dto.MonthlyMealPlanDTO;
+import com.shinhan.naengtureat.inventory.entity.Inventory;
+import com.shinhan.naengtureat.inventory.model.InventoryRepository;
 import com.shinhan.naengtureat.mealplan.dto.MealPlanDTO;
+import com.shinhan.naengtureat.mealplan.dto.MonthlyMealPlanDTO;
 import com.shinhan.naengtureat.mealplan.entity.MealPlan;
 import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.member.model.MemberRepository;
+import com.shinhan.naengtureat.recipe.entity.Recipe;
+import com.shinhan.naengtureat.recipe.entity.RecipeIngredient;
 import com.shinhan.naengtureat.recipe.model.RecipeHashtagRepository;
 import com.shinhan.naengtureat.recipe.model.RecipeRepository;
 
@@ -33,7 +38,36 @@ public class MealPlanService {
 
 	@Autowired
 	MealPlanRepository mealPlanRepository;
+	
+	@Autowired
+	MemberRepository memberRepository;
+	
+	@Autowired
+	InventoryRepository inventoryRepository;
+	
+	@Transactional
+    public void saveMealPlan(List<MealPlanDTO> mealplanDTO) {
+		Member member = memberRepository.findById(3L)
+				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+		
+		 List<MealPlan> mealPlans = mealplanDTO.stream().map(dto -> {
+		Recipe recipe = recipeRepository.findById(dto.getRecipeId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+		 return MealPlan.builder()
+                 .member(member)  // Member 객체 사용
+                 .recipe(recipe)  // Recipe 객체 사용
+                 .date(dto.getDate()) 
+                 .type(dto.getType()) 
+                 .isCheck(false) 
+                 .build();
+     }).collect(Collectors.toList());
 
+        // 한 번에 저장 (bulk insert)
+        mealPlanRepository.saveAll(mealPlans);
+    }
+	
+
+	
 	public List<String> getCategoryAll() {
 		return recipeRepository.findCategoryAll();
 	}
@@ -102,7 +136,46 @@ public class MealPlanService {
 		int result = mealPlanRepository.updateMealPlanCheckStatus(newMember, mealPlanId);
 		
 		if(result == 1) {
-			return "식단 이행여부 체크가 완료되었습니다.";
+			// 1. 회원 포인트 5점 추가
+	        Member memberEntity = memberRepository.findById(memberId).orElse(null);
+	        memberEntity.setPoint(memberEntity.getPoint() + 5);
+	        memberRepository.save(memberEntity);
+	        
+	        //2. 레시피재료만큼 인벤토리 재료 삭제
+	        MealPlan mealPlan = mealPlanRepository.findById(mealPlanId).orElse(null);
+	        Recipe recipe = mealPlan.getRecipe();
+	        
+	     // 식단의 레시피에 포함된 재료들을 순회하며 회원 인벤토리에서 차감
+	        for (RecipeIngredient ri : recipe.getIngredients()) {
+	        	String smallCategory = ri.getIngredient().getSmallCategory();
+	        	String recipeUnit = ri.getIngredient().getRecipeUnit();
+	        	String ingredientUnit = ri.getIngredient().getIngredientUnit();
+	        	
+	        	// 수량체크안하는 것들
+	        	if(smallCategory.equals("조미료")||smallCategory.equals("견과류")||smallCategory.equals("곡물")||
+	        	   smallCategory.equals("기타")||(!recipeUnit.equals(ingredientUnit))) {
+	        		continue;
+	        	}
+	        	
+	            Long ingredientId = ri.getIngredient().getId();
+
+	            // 회원 인벤토리 조회
+	            Inventory inventory = inventoryRepository.findByMemberIdAndIngredientId(memberId, ingredientId);
+	            
+	            if(inventory != null) {
+	            	double newQuantity = inventory.getQuantity() - ri.getQuantity();
+		            
+	            	if(newQuantity<=0) {
+	            		//남은 수량이 0이하면 인벤토리에서 재료 삭제
+	            		inventoryRepository.delete(inventory);
+	            	} else {
+	            		//남은 수량이 0보다 크면 업데이트 후 저장
+	            		inventory.setQuantity(newQuantity);
+	            		inventoryRepository.save(inventory);
+	            	}
+	            }
+	        }
+			return "식단 이행여부 체크, 포인트 업데이트, 인벤토리 차감이 완료되었습니다.";
 		} else {
 			return "식단 이행여부 체크에 실패하였습니다.";
 		}

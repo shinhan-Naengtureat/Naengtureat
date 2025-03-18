@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,19 @@ public class MealPlanController {
 	@Autowired
 	MemberService memberService;
 
+	//식단 저장
+	@PostMapping("/save")
+	public ResponseEntity<Object> saveMealPlan(@RequestBody List<MealPlanDTO> mealplanDTO){
+		 try {
+	            
+	            mealPlanService.saveMealPlan(mealplanDTO);
+	            return ResponseEntity.ok("식단이 성공적으로 저장되었습니다.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(500).body("식단 저장 중 오류 발생: " + e.getMessage());
+	        }
+	    
+	}
+	
 	// 카테고리 조회
 	@GetMapping("/category")
 	public ResponseEntity<Object> getCategory() {
@@ -159,7 +173,7 @@ public class MealPlanController {
 			e.printStackTrace();
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(BaseResponse.builder().message("식단 이행여크 체크 중 오류 발생했습니다: " + e.getMessage()).build());
+					.body(BaseResponse.builder().message("식단 이행여부 체크 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
 	}
 

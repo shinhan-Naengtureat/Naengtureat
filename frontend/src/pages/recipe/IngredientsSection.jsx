@@ -105,7 +105,7 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
 
   // 섹션 전체 유효성 (한 항목이라도 제대로 입력되었는지)
   const isSectionTouched = touched.ingredients.some(item => item.name || item.quantity || item.unit);
-  const validCount = form.ingredients.filter(ing => ing.name.trim() && ing.quantity.trim() && ing.unit.trim()).length;
+  const validCount = form.ingredients.filter(ing => ing.name.trim() && ing.quantity > 0 && ing.unit.trim()).length;
   const sectionClass = isSectionTouched ? (validCount >= 1 ? "section-valid" : "section-invalid") : "";
 
   return (
@@ -138,7 +138,7 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
                 onBlur={() => handleIngredientBlur(idx, 'quantity')}
                 className={
                   touched.ingredients[idx] && touched.ingredients[idx].quantity
-                    ? ingredient.quantity.trim() ? "input-valid" : "input-invalid"
+                    ? String(ingredient.quantity).trim() ? "input-valid" : "input-invalid"
                     : ""
                 }
               />

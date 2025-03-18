@@ -32,10 +32,10 @@
   font-size: 1rem; /* 아이템 이름 크기 증가 */
   font-weight: bold;
   margin-top: 8px;
-  white-space: nowrap;       /* 줄 바꿈 방지 */
-  overflow: hidden;          /* 넘치는 텍스트 숨김 */
-  text-overflow: ellipsis;   /* 말줄임표(...) 적용 */
-  max-width: 100%;           /* 부모 크기를 넘지 않도록 제한 */
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 말줄임표(...) 적용 */
+  max-width: 100%; /* 부모 크기를 넘지 않도록 제한 */
 }
 
 .inventory-list-item-image {
@@ -55,11 +55,11 @@
 }
 
 .badge.bg-success {
-  background-color: green!important; /* 뱃지 초록색 */
+  background-color: green !important; /* 뱃지 초록색 */
 }
 
 .badge.bg-danger {
-  background-color: red!important; /* 뱃지 빨간색 */
+  background-color: red !important; /* 뱃지 빨간색 */
 }
 
 .badge-position {
@@ -92,7 +92,38 @@ h5.text-start {
 }
 
 .inventory-list-category-btn.active {
-  background-color: #F35C04!important;
+  background-color: #F35C04 !important;
   color: white;
-  border-color: #F35C04!important;
+  border-color: #F35C04 !important;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+.item-box.selected {
+  border: 1px solid green;
+  box-shadow: 0px 0px 10px rgba(0, 128, 0, 0.5);
+  animation: shake 0.3s ease-in-out; /* 흔들리는 효과 */
+}
+
+
+.delete-multiple-inventory-button {
+  width: 80%;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 15px 0;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  text-align: center;
+  border-radius: 0;
+  justify-content: center;
+  bottom: 120px;
 }
