@@ -45,6 +45,10 @@ const formatPrice = (price) => {
 const handleBefore = () => {
     navigate(RouteConfig.paths.notEnoughIngredientList);
   };
+
+  const handleNext = () => {
+    navigate(RouteConfig.paths.cart);
+}
   return (
     <div className="shopping-container">
       {/* 뒤로가기 버튼 */}
@@ -87,7 +91,7 @@ const handleBefore = () => {
         </table>
       )}
       { /*장바구니 담고 페이지 이동 추가가*/}
-      <FloatingNextButton disabled={selectedIngredients.length === 0} >
+      <FloatingNextButton onClick={handleNext} disabled={selectedIngredients.length === 0} >
       장바구니에 담기
       </FloatingNextButton>
     </div>
