@@ -14,6 +14,7 @@ const RouteConfig = {
     inventoryDetail: `${BASE_URL}/inventory/:id`,
     inventoryCreate: `${BASE_URL}/inventory/new`,
     multipleInventory: `${BASE_URL}/multiple-inventory`,
+    inventoryWastebucket: `${BASE_URL}/wastebucket`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,
@@ -29,6 +30,7 @@ const RouteConfig = {
     searchRecipe: `${BASE_URL}/search-recipe`,
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
     recipeRegister: `${BASE_URL}/recipe/register`,
+    recipeEdit: `${BASE_URL}/recipe/edit/:recipeId`,
     notFound: '*',
   },
 
@@ -43,7 +45,7 @@ const RouteConfig = {
       title: "재료 관리",
       links: [
         { to: `${BASE_URL}/multiple-inventory`, icon: <FaPen />, alt: "다중선택" },
-        { to: `${BASE_URL}/wastebaket`, icon: <FaTrashCan />, alt: "휴지통" },
+        { to: `${BASE_URL}/wastebucket`, icon: <FaTrashCan />, alt: "휴지통"},
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },

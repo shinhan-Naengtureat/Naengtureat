@@ -2,9 +2,10 @@ import BottomNav from "components/common/BottomNav";
 import Layout from "components/common/Layout";
 import TopNav from "components/common/TopNav";
 import HomePage from "pages/home/HomePage";
-import InventoryCreate from "pages/inventory/InventoryCreate";
-import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryList from "pages/inventory/InventoryList";
+import InventoryDetail from "pages/inventory/InventoryDetail";
+import InventoryCreate from "pages/inventory/InventoryCreate";
+import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
 import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
@@ -14,6 +15,7 @@ import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListP
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
 import MyRecipes from 'pages/myPage/MyRecipes';
+import RecipeEdit from "pages/myPage/RecipeEdit";
 import RecipeDetail from 'pages/recipe/RecipeDetail';
 import RecipeList from "pages/recipe/RecipeList";
 import RecipeRegister from "pages/recipe/RecipeRegister";
@@ -47,6 +49,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.inventoryDetail} element={<Layout><InventoryDetail/></Layout>} />
         <Route path={routeConfig.paths.inventoryCreate} element={<Layout><InventoryCreate/></Layout>} />
         <Route path={routeConfig.paths.multipleInventory} element={<Layout><InventoryMultipleDelete/></Layout>} />
+        <Route path={routeConfig.paths.inventoryWastebucket} element={<Layout><InventoryWastebucket/></Layout>} />
 
         {/*mealPlan*/}
         <Route path={routeConfig.paths.mealPlanListDaily} element={ <Layout><MealPlanListDaily userSelections={userSelections} /></Layout>}/>
@@ -66,6 +69,7 @@ const AppRouter = () => {
 
         {/* mypage */}
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
+        <Route path={routeConfig.paths.recipeEdit} element={<Layout><RecipeEdit/></Layout>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />

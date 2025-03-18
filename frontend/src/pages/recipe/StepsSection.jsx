@@ -83,6 +83,7 @@ function StepsSection({ form, setForm, open, toggleSection, touched, setTouched 
               <div className="step-image">
                 <input
                   type="file"
+                  name="stepImage"
                   onChange={(e) => handleStepImageChange(idx, e)}
                   onBlur={() => handleStepBlur(idx, 'image')}
                   className={touched.steps[idx] && touched.steps[idx].image ? "input-valid" : ""}

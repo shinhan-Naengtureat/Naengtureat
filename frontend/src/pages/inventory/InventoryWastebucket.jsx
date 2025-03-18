@@ -1,35 +1,30 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Badge, Button, Col, Container, Form, Placeholder, Row} from 'react-bootstrap';
-import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
-import axiosInstance from "api/axios";
 import {useNavigate} from "react-router-dom";
-import "styles/inventory/inventoryList.css";
+import axiosInstance from "api/axios";
+import {Badge, Button, Col, Container, Placeholder, Row} from "react-bootstrap";
+import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
-const InventoryList = () => {
+const InventoryWastebucket = () => {
   // 다중 선택을 위한 상태 추가
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [rawItems, setRawItems] = useState();
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   //아이템 useEffect
   useEffect(() => {
     let ignore = false;
 
-    axiosInstance.get(`/inventory`)
+    axiosInstance.get(`/inventory/wastebasket`)
       .then(response => {
         if (!ignore) {
-          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
             remainingDays: item.remainingDays,
             ingredientBigCategory: item.ingredientBigCategory,
-            ingredientStandardImage: item.ingredientStandardImage,
-            memo: item.memo,
-            ingredientSmallCategory: item.ingredientSmallCategory
+            ingredientStandardImage: item.ingredientStandardImage
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
@@ -50,29 +45,15 @@ const InventoryList = () => {
     return rawItems.filter(item => selectedCategories.includes(item.ingredientBigCategory));
   }, [rawItems, selectedCategories]);
 
-  // 검색어 필터링 추가
-  const searchedItems = useMemo(() => {
-    if (!searchTerm) return filteredItems;
-    return filteredItems.filter(item => {
-      const lowerSearchTerm = searchTerm.toLowerCase();
-      return (
-        item.nickName.toLowerCase().includes(lowerSearchTerm) ||
-        item.ingredientBigCategory.toLowerCase().includes(lowerSearchTerm) ||
-        item.memo?.toLowerCase().includes(lowerSearchTerm) || // memo가 존재하는 경우만 검사
-        item.ingredientSmallCategory.toLowerCase().includes(lowerSearchTerm)
-      );
-    });
-  }, [filteredItems, searchTerm]);
-
   const groupedItems = useMemo(() => {
-    return (searchedItems || []).reduce((acc, item) => {
+    return (filteredItems || [ ]).reduce((acc, item) => {
       if (!acc[item.ingredientBigCategory]) {
-        acc[item.ingredientBigCategory] = [];
+        acc[item.ingredientBigCategory] = [ ];
       }
       acc[item.ingredientBigCategory].push(item);
       return acc;
     }, {});
-  }, [searchedItems]);
+  }, [filteredItems]);
 
   //카테고리 목록 동적 생성
   const categories = useMemo(() => {
@@ -100,14 +81,6 @@ const InventoryList = () => {
         items={categories}
         selectedItems={selectedCategories}
         toggleItem={toggleCategory}
-      />
-
-      <Form.Control
-        type="text"
-        placeholder="찾고싶은 재료를 검색해주세요"
-        className="my-3"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
       {loading ? (
@@ -165,4 +138,4 @@ const InventoryList = () => {
   );
 };
 
-export default InventoryList;
+export default InventoryWastebucket;
