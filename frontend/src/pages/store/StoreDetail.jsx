@@ -2,6 +2,7 @@ import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import 'styles/store/StoreDetail.css';
 
 function StoreDetail() {
@@ -37,6 +38,26 @@ function StoreDetail() {
 
         navigate(`/store/${storeId}/review`);
     };
+
+    // 장바구니에 상품 추가
+    const addToCartHandler = async (e, productId) => {
+        e.stopPropagation(); // 부모 요소 클릭 이벤트 방지
+
+        try {
+            const response = await axiosInstance.post(`/store/cart/${productId}`);
+            // react-toastify를 통한 알림
+            toast.success(response.data.message, {
+                position: "top-center",
+                autoClose: 3000,
+            });
+        } catch (error) {
+            console.error("장바구니 추가 중 오류 발생", error);
+            toast.error('장바구니 추가에 실패했습니다.', {
+                position: "top-center",
+                autoClose: 3000,
+            });
+        }
+    }
 
     if (!storeProductList || storeProductList.length === 0) {
         return <div>스토어 상품 정보가 없습니다.</div>;
@@ -88,7 +109,7 @@ function StoreDetail() {
                             {/* 상품 이미지 */}
                             <img src={`${INGREDIENT_IMAGE_PATH}/${product.image.split('_')[1]}`} alt={product.name} className="product-image" />
                             {/* 장바구니에 추가하는 버튼 */}
-                            <button className="add-to-cart">+</button>
+                            <button className="add-to-cart" onClick={(e) => addToCartHandler(e, product.id)}>+</button>
                         </div>
 
                         {/* 상품 정보 */}
@@ -117,6 +138,7 @@ function StoreDetail() {
                     </div>
                 ))}
             </div>
+            <ToastContainer />
         </>
     );
 }

@@ -28,6 +28,7 @@ const RouteConfig = {
     searchRecipe: `${BASE_URL}/search-recipe`,
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
     recipeRegister: `${BASE_URL}/recipe/register`,
+    cart: `${BASE_URL}/cart`,
     notFound: '*',
   },
 

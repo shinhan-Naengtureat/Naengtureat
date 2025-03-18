@@ -18,6 +18,7 @@ import RecipeDetail from 'pages/recipe/RecipeDetail';
 import RecipeList from "pages/recipe/RecipeList";
 import RecipeRegister from "pages/recipe/RecipeRegister";
 import RecipeSearchPage from "pages/recipe/RecipeSearchPage";
+import Cart from "pages/store/Cart";
 import Store from "pages/store/Store";
 import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
@@ -69,6 +70,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
         <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
         <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
+        <Route path={routeConfig.paths.cart} element={<Layout><Cart /></Layout>} />
 
         {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />
