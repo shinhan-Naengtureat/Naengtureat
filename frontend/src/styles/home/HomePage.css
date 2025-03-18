@@ -1,68 +1,167 @@
-.homepage-container {
+/* Swiper 슬라이드 스타일 */
+.home-recipeSwiper {
+  width: 100%;
+  height: 320px;
 }
 
-/* 헤더 영역 */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.home-title {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.user-icon {
-  width: 30px;
-  height: 30px;
-}
-
-/* 추천 요리 섹션 */
-.recipe-section p {
-  font-size: 14px;
-  color: #666;
-}
-
-.recipe-card {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-}
-
-.recipe-image {
-  width: 132px; /* 아이폰 13 Pro 기준으로 크기 조정 */
-  border-radius: 10px; /* 살짝 둥글게 */
-  max-width: 100%; /* 반응형 */
-}
-
-.recipe-info {
-  padding-left: 10px;
-}
-
-.recipe-info h3 {
-  margin: 0;
-  font-size: 16px;
-}
-
-.recipe-info p {
-  font-size: 12px;
-  color: #888;
-}
-
-/* 오늘의 식단 */
-.meal-plan-section {
+.home-sub-title {
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.meal-plan {
-  display: flex;
-  justify-content: space-around;
-  background: #f8f8f8;
-  padding: 10px;
+/* 레시피 카드 */
+.home-recipe-card {
+  position: relative;
+  width: 235px;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 정방형 이미지 */
+.home-recipe-image {
+  width: 100%;
+  height: 235px; /* 정방형 유지 */
+  object-fit: cover;
   border-radius: 10px;
 }
 
-.meal-item {
+/* 레시피 정보 전체 스타일 */
+.home-recipe-info {
+  width: 70%;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 10px;
+  position: absolute;
+  bottom: -9px; /* 이미지에 살짝 걸치게 */
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목과 좋아요(하트) 정렬 */
+.home-recipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* 제목 스타일 (길면 '...' 표시) */
+.home-recipe-title {
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%; /* 너비 제한 */
+}
+
+
+/* 하트 아이콘 스타일 */
+.home-recipe-like {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* 태그와 기타 정보 스타일 */
+.home-recipe-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
   font-size: 14px;
+  color: #777;
+}
+
+/* 태그 스타일 */
+.home-recipe-tags {
+  flex: 1;
+  text-align: left;
+}
+
+/* 난이도와 시간 정렬 */
+.home-recipe-meta {
+  display: flex;
+  gap: 6px;
+  text-align: right;
+}
+
+/* Swiper 슬라이드 효과 */
+.home-recipe-slide {
+  width: 280px;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0.7;
+  transform: scale(0.85)!important;
+}
+
+/* 활성화된 슬라이드는 확대 */
+.home-recipe-slide.swiper-slide-active {
+  transform: scale(1.2)!important;
+  opacity: 1;
+}
+
+/* 오늘의 식단 카드 */
+.home-meal-plan {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.home-meal-card {
+  background-color: #f9f9f9;
+  padding: 14px;
+  border-radius: 12px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.swiper {
+  height: 400px;
+}
+
+/* Swiper 페이지네이션 위치 변경 */
+.swiper-pagination {
+  position: absolute !important;
+  /*bottom: -5px!important;*/
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  gap: 6px !important;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* Swiper 페이지네이션 점 스타일 */
+.swiper-pagination-bullet {
+  width: 8px!important;
+  height: 8px!important;
+  background-color: rgba(0, 0, 0, 0.3)!important;
+  border-radius: 50%!important;
+  transition: all 0.3s!important;
+  opacity: 0.5!important;
+}
+
+/* 활성화된 페이지네이션 점 스타일 */
+.swiper-pagination-bullet-active {
+  width: 12px!important;
+  height: 12px!important;
+  background-color: #ff7f50!important;
+  opacity: 1!important;
+  transform: scale(1.2)!important;
+}
+
+.swiper-wrapper {
+  height: 310px!important;
 }
