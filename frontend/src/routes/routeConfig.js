@@ -16,6 +16,7 @@ const RouteConfig = {
     multipleInventory: `${BASE_URL}/multiple-inventory`,
     inventoryWastebucket: `${BASE_URL}/wastebucket`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
+    
     budgetInput: `${BASE_URL}/budget`,
     categorySelection: `${BASE_URL}/category`,
     themeSelection: `${BASE_URL}/theme`,
@@ -23,6 +24,9 @@ const RouteConfig = {
     excludedIngredients: `${BASE_URL}/exclude-ingredients`,
     notEnoughIngredientList: `${BASE_URL}/shopping-container`,
     ingredientStoreList: `${BASE_URL}/store-shopping-container`,
+    frequencyMealPlan: `${BASE_URL}/frequency`,
+    makeMealPlan: `${BASE_URL}/make-mealplan`,
+
     store: `${BASE_URL}/store`,
     storeReview: `${BASE_URL}/store/:storeId/review`,
     storeDetail: `${BASE_URL}/store/:storeId/detail`,
