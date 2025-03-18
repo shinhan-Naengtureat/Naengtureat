@@ -21,6 +21,8 @@ import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import InventoryDetail from "pages/inventory/InventoryDetail";
+import InstantCharge from 'pages/myPage/InstantCharge';
+
 
 
 const AppRouter = () => {
@@ -63,6 +65,7 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.searchRecipe} element={<Layout><RecipeSearchPage/></Layout>} />
         <Route path={routeConfig.paths.recipeDetail} element={<Layout><RecipeDetail/></Layout>} />
+        <Route path={routeConfig.paths.InstantCharge} element={<Layout><InstantCharge/></Layout>} />
 
 
         {/* 404 Not Found */}
