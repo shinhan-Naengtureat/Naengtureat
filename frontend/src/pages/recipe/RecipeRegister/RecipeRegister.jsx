@@ -6,6 +6,8 @@ import StepsSection from './StepsSection';
 import HashtagsSection from './HashtagsSection';
 import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 function RecipeRegister() {
   const [form, setForm] = useState({
@@ -18,7 +20,7 @@ function RecipeRegister() {
   hashtags: "",
   recipeImage: null,
 });
-
+    const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState(null);
 
   // 섹션 열림 상태
@@ -71,11 +73,17 @@ function RecipeRegister() {
     try {
       const response = await axiosInstance.post(`/recipe/new`, recipeDto);
       console.log("등록결과:",response.data);
-      alert("레시피 등록 성공");
+      toast.success(response.data.message, {
+                position: "top-center",
+                autoClose: 3000,
+            });
+      navigate("/recipes")
       // 등록 후 폼 초기화 또는 다른 페이지 이동 로직 추가 가능
     } catch (error) {
-      console.error("레시피 등록 오류:", error);
-      alert("레시피 등록 중 오류가 발생했습니다.");
+      toast.error('레시피 등록에 실패했습니다.', {
+                position: "top-center",
+                autoClose: 3000,
+            });
     }
   };
 
@@ -127,6 +135,7 @@ function RecipeRegister() {
         />
         <button type="submit" className="submit-btn">등록하기</button>
       </form>
+      <ToastContainer />
     </div>
   );
 }
