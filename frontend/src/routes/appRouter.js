@@ -30,7 +30,7 @@ import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
-//
+
 
 const AppRouter = () => {
 
