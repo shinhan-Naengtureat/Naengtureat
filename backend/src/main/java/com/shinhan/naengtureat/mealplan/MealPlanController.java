@@ -173,7 +173,7 @@ public class MealPlanController {
 			e.printStackTrace();
 
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(BaseResponse.builder().message("식단 이행여크 체크 중 오류 발생했습니다: " + e.getMessage()).build());
+					.body(BaseResponse.builder().message("식단 이행여부 체크 중 오류 발생했습니다: " + e.getMessage()).build());
 		}
 	}
 
