@@ -347,7 +347,7 @@ public class RecipeController {
 		}
 	}
 
-	@GetMapping("/top/recipe")
+	@GetMapping("/top/like")
 	public ResponseEntity<Object> getTopRecipeByLikes() {
 		return ResponseEntity.ok(recipeService.getTopRecipeByLikes());
 	}
