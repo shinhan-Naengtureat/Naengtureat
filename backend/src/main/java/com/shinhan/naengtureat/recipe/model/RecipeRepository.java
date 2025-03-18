@@ -7,16 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
 	
-	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO(r.id, r.name) FROM Recipe r")
-	public List<RecipeSimpleDTO> findRecipes();
+	
 	
 	// 사용자가 작성한 레시피 중 삭제되지 않은 레시피만 조회
 	@Query("SELECT r FROM Recipe r WHERE r.member.id = :memberId AND r.isDelete = false")
