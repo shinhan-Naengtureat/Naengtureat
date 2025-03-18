@@ -1,7 +1,6 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
-import { previousDay } from 'date-fns';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'styles/store/Cart.css';
 
@@ -99,8 +98,20 @@ function Cart() {
     }
 
     // 수량 조절
-    function countHandler(itemId, actionType) {
-
+    function countHandler(itemId, operation) {
+        axiosInstance.put(`/store/cart/count/${itemId}/${operation}`)
+        .then((response) => {
+            // 요청 성공 시, 로컬 상태 업데이트 (예시: cartItems state 업데이트)
+            setCartItems((prevItems) => prevItems.map((item) => 
+                item.id === itemId ? { 
+                    ...item,
+                    count: operation === 'increment' ? item.count + 1 : item.count > 1 ? item.count - 1 : 1, // 최소 1개 이하로 내려가지 않도록 처리
+                } : item
+            ));
+        })
+        .catch((error) => {
+            console.error("수량 업데이트 실패 : ", error);
+        })
     }
 
     if (loading) {
@@ -138,10 +149,10 @@ function Cart() {
                                         <span className='discountPrice'>
                                             {item.discountPrice ? (
                                                 <>
-                                                    <span>{item.discountPrice.toLocaleString()}원</span>
+                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
                                                 </>
                                             ) : (
-                                                <span>{item.productPrice.toLocaleString()}원</span>
+                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
                                             )}
                                         </span>
                                     </div>
