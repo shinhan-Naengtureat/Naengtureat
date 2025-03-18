@@ -27,6 +27,7 @@ import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
 import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
@@ -75,6 +76,21 @@ public class RecipeService {
 	
 	private ModelMapper mapper = new ModelMapper();
 
+	
+	// 전체 레시피 조회 simple
+			public List<RecipeSimpleDTO> getFilteredRecipes(List<String> excludedIngredients) {
+			    List<Object[]> results = recipeRepository.findFilteredRecipes(excludedIngredients);
+				return results.stream().map(row -> new RecipeSimpleDTO(
+				        (Long) row[0],       // id
+				        (String) row[1],     // name
+				        ((Number) row[2]).intValue(),     // category
+				        (String) row[3],        // price (Integer로 변환)
+				        (String) row[4],     // keyword
+				        (String) row[5]      // smallCategory
+				    )).collect(Collectors.toList());
+			};
+	
+	
 	// 전체 레시피 조회
 	public List<RecipeDTO> getAllRecipes() {
 		List<Recipe> recipes = recipeRepository.findAll();
