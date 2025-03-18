@@ -81,7 +81,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeMainDTO(" +
 		       "r.id, r.name, r.level, r.cookingTime, m.name, r.category, rm.mealName, r.image, r.isDelete, " +
 		       "function('group_concat', CONCAT(i.bigCategory, ':', i.smallCategory)), " +
-		       "function('group_concat', h.keyword)) " +
+		       "function('group_concat', h.keyword), " +
+		       "(SELECT COUNT(l) FROM Likes l WHERE l.recipe = r)) " +
 		       "FROM Recipe r " +
 		       "JOIN r.member m " +
 		       "JOIN r.meal rm " +
