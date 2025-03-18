@@ -55,7 +55,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	List<Recipe> findAllOrderByLikesCountDesc();
 
 	// 5개 추천순 정렬
-	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.Top5RecipeResponseDTO( " +
+	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.TopRecipeResponseDTO( " +
 			"r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
 			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete) " +
 			"FROM Recipe r " +
