@@ -1,6 +1,6 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'styles/store/StoreDetail.css';
@@ -8,16 +8,21 @@ import 'styles/store/StoreDetail.css';
 function StoreDetail() {
     const { storeId } = useParams(); // URL에서 storeId 가져오기
     const [storeProductList, setStoreProductList] = useState();
+    const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태 관리
+    const [selectedCategory, setSelectedCategory] = useState('전체');
     const location = useLocation();
     const storeData = location.state; // StoreList.jsx에서 전달한 store 정보 받기
     const navigate = useNavigate();
+
+    // 카테고리 목록 배열
+    const categories = ['전체', '과일', '채소', '고기', '수산물', '유제품', '음료', '조미료', '기타', '빵류', '견과류', '곡물'];
 
     useEffect(() => {
         // 스토어 상품 정보 가져오기
         const fetchStoreProduct = async () => {
             try {
                 const storeProductDTOList = await axiosInstance.get(`/store/${storeId}/product`);
-                console.log("storeProductDTOList : ", storeProductDTOList.data);
+                console.log("스토어 상품 목록 : ", storeProductDTOList.data);
                 setStoreProductList(storeProductDTOList.data);
             } catch (error) {
                 console.error("스토어 상품 정보를 가져오는 중 오류 발생: ", error);
@@ -38,6 +43,36 @@ function StoreDetail() {
 
         navigate(`/store/${storeId}/review`);
     };
+
+    // 검색어를 기반으로 상품 검색 요청
+    const searchProducts = async () => {
+        if (searchKeyword.trim() === '') {
+            try {
+                const response = await axiosInstance.get(`/store/${storeId}/product`);
+                setStoreProductList(response.data);
+            } catch (error) {
+                console.error("스토어 상품 정보를 가져오는 중 오류 발생: ", error);
+            }
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.get(`/store/product/${searchKeyword}`);
+            console.log("키워드 기반 검색 결과 : ", response.data);
+            setStoreProductList(response.data);
+        } catch (error) {
+            console.error("키워드 기반 검색 결과 가져오는 중 오류 발생: ", error);
+        }
+    };
+
+    // 카테고리 별 필터링: selectedCategory가 '전체'이면 전체를, 아니면 선택한 카테고리에 맞는 상품만 반환
+    const filteredProducts = useMemo(() => {
+        if (selectedCategory === '전체') return storeProductList;
+
+        return storeProductList.filter(
+            product => product.ingredientBigCategory === selectedCategory
+        );
+    }, [storeProductList, selectedCategory]);
 
     // 장바구니에 상품 추가
     const addToCartHandler = async (e, productId) => {
@@ -80,30 +115,25 @@ function StoreDetail() {
 
             {/* 검색바 */}
             <div className='store-search-bar'>
-                <input type="text" placeholder='재료명을 입력하세요.' className='search-ingredient' />
+                <input type="text" placeholder='재료명을 입력하세요.' className='search-ingredient' value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') searchProducts(); }} />
             </div>
 
             {/* 카테고리 */}
             <div className='store-category'>
                 <ul className="category-list">
-                    <li className="category-item active">전체</li>
-                    <li className="category-item">과일</li>
-                    <li className="category-item">채소</li>
-                    <li className="category-item">고기</li>
-                    <li className="category-item">수산물</li>
-                    <li className="category-item">유제품</li>
-                    <li className="category-item">음료</li>
-                    <li className="category-item">조미료</li>
-                    <li className="category-item">기타</li>
-                    <li className="category-item">빵류</li>
-                    <li className="category-item">견과류</li>
-                    <li className="category-item">곡물</li>
+                    {categories.map((category) => (
+                        <li key={category} className={`category-item ${selectedCategory === category ? 'active' : ''}`} onClick={() => setSelectedCategory(category)}>
+                            {category}
+                        </li>
+                    ))}
                 </ul>
             </div>
 
             {/* 상품 카드 UI */}
             <div className="product-grid">
-                {storeProductList.map((product) => (
+                {filteredProducts.map((product) => (
+                // {storeProductList.map((product) => (
                     <div key={product.id} className="product-card">
                         <div className="image-container">
                             {/* 상품 이미지 */}
