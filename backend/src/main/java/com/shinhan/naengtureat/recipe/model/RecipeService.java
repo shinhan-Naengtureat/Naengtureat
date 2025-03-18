@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.shinhan.naengtureat.recipe.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +21,6 @@ import com.shinhan.naengtureat.mealplan.entity.MealPlan;
 import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
-import com.shinhan.naengtureat.recipe.dto.CommentDTO;
-import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
-import com.shinhan.naengtureat.recipe.dto.MealDTO;
-import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeMainDTO;
-import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
 import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
 import com.shinhan.naengtureat.recipe.entity.Meal;
@@ -421,5 +413,9 @@ public class RecipeService {
 	public List<RecipeDTO> searchRecipes(String keyword) {
 		List<Recipe> recipes = recipeRepository.searchRecipes(keyword);
 		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+	}
+
+	public List<Top5RecipeResponseDTO> getTop5RecipeByLikes() {
+		return  recipeRepository.findTop5ByLikes(PageRequest.of(0, 7));
 	}
 }

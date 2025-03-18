@@ -107,20 +107,20 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("레시피 등록 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
-	
-	// DB에 있는 모든 해시태그를 조회
-    @GetMapping("/hashtag")
-    public ResponseEntity<List<HashtagDTO>> getAllHashtags() {
-        List<HashtagDTO> hashtags = recipeService.getAllHashtags();
-        return ResponseEntity.ok(hashtags);
-    }
 
-    // DB에 있는 모든 Meal을 조회하여 DTO 목록으로 반환
-    @GetMapping("/meal")
-    public ResponseEntity<List<MealDTO>> getAllMeals() {
-        List<MealDTO> meals = recipeService.getAllMeals();
-        return ResponseEntity.ok(meals);
-    }
+	// DB에 있는 모든 해시태그를 조회
+	@GetMapping("/hashtag")
+	public ResponseEntity<List<HashtagDTO>> getAllHashtags() {
+		List<HashtagDTO> hashtags = recipeService.getAllHashtags();
+		return ResponseEntity.ok(hashtags);
+	}
+
+	// DB에 있는 모든 Meal을 조회하여 DTO 목록으로 반환
+	@GetMapping("/meal")
+	public ResponseEntity<List<MealDTO>> getAllMeals() {
+		List<MealDTO> meals = recipeService.getAllMeals();
+		return ResponseEntity.ok(meals);
+	}
 
 	// 마이페이지- 내 레시피 전체 목록 조회
 	@GetMapping("/myrecipeList")
@@ -158,7 +158,7 @@ public class RecipeController {
 			}
 
 			// 레시피 삭제 서비스 호출 (논리적 삭제)
-	        String result = recipeService.deleteMyRecipe(memberId, recipeId);
+			String result = recipeService.deleteMyRecipe(memberId, recipeId);
 
 			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
 		} catch (Exception e) {
@@ -166,30 +166,30 @@ public class RecipeController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 삭제 중 오류 발생").build());
 		}
 	}
-	
+
 	// 마이페이지- 내 레시피 수정
 	@PutMapping("/{recipeId}")
-	public ResponseEntity<Object> updateMyRecipe(@PathVariable("recipeId") Long recipeId,  @RequestBody RecipeDTO recipeDTO) {
+	public ResponseEntity<Object> updateMyRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody RecipeDTO recipeDTO) {
 		try {
-			
-			Long memberId = 3L;
-			recipeDTO.setId(recipeId);		
-	        String result = recipeService.updateRecipe(memberId, recipeDTO);
-	        
-	        return ResponseEntity.ok(BaseResponse.builder().message(result).build());
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 수정 중 오류 발생"));
-	    }
+			Long memberId = 3L;
+			recipeDTO.setId(recipeId);
+			String result = recipeService.updateRecipe(memberId, recipeDTO);
+
+			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponse.builder().message("레시피 수정 중 오류 발생"));
+		}
 	}
 
 
 	// 댓글 등록
 	@PostMapping("/{recipeId}/comment")
 	public ResponseEntity<Object> createComment(@PathVariable("recipeId") Long recipeId,
-			@RequestBody CommentDTO commentDto) {
+												@RequestBody CommentDTO commentDto) {
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
 			Long memberId = 3L; // security 적용시 코드 수정 필요
@@ -207,7 +207,7 @@ public class RecipeController {
 	// 댓글 수정
 	@PutMapping("/comment/{commentId}")
 	public ResponseEntity<Object> updateComment(@PathVariable("commentId") Long commentId,
-			@RequestBody CommentDTO commentDto) {
+												@RequestBody CommentDTO commentDto) {
 		try {
 			// 댓글 수정 서비스 호출
 			CommentDTO updatedComment = recipeService.updateComment(commentId, commentDto);
@@ -243,13 +243,13 @@ public class RecipeController {
 					.body(BaseResponse.builder().message("댓글 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
 		}
 	}
-	
+
 	@GetMapping("/{recipeId}/like/check")
 	public ResponseEntity<Object> checkRecipeLike(@PathVariable("recipeId") Long recipeId) {
-	    Long memberId = 3L;
-	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
-	    // 좋아요 상태를 JSON 객체로 반환 (예: { "liked": true })
-	    return ResponseEntity.ok(Collections.singletonMap("liked", liked));
+		Long memberId = 3L;
+		boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
+		// 좋아요 상태를 JSON 객체로 반환 (예: { "liked": true })
+		return ResponseEntity.ok(Collections.singletonMap("liked", liked));
 	}
 
 	// 좋아요 토글 API
@@ -269,20 +269,20 @@ public class RecipeController {
 	// 카테고리별 레시피 조회
 	@GetMapping("/category")
 	public ResponseEntity<Object> getRecipesByCategory(@RequestParam("category") List<String> categories) {
-	    try {
-	        // 예시: 여러 카테고리 중 하나라도 해당하는 레시피 조회 (서비스 로직 수정 필요)
-	        List<RecipeDTO> recipes = recipeService.getRecipesByCategory(categories);
-	        return ResponseEntity.ok(recipes);
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                .body(BaseResponse.builder().message("카테고리별 레시피 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
-	    }
+		try {
+			// 예시: 여러 카테고리 중 하나라도 해당하는 레시피 조회 (서비스 로직 수정 필요)
+			List<RecipeDTO> recipes = recipeService.getRecipesByCategory(categories);
+			return ResponseEntity.ok(recipes);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body(BaseResponse.builder().message("카테고리별 레시피 조회 중 오류가 발생했습니다: " + e.getMessage()).build());
+		}
 	}
 
 	// 마음에드는 레시피를 내 식단에 추가
 	@PostMapping("/{recipeId}/mealplan")
 	public ResponseEntity<Object> addMealPlan(@PathVariable("recipeId") Long recipeId,
-			@RequestBody MealPlanCheckDTO requestDTO) {
+											  @RequestBody MealPlanCheckDTO requestDTO) {
 		try {
 			MealPlanDTO mealPlanDTO = recipeService.createOrUpdateMealPlan(requestDTO.getMemberId(), recipeId,
 					requestDTO.getDate(), requestDTO.getType());
@@ -333,4 +333,8 @@ public class RecipeController {
 		}
 	}
 
+	@GetMapping("/topfive")
+	public ResponseEntity<Object> getTop5RecipeByLikes() {
+		return ResponseEntity.ok(recipeService.getTop5RecipeByLikes());
+	}
 }
