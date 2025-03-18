@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Top5RecipeResponseDTO {
+public class TopRecipeResponseDTO {
     private Long id;
     private Long mealId;
     private String mealMealname;

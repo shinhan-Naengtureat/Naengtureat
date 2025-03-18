@@ -2,7 +2,7 @@ package com.shinhan.naengtureat.recipe.model;
 import java.util.List;
 import java.util.Optional;
 
-import com.shinhan.naengtureat.recipe.dto.Top5RecipeResponseDTO;
+import com.shinhan.naengtureat.recipe.dto.TopRecipeResponseDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -63,7 +63,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 			"GROUP BY r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
 			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete " +
 			"ORDER BY COUNT(l.recipe) DESC")
-	List<Top5RecipeResponseDTO> findTop5ByLikes(Pageable pageable);
+	List<TopRecipeResponseDTO> findTopByLikes(Pageable pageable);
 
 	// 검색 기능
 	@Query("SELECT DISTINCT r FROM Recipe r " + "LEFT JOIN r.hashtags rh " + "LEFT JOIN rh.hashtag h "

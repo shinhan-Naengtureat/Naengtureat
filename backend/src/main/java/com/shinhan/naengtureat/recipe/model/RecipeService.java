@@ -441,7 +441,7 @@ public class RecipeService {
 		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
 	}
 
-	public List<Top5RecipeResponseDTO> getTop5RecipeByLikes() {
-		return  recipeRepository.findTop5ByLikes(PageRequest.of(0, 7));
+	public List<TopRecipeResponseDTO> getTopRecipeByLikes() {
+		return  recipeRepository.findTopByLikes(PageRequest.of(0, 7));
 	}
 }
