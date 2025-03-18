@@ -87,10 +87,15 @@ const InventoryDetail = () => {
   }, [id]);
 
   useEffect(() => {
-    if (inventory && ingredientUnit === "개") {
-      const quantity = inventory.quantity;
-      setIntegerPart(Math.floor(quantity));
-      setFractionPart(quantity - Math.floor(quantity));
+    if (inventory) {
+      if (ingredientUnit === "개") {
+        const quantity = inventory.quantity;
+        setIntegerPart(Math.floor(quantity));
+        setFractionPart(quantity - Math.floor(quantity));
+      } else {
+        setIntegerPart(inventory.quantity); // 개가 아닐 때도 quantity 설정
+        setFractionPart(0); // 개가 아닐 경우 소수 부분은 0으로 설정
+      }
     }
   }, [inventory, ingredientUnit]);
 
