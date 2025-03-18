@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 const CACHE_NAME = "naengteolit-cache-v1";
 const urlsToCache = [
   "/",
