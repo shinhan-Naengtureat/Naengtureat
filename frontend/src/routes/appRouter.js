@@ -15,6 +15,7 @@ import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListP
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/ThemeSelectionPage";
 import MyRecipes from 'pages/myPage/MyRecipes';
+import RecipeEdit from "pages/myPage/RecipeEdit";
 import RecipeDetail from 'pages/recipe/RecipeDetail';
 import RecipeList from "pages/recipe/RecipeList";
 import RecipeRegister from "pages/recipe/RecipeRegister";
@@ -66,6 +67,7 @@ const AppRouter = () => {
 
         {/* mypage */}
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
+        <Route path={routeConfig.paths.recipeEdit} element={<Layout><RecipeEdit/></Layout>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
