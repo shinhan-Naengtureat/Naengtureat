@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { startOfWeek, addDays, format } from "date-fns";
 import { ko } from "date-fns/locale";
+import "styles/mealPlan/WeeklyMealPlan.css";
+import "../../index.css"; 
 
 const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
     const [mealPlan, setMealPlan] = useState(initialMealPlan);
@@ -22,7 +24,13 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
     const formattedDate = format(day, "yyyy-MM-dd");
     return {
       date: formattedDate,
-      dayLabel: format(day, "d (E)", { locale: ko }),
+       dayLabel: (
+      <>
+        {format(day, "d", { locale: ko })}
+        <br />
+        {format(day, "E", { locale: ko })}
+      </>
+    ),
       meals: {
         아침: mealPlan.find((m) => m.date === formattedDate && m.type === "아침") || null,
         점심: mealPlan.find((m) => m.date === formattedDate && m.type === "점심") || null,
@@ -37,11 +45,11 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
 
     const sourceId = result.source.droppableId.split("-");
     const destId = result.destination.droppableId.split("-");
-// console.log(" sourceId:", sourceId); // ✅ 확인
-//   console.log( "destId:", destId); // ✅ 확인
+// console.log(" sourceId:", sourceId); // 확인
+//   console.log( "destId:", destId); // 확인
       
       if (sourceId.length < 2 || destId.length < 2) {
-    console.error("🚨 droppableId 값이 잘못되었습니다.", { sourceId, destId });
+    console.error(" droppableId 값이 잘못되었습니다.", { sourceId, destId });
     return;
   }
     // sourceId[0]은 YYYY-MM-DD 형식이어야 함
@@ -50,14 +58,7 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
 
   const destDate = `${destId[0]}-${destId[1]}-${destId[2]}`;
   const destMealType = destId[3];
-      
-//   console.log("" 드래그된 데이터:", {
-//     sourceDate,
-//     sourceMealType,
-//     destDate,
-//     destMealType,
-//   });
-      
+
         //  상태 업데이트
       const newMealPlan = [...mealPlan];
       
@@ -100,8 +101,7 @@ if (sourceMealIndex === -1) {
       type: destMealType,
     };
   }
-       setMealPlan(newMealPlan);
-     console.log(" 업데이트된 MealPlan:", newMealPlan);
+    setMealPlan(newMealPlan);
 
   };
 
@@ -121,7 +121,7 @@ if (sourceMealIndex === -1) {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <table className="meal-plan-table">
+      <table className="meal-plan-table" style={{margin:"auto"}}>
         <thead>
           <tr>
             <th> </th>
@@ -137,7 +137,7 @@ if (sourceMealIndex === -1) {
               {["아침", "점심", "저녁"].map((mealType) => (
                 <Droppable key={`${date}-${mealType}`} droppableId={`${date}-${mealType}`}>
                   {(provided) => (
-                    <td ref={provided.innerRef} {...provided.droppableProps} className="meal-cell">
+                    <td ref={provided.innerRef} {...provided.droppableProps} className="meal-cell" style={{ "width": "120px","word-wrap":"break-word","white-space":"normal" }}>
                       {meals[mealType] ? (
                        <Draggable key={meals[mealType].id} draggableId={meals[mealType].id} index={0}>
                           {(provided) => (
@@ -145,12 +145,12 @@ if (sourceMealIndex === -1) {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className="meal-item"
+                              className="meal-item" style={{"word-break":"break-word"}}
                             >
                               {meals[mealType].recipeName}
-                              <button className="refresh-btn" onClick={() => refreshMeal(date, mealType)}>
+                              {/* <button className="refresh-btn" onClick={() => refreshMeal(date, mealType)}>
                                 🔄
-                              </button>
+                              </button> */}
                             </div>
                           )}
                         </Draggable>
@@ -171,3 +171,4 @@ if (sourceMealIndex === -1) {
 };
 
 export default WeeklyMealPlanEditor;
+

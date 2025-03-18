@@ -61,14 +61,14 @@ const ThemeSelectionPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="category-title" style={{ textAlign: "center" }}>
       {/* 뒤로가기 & 타이틀 */}
-      <div className="header">
+      <div className="category-header">
         <BackButton onClick={handleBefore} />
       </div>
 
-      <h2 className="title">
-        원하는 <span className="highlight">테마</span>를 선택하세요
+      <h2 className="category-title">
+        원하는 <span className="category-highlight">테마</span>를 선택하세요
       </h2>
 
       <div className="theme-container">

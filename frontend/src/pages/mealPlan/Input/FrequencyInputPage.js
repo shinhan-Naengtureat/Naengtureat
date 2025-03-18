@@ -6,7 +6,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
 import styled from "styled-components";
-
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
 const meals = [
     { id: "아침",icon:`${ICON_IMAGE_PATH}/breakfast.png` },
     { id: "점심",icon:`${ICON_IMAGE_PATH}/lunch.png` },
@@ -26,11 +27,19 @@ const FrequencyInputPage = () => {
       prev.includes(meal) ? prev.filter((m) => m !== meal) : [...prev, meal]
     );
   };
+   // 오늘 요일 확인 (format으로 한글 요일 변환)
+  const today = format(new Date(), "E", { locale:ko }); 
+  const weekDays = ["월", "화", "수", "목", "금", "토", "일"];
+  
+  //  오늘을 포함한 이전 요일을 비활성화
+ const disabledDays = weekDays.slice(0, weekDays.indexOf(today) + 1);
 
   const toggleDay = (day) => {
+    if (disabledDays.includes(day)) return; // 이전 요일 선택 방지
+    
     if (day === "전체") {
       setSelectedDays((prev) =>
-        prev.includes("전체") ? [] : ["전체", "월", "화", "수", "목", "금", "토", "일"]
+        prev.includes("전체") ? [] : ["전체", "월", "화", "수", "목", "금", "토", "일"].filter(d => !disabledDays.includes(d))
       );
     } else {
         setSelectedDays((prev) =>{
@@ -40,9 +49,8 @@ const FrequencyInputPage = () => {
     }
   };
  
+  const totalMeals = selectedMeals.length * (selectedDays.includes("전체") ? 7 - disabledDays.length : selectedDays.length);
 
- 
- const totalMeals = selectedMeals.length * (selectedDays.includes("전체") ? 7 : selectedDays.length);
 // 뒤로가기기
   const handleBefore = () => {
     navigate(RouteConfig.paths.excludedIngredients);
@@ -58,6 +66,7 @@ setUserSelections((prev) => ({
       ...prev,
       mealTimes: selectedMeals, //  선택한 식사 저장
       days: selectedDays, //  선택한 요일 저장
+      mealCount: totalMeals,
     }));
 
     navigate(RouteConfig.paths.makeMealPlan); //  GPTChat 페이지로 이동
@@ -76,12 +85,12 @@ setUserSelections((prev) => ({
               <Title2>몇개의 식단을 만들어드릴까요?</Title2>
           <CountSection>
               <CountText>
-          총 <CountNumber>{totalMeals}</CountNumber><CountUnit>회</CountUnit>
+                총 <CountNumber>{totalMeals}</CountNumber><CountUnit>회</CountUnit>
               </CountText>
               <CountLine />
               <SubText>를 선택하셨어요</SubText>
-              </CountSection>
-              </Header>
+            </CountSection>
+          </Header>
 
       {/* 끼니 선택 */}
       <MealContainer>
@@ -97,8 +106,25 @@ setUserSelections((prev) => ({
             
         ))}
       </MealContainer>
-
-          {/* 요일 선택 (3x3 그리드 형태) */}
+ {/* 요일 선택 */}
+      <Line />
+      <DayContainer>
+        {weekDays.map((day) => (
+          <DayButton
+            key={day}
+            selected={selectedDays.includes(day)}
+            disabled={disabledDays.includes(day)} // 🔹 오늘 이전 요일 비활성화
+            style={{
+              opacity: disabledDays.includes(day) ? 0.5 : 1, // 🔹 어둡게 처리
+              cursor: disabledDays.includes(day) ? "not-allowed" : "pointer", // 클릭 방지
+            }}
+            onClick={() => toggleDay(day)}
+          >
+            {day}
+          </DayButton>
+        ))}
+      </DayContainer>
+          {/* 요일 선택 (3x3 그리드 형태)
                 <Line />
       <DayContainer>
         {["전체", "월", "화", "수", "목", "금", "토", "일"].map((day) => (
@@ -106,7 +132,7 @@ setUserSelections((prev) => ({
             {day}
           </DayButton>
         ))}
-      </DayContainer>
+      </DayContainer> */}
 
 </div>
       {/* 다음 버튼 */}

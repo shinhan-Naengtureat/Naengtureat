@@ -3,6 +3,9 @@ import axiosInstance from "api/axios";
 import useMealPlanContext from "hooks/useMealPlanContext";
 import WeeklyMealPlanEditor from "pages/mealPlan/WeeklyMealPlanEditor";
 import { startOfWeek, addDays, format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import RouteConfig from "routes/routeConfig";
+import FloatingNextButton from "components/FloatingNextButton";
 
 const GPTChat = () => {
   const { userSelections } = useMealPlanContext();
@@ -11,7 +14,7 @@ const GPTChat = () => {
   const [foodList, setFoodList] = useState([]); // DB에서 가져온 음식 목록
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate(); 
   //  요일을 날짜로 변환하는 함수
   const convertDayToDate = (dayString) => {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
@@ -44,19 +47,19 @@ const GPTChat = () => {
 
     fetchFoodList();
   }, [userSelections.excludedIngredients]);
-
+const [hasFetched, setHasFetched] = useState(false);
   //  GPT API 호출 및 데이터 변환
   useEffect(() => {
-    if (foodList.length === 0) return; // 🚨 음식 목록이 없으면 GPT 호출 X
+    if (foodList.length === 0 || hasFetched) return; //  음식 목록이 없으면 GPT 호출 X
 
     const fetchMealPlan = async () => {
       setIsLoading(true);
       setError("");
-  console.log("📌 API 호출 전에 userSelections 확인:", userSelections);
-      const { budget, days, mealTimes, category, theme, preferredIngredients, excludedIngredients } = userSelections;
+  console.log(" API 호출 전에 userSelections 확인:", userSelections);
+      const { budget, days, mealTimes, category, theme, preferredIngredients, mealCount } = userSelections;
 
       if (!budget || !days || !mealTimes || !category || !theme) {
-        console.error("⚠️ 모든 입력 값이 필요합니다!");
+        console.error(" 모든 입력 값이 필요합니다!");
         setError("입력값이 부족하여 식단을 생성할 수 없습니다.");
         setIsLoading(false);
         return;
@@ -74,12 +77,13 @@ const GPTChat = () => {
       - 선호하는 재료: ${preferredIngredients ? preferredIngredients.join(", ") : "없음"}
       - 요청 요일: ${days.join(", ")}
       - 요청 끼니: ${mealTimes.join(", ")}
+      - 총 식단 개수: ${mealCount}회
 
 
        아래 요구사항을 반드시 지켜야 해:
-      1. 요청한 요일과 끼니에 맞게 식단을 구성할 것.
+      1. 요청한 요일과 끼니, 총 식단 개수에 맞게 식단을 구성할 것.
       2. 음식 목록에 포함된 음식만 사용할 것.
-      3. 선호하는 재료를 포함하고, 제외할 재료를 포함하지 않을 것.
+      3. 선호하는 재료를 우선시 할 것.
       4. 예산을 초과하지 않도록 식단을 구성할 것.
       5. 응답 형식은 JSON으로 반환해야 함.
 
@@ -87,7 +91,7 @@ const GPTChat = () => {
       {
         "mealPlan": [
           { "day": "월", "mealTime": "아침", "recipeId": 17, "recipeName": "태국식 불고기 샐러드(분짜)" },
-          { "day": "월", "mealTime": "점심", "recipeId": 8, "recipeName": "돼지고기 김치찌개" }
+          { "day": "금", "mealTime": "점심", "recipeId": 8, "recipeName": "돼지고기 김치찌개" }
         ],
         "extraMeals": ["불고기", "감자수프", "김치볶음밥", "나시고랭"]
       }
@@ -107,7 +111,7 @@ const GPTChat = () => {
         console.log(" GPT 응답 데이터:", res.data);
 
         if (!res.data || !Array.isArray(res.data.mealPlan) || !Array.isArray(res.data.extraMeals)) {
-          console.error("🚨 GPT 응답 오류: 올바른 데이터가 아님", res.data);
+          console.error(" GPT 응답 오류: 올바른 데이터가 아님", res.data);
           setError("식단을 불러오는 데 실패했습니다.");
           return;
         }
@@ -123,6 +127,7 @@ const GPTChat = () => {
 
         setMealPlan(formattedMealPlan);
         setExtraMeals(res.data.extraMeals);
+        setHasFetched(true); 
        
       } catch (error) {
         console.error(" API 호출 오류:", error);
@@ -135,15 +140,46 @@ const GPTChat = () => {
     fetchMealPlan();
   }, [foodList]); // foodList가 준비된 후 GPT 요청 실행
 
+//  저장 버튼 클릭 시 API 호출
+  const saveMealPlan = async () => {
+    try {
+      const payload = mealPlan.map(meal => ({
+        date: meal.date,
+        type: meal.type,
+        recipeId: meal.recipeId,
+      }));
+
+      const response = await axiosInstance.post(
+        "/mealplan/save",
+        payload,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log(" 식단 저장 성공:", response.data);
+      alert("식단이 성공적으로 저장되었습니다!");
+      navigate(RouteConfig.paths.mealPlanListDaily);
+      
+    } catch (error) {
+      console.error(" 식단 저장 오류:", error);
+      alert("식단 저장에 실패했습니다.");
+    }
+  };
+
   return (
-    <div style={{ textAlign: "center", marginTop: "30px" }}>
-      <h2>📋 식단 추천 결과</h2>
+   
+    <div style={{ textAlign: "center", marginTop:"50px"}}>
+      <h2 style={{marginBottom:"40px"}}> 식단 추천 결과</h2>
 
       {isLoading && <p>⏳ 식단을 생성 중입니다...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {!isLoading && !error && (
+        <>
         <WeeklyMealPlanEditor initialMealPlan={mealPlan} extraMeals={extraMeals} />
+        <FloatingNextButton onClick={saveMealPlan} style={{ marginTop: "20px", padding: "10px 20px" }}>
+             식단 저장하기
+       </FloatingNextButton>
+        </>
       )}
     </div>
   );
