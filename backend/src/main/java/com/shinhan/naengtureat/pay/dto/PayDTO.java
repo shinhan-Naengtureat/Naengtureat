@@ -1,7 +1,5 @@
 package com.shinhan.naengtureat.pay.dto;
 
-import com.shinhan.naengtureat.member.entity.Member;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PayDTO {
-    private Long id;
-    private Member member;
-    private int balance;
-    private String customerUid;
+    private Long id; // pay id
+    private Long memberId; // member id
+    private int balance; // 잔액
+    private String customerUid; // 빌링키
 }

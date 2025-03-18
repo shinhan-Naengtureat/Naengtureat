@@ -44,7 +44,30 @@ public class MealPlanService {
 	
 	@Autowired
 	InventoryRepository inventoryRepository;
+	
+	@Transactional
+    public void saveMealPlan(List<MealPlanDTO> mealplanDTO) {
+		Member member = memberRepository.findById(3L)
+				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+		
+		 List<MealPlan> mealPlans = mealplanDTO.stream().map(dto -> {
+		Recipe recipe = recipeRepository.findById(dto.getRecipeId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+		 return MealPlan.builder()
+                 .member(member)  // Member 객체 사용
+                 .recipe(recipe)  // Recipe 객체 사용
+                 .date(dto.getDate()) 
+                 .type(dto.getType()) 
+                 .isCheck(false) 
+                 .build();
+     }).collect(Collectors.toList());
 
+        // 한 번에 저장 (bulk insert)
+        mealPlanRepository.saveAll(mealPlans);
+    }
+	
+
+	
 	public List<String> getCategoryAll() {
 		return recipeRepository.findCategoryAll();
 	}

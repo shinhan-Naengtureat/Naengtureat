@@ -10,6 +10,8 @@ import BudgetInputPage from "pages/mealPlan/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
+
+import InstantCharge from 'pages/myPage/InstantCharge';
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import PreferredIngredientsPage from "pages/mealPlan/PreferredIngredientsPage";
@@ -27,6 +29,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
 import InventoryMultipleDelete from "pages/inventory/InventoryMultipleDelete";
+
 
 const AppRouter = () => {
   const [userSelections, setUserSelections] = useState({
@@ -70,6 +73,7 @@ const AppRouter = () => {
         {/* mypage */}
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.recipeEdit} element={<Layout><RecipeEdit/></Layout>} />
+        <Route path={routeConfig.paths.InstantCharge} element={<Layout><InstantCharge/></Layout>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
