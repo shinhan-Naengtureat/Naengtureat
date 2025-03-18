@@ -67,15 +67,15 @@ const CategorySelectionPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="category-container">
       {/* 뒤로가기 & 타이틀 */}
-      <div className="header">
+      <div className="category-header">
         <BackButton onClick={handleBefore} />
       </div>
 
-      <h2 className="title">
+      <h2 className="category-title" style={{textAlign:"center"}}>
         식단표에 추가하고 싶은 <br />
-        <span className="highlight">카테고리를 모두 선택하세요</span>
+        <span className="category-highlight">카테고리를 모두 선택하세요</span>
       </h2>
 
       {/*카테고리 버튼 목록 */}

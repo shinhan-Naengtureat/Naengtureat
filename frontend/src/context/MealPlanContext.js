@@ -13,6 +13,7 @@ export const MealPlanProvider = ({ children }) => {
     excludedIngredients: [],
     days: [],
     mealTimes: [],
+    mealCount:[],
   });
 
   return (
