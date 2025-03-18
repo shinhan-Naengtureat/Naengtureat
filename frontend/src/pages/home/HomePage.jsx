@@ -1,15 +1,11 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import {Swiper, SwiperSlide} from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules"; // Autoplay 추가
 import "styles/home/HomePage.css";
-
-const recipes = [
-  {title: "오리엔탈 양배추 샐러드", img: "recipe-salad.jpg", tags: "#메인요리 | 초급 | 30분"},
-  {title: "닭가슴살 아보카도 샐러드", img: "recipe-avocado.jpg", tags: "#샐러드 | 중급 | 25분"},
-  {title: "고구마 밀프랩", img: "recipe-sweetpotato.jpg", tags: "#밀프랩 | 초급 | 15분"},
-];
+import axiosInstance from "api/axios";
+import {API_PATH, RECIPE_IMAGE_PATH} from "config/pathConfig";
 
 const todaysMeals = [
   { meal: "아침", content: "시저감자 샐러드" },
@@ -17,8 +13,30 @@ const todaysMeals = [
   { meal: "저녁", content: "새우 버섯 리조또, 양배추 피클" },
 ];
 
-
 const HomePage = () => {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`${API_PATH}/recipe/top/like`)
+      .then((response) => {
+        if (response.data) {
+          // 🔹 isDelete가 false인 데이터만 필터링
+          const filteredRecipes = response.data
+            .filter(recipe => recipe.isDelete === false)
+            .map(recipe => ({
+              title: recipe.name,
+              img: recipe.image,
+              tags: `#${recipe.level} | ${recipe.serving}`,
+            }));
+          setRecipes(filteredRecipes);
+        }
+      })
+      .catch((error) => console.error("Error fetching recipes:", error));
+  }, []);
+
+
+
   return (
     <>
       <div className="home-header">
@@ -44,7 +62,7 @@ const HomePage = () => {
             <SwiperSlide key={idx} className="home-recipe-slide">
               <div className="home-recipe-card">
                 <img
-                  src={`${process.env.PUBLIC_URL}/assets/images/${recipe.img}`}
+                  src={`${RECIPE_IMAGE_PATH}/${recipe.img}`}
                   alt={recipe.title}
                   className="home-recipe-image"
                 />
@@ -56,10 +74,6 @@ const HomePage = () => {
                 </div>
                 <div className="home-recipe-details">
                   <span className="home-recipe-tags">{recipe.tags}</span>
-                  <span className="home-recipe-meta">
-                    <span className="home-recipe-level">초급</span> ·
-                    <span className="home-recipe-time">⏳ 30분</span>
-                  </span>
                 </div>
               </div>
             </SwiperSlide>
