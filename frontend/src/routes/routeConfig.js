@@ -1,4 +1,4 @@
-import {FaBars, FaBell, FaEdit, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {FaBars, FaEdit, FaPen, FaSearch, FaShoppingCart} from "react-icons/fa";
 import {FaTrashCan} from "react-icons/fa6";
 
 const BASE_URL = process.env.PUBLIC_URL;
@@ -13,6 +13,8 @@ const RouteConfig = {
     inventoryList: `${BASE_URL}/inventory`,
     inventoryDetail: `${BASE_URL}/inventory/:id`,
     inventoryCreate: `${BASE_URL}/inventory/new`,
+    multipleInventory: `${BASE_URL}/multiple-inventory`,
+    inventoryWastebucket: `${BASE_URL}/wastebucket`,
     mealPlanListDaily: `${BASE_URL}/mealplan`,
     
     budgetInput: `${BASE_URL}/budget`,
@@ -32,6 +34,8 @@ const RouteConfig = {
     searchRecipe: `${BASE_URL}/search-recipe`,
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
     recipeRegister: `${BASE_URL}/recipe/register`,
+    recipeEdit: `${BASE_URL}/recipe/edit/:recipeId`,
+    InstantCharge: `${BASE_URL}/instant-charge`,
     notFound: '*',
   },
 
@@ -39,15 +43,14 @@ const RouteConfig = {
     [`${BASE_URL}/`]: {
       title: "홈",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaBell />, alt: "알림" },
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
     [`${BASE_URL}/inventory`]: {
       title: "재료 관리",
       links: [
-        { to: `${BASE_URL}/notifications`, icon: <FaSearch />, alt: "검색" },
-        { to: `${BASE_URL}/wastebaket`, icon: <FaTrashCan />, alt: "휴지통" },
+        { to: `${BASE_URL}/multiple-inventory`, icon: <FaPen />, alt: "다중선택" },
+        { to: `${BASE_URL}/wastebucket`, icon: <FaTrashCan />, alt: "휴지통"},
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
