@@ -4,23 +4,29 @@ import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
 import axiosInstance from "api/axios";
 import { STORE_IMAGE_PATH } from "config/pathConfig";
+import { useLocation, useNavigate } from "react-router-dom";
+import FloatingNextButton from "components/FloatingNextButton";
+import RouteConfig from "routes/routeConfig";
 
-const IngredientStoreListPage = (selectedIngredients) => {
+const IngredientStoreListPage = () => {
   const [stores, setStores] = useState([]);
   const [selectedStore, setSelectedStore] = useState(null);
-
-   //  테스트용 하드코딩된 `ingredientIds`
-  const testIngredientIds = [4, 6, 79]; // 테스트 ID 값
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const selectedIngredients = location.state?.selectedIngredients || []; // ⬅ 받은 데이터
+console.log("📌 선택된 재료:", selectedIngredients);
   //  API 호출: 부족 재료 보유한 상점 리스트 가져오기
   useEffect(() => {
     const fetchShoppingStoreList = async () => {
       try {
-        if (!selectedIngredients || selectedIngredients.length === 0) return;
+        if (selectedIngredients.length === 0) return;
+         const ingredientIds = selectedIngredients.map((item) => item.mealPlanIngredientId);
+         console.log("📌 API 요청 ingredientIds:", ingredientIds);
+         
+        
         const response = await axiosInstance.post(
           `/store/emptyproduct`,
-          { ingredientIds: testIngredientIds }, //하드코딩용 
-          // { ingredientIds: selectedIngredients.map((item) => item.id) }, // JSON Body로 전달
+          { ingredientIds },  
           { headers: { "Content-Type": "application/json" } }
         );
         if (response.status === 200) {
@@ -31,15 +37,21 @@ const IngredientStoreListPage = (selectedIngredients) => {
       }
     };
     fetchShoppingStoreList();
-  }, []);
+  }, [selectedIngredients]);
 
-
+const formatPrice = (price) => {
+  return price.toLocaleString("ko-KR") + "원";
+};
+const handleBefore = () => {
+    navigate(RouteConfig.paths.notEnoughIngredientList);
+  };
   return (
     <div className="shopping-container">
       {/* 뒤로가기 버튼 */}
-      <div className="header">
-        <BackButton />
+      <div className="clickbutton">
+        <BackButton onClick={handleBefore}/>
       </div>
+
       {/* 제목 */}
       <h2 className="title" style={{ textAlign: "center" }}>판매지점 리스트</h2>
 
@@ -50,7 +62,7 @@ const IngredientStoreListPage = (selectedIngredients) => {
           <thead>
             <tr>
               <th> </th>
-              <th>사진</th>
+              <th></th>
               <th>가게명</th>
               <th>가격</th>
               <th>할인된 가격</th>
@@ -67,13 +79,17 @@ const IngredientStoreListPage = (selectedIngredients) => {
                    />
                   </td>
                   <td>{stores.storeName}</td>
-                  <td>{stores.totalPrice}</td>
-                  <td>{stores.totalDiscountPrice}</td>
+                  <td>{formatPrice(stores.totalPrice)}</td>
+                  <td>{formatPrice(stores.totalDiscountPrice)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
+      { /*장바구니 담고 페이지 이동 추가가*/}
+      <FloatingNextButton disabled={selectedIngredients.length === 0} >
+      장바구니에 담기
+      </FloatingNextButton>
     </div>
   );
 };

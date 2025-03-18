@@ -3,30 +3,21 @@ import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
 import axiosInstance from "api/axios";
 import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import useNotEnoughIngredients from "hooks/useNotEnoughIngredients";
+import { useNavigate } from "react-router-dom"; 
+import FloatingNextButton from "components/FloatingNextButton";
+import RouteConfig from "routes/routeConfig";
 
 const NotEnoughIngredientListPage = () => {
   const [ingredients, setIngredients] = useState([]);
+  const { notEnoughIngredients, loading } = useNotEnoughIngredients(); // 공통 훅 사용
+  const navigate = useNavigate();
 
-  // API 호출: 부족한 재료 리스트 가져오기
-  useEffect(() => {
-    const fetchShoppingList = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/inventory/gap?startDate=2025-03-10&endDate=2025-03-16`
-        );
-        if (response.status === 200) {
-          setIngredients(response.data);
-        }
-      } catch (error) {
-        console.error("재료 리스트 API 호출 오류:", error);
-      }
-    };
-    fetchShoppingList();
-  }, []);
+ //처음에 모든 재료가 선택된 상태로 초기화
+  const [selectedIngredients, setSelectedIngredients] = useState(notEnoughIngredients);
 
-  // 📌 재료 선택을 위한 체크박스 상태 관리
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
+//개별 체크박스 클릭 시 선택된 재료 업데이트
   const handleCheckboxChange = (ingredient) => {
     setSelectedIngredients((prev) =>
       prev.includes(ingredient)
@@ -35,39 +26,67 @@ const NotEnoughIngredientListPage = () => {
     );
   };
 
+  // 전체 선택/해제 기능
+  const handleSelectAll = () => {
+    if (selectedIngredients.length === notEnoughIngredients.length) {
+      setSelectedIngredients([]); // 전부 해제
+    } else {
+      setSelectedIngredients(notEnoughIngredients); // 전부 선택
+    }
+  };
+
+
+// 다음 페이지로 데이터 전달하는 함수
+  const handleNextPage = () => {
+    navigate("/store-shopping-container", { state: { selectedIngredients } });
+  };
+ const handleBefore = () => {
+    navigate(RouteConfig.paths.mealPlanListDaily);
+  };
   return (
     <div className="shopping-container">
+
       {/* 뒤로가기 버튼 */}
-      <div className="header">
-        <BackButton />
+      <div className="clickbutton">
+        <BackButton onClick={handleBefore}/>
       </div>
+
       {/* 제목 */}
       <h2 className="title" style={{ textAlign: "center" }}>필요한 재료 리스트</h2>
 
-      {ingredients.length === 0 ? (
+      {notEnoughIngredients.length === 0 ? (
         <p className="no-items">부족한 재료가 없습니다 🎉</p>
       ) : (
         <table className="shopping-table">
           <thead>
             <tr>
-              <th></th>
-              <th></th>
+                {/*  `th` 클릭 시 전체 선택/해제 */}
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={selectedIngredients.length === notEnoughIngredients.length}
+                    onChange={handleSelectAll}
+                  /></th>
+                <th></th>
               <th>재료명</th>
               <th>현재 보유량</th>
               <th>구매 필요량</th>
             </tr>
           </thead>
           <tbody>
-              {ingredients.filter((item) => item.mealPlanQuantity - item.memberQuantity > 0)
+              {notEnoughIngredients
+              .filter((item) => item.mealPlanQuantity - item.memberQuantity > 0)
                 .map((item, index) => (
               <tr key={index}>
-                {/* 체크박스 */}
-                <td>
-                  <input
-                    type="checkbox"
-                    onChange={() => handleCheckboxChange(item)}
-                  />
-                </td>
+                  {/* 체크박스 */}
+                  <td>
+                    <input
+                        type="checkbox"
+                        checked={selectedIngredients.includes(item)}
+                        onChange={() => handleCheckboxChange(item)}
+                      />
+                  </td>
+
                 {/* 이미지 */}
                 <td>
                   <img 
@@ -87,6 +106,8 @@ const NotEnoughIngredientListPage = () => {
           </tbody>
         </table>
       )}
+      <FloatingNextButton onClick={handleNextPage} disabled={selectedIngredients.length === 0} />
+            다음 페이지로 이동
     </div>
   );
 };
