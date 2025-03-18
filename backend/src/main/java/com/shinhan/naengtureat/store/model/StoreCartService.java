@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.member.entity.Cart;
 import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
 
@@ -97,6 +95,28 @@ public class StoreCartService {
 		storeCartRepository.deleteAllByIdInBatch(cartIdList);
 		
 		return "장바구니에서 " + cartIdList.size() + "개의 상품이 삭제되었습니다.";
+	}
+	
+	// 장바구니 수량 수정
+	public String updateCount(Long cartId, String operation) {
+		Cart cartEntity = storeCartRepository.findById(cartId)
+				.orElseThrow(() -> new RuntimeException("해당 장바구니 아이템을 찾을 수 없습니다."));
+		
+		int currentCount = cartEntity.getCount();
+		
+		if ("increment".equalsIgnoreCase(operation)) {
+			cartEntity.setCount(currentCount + 1);
+		} else if ("decrement".equalsIgnoreCase(operation)) {
+			// 최소 수량 1 이하로 내려가지 않도록 처리
+            cartEntity.setCount(currentCount > 1 ? currentCount - 1 : 1);
+		} else {
+			throw new IllegalArgumentException("유효하지 않은 operation 값입니다.");
+		}
+		
+		// 변경된 수량 저장
+		storeCartRepository.save(cartEntity);
+		
+		return "장바구니 id가 " + cartEntity.getId() + "인 count의 값이 수정되었습니다.";
 	}
 	
 	// Entity를 DTO로 변환
