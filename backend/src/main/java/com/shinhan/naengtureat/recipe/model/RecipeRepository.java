@@ -16,9 +16,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	// 필터 후 레시피 및 관련 정보 조회
 		@Query(value = "SELECT r.recipe_id AS id, r.name, " +
 			       "CAST(FLOOR(r.price / CAST(SUBSTRING(r.serving, 1, LENGTH(r.serving)-2) AS UNSIGNED)) AS SIGNED) AS price, " +
-			       "GROUP_CONCAT(DISTINCT r.category SEPARATOR ', '), " +
+			       "r.category, " +
 			       "GROUP_CONCAT(ing.small_category SEPARATOR ', ') AS smallCategory, " +
-			       " GROUP_CONCAT(DISTINCT h.keyword SEPARATOR ', ') " +
+			       " h.keyword " +
 			       "FROM recipe r " +
 			       "JOIN recipe_hashtag hs ON r.recipe_id = hs.recipe_id " +
 			       "JOIN hashtag h ON hs.hashtag_id = h.hashtag_id " +
