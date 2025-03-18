@@ -11,7 +11,6 @@ import CategorySelectionPage from "pages/mealPlan/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/ExcludedIngredientsPage";
 import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 
-import InventoryDetail from "pages/inventory/InventoryDetail";
 import InstantCharge from 'pages/myPage/InstantCharge';
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
