@@ -2,6 +2,8 @@ package com.shinhan.naengtureat.recipe.model;
 import java.util.List;
 import java.util.Optional;
 
+import com.shinhan.naengtureat.recipe.dto.TopRecipeResponseDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,6 +53,17 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	// 추천순 정렬
 	@Query("SELECT r FROM Recipe r LEFT JOIN Likes l ON l.recipe = r GROUP BY r ORDER BY COUNT(l) DESC")
 	List<Recipe> findAllOrderByLikesCountDesc();
+
+	// 5개 추천순 정렬
+	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.Top5RecipeResponseDTO( " +
+			"r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
+			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete) " +
+			"FROM Recipe r " +
+			"LEFT JOIN Likes l ON l.recipe = r " +
+			"GROUP BY r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
+			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete " +
+			"ORDER BY COUNT(l.recipe) DESC")
+	List<TopRecipeResponseDTO> findTopByLikes(Pageable pageable);
 
 	// 검색 기능
 	@Query("SELECT DISTINCT r FROM Recipe r " + "LEFT JOIN r.hashtags rh " + "LEFT JOIN rh.hashtag h "

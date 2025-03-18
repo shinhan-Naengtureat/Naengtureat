@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.shinhan.naengtureat.recipe.dto.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +79,7 @@ public class RecipeService {
 	
 	private ModelMapper mapper = new ModelMapper();
 
-	
+
 	// 필터 후 레시피 및 관련 정보 조회
 	public List<RecipeSimpleDTO> getFilteredRecipes(List<String> excludedIngredients) {
 	    List<Object[]> results = recipeRepository.findFilteredRecipes(excludedIngredients);
@@ -91,7 +93,7 @@ public class RecipeService {
 		    )).collect(Collectors.toList());
 	};
 
-	
+
 	// 전체 레시피 조회
 	public List<RecipeMainDTO> getAllRecipes() {
 		List<RecipeMainDTO> recipes = recipeRepository.findRecipeMainDTOs();
@@ -437,5 +439,9 @@ public class RecipeService {
 	public List<RecipeDTO> searchRecipes(String keyword) {
 		List<Recipe> recipes = recipeRepository.searchRecipes(keyword);
 		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+	}
+
+	public List<TopRecipeResponseDTO> getTopRecipeByLikes() {
+		return  recipeRepository.findTopByLikes(PageRequest.of(0, 7));
 	}
 }
