@@ -82,8 +82,6 @@ public class RecipeService {
 		return recipes.stream().map(recipe -> entityToDTO(recipe)).collect(Collectors.toList());
 	}
 
-	
-	
 	@Transactional
 	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
 		// 1. Recipe 생성 및 저장

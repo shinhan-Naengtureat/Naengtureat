@@ -56,7 +56,6 @@ public class RecipeController {
 		}
 	}
 
-	
 	@GetMapping("/like")
 	public ResponseEntity<Object> getLikeRecipeList() {
 		Long memberId = 3L;
