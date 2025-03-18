@@ -27,13 +27,17 @@ const GPTChat = () => {
   useEffect(() => {
     const fetchFoodList = async () => {
       try {
-        const response = await axiosInstance.get("/recipe/recipeList"); // DB에서 음식 목록 가져오기
+        console.log("제외 재료 목록:", userSelections.excludedIngredients);
+        const response = await axiosInstance.post("/recipe/fillteredList",
+          userSelections.excludedIngredients,
+          { headers: { "Content-Type": "application/json" } }); // DB에서 음식 목록 가져오기
+        
         if (!Array.isArray(response.data)) {
           console.error(" 올바른 음식 데이터 형식이 아닙니다:", response.data);
           return;
         }
         setFoodList(response.data);
-        console.log(" DB에서 불러온 음식 목록:", response.data);
+        console.log(" 필터링된 음식 목록:", response.data);
       } catch (error) {
         console.error(" 음식 목록 불러오기 오류:", error);
         setFoodList([]);
@@ -41,7 +45,7 @@ const GPTChat = () => {
     };
 
     fetchFoodList();
-  }, []);
+  }, [userSelections.excludedIngredients]);
 
   //  GPT API 호출 및 데이터 변환
   useEffect(() => {
@@ -70,7 +74,6 @@ const GPTChat = () => {
       - 요청 카테고리 : ${category}
       - 요청 테마 : ${theme}
       - 선호하는 재료: ${preferredIngredients ? preferredIngredients.join(", ") : "없음"}
-      - 제외할 재료: ${excludedIngredients ? excludedIngredients.join(", ") : "없음"}
       - 요청 요일: ${days.join(", ")}
       - 요청 끼니: ${mealTimes.join(", ")}
 
