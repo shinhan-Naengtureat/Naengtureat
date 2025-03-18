@@ -85,4 +85,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 		    );
 
     List<Inventory> findAllByMemberId(Long memberId);
+    
+    Inventory findByMemberIdAndIngredientId(Long memberId, Long ingredientId);
 }

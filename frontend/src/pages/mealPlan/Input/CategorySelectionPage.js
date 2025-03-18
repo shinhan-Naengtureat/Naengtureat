@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
@@ -7,10 +6,12 @@ import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/BoxChoice.css";
 import axiosInstance from "api/axios";
+import useMealPlanContext from "hooks/useMealPlanContext";
 
-const CategorySelectionPage = ({ setUserSelections }) => {
+const CategorySelectionPage = () => {
+  const { userSelections, setUserSelections } = useMealPlanContext(); 
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(userSelections?.category || []); // 기존 선택값 유지
   const navigate = useNavigate();
 
   // 백엔드에서 카테고리 목록 불러오기

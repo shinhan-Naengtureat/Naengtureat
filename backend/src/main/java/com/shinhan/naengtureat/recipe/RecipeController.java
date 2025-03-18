@@ -27,6 +27,7 @@ import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeMainDTO;
 import com.shinhan.naengtureat.recipe.entity.Likes;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
@@ -44,24 +45,24 @@ public class RecipeController {
 	@Autowired
 	LikesService likesService;
 
-	// 전체 레시피 조회(레시피id,음식명)
-		@PostMapping("/fillteredList")
-		public ResponseEntity<Object> getfillterdRecipes(@RequestBody List<String> excludedIngredients) {
-			try {
-				List<RecipeSimpleDTO> recipes = recipeService.getFilteredRecipes(excludedIngredients);
-				return ResponseEntity.ok(recipes);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-						.body(BaseResponse.builder().message("레시피 조회 중 오류 발생: " + e.getMessage()).build());
-			}
+	// 필터 후 레시피 및 관련 정보 조회
+	@PostMapping("/fillteredList")
+	public ResponseEntity<Object> getfillterdRecipes(@RequestBody List<String> excludedIngredients) {
+		try {
+			List<RecipeSimpleDTO> recipes = recipeService.getFilteredRecipes(excludedIngredients);
+			return ResponseEntity.ok(recipes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("레시피 조회 중 오류 발생: " + e.getMessage()).build());
 		}
+	}
 
 	// 전체 레시피 조회
 	@GetMapping
 	public ResponseEntity<Object> getAllRecipes() {
 		try {
-			List<RecipeDTO> recipes = recipeService.getAllRecipes();
+			List<RecipeMainDTO> recipes = recipeService.getAllRecipes();
 			return ResponseEntity.ok(recipes);
 		} catch (Exception e) {
 			e.printStackTrace();

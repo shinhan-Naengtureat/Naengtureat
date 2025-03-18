@@ -1,5 +1,4 @@
 package com.shinhan.naengtureat.recipe.model;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -7,14 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.shinhan.naengtureat.ingredient.entity.Ingredient;
-import com.shinhan.naengtureat.member.entity.Member;
-import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeMainDTO;
 import com.shinhan.naengtureat.recipe.entity.Recipe;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-	//전체 레시피 id,음식명,가격 가져오기
+	// 필터 후 레시피 및 관련 정보 조회
 	@Query(value = "SELECT r.recipe_id AS id, r.name, " +
 		       "CAST(FLOOR(r.price / CAST(SUBSTRING(r.serving, 1, LENGTH(r.serving)-2) AS UNSIGNED)) AS int), "+
 		       "r.category, " +
@@ -66,5 +63,18 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	
 	// 카테고리 필터(한식,중식 등)
 	List<Recipe> findByCategoryIn(List<String> categories);
-
+	
+	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeMainDTO(" +
+		       "r.id, r.name, r.level, r.cookingTime, m.name, r.category, rm.mealName, r.image, r.isDelete, " +
+		       "function('group_concat', CONCAT(i.bigCategory, ':', i.smallCategory)), " +
+		       "function('group_concat', h.keyword)) " +
+		       "FROM Recipe r " +
+		       "JOIN r.member m " +
+		       "JOIN r.meal rm " +
+		       "LEFT JOIN r.ingredients ri " +
+		       "LEFT JOIN ri.ingredient i " +
+		       "LEFT JOIN r.hashtags rh " +
+		       "LEFT JOIN rh.hashtag h " +
+		       "GROUP BY r.id, r.name, r.level, r.cookingTime, m.name, r.category, rm.mealName, r.image, r.isDelete")
+		List<RecipeMainDTO> findRecipeMainDTOs();
 }
