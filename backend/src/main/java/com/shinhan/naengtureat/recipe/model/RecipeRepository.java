@@ -12,19 +12,21 @@ import com.shinhan.naengtureat.recipe.entity.Recipe;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
 	// 필터 후 레시피 및 관련 정보 조회
-	@Query(value = "SELECT r.recipe_id AS id, r.name, " +
-		       "CAST(FLOOR(r.price / CAST(SUBSTRING(r.serving, 1, LENGTH(r.serving)-2) AS UNSIGNED)) AS int), "+
-		       "r.category, " +
-		       "ing.small_category AS smallCategory, h.keyword " +
-		       "FROM recipe r " +
-		       "JOIN recipe_hashtag hs ON r.recipe_id = hs.recipe_id " +
-		       "JOIN hashtag h ON hs.hashtag_id = h.hashtag_id " +
-		       "JOIN recipe_ingredient ring ON r.recipe_id = ring.recipe_id " +
-		       "JOIN ingredient ing ON ring.ingredient_id = ing.ingredient_id " +
-		       "WHERE ing.big_category NOT IN ('조미료') " +
-		       "AND ing.small_category NOT IN (:excludeIngredients)",
-		       nativeQuery = true)
-	public List<Object[]> findFilteredRecipes(@Param ("excludeIngredients") List<String> excludeIngredients);
+		@Query(value = "SELECT r.recipe_id AS id, r.name, " +
+			       "CAST(FLOOR(r.price / CAST(SUBSTRING(r.serving, 1, LENGTH(r.serving)-2) AS UNSIGNED)) AS SIGNED) AS price, " +
+			       "GROUP_CONCAT(DISTINCT r.category SEPARATOR ', '), " +
+			       "GROUP_CONCAT(ing.small_category SEPARATOR ', ') AS smallCategory, " +
+			       " GROUP_CONCAT(DISTINCT h.keyword SEPARATOR ', ') " +
+			       "FROM recipe r " +
+			       "JOIN recipe_hashtag hs ON r.recipe_id = hs.recipe_id " +
+			       "JOIN hashtag h ON hs.hashtag_id = h.hashtag_id " +
+			       "JOIN recipe_ingredient ring ON r.recipe_id = ring.recipe_id " +
+			       "JOIN ingredient ing ON ring.ingredient_id = ing.ingredient_id " +
+			       "WHERE ing.big_category NOT IN ('조미료') " +
+			       "AND ing.small_category NOT IN (:excludeIngredients) "+
+			       "GROUP BY r.recipe_id, r.name, r.category, r.price, h.keyword ",
+			       nativeQuery = true)
+		public List<Object[]> findFilteredRecipes(@Param ("excludeIngredients") List<String> excludeIngredients);
 
 	
 	// 사용자가 작성한 레시피 중 삭제되지 않은 레시피만 조회
