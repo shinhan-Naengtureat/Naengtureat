@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.store;
 
+import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.store.dto.*;
 import com.shinhan.naengtureat.store.entity.Store;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
 
 @Slf4j
 @RestController
@@ -54,11 +53,22 @@ public class StoreController {
 	// 스토어 리뷰 등록
 	@PostMapping("/review")
 	public ResponseEntity<Object> createStoreReview(@RequestBody StoreReviewRequestDTO storeReviewRequestDTO) {
-		Long memberId = 1L;
-		storeReviewRequestDTO.setMemberId(memberId);
-		log.info(storeReviewRequestDTO.toString());
-		Map<String, String> responseMap = storeReviewService.createStoreReview(storeReviewRequestDTO);
-		return ResponseEntity.ok(responseMap);
+		
+		try {
+			Long memberId = 3L;
+			storeReviewRequestDTO.setMemberId(memberId);
+			log.info(storeReviewRequestDTO.toString());
+			
+			Map<String, String> responseMap = storeReviewService.createStoreReview(storeReviewRequestDTO);
+			
+			return ResponseEntity.ok(responseMap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("스토어 리뷰 등록 중 오류 발생: " + e.getMessage()).build());
+		}
+		
 	}
 	
 	// 스토어 상세 조회
@@ -80,7 +90,6 @@ public class StoreController {
 		
 	}
 	
-
 	// 스토어 조회 (부족한 재료 리스트 기반)
     @PostMapping("/emptyproduct")
     public ResponseEntity<?> getStoreListEmptyProduct(@RequestBody Map<String,List<Long>> requestBody) {
@@ -108,7 +117,6 @@ public class StoreController {
         }
     }
 	
-
 	// 스토어 상품 조회
 	@GetMapping("/{storeId}/product")
 	public ResponseEntity<Object> getStoreProductByStoreId(@PathVariable("storeId") Long storeId) {
@@ -174,7 +182,7 @@ public class StoreController {
 		
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 			
 			List<CartDTO> cartDTOList = storeCartService.getCartByMemberId(memberId);
 			
@@ -196,7 +204,7 @@ public class StoreController {
 		
 		try {
 			// 세션에서 로그인된 사용자 정보 가져오기
-			Long memberId = 2L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
 			
 			Map<String, Object> result = storeCartService.createCartItem(memberId, productId);
 			
@@ -218,16 +226,14 @@ public class StoreController {
 		
 		try {
 			// 삭제할 재료(상품)의 cartId를 리스트 형태로 전달
-			String result = storeCartService.deleteCartItems(cartIdList);
+			String resultMsg = storeCartService.deleteCartItems(cartIdList);
 			
-			return ResponseEntity.ok(result);
+			return ResponseEntity.ok(BaseResponse.builder().message(resultMsg).build());
 		} catch (Exception e) {
 			e.printStackTrace();
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "스토어 장바구니 재료 삭제 중 오류 발생");
-			errorResponse.put("message", e.getMessage()); // 예외 메시지 포함
 
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("스토어 장바구니 재료 삭제 중 오류 발생: " + e.getMessage()).build());
 		}
 		
 	}

@@ -1,0 +1,143 @@
+.recipe-form-container {
+  width: 90%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #ffffff;
+  font-family: "Arial", sans-serif;
+}
+
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 섹션 스타일 (테두리, 배경, hover 효과) */
+.recipe-overview,
+.recipe-ingredients,
+.recipe-steps,
+.recipe-hashtags {
+  border: 1px solid #ddd;       /* 테두리 */
+  border-radius: 8px;           /* 모서리 둥글게 */
+  padding: 12px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+  cursor: pointer; /* 아코디언처럼 클릭 가능하게 보이도록 할 때 사용 */
+}
+
+/* 호버 시 배경색 살짝 변경 */
+.recipe-overview:hover,
+.recipe-ingredients:hover,
+.recipe-steps:hover,
+.recipe-hashtags:hover {
+  background-color: #fafafa;
+}
+
+/* 섹션 제목(H2) */
+.recipe-form h2 {
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 공통 인풋 스타일 */
+.recipe-form input[type="text"],
+.recipe-form input[type="number"],
+.recipe-form input[type="file"],
+.recipe-form textarea,
+.recipe-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+/* 재료 및 요리 순서 섹션 내부 레이아웃 */
+.recipe-ingredients .ingredient-entry,
+.recipe-steps .step-entry {
+  display: flex;
+  gap: 10px;
+}
+
+/* 요리정보(인원, 시간, 난이도) 레이아웃 */
+.recipe-cooking-info {
+  display: flex;
+  gap: 10px;
+}
+
+/* 등록하기 버튼 */
+.recipe-form button.submit-btn {
+  background-color: #ff7f50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.recipe-form button.submit-btn:hover {
+  background-color: #ff6333;
+}
+
+/* 파일 업로드 인풋은 기본 테두리 제거 */
+input[type="file"] {
+  border: none;
+  padding: 0;
+}
+
+.step-entry {
+  display: flex;
+  gap: 10px;           /* 왼쪽, 오른쪽 영역 간격 */
+  width: 100%;         /* 전체 너비 사용 */
+  box-sizing: border-box;
+  margin-bottom: 16px; /* 단계 간격(선택사항) */
+}
+
+/* 왼쪽 텍스트 영역: 비율 2 */
+.step-content {
+  flex: 2; 
+  display: flex;        /* 필요시 정렬 위해 */
+  flex-direction: column;
+}
+
+/* 텍스트영역 크기 */
+.step-content textarea {
+  width: 100%;
+  min-height: 120px;    /* textarea가 너무 작아지지 않도록 최소 높이 */
+  resize: vertical;     /* 사용자 크기조정 가능(원하면 none으로 변경) */
+}
+
+/* 오른쪽 이미지 영역: 비율 1 */
+.step-image {
+  flex: 1;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; /* input, img 왼쪽 정렬 */
+}
+
+/* 이미지 미리보기 크기 */
+.step-image img {
+  max-width: 100%;   /* 부모영역에 맞게 축소 */
+  height: auto; 
+  margin-top: 10px;  /* 파일선택창과 간격 */
+}
+
+.input-valid {
+  border: 1px solid green;
+}
+
+.input-invalid {
+  border: 1px solid red;
+}
+
+.section-valid {
+  border: 2px solid green;
+}
+
+.section-invalid {
+  border: 2px solid red;
+}
