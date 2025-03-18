@@ -1,10 +1,10 @@
 // RecipeEdit.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import OverviewSection from 'pages/recipe/OverviewSection';
-import IngredientsSection from 'pages/recipe/IngredientsSection';
-import StepsSection from 'pages/recipe/StepsSection';
-import HashtagsSection from 'pages/recipe/HashtagsSection';
+import OverviewSection from 'pages/recipe/RecipeRegister/OverviewSection';
+import IngredientsSection from 'pages/recipe/RecipeRegister/IngredientsSection';
+import StepsSection from 'pages/recipe/RecipeRegister/StepsSection';
+import HashtagsSection from 'pages/recipe/RecipeRegister/HashtagsSection';
 import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
 

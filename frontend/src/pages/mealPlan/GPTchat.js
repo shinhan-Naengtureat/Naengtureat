@@ -27,17 +27,15 @@ const GPTChat = () => {
   useEffect(() => {
     const fetchFoodList = async () => {
       try {
-        console.log("제외 재료 목록:", userSelections.excludedIngredients);
         const response = await axiosInstance.post("/recipe/fillteredList",
           userSelections.excludedIngredients,
           { headers: { "Content-Type": "application/json" } }); // DB에서 음식 목록 가져오기
-        
         if (!Array.isArray(response.data)) {
           console.error(" 올바른 음식 데이터 형식이 아닙니다:", response.data);
           return;
         }
         setFoodList(response.data);
-        console.log(" 필터링된 음식 목록:", response.data);
+       console.log(" 필터링된 음식 목록:", response.data);
       } catch (error) {
         console.error(" 음식 목록 불러오기 오류:", error);
         setFoodList([]);

@@ -151,11 +151,14 @@
     font-size: 1.3rem;
     cursor: pointer;
     color: #e74c3c;
-    transition: background-color 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .add-to-cart:hover {
-    background-color: #f0f0f0;
+    background-color: #e74c3c;
+    transform: translateY(-2px); /* 살짝 위로 이동하여 입체감 효과 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
 }
 
 /* 상품명 */

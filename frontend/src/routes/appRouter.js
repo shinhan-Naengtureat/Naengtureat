@@ -6,28 +6,28 @@ import InventoryCreate from "pages/inventory/InventoryCreate";
 import InventoryDetail from "pages/inventory/InventoryDetail";
 import InventoryList from "pages/inventory/InventoryList";
 import InventoryWastebucket from "pages/inventory/InventoryWastebucket";
+import GPTChat from "pages/mealPlan/GPTchat";
+import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import BudgetInputPage from "pages/mealPlan/Input/BudgetInputPage";
 import CategorySelectionPage from "pages/mealPlan/Input/CategorySelectionPage";
 import ExcludedIngredientsPage from "pages/mealPlan/Input/ExcludedIngredientsPage";
-import GPTChat from "pages/mealPlan/GPTchat";
-import IngredientStoreListPage from "pages/mealPlan/IngredientStoreListPage";
 import FrequencyInputPage from "pages/mealPlan/Input/FrequencyInputPage";
 import PreferredIngredientsPage from "pages/mealPlan/Input/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/Input/ThemeSelectionPage";
-
 import InventoryMultipleDelete from "pages/inventory/InventoryMultipleDelete";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
 import InstantCharge from 'pages/myPage/InstantCharge';
 import MyRecipes from 'pages/myPage/MyRecipes';
 import RecipeEdit from "pages/myPage/RecipeEdit";
-import RecipeDetail from 'pages/recipe/RecipeDetail';
-import RecipeList from "pages/recipe/RecipeList";
-import RecipeRegister from "pages/recipe/RecipeRegister";
-import RecipeSearchPage from 'pages/recipe/RecipeSearchPage';
+import RecipeDetail from 'pages/recipe/RecipeDetail/RecipeDetail';
+import RecipeList from "pages/recipe/RecipeMain/RecipeList";
+import RecipeRegister from "pages/recipe/RecipeRegister/RecipeRegister";
+import RecipeSearchPage from 'pages/recipe/RecipeMain/RecipeSearchPage';
 import Store from "pages/store/Store";
 import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
+import Cart from "pages/store/Cart";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
 
@@ -75,8 +75,9 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
         <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
         <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
-       
-       
+        <Route path={routeConfig.paths.cart} element={<Layout><Cart /></Layout>} />
+
+        {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />
         </Routes>
          </MealPlanProvider>
