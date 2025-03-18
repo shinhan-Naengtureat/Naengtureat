@@ -1,35 +1,41 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Badge, Button, Col, Container, Placeholder, Row} from 'react-bootstrap';
-import "styles/inventory/inventoryList.css";
+import {Badge, Button, Col, Container, Form, Placeholder, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
-import {API_PATH} from "config/pathConfig";
 import axiosInstance from "api/axios";
+import {useNavigate} from "react-router-dom";
+import "styles/inventory/inventoryList.css";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [rawItems, setRawItems] = useState();
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   //아이템 useEffect
   useEffect(() => {
     let ignore = false;
 
-    axiosInstance.get(`${API_PATH}/inventory`)
+    axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
+          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
             remainingDays: item.remainingDays,
-            ingredientBigCategory: item.ingredientBigCategory
+            ingredientBigCategory: item.ingredientBigCategory,
+            ingredientStandardImage: item.ingredientStandardImage,
+            memo: item.memo,
+            ingredientSmallCategory: item.ingredientSmallCategory
           }));
           setRawItems(extractedItems);
           setLoading(false); // 데이터 로딩 완료
         }
       })
       .catch(error => {
-        console.log("데이터를 가져오는 중 에러 발생: " + error);
         setLoading(false);
       });
 
@@ -38,28 +44,42 @@ const InventoryList = () => {
     };
   }, []);
 
-  //카테고리 목록 동적 생성
-  const categories = useMemo(() => {
-    if (!rawItems) return ["전체"];
-    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
-    return ["전체", ...uniqueCategories];
-  }, [rawItems]);
-
   //필터링된 아이템 리스트
   const filteredItems = useMemo(() => {
     if (!selectedCategories.length || selectedCategories.includes("전체")) return rawItems;
     return rawItems.filter(item => selectedCategories.includes(item.ingredientBigCategory));
   }, [rawItems, selectedCategories]);
 
+  // 검색어 필터링 추가
+  const searchedItems = useMemo(() => {
+    if (!searchTerm) return filteredItems;
+    return filteredItems.filter(item => {
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      return (
+        item.nickName.toLowerCase().includes(lowerSearchTerm) ||
+        item.ingredientBigCategory.toLowerCase().includes(lowerSearchTerm) ||
+        item.memo?.toLowerCase().includes(lowerSearchTerm) || // memo가 존재하는 경우만 검사
+        item.ingredientSmallCategory.toLowerCase().includes(lowerSearchTerm)
+      );
+    });
+  }, [filteredItems, searchTerm]);
+
   const groupedItems = useMemo(() => {
-    return (filteredItems || [ ]).reduce((acc, item) => {
+    return (searchedItems || []).reduce((acc, item) => {
       if (!acc[item.ingredientBigCategory]) {
-        acc[item.ingredientBigCategory] = [ ];
+        acc[item.ingredientBigCategory] = [];
       }
       acc[item.ingredientBigCategory].push(item);
       return acc;
     }, {});
-  }, [filteredItems]);
+  }, [searchedItems]);
+
+  //카테고리 목록 동적 생성
+  const categories = useMemo(() => {
+    if (!rawItems || rawItems.length === 0) return ["전체"];
+    const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
+    return ["전체", ...uniqueCategories];
+  }, [rawItems]);
 
   // 전체 선택 시 다른 카테고리 해제 & 중복 선택 방지
   const toggleCategory = (category) => {
@@ -80,6 +100,14 @@ const InventoryList = () => {
         items={categories}
         selectedItems={selectedCategories}
         toggleItem={toggleCategory}
+      />
+
+      <Form.Control
+        type="text"
+        placeholder="찾고싶은 재료를 검색해주세요"
+        className="my-3"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
       {loading ? (
@@ -105,12 +133,15 @@ const InventoryList = () => {
                 const isExpired = item.remainingDays < 0;
                 return (
                   <Col xs={4} key={item.id} className="mb-3"> {/* xs=4: 한 줄에 3개 */}
-                    <div className={`item-box ${isExpired ? 'expired' : 'fresh'}`}>
+                    <div className={`item-box ${isExpired ? 'expired' : 'fresh'}`}
+                         onClick={() => navigate(`/inventory/${item.id}`)} // 클릭 시 이동
+                         style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
+                    >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
                         {item.remainingDays}
                       </Badge>
                       <div className="item-content">
-                        <img src="" alt="item" className="item-image" />
+                        <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />
                         <div className="item-name">{item.nickName}</div>
                       </div>
                     </div>
@@ -125,7 +156,8 @@ const InventoryList = () => {
       <Button
         variant="warning"
         className="rounded-circle position-fixed"
-        style={{bottom: "90px", right: "30px", width: "50px", height: "50px"}}
+        style={{bottom: "150px", right: "30px", width: "70px", height: "70px"}}
+        onClick={() => navigate("/inventory/new")}  // 새로운 등록 페이지로 이동
       >
         +
       </Button>

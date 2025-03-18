@@ -1,9 +1,9 @@
-import { format, startOfWeek } from "date-fns";
-import MealPlanHeader from "pages/mealPlan/MealPlanHeader";
-import MonthlyMealPlan from "pages/mealPlan/MonthlyMealPlan";
-import WeeklyMealPlan from "pages/mealPlan/weekly/WeeklyMealPlan";
-import { useState, useMemo } from "react";
 import { Spinner } from "react-bootstrap";
+import { format, startOfWeek } from "date-fns";
+import { useState, useMemo } from "react";
+import MealPlanHeader from "pages/mealPlan/MealPlanHeader";
+import WeeklyMealPlan from "pages/mealPlan/weekly/WeeklyMealPlan";
+import MonthlyMealPlan from "pages/mealPlan/monthly/MonthlyMealPlan";
 import useMealPlan from "hooks/useMealPlan"; // 데이터를 가져오는 훅
 import useMealPlanActions from "hooks/useMealPlanActions"; // 액션 훅
 
@@ -11,12 +11,18 @@ function MealPlanListDaily() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [isMonthlyView, setIsMonthlyView] = useState(false); // 월간보기 상태
 
-  // 현재 주의 시작 날짜
+  // 주간 조회 - 현재 주의 시작 날짜
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const formattedDate = format(weekStart, "yyyyMMdd");
 
-  // 데이터 로딩 훅
-  const { mealData, loading, setMealData } = useMealPlan(formattedDate);
+  // 월간 조회
+  const formattedMonth = format(currentWeek, "yyyyMM");
+
+  // isMonthlyView에 따라 적절한 데이터 요청
+  const { mealData, loading, setMealData } = useMealPlan(
+    isMonthlyView ? formattedMonth : formattedDate,
+    isMonthlyView
+  );
 
   // 액션 훅
   const { handleDragEnd, updateMeal, deleteMeal } = useMealPlanActions(
@@ -38,7 +44,7 @@ function MealPlanListDaily() {
           <Spinner animation="border" />
         </div>
       ) : isMonthlyView ? (
-        <MonthlyMealPlan />
+        <MonthlyMealPlan mealData={memoizedMeals} />
       ) : (
         <WeeklyMealPlan
           memoizedMeals={memoizedMeals}

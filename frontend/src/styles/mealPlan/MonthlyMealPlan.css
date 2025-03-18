@@ -1,0 +1,95 @@
+/* 캘린더 div */
+.calendar-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+
+/* 전체 캘린더 스타일 */
+.react-calendar {
+  width: 100%;
+  max-width: 350px;
+  border: none !important;
+  font-family: var(--font-nanum) !important;
+  font-weight: bold;
+}
+
+/* 년월일 나오는 라벨 */
+.react-calendar__navigation__label__labelText {
+  font-weight: bold;
+}
+
+/* 달력 타일 (기본 날짜 스타일) */
+.react-calendar__tile {
+  border-radius: 50%;
+  width: 35px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+/* 오늘 날짜 배경 및 폰트 제거 */
+.react-calendar__tile--now {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* 토요일에 파란 폰트 */
+.saturday {
+  color: #6172DA !important; /* 후보:#5C71E4, #6172DA */
+}
+
+/* 식단 이행 개수에 따른 색상 변화 */
+.completed-1 { background-color: rgba(255, 138, 66, 0.2)!important; } /* 후보: */
+.completed-2 { background-color: rgba(255, 138, 66, 0.5)!important; } /* 후보: */
+.completed-3 { background-color: rgba(255, 138, 66)!important; }
+
+/* 선택된 날짜 강조 */
+.react-calendar__tile--active {
+  background: #333 !important;
+  color: white !important;
+}
+
+/* 요일부분 */
+abbr[title] {
+  text-decoration: none !important; /* 밑줄 제거 */
+  cursor: default !important;
+}
+
+/* 일간 주간 식단 목록 */
+.event-list {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  height: 165px !important;
+}
+
+/* 식단 없을때 나오는 p태그 */
+.mealplan-no {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 165px;
+  color: gray;
+  font-family: var(--font-nanum) !important;
+}
+
+.mealplan-check {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: rgba(214, 214, 214, 0.16);
+  border-radius: 10px;
+}
+
+.mealplan-check-label-orange{
+  color: #F35C04;
+}
+
+.react-tooltip {
+  white-space: pre-wrap; /* 줄바꿈을 허용 */
+  word-wrap: break-word; /* 긴 단어도 자동으로 줄바꿈 */
+}

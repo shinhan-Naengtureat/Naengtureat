@@ -59,9 +59,8 @@ public class InventoryService {
     public List<InventoryResponseDTO> getAllInventory(Long memberId) {
         List<Inventory> inventoryList = inventoryRepository.findAllByMemberId(memberId);
 
-        return inventoryList.stream().map((eachInventory) -> {
-            //entity -> DTO
-            InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+        return inventoryList.stream().map((inventory) -> {
+            InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
 
             //남은 기간 계산 및 저장
             setCalculateDday(inventoryResponseDTO);
@@ -142,9 +141,8 @@ public class InventoryService {
 
     public List<InventoryResponseDTO> getExpiredInventory(Long memberId) {
         return inventoryRepository.findAllByMemberId(memberId).stream()
-                .map(eachInventory -> {
-                    //entity -> DTO
-                    InventoryResponseDTO inventoryResponseDTO = convertDto(eachInventory);
+                .map(inventory -> {
+                    InventoryResponseDTO inventoryResponseDTO = convertDto(inventory);
 
                     //남은 기간 계산 및 저장
                     setCalculateDday(inventoryResponseDTO);
@@ -196,5 +194,10 @@ public class InventoryService {
                         (String) row[7]//이미지 경로
                 		 ))
                  .collect(Collectors.toList());
+    }
+
+    public String deleteInventoryById(Long inventoryId) {
+        inventoryRepository.deleteById(inventoryId);
+        return "재료가 삭제되었습니다.";
     }
 }

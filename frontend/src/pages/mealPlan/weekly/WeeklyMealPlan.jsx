@@ -1,7 +1,7 @@
 import { addWeeks, format, getDate, getDay, startOfMonth, subWeeks } from "date-fns";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import WeeklyMealPlanTable from "pages/mealPlan/weekly/WeeklyMealPlanTable";
 import "styles/mealPlan/WeeklyMealPlan.css";
-import WeeklyMealPlanTable from "./WeeklyMealPlanTable";
 
 function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal, onDeleteMeal, currentWeek, setCurrentWeek }) {
   // 이전 주로 이동하는 함수
@@ -56,17 +56,16 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
   };
 
   return (
-    <>
+    <div className="weekly-container">
       {/* 이전 주, 다음 주 버튼 */}
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="meal-plan-weekly-header">
         <button
           onClick={goToPreviousWeek}
           className="previous-week-btn"
           variant="link"
           size="sm"
         >
-          <FaChevronLeft />
-          <span>지난주</span>
+          <IoIosArrowBack style={{ fontSize: '24px' }} />
         </button>
         {/* 현재 월 출력 */}
         <span className="current-month-label">{currentMonth}</span>
@@ -76,8 +75,7 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
           size="sm"
           className="next-week-btn"
         >
-          <span>다음주</span>
-          <FaChevronRight />
+          <IoIosArrowForward style={{ fontSize: '24px' }} />
         </button>
       </div>
 
@@ -89,7 +87,10 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
         toggleMealCheck={toggleMealCheck}
         deleteMeal={deleteMeal}
       />
-    </>
+      <span className="mealplan-info">
+        ※ 일요일에는 다음주 식단이 생성됩니다.
+      </span>
+    </div>
   );
 }
 

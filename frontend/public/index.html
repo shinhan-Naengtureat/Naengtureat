@@ -2,29 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <!-- PWA 적용을 위한 메타 태그 수정 -->
+    <meta name="theme-color" content="#f4a261" /> <!-- manifest.json의 theme_color와 일치 -->
+    <meta name="description" content="냉장고 속 남은 재료로 요리를 추천받고 관리하는 냉털잇 서비스!" />
+
+    <!-- iOS 및 크롬 PWA 지원 -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="냉털잇" />
+
+    <!-- iOS PWA 아이콘 설정 -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icons/icon-192x192.png" />
+
+    <!-- 크롬 PWA를 위한 설정 -->
+    <meta name="theme-color" content="#f4a261" />
+    <meta name="description" content="냉장고 속 남은 재료로 요리를 추천받고 관리하는 냉털잇 서비스!" />
+
+    <!-- 크롬 PWA 아이콘 -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icons/icon-192x192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- PWA 설치를 위한 manifest 연결 -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <title>냉털잇</title>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

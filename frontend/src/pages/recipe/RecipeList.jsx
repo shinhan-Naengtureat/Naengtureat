@@ -6,6 +6,13 @@ import SortFilter from "./SortFilter";
 
 import "styles/recipe/Recipe.css";
 
+const sortMapping = {
+    추천순: "recommend",
+    최신순: "latest",
+    난이도순: "difficulty",
+    조리시간순: "cookingtime",
+  };
+
 function RecipeList() {
   const [recipes, setRecipes] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
@@ -15,13 +22,6 @@ function RecipeList() {
   const [error, setError] = useState(null);
 
   const categories = ["전체", "채식", "한식", "양식", "일식", "중식", "퓨전"];
-
-  const sortMapping = {
-    추천순: "recommend",
-    최신순: "latest",
-    난이도순: "difficulty",
-    조리시간순: "cookingtime",
-  };
 
   // 선택된 필터(정렬, 식재료, 카테고리)에 따라 API 호출
   useEffect(() => {

@@ -1,9 +1,12 @@
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { addDays, format } from "date-fns";
 import { ko } from "date-fns/locale/ko";
+import { addDays, format } from "date-fns";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OverlayTrigger, Popover } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDeleteMeal, toggleMealCheck, deleteMeal }) {
+  const navigate = useNavigate();
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
         <table className="meal-plan-table">
@@ -119,7 +122,11 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
                                                 </span>
                                               </p>
                                               <hr />
-                                              <p>레시피 보기</p>
+                                              <p
+                                                className="meal-show-recipe"
+                                                onClick={() => navigate(`/recipe/${meal.recipeId}`)}>
+                                                  레시피 보기
+                                              </p>
                                               <hr />
                                               <p
                                                 onClick={() =>
