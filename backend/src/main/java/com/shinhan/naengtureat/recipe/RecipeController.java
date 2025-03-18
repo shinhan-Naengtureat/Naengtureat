@@ -26,6 +26,7 @@ import com.shinhan.naengtureat.recipe.dto.MealDTO;
 import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
 import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeMainDTO;
 import com.shinhan.naengtureat.recipe.entity.Likes;
 import com.shinhan.naengtureat.recipe.model.LikesService;
 import com.shinhan.naengtureat.recipe.model.RecipeService;
@@ -47,7 +48,7 @@ public class RecipeController {
 	@GetMapping
 	public ResponseEntity<Object> getAllRecipes() {
 		try {
-			List<RecipeDTO> recipes = recipeService.getAllRecipes();
+			List<RecipeMainDTO> recipes = recipeService.getAllRecipes();
 			return ResponseEntity.ok(recipes);
 		} catch (Exception e) {
 			e.printStackTrace();
