@@ -21,6 +21,17 @@ import com.shinhan.naengtureat.mealplan.entity.MealPlan;
 import com.shinhan.naengtureat.mealplan.model.MealPlanRepository;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberRepository;
+import com.shinhan.naengtureat.recipe.dto.CommentDTO;
+import com.shinhan.naengtureat.recipe.dto.HashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.MealDTO;
+import com.shinhan.naengtureat.recipe.dto.MyRecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeDetailDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeHashtagDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeIngredientDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeSimpleDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeMainDTO;
+import com.shinhan.naengtureat.recipe.dto.RecipeStepDTO;
 import com.shinhan.naengtureat.recipe.entity.Comment;
 import com.shinhan.naengtureat.recipe.entity.Hashtag;
 import com.shinhan.naengtureat.recipe.entity.Meal;
@@ -67,6 +78,21 @@ public class RecipeService {
 	private MealRepository mealRepository;
 	
 	private ModelMapper mapper = new ModelMapper();
+
+
+	// 필터 후 레시피 및 관련 정보 조회
+	public List<RecipeSimpleDTO> getFilteredRecipes(List<String> excludedIngredients) {
+	    List<Object[]> results = recipeRepository.findFilteredRecipes(excludedIngredients);
+		return results.stream().map(row -> new RecipeSimpleDTO(
+		        (Long) row[0],       // id
+		        (String) row[1],     // name
+		        ((Number) row[2]).intValue(),     // category
+		        (String) row[3],        // price (Integer로 변환)
+		        (String) row[4],     // keyword
+		        (String) row[5]      // smallCategory
+		    )).collect(Collectors.toList());
+	};
+
 
 	// 전체 레시피 조회
 	public List<RecipeMainDTO> getAllRecipes() {
