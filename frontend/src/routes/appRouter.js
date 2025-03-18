@@ -14,7 +14,6 @@ import ExcludedIngredientsPage from "pages/mealPlan/Input/ExcludedIngredientsPag
 import FrequencyInputPage from "pages/mealPlan/Input/FrequencyInputPage";
 import PreferredIngredientsPage from "pages/mealPlan/Input/PreferredIngredientsPage";
 import ThemeSelectionPage from "pages/mealPlan/Input/ThemeSelectionPage";
-
 import InventoryMultipleDelete from "pages/inventory/InventoryMultipleDelete";
 import MealPlanListDaily from "pages/mealPlan/MealPlanListDaily";
 import NotEnoughIngredientListPage from "pages/mealPlan/NotEnoughIngredientListPage";
@@ -28,6 +27,7 @@ import RecipeSearchPage from 'pages/recipe/RecipeMain/RecipeSearchPage';
 import Store from "pages/store/Store";
 import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
+import Cart from "pages/store/Cart";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
 
@@ -75,8 +75,9 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
         <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
         <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
-       
-       
+        <Route path={routeConfig.paths.cart} element={<Layout><Cart /></Layout>} />
+
+        {/* 404 Not Found */}
         <Route path={routeConfig.paths.notFound} element={<h1>404 Not Found</h1>} />
         </Routes>
          </MealPlanProvider>
