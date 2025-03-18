@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import RecipeListGrid from "./RecipeListGrid";
-import SearchBar from "./SearchBar";
+import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
+import SearchBar from "pages/recipe/RecipeMain/SearchBar";
 import "styles/recipe/Recipe.css";
 
 function RecipeSearchPage() {

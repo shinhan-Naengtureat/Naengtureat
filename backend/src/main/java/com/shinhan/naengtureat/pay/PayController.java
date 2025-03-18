@@ -1,10 +1,14 @@
 package com.shinhan.naengtureat.pay;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,5 +37,21 @@ public class PayController {
 		}
 		return ResponseEntity.ok(pay);
 	}
+	
+	
+    // 결제 완료 후 잔액 및 포인트 업데이트
+    @PostMapping("/naengpay/charge")
+    public ResponseEntity<Object> completePayment(@RequestBody PayDTO PayDto) {
+        try {
+            payService.completePayment(PayDto);
+            return ResponseEntity.ok(Map.of("status", "PAID"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            log.error("결제 완료 처리 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("결제 완료 처리 중 오류가 발생했습니다.");
+        }
+    }
 
 }
