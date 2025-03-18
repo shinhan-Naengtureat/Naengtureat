@@ -31,6 +31,7 @@ const RouteConfig = {
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
     recipeRegister: `${BASE_URL}/recipe/register`,
     recipeEdit: `${BASE_URL}/recipe/edit/:recipeId`,
+    InstantCharge: `${BASE_URL}/instant-charge`,
     notFound: '*',
   },
 
