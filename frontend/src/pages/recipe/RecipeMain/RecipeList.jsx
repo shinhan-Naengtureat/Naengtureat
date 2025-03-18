@@ -4,8 +4,6 @@ import CategoryFilter from "pages/recipe/RecipeMain/CategoryFilter";
 import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
 import IngredientFilter from "pages/recipe/RecipeMain/IngredientFilter";
 import SortFilter from "pages/recipe/RecipeMain/SortFilter";
-import SearchBar from "pages/recipe/RecipeMain/SearchBar";
-
 import "styles/recipe/Recipe.css";
 
 const sortMapping = {
@@ -24,7 +22,6 @@ function RecipeList() {
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [selectedBigCategories, setSelectedBigCategories] = useState([]);
   const [selectedSortFilter, setSelectedSortFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
 
   // 로딩 및 에러 상태
   const [loading, setLoading] = useState(false);
@@ -49,7 +46,7 @@ function RecipeList() {
       });
   }, []);
 
-  // 필터링: 카테고리, 재료 대분류, 정렬, 검색어 적용
+  // 필터링: 카테고리, 재료 대분류, 정렬 적용
   useEffect(() => {
     let recipes = [...allRecipes];
 
@@ -76,24 +73,6 @@ function RecipeList() {
       });
     }
 
-    // 검색어 필터: recipe.name에 검색어가 포함되어 있는지 (대소문자 구분 없이)
-    if (searchTerm.trim() !== "") {
-      recipes = recipes.filter((recipe) => {
-        const lowerTerm = searchTerm.toLowerCase();
-        const name = recipe.name ? recipe.name.toLowerCase() : "";
-        const hashtags = recipe.aggregatedHashtags ? recipe.aggregatedHashtags.toLowerCase() : "";
-        const ingredients = recipe.aggregatedIngredients ? recipe.aggregatedIngredients.toLowerCase() : "";
-        const mealName = recipe.mealName ? recipe.mealName.toLowerCase() : "";
-        
-        return (
-          name.includes(lowerTerm) ||
-          hashtags.includes(lowerTerm) ||
-          ingredients.includes(lowerTerm) ||
-          mealName.includes(lowerTerm)
-        );
-      });
-    }
-
     // 정렬 필터 적용
     if (selectedSortFilter) {
       const sortType = sortMapping[selectedSortFilter];
@@ -116,7 +95,6 @@ function RecipeList() {
     selectedCategories,
     selectedBigCategories,
     selectedSortFilter,
-    searchTerm,
   ]);
 
   // 다중 선택 카테고리 토글
