@@ -197,7 +197,7 @@ const handleBefore = () => {
 export default GPTChat;
 // Styled Components
 const Title1 = styled.div`
-  font-family: "Nanum Gothic";
+  font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   margin-bottom : 15px;

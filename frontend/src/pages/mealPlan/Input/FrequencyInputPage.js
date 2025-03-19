@@ -145,12 +145,12 @@ const ContainerFre = styled.div`
   
 `;
 const Header = styled.div`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   width: 100%;
   text-align: left;
 `;
 const Title1 = styled.h2`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -158,7 +158,7 @@ font-family: "Nanum Gothic";
   margin-bottom: 5px;
 `;
 const Title2 = styled.h2`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -167,7 +167,7 @@ font-family: "Nanum Gothic";
 `;
 
 const CountSection = styled.div`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -176,7 +176,7 @@ font-family: "Nanum Gothic";
 `;
 
 const CountText = styled.div`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682; 
@@ -186,7 +186,7 @@ font-family: "Nanum Gothic";
 `;
 
 const CountNumber = styled.span`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   color: #f35c04; /* 강조된 숫자 */
@@ -194,7 +194,7 @@ font-family: "Nanum Gothic";
 `;
 
 const CountUnit = styled.span`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682;
@@ -213,7 +213,7 @@ const Line = styled.div`
 `;
 
 const SubText = styled.p`
-font-family: "Nanum Gothic";
+font-family: var(--font-nanum) !important;
   font-size: 14px;
   color: #a0aec0; /* gray-500 */
 `;
