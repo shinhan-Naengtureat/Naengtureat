@@ -1,6 +1,5 @@
 // CommentsSection.jsx
 import React from "react";
-import { FaRegComment } from "react-icons/fa";
 
 function CommentsSection({ 
   comments, 
@@ -43,16 +42,6 @@ function CommentsSection({
           </button>
         )}
       </div>
-      <FaRegComment
-        className="icon"
-        title="댓글 보기"
-        onClick={() => {
-          const commentSection = document.querySelector(".comment-section");
-          if (commentSection) {
-            commentSection.scrollIntoView({ behavior: "smooth" });
-          }
-        }}
-      />
     </div>
   );
 }
