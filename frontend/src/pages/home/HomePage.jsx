@@ -11,12 +11,13 @@ import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
+  const [isSwiperMounted, setIsSwiperMounted] = useState(false);
   const [dailyMealPlan, setDailyMealPlan] = useState([]);
   const navigate = useNavigate();
   const mealTypeOrder = {
-  "아침": 1,
-  "점심": 2,
-  "저녁": 3,
+    "아침": 1,
+    "점심": 2,
+    "저녁": 3,
   };
 
   // Top Recipe 데이터 가져오기
@@ -32,6 +33,14 @@ const HomePage = () => {
       })
       .catch((error) => console.error("Error fetching recipes:", error));
   }, []);
+
+  useEffect(() => {
+    // 300ms 후에 Swiper를 렌더링하도록 설정 (필요에 따라 지연시간 조정)
+    const timer = setTimeout(() => {
+      setIsSwiperMounted(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  });
 
   // 좋아요 토글 함수
   const handleToggleLike = (recipeId) => {
@@ -83,6 +92,7 @@ const HomePage = () => {
         <h2 className="home-title">오늘, 이 요리 어때요?</h2>
       </div>
       <div className="home-recipe-section">
+        {isSwiperMounted && (
         <Swiper
           slidesPerView={1.5}
           spaceBetween={15}
@@ -132,7 +142,7 @@ const HomePage = () => {
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper>)}
       </div>
       <div className="home-meal-plan-section">
         <h2 className="home-sub-title">오늘의 식단</h2>
