@@ -67,10 +67,12 @@ const CategorySelectionPage = () => {
   };
 
   return (
+     <div className="home-box-container">
     <div className="box-container">
-      {/* 뒤로가기 & 타이틀 */}
+        {/* 뒤로가기 & 타이틀 */}
+         
       <div className="box-header">
-        <BackButton onClick={handleBefore} />
+       <BackButton onClick={handleBefore} />
       </div>
 
       <h2 className="box-title" style={{textAlign:"center"}}>
@@ -102,7 +104,8 @@ const CategorySelectionPage = () => {
         onClick={handleNext}
         disabled={selectedCategories.length === 0}
       />
-    </div>
+      </div>
+     </div>
   );
 };
 export default CategorySelectionPage;

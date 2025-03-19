@@ -73,7 +73,8 @@ setUserSelections((prev) => ({
   };
 
     return (
-      
+      <div className="home-box-container2">
+        <div className="preferred-ingredients-container">
       <ContainerFre>
          <div className="preferred-header">
         <BackButton onClick={handleBefore}/>
@@ -141,7 +142,8 @@ setUserSelections((prev) => ({
         disabled={totalMeals.length === 0}
       />
     </ContainerFre>
-    
+        </div>
+        </div>
   );
 };
 // Styled Components
@@ -149,7 +151,7 @@ const ContainerFre = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  
 `;
 const Header = styled.div`
   width: 100%;

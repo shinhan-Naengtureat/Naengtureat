@@ -14,14 +14,14 @@ const IngredientStoreListPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedIngredients = location.state?.selectedIngredients || []; // ⬅ 받은 데이터
-console.log("📌 선택된 재료:", selectedIngredients);
+console.log(" 선택된 재료:", selectedIngredients);
   //  API 호출: 부족 재료 보유한 상점 리스트 가져오기
   useEffect(() => {
     const fetchShoppingStoreList = async () => {
       try {
         if (selectedIngredients.length === 0) return;
          const ingredientIds = selectedIngredients.map((item) => item.mealPlanIngredientId);
-         console.log("📌 API 요청 ingredientIds:", ingredientIds);
+         console.log(" API 요청 ingredientIds:", ingredientIds);
          
         
         const response = await axiosInstance.post(
@@ -57,7 +57,7 @@ const handleBefore = () => {
       </div>
 
       {/* 제목 */}
-      <h2 className="title" style={{ textAlign: "center" }}>판매지점 리스트</h2>
+      <h2 className="shopping-title" style={{ textAlign: "center",marginBottom:"20px" }}>주변 스토어</h2>
 
       {stores.length === 0 ? (
         <p className="no-items">해당 재료를 보유한 스토어가 없습니다.</p>
@@ -67,9 +67,9 @@ const handleBefore = () => {
             <tr>
               <th> </th>
               <th></th>
-              <th>가게명</th>
-              <th>가격</th>
-              <th>할인된 가격</th>
+              <th>스토어</th>
+              <th>정상가</th>
+              <th>Pay 할인가</th>
             </tr>
           </thead>
           <tbody>
@@ -78,13 +78,13 @@ const handleBefore = () => {
                   <td><input type="radio" name="store" value={stores.storeName} onChange={() => setSelectedStore(stores)} /></td>
                   {/* 이미지 */}
                   <td>
-                  <img src={`${STORE_IMAGE_PATH}/${stores.image}.png`} alt={stores.ingredientName}
+                  <img src={`${STORE_IMAGE_PATH}/${stores.image}`} alt={stores.ingredientName}
                     style={{ width: "50px", height: "50px", objectFit: "contain" }}
                    />
                   </td>
-                  <td>{stores.storeName}</td>
+                  <td style={{width:"100px", wordWrap: "break-word"}}>{stores.storeName}</td>
                   <td>{formatPrice(stores.totalPrice)}</td>
-                  <td>{formatPrice(stores.totalDiscountPrice)}</td>
+                  <td style={{color:"#f35c04"}}>{formatPrice(stores.totalDiscountPrice)}</td>
               </tr>
             ))}
           </tbody>

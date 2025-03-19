@@ -4,11 +4,13 @@ import { startOfWeek, addDays, format, isBefore } from "date-fns";
 import { ko } from "date-fns/locale";
 import "styles/mealPlan/WeeklyMealPlan.css";
 import "../../index.css"; 
+import { useNavigate } from "react-router-dom";
+import RouteConfig from "routes/routeConfig";
 
 const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
     const [mealPlan, setMealPlan] = useState(initialMealPlan);
     const [backupMeals, setBackupMeals] = useState(extraMeals);
-    
+   
     useEffect(() => {
    // console.log(" 초기 MealPlan 상태:", initialMealPlan);
     setMealPlan(initialMealPlan);
@@ -128,6 +130,7 @@ if (sourceMealIndex === -1) {
   };
 
   return (
+    
     <DragDropContext onDragEnd={handleDragEnd}>
       <table className="meal-plan-table" style={{margin:"auto"}}>
         <thead>

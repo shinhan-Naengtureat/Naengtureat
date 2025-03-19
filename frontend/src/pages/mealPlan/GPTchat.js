@@ -6,6 +6,7 @@ import { startOfWeek, addDays, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
+import BackButton from "components/BackButton";
 
 const GPTChat = () => {
   const { userSelections } = useMealPlanContext();
@@ -164,11 +165,17 @@ const [hasFetched, setHasFetched] = useState(false);
       alert("식단 저장에 실패했습니다.");
     }
   };
-
+const handleBefore = () => {
+    navigate(RouteConfig.paths.mealPlanListDaily);
+  };
   return (
-   
+ 
+
     <div style={{ textAlign: "center", marginTop:"50px"}}>
-      <h2 style={{marginBottom:"40px"}}> 식단 추천 결과</h2>
+      <div className="clickbutton">
+        <BackButton onClick={handleBefore}/>
+      </div>
+      <h2 style={{ marginBottom: "40px" }}> 식단 추천 결과</h2>
 
       {isLoading && <p>⏳ 식단을 생성 중입니다...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
