@@ -95,7 +95,8 @@ public class RecipeController {
 	@GetMapping("/{recipeId}")
 	public ResponseEntity<Object> getRecipeDetail(@PathVariable("recipeId") Long recipeId) {
 		try {
-			RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId);
+			Long memberId = 3L;
+			RecipeDetailDTO recipeDetail = recipeService.getRecipeDetail(recipeId,memberId);
 			return ResponseEntity.ok(recipeDetail);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -349,6 +350,7 @@ public class RecipeController {
 
 	@GetMapping("/top/like")
 	public ResponseEntity<Object> getTopRecipeByLikes() {
-		return ResponseEntity.ok(recipeService.getTopRecipeByLikes());
+		Long memberId = 3L;
+		return ResponseEntity.ok(recipeService.getTopRecipeByLikes(memberId));
 	}
 }
