@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.orders.dto.OrdersDTO;
 import com.shinhan.naengtureat.orders.dto.OrdersDetailDTO;
 import com.shinhan.naengtureat.orders.dto.OrdersResponseDTO;
+import com.shinhan.naengtureat.orders.dto.PaymentDTO;
 import com.shinhan.naengtureat.orders.entity.Orders;
 import com.shinhan.naengtureat.orders.entity.OrdersDetail;
 import com.shinhan.naengtureat.orders.model.OrdersDetailService;
@@ -64,16 +65,14 @@ public class OrdersController {
 	
 	// 결제하기
 	@PostMapping("/payment")
-	public ResponseEntity<Object> saveOrdersInfo(@RequestBody OrdersDTO ordersDTO, HttpSession session) {
+	public ResponseEntity<Object> saveOrdersInfo(@RequestBody PaymentDTO paymentDTO) {
 		
 		try {
-			// ordersDTO : memberId, method, point_pay를 Front 단에서 받아야 함
+			OrdersDTO ordersDTO = paymentDTO.getOrdersDTO();
+			ordersDTO.setMemberId(3L);
 			
-			// 세션에 저장되어 있는 주문할 상품 정보(productId, count, price)
-			List<OrdersDetailDTO> orderDetailDTOList = (List<OrdersDetailDTO>) session.getAttribute("orderDetailDTOList");
-//			List<OrdersDetailDTO> orderDetailDTOList = new ArrayList<>();
-//			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(1L).count(1).price(3000).build());
-//			orderDetailDTOList.add(OrdersDetailDTO.builder().productId(2L).count(2).price(10000).build());
+			List<OrdersDetailDTO> orderDetailDTOList = paymentDTO.getOrderDetailDTOList();
+			
 			log.info("[orderDetailDTOList] : " + orderDetailDTOList);
 			 
 	        if (orderDetailDTOList == null) {
@@ -97,10 +96,12 @@ public class OrdersController {
 	        	
 	            int ordersDetailCount = ordersDetail.getCount();
 	            int ordersDetailPrice = ordersDetail.getPrice();
+	            int ordersPointPay = savedOrders.getPointPay();
 	            
 	            String memberName = savedOrders.getMember().getName();
 	            String memberPhone = savedOrders.getMember().getPhone();
 	            String memberRoadAddressName = savedOrders.getMember().getRoadAddressName();
+	            String memberDetailAddress = savedOrders.getMember().getDetailAddress();
 
 	            // OrdersResponseDTO 생성
 	            OrdersResponseDTO orderResponseDto = OrdersResponseDTO.builder()
@@ -109,14 +110,15 @@ public class OrdersController {
 	                    .productName(productName)
 	                    .ordersDetailCount(ordersDetailCount)
 	                    .ordersDetailPrice(ordersDetailPrice)
+	                    .ordersPointPay(ordersPointPay)
 	                    .memberName(memberName)
 	                    .memberPhone(memberPhone)
-	                    .memberRoadAddressName(memberRoadAddressName)
+	                    .memberRoadAddressName(memberRoadAddressName+" "+memberDetailAddress)
 	                    .build();
 
 	            responseDtos.add(orderResponseDto);
 	        }
-	        
+	        System.out.println("responseDtos:"+responseDtos);
 	        return ResponseEntity.ok(responseDtos);
 		} catch (Exception e) {
 			e.printStackTrace();
