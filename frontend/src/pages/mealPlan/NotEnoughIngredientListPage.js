@@ -54,7 +54,7 @@ const NotEnoughIngredientListPage = () => {
       </div>
 
       {/* 제목 */}
-      <h2 className="shopping-title" style={{ textAlign: "center" ,marginBottom:"20px"}}>필요한 재료 리스트</h2>
+      <h2 className="shopping-title" style={{ textAlign: "center" ,marginBottom:"30px"}}>필요한 재료 리스트</h2>
 
       {notEnoughIngredients.length === 0 ? (
         <p className="no-items">부족한 재료가 없습니다 🎉</p>
@@ -72,7 +72,7 @@ const NotEnoughIngredientListPage = () => {
                 <th></th>
               <th>재료명</th>
               <th>현재 <br></br>보유량</th>
-              <th>구매 <br></br>필요량</th>
+              <th style={{color:"#f35c04"}}>구매 <br></br>필요량</th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@ const NotEnoughIngredientListPage = () => {
                 {/* 현재 보유량 */}
                 <td>{item.memberQuantity ?? 0} {item.ingredientUnit}</td>
                 {/* 구매 필요량 */}
-                <td>{item.mealPlanQuantity - item.memberQuantity} {item.ingredientUnit}</td>
+                <td style={{color:"#f35c04"}}>{item.mealPlanQuantity - item.memberQuantity} {item.ingredientUnit}</td>
               </tr>
             ))}
           </tbody>

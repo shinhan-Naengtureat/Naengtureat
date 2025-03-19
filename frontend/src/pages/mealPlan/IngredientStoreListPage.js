@@ -65,26 +65,27 @@ const handleBefore = () => {
    
 }
   return (
+
     <div className="shopping-container">
       {/* 뒤로가기 버튼 */}
-      <div className="clickbutton">
+      <div className="preferred-header">
         <BackButton onClick={handleBefore}/>
       </div>
 
       {/* 제목 */}
-      <h2 className="title" style={{ textAlign: "center" }}>판매지점 리스트</h2>
+      <h2 className="shopping-title" style={{ textAlign: "center" }}>판매지점 리스트</h2>
 
       {stores.length === 0 ? (
         <p className="no-items">해당 재료를 보유한 스토어가 없습니다.</p>
       ) : (
         <table className="shopping-table">
           <thead>
-            <tr>
+            <tr >
               <th> </th>
               <th></th>
-              <th>가게명</th>
-              <th>가격</th>
-              <th>할인된 가격</th>
+              <th>주변 스토어</th>
+              <th>정상가</th>
+              <th style={{color:"#f35c04"}}>Pay 할인가</th>
             </tr>
           </thead>
           <tbody>
@@ -93,13 +94,13 @@ const handleBefore = () => {
                   <td><input type="radio" name="store" value={stores.storeName} onChange={() => setSelectedStore(stores)} /></td>
                   {/* 이미지 */}
                   <td>
-                  <img src={`${STORE_IMAGE_PATH}/${stores.image}.png`} alt={stores.ingredientName}
-                    style={{ width: "50px", height: "50px", objectFit: "contain" }}
+                  <img src={`${STORE_IMAGE_PATH}/${stores.image}`} alt={stores.ingredientName}
+                    style={{ width: "60px", height: "60px", objectFit: "contain" }}
                    />
                   </td>
-                  <td>{stores.storeName}</td>
+                  <td style={{fontSize:"14px",wordBreak:"break-word",width:"110px"} }>{stores.storeName}</td>
                   <td>{formatPrice(stores.totalPrice)}</td>
-                  <td>{formatPrice(stores.totalDiscountPrice)}</td>
+                  <td style={{color:"#f35c04", fontWeight:"bold"}} >{formatPrice(stores.totalDiscountPrice)}</td>
               </tr>
             ))}
           </tbody>
