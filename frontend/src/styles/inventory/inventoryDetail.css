@@ -152,6 +152,8 @@
   align-items: center;
   transition: all 0.2s ease-in-out; /* 부드러운 효과 */
   justify-content: center;
+  min-width: 80px;
+  min-height: 80px;
 }
 
 
@@ -245,6 +247,7 @@
   max-width: 50%;
   display: flex;
   justify-content: left;
+  white-space: nowrap;
 }
 
 .text-center.category-col.col-4 {
