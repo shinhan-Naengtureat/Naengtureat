@@ -45,36 +45,35 @@ public class MealPlanService {
 	@Autowired
 	InventoryRepository inventoryRepository;
 	
-//	@Transactional
-//    public void saveMealPlan(List<MealPlanDTO> mealplanDTO) {
-//		Member member = memberRepository.findById(3L)
-//				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-//		
-//		List<MealPlan> existingMealPlans = mealPlanRepository.findByMemberId(member.getId());
-//		
-//		 List<MealPlan> newMealPlans = mealplanDTO.stream()
-//				 .filter(dto ->
-//				 existingMealPlans.stream()
-//                 .noneMatch(meal -> meal.getDate().equals(dto.getDate()) && meal.getType().equals(dto.getType()))
-//	         ).map(dto -> {
-//			Recipe recipe = recipeRepository.findById(dto.getRecipeId())
-//					.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
-//			 return MealPlan.builder()
-//                 .member(member)  // Member 객체 사용
-//                 .recipe(recipe)  // Recipe 객체 사용
-//                 .date(dto.getDate()) 
-//                 .type(dto.getType()) 
-//                 .isCheck(false) 
-//                 .build();
-//	         	}).collect(Collectors.toList());
-//
-//		// 🔹 3. 새로운 식단이 있다면 저장
-//		    if (!newMealPlans.isEmpty()) {
-//		        mealPlanRepository.saveAll(newMealPlans);
-//		    }
-//    }
-//	
+	@Transactional
+    public void saveMealPlan(List<MealPlanDTO> mealplanDTO) {
+		Member member = memberRepository.findById(3L)
+				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
 
+		List<MealPlan> newMealPlans = mealplanDTO.stream().filter(dto -> {
+			// 해당 회원의 특정 날짜 식단만 조회
+			List<MealPlan> existingMeals = mealPlanRepository.findByMemberAndDate(member, dto.getDate());
+
+			// 같은 date와 type이 존재하는지 확인 후 없으면 저장
+			return existingMeals.stream()
+					.noneMatch(meal -> meal.getType().equals(dto.getType()));
+			})
+				.map(dto -> {
+			Recipe recipe = recipeRepository.findById(dto.getRecipeId())
+					.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+			return MealPlan.builder()
+					.member(member) // Member 객체 사용
+					.recipe(recipe) // Recipe 객체 사용
+					.date(dto.getDate())
+					.type(dto.getType())
+					.isCheck(false).build();
+		}).collect(Collectors.toList());
+
+		// 3. 새로운 식단이 있다면 저장
+		if (!newMealPlans.isEmpty()) {
+			mealPlanRepository.saveAll(newMealPlans);
+		}
+	}
 	
 	public List<String> getCategoryAll() {
 		return recipeRepository.findCategoryAll();
