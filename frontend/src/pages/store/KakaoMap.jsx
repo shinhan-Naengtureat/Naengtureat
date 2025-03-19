@@ -78,7 +78,7 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
             setTimeout(() => {
                 mapRef.current.panBy(0, 120); // y 방향으로 170px 이동
                 panByExecuted.current = true;
-            }, 300);
+            }, 500);
         }
     }, [center]); // center가 설정될 때 실행
 
