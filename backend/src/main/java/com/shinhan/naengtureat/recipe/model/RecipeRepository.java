@@ -57,14 +57,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
 	// 5개 추천순 정렬
 	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.TopRecipeResponseDTO( " +
-			"r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
-			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete) " +
-			"FROM Recipe r " +
-			"LEFT JOIN Likes l ON l.recipe = r " +
-			"GROUP BY r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
-			"r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete " +
-			"ORDER BY COUNT(l.recipe) DESC")
-	List<TopRecipeResponseDTO> findTopByLikes(Pageable pageable);
+		       "r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
+		       "r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete, " +
+		       "CASE WHEN SUM(CASE WHEN l.member.id = :memberId THEN 1 ELSE 0 END) > 0 THEN true ELSE false END) " +
+		       "FROM Recipe r " +
+		       "LEFT JOIN Likes l ON l.recipe = r " +
+		       "GROUP BY r.id, r.meal.id, r.meal.mealName, r.member.id, r.member.name, r.member.image, " +
+		       "r.name, r.price, r.level, r.cookingTime, r.serving, r.image, r.isDelete " +
+		       "ORDER BY COUNT(l.recipe) DESC")
+		List<TopRecipeResponseDTO> findTopByLikes(@Param("memberId") Long memberId, Pageable pageable);
 
 	// 검색 기능
 	@Query("SELECT DISTINCT r FROM Recipe r " + "LEFT JOIN r.hashtags rh " + "LEFT JOIN rh.hashtag h "
