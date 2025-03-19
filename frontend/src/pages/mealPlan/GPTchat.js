@@ -142,15 +142,21 @@ const [hasFetched, setHasFetched] = useState(false);
     fetchMealPlan();
   }, [foodList]); // foodList가 준비된 후 GPT 요청 실행
 
+   // WeeklyMealPlanEditor에서 mealPlan을 업데이트하는 함수
+  const updateMealPlan = (updatedMealPlan) => {
+    console.log("WeeklyMealPlanEditor에서 받은 최신 MealPlan:", updatedMealPlan);
+    setMealPlan(updatedMealPlan);
+  };
 //  저장 버튼 클릭 시 API 호출
   const saveMealPlan = async () => {
+     console.log(" 저장 직전 mealPlan:", mealPlan); // 저장할 데이터 확인
     try {
       const payload = mealPlan.map(meal => ({
         date: meal.date,
         type: meal.type,
         recipeId: meal.recipeId,
       }));
-
+console.log("백엔드로 보낼 데이터:", payload);
       const response = await axiosInstance.post(
         "/mealplan/save",
         payload,
@@ -183,7 +189,7 @@ const handleBefore = () => {
 
       {!isLoading && !error && (
         <>
-        <WeeklyMealPlanEditor initialMealPlan={mealPlan} extraMeals={extraMeals} />
+        <WeeklyMealPlanEditor initialMealPlan={mealPlan} extraMeals={extraMeals} updateMealPlan={updateMealPlan} />
         <FloatingNextButton onClick={saveMealPlan} style={{ marginTop: "20px", padding: "10px 20px" }}>
              식단 저장하기
        </FloatingNextButton>
