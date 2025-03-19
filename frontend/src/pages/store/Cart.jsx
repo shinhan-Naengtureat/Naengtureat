@@ -15,7 +15,7 @@ function Cart() {
         const fetchCartItems = async () => {
             try {
                 const cartDTOList = await axiosInstance.get('/store/cart');
-                console.log('장바구니 목록 : ', cartDTOList.data);
+
                 setCartItems(cartDTOList.data);
             } catch (error) {
                 console.log('장바구니 정보를 가져오는 중 오류 발생 : ', error);
@@ -43,7 +43,6 @@ function Cart() {
     const deleteCheckedHandler = () => {
         // 체크된 상품의 id 목록
         const checkedIds = cartItems.filter((item) => item.isCheck).map((item) => item.id);
-        console.log('checkedIds : ', checkedIds);
 
         if (checkedIds.length === 0) {
             // 선택된 항목이 없을 경우, 필요한 경우 경고 메시지 등을 표시
@@ -118,8 +117,19 @@ function Cart() {
 
     // 주문하기 버튼 클릭 핸들러
     const orderHandler = () => {
-        // cartItems 배열에서 필요한 속성만 추출
-        const orderItems = cartItems.map(item => ({
+        // 체크박스가 활성화된 항목들만 필터링
+        const selectedItems = cartItems.filter(item => item.isCheck);
+        
+        if (selectedItems.length === 0) {
+            toast.error("선택된 상품이 없습니다.", {
+                position: "top-center",
+                autoClose: 3000,
+            });
+            return;
+        }
+
+        // 선택된 항목에서 필요한 속성만 추출
+        const orderItems = selectedItems.map(item => ({
             productId: item.productId,
             productName: item.productName,
             count: item.count,
