@@ -23,4 +23,5 @@ public class TopRecipeResponseDTO {
     private String serving;
     private String image;
     private Boolean isDelete;
+    private Boolean liked;
 }

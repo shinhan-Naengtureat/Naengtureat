@@ -28,6 +28,7 @@ function RecipeDetail() {
     axiosInstance.get(`/recipe/${recipeId}`)
       .then((response) => {
         setRecipe(response.data);
+        setLiked(response.data.liked);
         setLoading(false);
       })
       .catch((err) => {

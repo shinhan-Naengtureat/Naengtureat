@@ -23,6 +23,7 @@ public class RecipeDetailDTO {
     private String image;
     private String category;
     private Long mealId;
+    private boolean liked;
     private List<RecipeIngredientDTO> ingredients; // 레시피 재료 목록
     private List<RecipeStepDTO> steps; // 조리 과정 목록
     private List<RecipeHashtagDTO> hashtags; // 해시태그 목록

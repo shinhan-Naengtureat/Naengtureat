@@ -77,6 +77,9 @@ public class RecipeService {
 	@Autowired
 	private MealRepository mealRepository;
 	
+	@Autowired
+	private LikesService likesService;
+	
 	private ModelMapper mapper = new ModelMapper();
 
 
@@ -322,7 +325,7 @@ public class RecipeService {
 	}
 
 	@Transactional
-	public RecipeDetailDTO getRecipeDetail(Long recipeId) {
+	public RecipeDetailDTO getRecipeDetail(Long recipeId, Long memberId) {
 
 		ModelMapper mapper = new ModelMapper();
 		Recipe recipe = recipeRepository.findById(recipeId)
@@ -338,6 +341,9 @@ public class RecipeService {
 
 		recipeDetailDTO.setHashtags(recipe.getHashtags().stream().map(ht -> mapper.map(ht, RecipeHashtagDTO.class))
 				.collect(Collectors.toList()));
+		// 좋아요 여부 체크 (좋아요를 했다면 true, 아니면 false)
+	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
+	    recipeDetailDTO.setLiked(liked);
 
 		return recipeDetailDTO;
 	}
@@ -441,7 +447,7 @@ public class RecipeService {
 		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
 	}
 
-	public List<TopRecipeResponseDTO> getTopRecipeByLikes() {
-		return  recipeRepository.findTopByLikes(PageRequest.of(0, 7));
+	public List<TopRecipeResponseDTO> getTopRecipeByLikes(Long memberId) {
+		return  recipeRepository.findTopByLikes(memberId,PageRequest.of(0, 7));
 	}
 }
