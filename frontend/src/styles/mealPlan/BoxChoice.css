@@ -22,6 +22,7 @@
 
 /* 제목 스타일 */
 .box-title {
+   font-family: "Nanum Gothic";
    text-align: center;
   font-size: 22px;
   font-weight: 800;
@@ -37,6 +38,7 @@
 
 /* 테마 버튼 목록 */
 .theme-container {
+   font-family: "Nanum Gothic";
   display: flex;
   flex-wrap: wrap;
   gap: 10px;

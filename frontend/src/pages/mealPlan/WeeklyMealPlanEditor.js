@@ -132,7 +132,7 @@ if (sourceMealIndex === -1) {
   return (
     
     <DragDropContext onDragEnd={handleDragEnd}>
-      <table className="meal-plan-table" style={{margin:"auto"}}>
+      <table className="meal-plan-table" style={{margin:"auto" }}>
         <thead>
           <tr>
             <th> </th>

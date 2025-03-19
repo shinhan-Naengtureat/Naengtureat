@@ -49,7 +49,7 @@ const CategorySelectionPage = () => {
   };
 
   const handleBefore = () => {
-    navigate(RouteConfig.budgetInput);
+    navigate(RouteConfig.paths.budgetInput);
   };
   // 다음 버튼 클릭 시 데이터 저장 및 이동
   const handleNext = () => {

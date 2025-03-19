@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
 import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
+import styled from "styled-components";
 
 const GPTChat = () => {
   const { userSelections } = useMealPlanContext();
@@ -170,12 +171,12 @@ const handleBefore = () => {
   };
   return (
  
-
-    <div style={{ textAlign: "center", marginTop:"50px"}}>
+<div className="home-box-container4">
+    <div style={{ textAlign: "center", marginTop:"20px"}}>
       <div className="clickbutton">
         <BackButton onClick={handleBefore}/>
       </div>
-      <h2 style={{ marginBottom: "40px" }}> 식단 추천 결과</h2>
+      <Title1 > 식단 추천 결과</Title1>
 
       {isLoading && <p>⏳ 식단을 생성 중입니다...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -188,8 +189,17 @@ const handleBefore = () => {
        </FloatingNextButton>
         </>
       )}
-    </div>
+      </div>
+      </div>
   );
 };
 
 export default GPTChat;
+// Styled Components
+const Title1 = styled.div`
+  font-family: "Nanum Gothic";
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom : 15px;
+  
+`;
