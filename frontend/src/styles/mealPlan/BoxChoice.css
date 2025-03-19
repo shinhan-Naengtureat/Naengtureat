@@ -1,5 +1,5 @@
 /* 전체 컨테이너 */
-.container {
+.box-container {
   display: block;
   flex-direction: column;
   align-items: center;
@@ -20,14 +20,16 @@
 }
 
 /* 제목 스타일 */
-.title {
+.box-title {
+   text-align: center;
   font-size: 22px;
   font-weight: 800;
   color: #6b7682;
   margin-bottom: 20px;
 }
 
-.highlight {
+.box-highlight {
+  
   color: #343d4c;
   font-weight: 800;
 }
@@ -39,6 +41,8 @@
   gap: 10px;
   justify-content: center;
   max-width: 400px;
+   text-align: center;
+   align-items: center;
 }
 
 /* 테마 버튼 스타일 */
