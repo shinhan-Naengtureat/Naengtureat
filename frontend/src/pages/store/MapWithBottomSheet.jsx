@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import KakaoMap from "pages/store/KakaoMap";
 import StoreList from "pages/store/StoreList";
 import "styles/store/MapWithBottomSheet.css";
@@ -9,9 +9,19 @@ function MapWithBottomSheet({ setPlaces, places }) {
     // 초기 바텀 시트 높이 (픽셀 단위)
     const [sheetHeight, setSheetHeight] = useState(defaultSheetHeight);
     const sheetRef = useRef(null);
+    const contentRef = useRef(null);
     const startYRef = useRef(0);         // 드래그 시작 시점의 y 좌표
     const startHeightRef = useRef(0);    // 드래그 시작 시점의 시트 높이
-    const topNavHeight = 170; // 상단 네비게이션 바 높이(px)
+    const topNavHeight = 250; // 상단 네비게이션 바 높이(px)
+
+    // places 변경 시, 내부 콘텐츠 높이를 측정하여 시트 높이 업데이트
+    useEffect(() => {
+        if (contentRef.current) {
+        const contentHeight = contentRef.current.scrollHeight;
+        // 콘텐츠 높이와 기본 높이 중 더 큰 값을 사용하여, 내용이 적으면 기본 높이 유지
+        setSheetHeight(Math.max(contentHeight, defaultSheetHeight));
+        }
+    }, [places, defaultSheetHeight]);
 
     // 드래그 시작 이벤트 (마우스 또는 터치)
     const handleDragStart = (e) => {

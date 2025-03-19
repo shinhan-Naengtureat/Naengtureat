@@ -1,9 +1,9 @@
 // RecipeRegister.jsx
 import React, { useState } from 'react';
-import OverviewSection from './OverviewSection';
-import IngredientsSection from './IngredientsSection';
-import StepsSection from './StepsSection';
-import HashtagsSection from './HashtagsSection';
+import OverviewSection from 'pages/recipe/RecipeRegister/OverviewSection';
+import IngredientsSection from 'pages/recipe/RecipeRegister/IngredientsSection';
+import StepsSection from 'pages/recipe/RecipeRegister/StepsSection';
+import HashtagsSection from 'pages/recipe/RecipeRegister/HashtagsSection';
 import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
 import { toast, ToastContainer } from 'react-toastify';
@@ -73,7 +73,7 @@ function RecipeRegister() {
     try {
       const response = await axiosInstance.post(`/recipe/new`, recipeDto);
       console.log("등록결과:",response.data);
-      toast.success(response.data.message, {
+      toast.success('레시피가 등록되었습니다', {
                 position: "top-center",
                 autoClose: 3000,
             });
