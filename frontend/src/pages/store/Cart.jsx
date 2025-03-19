@@ -1,6 +1,7 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'styles/store/Cart.css';
 
@@ -8,12 +9,13 @@ function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 const cartDTOList = await axiosInstance.get('/store/cart');
-                console.log('cartDTOList : ', cartDTOList.data);
+                console.log('장바구니 목록 : ', cartDTOList.data);
                 setCartItems(cartDTOList.data);
             } catch (error) {
                 console.log('장바구니 정보를 가져오는 중 오류 발생 : ', error);
@@ -114,6 +116,21 @@ function Cart() {
         })
     }
 
+    // 주문하기 버튼 클릭 핸들러
+    const orderHandler = () => {
+        // cartItems 배열에서 필요한 속성만 추출
+        const orderItems = cartItems.map(item => ({
+            productId: item.productId,
+            productName: item.productName,
+            count: item.count,
+            productPrice: item.productPrice,
+            discountPrice: item.discountPrice
+        }));
+
+        // OrderDetail.jsx 컴포넌트로 state를 함께 전달
+        navigate('/store/order', { state: { orderItems } });
+    };
+
     if (loading) {
         return <div>장바구니 로딩 중...</div>
     }
@@ -197,7 +214,7 @@ function Cart() {
                         ))}
                     </div>
 
-                    <button className='order-button'>주문하기</button>
+                    <button className='order-button' onClick={orderHandler}>주문하기</button>
                 </>
             )}
         </div>
