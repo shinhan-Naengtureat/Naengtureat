@@ -98,7 +98,7 @@
   width: 90%;
   max-width: 430px;
   margin: 0;
- font-family: "Nanum Gothic";
+  font-family: var(--font-nanum) !important;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -112,7 +112,7 @@
   width: 90%;
   max-width: 430px;
   margin: 0;
-font-family: "Nanum Gothic";
+ font-family: var(--font-nanum) !important;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -124,7 +124,7 @@ font-family: "Nanum Gothic";
   padding: 5px;
   width: 100%;
   max-width: 100%;
- font-family: "Nanum Gothic";
+  font-family: var(--font-nanum) !important;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

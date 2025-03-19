@@ -32,7 +32,7 @@
 
 /* 제목 스타일 */
 .preferred-title {
-  font-family: "Nanum Gothic";
+   font-family: var(--font-nanum) !important;
   font-size: 18px;
   font-weight: bold;
   color: #f35c04;
@@ -41,7 +41,7 @@
 }
 
 .preferred-subtitle {
-  font-family: "Nanum Gothic";
+   font-family: var(--font-nanum) !important;
   font-size: 24px;
   font-weight: bold;
   color: #343d4c;
@@ -49,7 +49,7 @@
   margin-bottom: 20px;
 }
 .excluded-subtitle {
-  font-family: "Nanum Gothic";
+   font-family: var(--font-nanum) !important;
   font-size: 15px;
   font-weight: bold;
   color: #343d4c;
