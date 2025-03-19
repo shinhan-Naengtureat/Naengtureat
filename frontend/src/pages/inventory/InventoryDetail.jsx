@@ -5,6 +5,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
 import {toast} from "react-toastify";
+import routeConfig from "routes/routeConfig";
 
 const InventoryDetail = () => {
   const {id} = useParams();
@@ -208,7 +209,7 @@ const InventoryDetail = () => {
 
     axiosInstance.put("/inventory", updatedInventory)
       .then(response => {
-        navigate("/inventory");
+        navigate(routeConfig.paths.inventoryList);
       })
       .catch(error => {
         console.error("재료 수정 중 오류 발생:", error);
@@ -240,7 +241,7 @@ const InventoryDetail = () => {
     axiosInstance
       .delete(`/inventory/${inventory.id}`)
       .then(() => {
-        navigate("/inventory", { state: { message: `"${inventory.nickName}"이(가) 삭제되었습니다.` } });
+        navigate(routeConfig.paths.inventoryList);
       })
       .catch(error => {
         console.error("재료 삭제 중 오류 발생:", error);
