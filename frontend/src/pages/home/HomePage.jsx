@@ -8,6 +8,7 @@ import axiosInstance from "api/axios";
 import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import routeConfig from "routes/routeConfig";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -110,14 +111,14 @@ const HomePage = () => {
         >
           {recipes.map((recipe) => (
             <SwiperSlide key={recipe.id} className="home-recipe-slide">
-              <div className="home-recipe-card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
+              <div className="home-recipe-card" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", recipe.id))}>
                 <img
                   src={`${RECIPE_IMAGE_PATH}/${recipe.image}`}
                   alt={recipe.name}
                   className="home-recipe-image"
                 />
               </div>
-              <div className="home-recipe-info">
+              <div className="home-recipe-info" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", recipe.id))}>
                 <div className="home-recipe-header">
                   <h5 className="home-recipe-title">{recipe.name}</h5>
                   {recipe.liked ? (
@@ -150,7 +151,7 @@ const HomePage = () => {
           {dailyMealPlan.length > 0 ? (
             dailyMealPlan.map((meal, idx) => (
               <div key={idx} className="home-meal-item">
-                <div className="home-meal-card">
+                <div className="home-meal-card" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", meal.recipeId))}>
                   <p className="home-meal-time">{meal.type}</p>
                   <p className="home-meal-content">{meal.recipeName}</p>
                 </div>
