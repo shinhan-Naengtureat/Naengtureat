@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { startOfWeek, addDays, format } from "date-fns";
+import { startOfWeek, addDays, format, isBefore } from "date-fns";
 import { ko } from "date-fns/locale";
 import "styles/mealPlan/WeeklyMealPlan.css";
 import "../../index.css"; 
@@ -24,6 +24,7 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
     const formattedDate = format(day, "yyyy-MM-dd");
     return {
       date: formattedDate,
+      isDisabled: isBefore(day, today),
        dayLabel: (
       <>
         {format(day, "d", { locale: ko })}
@@ -59,8 +60,15 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
   const destDate = `${destId[0]}-${destId[1]}-${destId[2]}`;
   const destMealType = destId[3];
 
-        //  상태 업데이트
-      const newMealPlan = [...mealPlan];
+  // 오늘 이전 날짜로 이동하려고 하면 중단
+  if (isBefore(new Date(destDate), today)) {
+      console.warn("이전 날짜로 이동할 수 없습니다.");
+      return;
+  }
+
+    
+  //  상태 업데이트
+  const newMealPlan = [...mealPlan];
       
   //  드래그한 식단 찾기
   const sourceMealIndex = newMealPlan.findIndex(
@@ -131,13 +139,35 @@ if (sourceMealIndex === -1) {
           </tr>
         </thead>
         <tbody>
-          {structuredMealPlan.map(({ date, dayLabel, meals }) => (
+          {structuredMealPlan.map(({ date, dayLabel, meals,isDisabled }) => (
             <tr key={date}>
               <td className="date-cell">{dayLabel}</td>
-              {["아침", "점심", "저녁"].map((mealType) => (
+              {["아침", "점심", "저녁"].map((mealType) => 
+                isDisabled ? (
+                  <td
+                  key={`${date}-${mealType}`}
+                                        className="meal-cell disabled"
+                                        style={{
+                                            width: "120px",
+                                            wordWrap: "break-word",
+                                            whiteSpace: "normal",
+                                            backgroundColor: "#dee2e6", // 비활성화 스타일
+                                            cursor: "not-allowed",
+                                        }}
+                                    >
+                    {meals[mealType] ? meals[mealType].recipeName : "x"}
+                    </td>
+                    ):(
                 <Droppable key={`${date}-${mealType}`} droppableId={`${date}-${mealType}`}>
                   {(provided) => (
-                    <td ref={provided.innerRef} {...provided.droppableProps} className="meal-cell" style={{ "width": "120px","word-wrap":"break-word","white-space":"normal" }}>
+                        <td
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                          className="meal-cell"
+                          style={{
+                            "width": "120px", "word-wrap": "break-word", "white-space": "normal"                          
+                          }}
+                        >
                       {meals[mealType] ? (
                        <Draggable key={meals[mealType].id} draggableId={meals[mealType].id} index={0}>
                           {(provided) => (
@@ -145,7 +175,7 @@ if (sourceMealIndex === -1) {
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              className="meal-item" style={{"word-break":"break-word"}}
+                              className="meal-item"
                             >
                               {meals[mealType].recipeName}
                               {/* <button className="refresh-btn" onClick={() => refreshMeal(date, mealType)}>
@@ -161,7 +191,8 @@ if (sourceMealIndex === -1) {
                     </td>
                   )}
                 </Droppable>
-              ))}
+                )
+              )}
             </tr>
           ))}
         </tbody>
