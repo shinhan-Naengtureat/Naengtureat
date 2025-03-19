@@ -8,6 +8,7 @@ import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import routeConfig from "routes/routeConfig";
 
 function RecipeRegister() {
   const [form, setForm] = useState({
@@ -77,7 +78,7 @@ function RecipeRegister() {
                 position: "top-center",
                 autoClose: 3000,
             });
-      navigate("/recipes")
+      navigate(routeConfig.paths.recipeList)
       // 등록 후 폼 초기화 또는 다른 페이지 이동 로직 추가 가능
     } catch (error) {
       toast.error('레시피 등록에 실패했습니다.', {

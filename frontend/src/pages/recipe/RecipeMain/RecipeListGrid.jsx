@@ -1,6 +1,7 @@
 import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import routeConfig from "routes/routeConfig";
 
 function RecipeListGrid({ recipes }) {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function RecipeListGrid({ recipes }) {
         <div
           key={recipe.id}
           className="recipe-card"
-          onClick={() => navigate(`/recipe/${recipe.id}`)}
+          onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", recipe.id))}
         >
           <img src={`${RECIPE_IMAGE_PATH}/${recipe.image}`} alt={recipe.name} />
           <div className="recipe-info">
