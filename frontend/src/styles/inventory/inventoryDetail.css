@@ -209,6 +209,18 @@
   width: 100%;
 }
 
+.inventory-delete-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.inventory-delete-modal .modal-content {
+  transform: translateY(0%);
+}
+
 /* 검색 입력창 */
 .search-container {
   flex-grow: 1;

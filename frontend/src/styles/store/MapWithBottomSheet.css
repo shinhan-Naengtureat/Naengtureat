@@ -2,18 +2,18 @@
 .map-container {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 673px;
     overflow: hidden;
 }
 
 /* 바텀 시트: 지도 하단에 오버레이 */
 .store-bottom-sheet {
     position: absolute;
-    bottom: 178px;
+    bottom: 0px;
     width: 100%;
     background: #fff;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
