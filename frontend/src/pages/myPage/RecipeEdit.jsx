@@ -131,7 +131,6 @@ function RecipeEdit() {
 
   return (
     <div className="recipe-form-container">
-      <h1>레시피 수정</h1>
       <form className="recipe-form" onSubmit={handleSubmit}>
         <OverviewSection
           form={form}

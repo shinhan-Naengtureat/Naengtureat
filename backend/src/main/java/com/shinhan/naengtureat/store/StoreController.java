@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.member.entity.Cart;
+import com.shinhan.naengtureat.store.dto.CartRequestDTO;
 import com.shinhan.naengtureat.store.dto.StoreDTO;
 import com.shinhan.naengtureat.store.dto.StorePriceDTO;
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
@@ -212,6 +213,21 @@ public class StoreController {
 		}
 		
 	}
+	//장바구니 추가(부족한재료 - 스토어조회)
+	@PostMapping("/cart/add")
+    public ResponseEntity<Object> addToCart(@RequestBody CartRequestDTO cartRequestDto) {
+        try {
+            // ingredient_id와 store_id를 이용해 product_id 조회 후 장바구니 추가
+        	List<Map<String, Object>> response = storeCartService.addMultipleToCart(
+                    3L, cartRequestDto.getIngredientIds(), cartRequestDto.getStoreId());
+                    return ResponseEntity.ok().body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+	
+	
+	
 	
 	// 장바구니 추가
 	@PostMapping("/cart/{productId}")

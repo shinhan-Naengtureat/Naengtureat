@@ -35,8 +35,9 @@ function RecipeList() {
     axios
       .get("/recipe")
       .then((res) => {
-        setAllRecipes(res.data);
-        setFilteredRecipes(res.data);
+        const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
+        setAllRecipes(validRecipes);
+        setFilteredRecipes(validRecipes);
         setLoading(false);
       })
       .catch((err) => {
@@ -128,6 +129,29 @@ function RecipeList() {
           onSelectSortFilter={setSelectedSortFilter}
         />
       </div>
+
+      {/* 선택된 재료 대분류를 보여주는 영역 */}
+    {selectedBigCategories.length > 0 && (
+      <div className="selected-big-categories" style={{ margin: "16px", textAlign: "left", marginLeft:"15px"}}>
+        <strong>선택한 식재료: </strong>
+        {selectedBigCategories.map((category, index) => (
+          <span
+            key={index}
+            className="selected-category-chip"
+            style={{
+              color:"#fff",
+              marginRight: "8px",
+              padding: "8px 12px",
+              border: "1px solid #ddd",
+              background: "#fe7f2d",
+              borderRadius: "50px",
+            }}
+          >
+            {category}
+          </span>
+        ))}
+      </div>
+    )}
 
       {loading ? (
         <div style={{ padding: "16px" }}>로딩중...</div>
