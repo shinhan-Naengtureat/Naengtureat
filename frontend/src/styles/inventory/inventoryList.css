@@ -114,7 +114,8 @@ h5.text-start {
 
 
 .delete-multiple-inventory-button {
-  width: 80%;
+  width: 30%;
+  max-width: 430px;
   font-size: 18px;
   font-weight: bold;
   padding: 15px 0;
