@@ -55,4 +55,24 @@ public class PayService {
         pay.setBalance(pay.getBalance() + chargeAmount);
         payRepository.save(pay);
     }
+    
+    // 냉털잇페이로 결제
+    @Transactional
+    public String payNaengpay(Long memberId, int price) {
+    	// 페이 결제
+    	Member member = memberRepository.findById(memberId)
+    					.orElseThrow(() -> new NoSuchElementException("해당 회원 정보를 찾을 수 없습니다."));
+    	
+    	Pay memberPay  = payRepository.findByMember(member);
+    	
+    	memberPay.setBalance(memberPay.getBalance() - price);
+    	payRepository.save(memberPay);
+    	
+    	// 결제금액의 1% 포인트로 적립
+    	int bonusPoint = (int) (price * 0.01);
+    	member.setPoint(member.getPoint() + bonusPoint);
+    	memberRepository.save(member);
+    	
+    	return "냉털잇페이 결제가 완료되었습니다";
+    }
 }
