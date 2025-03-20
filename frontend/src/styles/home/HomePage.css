@@ -113,7 +113,7 @@
 /* 오늘의 식단 카드 */
 .home-meal-plan {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 20px;
 }
 
