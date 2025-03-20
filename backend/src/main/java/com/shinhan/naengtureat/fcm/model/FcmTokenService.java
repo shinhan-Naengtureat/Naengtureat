@@ -14,7 +14,6 @@ public class FcmTokenService {
     public void saveToken(Long userId, String token) {
         String key = "fcm_token:" + userId.toString();
         redisTemplate.opsForValue().set(key, token);
-        System.out.println("✅ Redis에 저장 완료: " + redisTemplate.opsForValue().get("fcm_token:" + userId));
     }
 
     //사용자 FCM 토큰 조회

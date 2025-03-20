@@ -23,8 +23,6 @@ public class FcmController {
     //FCM 토큰 저장 API
     @PostMapping("/token")
     public ResponseEntity<Object> saveToken(@RequestBody FcmTokenRequestDto fcmTokenRequestDto) {
-        System.out.println("✅ Redis에 FCM 토큰 저장 시도: userId=" + fcmTokenRequestDto.getUserId()
-                + ", token=" + fcmTokenRequestDto.getToken());
         fcmTokenService.saveToken(fcmTokenRequestDto.getUserId(), fcmTokenRequestDto.getToken());
         return ResponseEntity.ok(BaseResponse.builder().message("FCM 토큰 저장 완료!").build());
     }
