@@ -38,11 +38,14 @@ function TopNav(props) {
   // 현재 경로로부터 설정된 navConfig를 찾음
   const currentNav = getNavConfigForPath(location.pathname);
 
+  const hideBackButtonPaths = ["/", "/inventory", "/mealplan", "/recipes", "/store"];
 
   return (
     <>
       <div className="top-navi">
-        <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+         {!hideBackButtonPaths.includes(location.pathname) && (
+          <button className="back-btn" onClick={() => navigate(-1)}>←</button>
+        )}
         <h2 className="title">{currentNav.title}</h2>
         <div className="icons">
   {currentNav.links.map((link, idx) => {
