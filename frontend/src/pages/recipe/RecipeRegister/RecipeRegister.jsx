@@ -1,13 +1,14 @@
 // RecipeRegister.jsx
 import React, { useState } from 'react';
-import OverviewSection from './OverviewSection';
-import IngredientsSection from './IngredientsSection';
-import StepsSection from './StepsSection';
-import HashtagsSection from './HashtagsSection';
+import OverviewSection from 'pages/recipe/RecipeRegister/OverviewSection';
+import IngredientsSection from 'pages/recipe/RecipeRegister/IngredientsSection';
+import StepsSection from 'pages/recipe/RecipeRegister/StepsSection';
+import HashtagsSection from 'pages/recipe/RecipeRegister/HashtagsSection';
 import axiosInstance from 'api/axios';
 import 'styles/recipe/RecipeRegister.css';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast} from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import routeConfig from "routes/routeConfig";
 
 function RecipeRegister() {
   const [form, setForm] = useState({
@@ -73,11 +74,13 @@ function RecipeRegister() {
     try {
       const response = await axiosInstance.post(`/recipe/new`, recipeDto);
       console.log("등록결과:",response.data);
-      toast.success(response.data.message, {
+      setTimeout(() => {
+                  toast.success('레시피가 등록되었습니다', {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 2000,
             });
-      navigate("/recipes")
+          }, 300);
+      navigate(routeConfig.paths.recipeList)
       // 등록 후 폼 초기화 또는 다른 페이지 이동 로직 추가 가능
     } catch (error) {
       toast.error('레시피 등록에 실패했습니다.', {
@@ -89,7 +92,7 @@ function RecipeRegister() {
 
   return (
     <div className="recipe-form-container">
-      <h1>레시피 등록</h1>
+      
       <form className="recipe-form" onSubmit={handleSubmit}>
         <OverviewSection
           form={form}
@@ -135,7 +138,6 @@ function RecipeRegister() {
         />
         <button type="submit" className="submit-btn">등록하기</button>
       </form>
-      <ToastContainer />
     </div>
   );
 }

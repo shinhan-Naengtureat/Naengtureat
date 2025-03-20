@@ -30,6 +30,9 @@ const RouteConfig = {
     store: `${BASE_URL}/store`,
     storeReview: `${BASE_URL}/store/:storeId/review`,
     storeDetail: `${BASE_URL}/store/:storeId/detail`,
+    orderDetail: `${BASE_URL}/store/order`,
+    orderComplete: `${BASE_URL}/store/order/complete`,
+    orderSuccess: `${BASE_URL}/orders/success`,
     myRecipeList: `${BASE_URL}/my-recipe-list`,
     searchRecipe: `${BASE_URL}/search-recipe`,
     recipeDetail: `${BASE_URL}/recipe/:recipeId`,
@@ -47,6 +50,8 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+
+    /*==================재료==================*/
     [`${BASE_URL}/inventory`]: {
       title: "재료 관리",
       links: [
@@ -55,12 +60,40 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+    [`${BASE_URL}/inventory/:id`]: {
+      title: "재료 상세 정보",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/inventory/new`]: {
+      title: "재료 등록",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/multiple-inventory`]: {
+      title: "재료 삭제",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/wastebucket`]: {
+      title: "유통기한 지난 재료",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+
+    /*==================식단==================*/
     [`${BASE_URL}/mealplan`]: {
       title: "식단 관리",
       links: [
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+
+    /*==================레시피==================*/
     [`${BASE_URL}/recipes`]: {
       title: "테마별 레시피",
       links: [
@@ -69,7 +102,26 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
       ],
     },
+    [`${BASE_URL}/recipe/:recipeId`]: {
+      title: "상세 레시피",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/recipe/register`]: {
+      title: "레시피 등록",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/search-recipe`]: {
+      title: "레시피 검색",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
 
+    /*==================스토어==================*/
     [`${BASE_URL}/store`]: {
       title: "스토어",
       links: [
@@ -77,9 +129,28 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+  
 
+    /*==================마이페이지==================*/
+    [`${BASE_URL}/recipe/edit/:recipeId`]: {
+      title: "레시피 수정",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/instant-charge`]: {
+      title: "냉털잇 페이",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/my-recipe-list`]: {
+      title: "나의 레시피",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
   },
-
   notFound: "*",
 };
 

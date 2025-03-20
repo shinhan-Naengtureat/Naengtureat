@@ -7,6 +7,16 @@
   margin: auto;
   padding-bottom: 133px;
 }
+.ingredient-grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+  max-width: 400px;
+  margin: auto;
+  padding-bottom: 133px;
+  height: 100px;
+}
+
 
 /*  개별 카드 스타일 */
 .ingredient-card {

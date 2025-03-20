@@ -39,11 +39,12 @@ public class PayService {
         return mapper.map(pay, PayDTO.class);
     }
 
-	// 결제 완료 후 잔액과 멤버 포인트 업데이트 (충전 금액의 1% 보너스 추가)
+	// 결제 완료 후 잔액 업데이트
     @Transactional
-    public void completePayment(PayDTO PayDto) {
+    public void completePayment(Long memberId, PayDTO PayDto) {
         // 1. 해당 회원의 Pay 정보 조회
         Member memberKey = Member.builder().id(PayDto.getMemberId()).build();
+
         Pay pay = payRepository.findByMember(memberKey);
         if (pay == null) {
             throw new NoSuchElementException("해당 회원의 Pay 정보를 찾을 수 없습니다.");
@@ -53,12 +54,25 @@ public class PayService {
         int chargeAmount = PayDto.getBalance();
         pay.setBalance(pay.getBalance() + chargeAmount);
         payRepository.save(pay);
-        
-        // 3. 멤버 테이블의 포인트 업데이트 (충전 금액의 1% 보너스 추가)
-        Member member = memberRepository.findById(PayDto.getMemberId())
-                .orElseThrow(() -> new NoSuchElementException("해당 회원 정보를 찾을 수 없습니다."));
-        int bonusPoint = (int) (chargeAmount * 0.01);
-        member.setPoint(member.getPoint() + bonusPoint);
-        memberRepository.save(member);
+    }
+    
+    // 냉털잇페이로 결제
+    @Transactional
+    public String payNaengpay(Long memberId, int price) {
+    	// 페이 결제
+    	Member member = memberRepository.findById(memberId)
+    					.orElseThrow(() -> new NoSuchElementException("해당 회원 정보를 찾을 수 없습니다."));
+    	
+    	Pay memberPay  = payRepository.findByMember(member);
+    	
+    	memberPay.setBalance(memberPay.getBalance() - price);
+    	payRepository.save(memberPay);
+    	
+    	// 결제금액의 1% 포인트로 적립
+    	int bonusPoint = (int) (price * 0.01);
+    	member.setPoint(member.getPoint() + bonusPoint);
+    	memberRepository.save(member);
+    	
+    	return "냉털잇페이 결제가 완료되었습니다";
     }
 }
