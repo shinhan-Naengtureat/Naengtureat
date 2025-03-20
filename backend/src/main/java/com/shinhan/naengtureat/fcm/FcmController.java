@@ -4,7 +4,6 @@ import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.fcm.dto.FcmNotificationRequestDto;
 import com.shinhan.naengtureat.fcm.model.FcmNotificationService;
 import com.shinhan.naengtureat.fcm.model.FcmTokenService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
