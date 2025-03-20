@@ -5,6 +5,8 @@ import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
 import IngredientFilter from "pages/recipe/RecipeMain/IngredientFilter";
 import SortFilter from "pages/recipe/RecipeMain/SortFilter";
 import "styles/recipe/Recipe.css";
+import {ToastContainer } from 'react-toastify';
+
 
 const sortMapping = {
   추천순: "recommend",
@@ -162,6 +164,8 @@ function RecipeList() {
       ) : (
         <RecipeListGrid recipes={filteredRecipes} />
       )}
+      <ToastContainer />
+
     </div>
   );
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axiosInstance from "api/axios";
-import { Button, Col, Container, Form, Modal, Row, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
-import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import {toast, ToastContainer} from "react-toastify";
 
 const InventoryCreate = () => {
   const [bigCategories, setBigCategories] = useState([]); // 대분류 목록
@@ -117,7 +118,7 @@ const InventoryCreate = () => {
             setIngredientUnit(matchedCategory.ingredientUnit);
           }
         })
-        .catch(error => console.log("🚨 재료 단위 불러오기 실패:", error));
+        .catch(error => console.log("재료 단위 불러오기 실패:", error));
     }
   }, [selectedSmallCategory]);
 
@@ -125,6 +126,11 @@ const InventoryCreate = () => {
   const handleCreateInventory = () => {
     if (!ingredientId) {
       alert("재료 ID가 없습니다.");
+      return;
+    }
+
+    if (integerPart + fractionPart === 0) {
+      toast.error("0개는 등록할 수 없어요!")
       return;
     }
 
@@ -175,6 +181,7 @@ const InventoryCreate = () => {
 
   return (
     <Container className="inventory-detail-container">
+      <ToastContainer/>
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
@@ -207,7 +214,7 @@ const InventoryCreate = () => {
               <Form.Control
                 className="category-select"
                 value={selectedSmallCategory} readOnly
-                onClick={() => setIsModalOpen(true)} />
+                onClick={() => setIsModalOpen(true)}/>
             </Col>
             {/* 닉네임 입력 */}
             <Col>
@@ -276,10 +283,10 @@ const InventoryCreate = () => {
           <Button variant="outline-danger" onClick={() => setIntegerPart(prev => Math.max(prev - 1, 0))}>－</Button>
           <Form.Control
             type="number"
-            value={integerPart === "" ? "" : integerPart} // 빈 값 유지
+            value={integerPart === 0 ? 1 : integerPart} // 빈 값 유지
             onChange={handleChangeIntegerPart} // 새로운 핸들러 사용
             className="mx-2 text-center"
-            style={{ width: "50px" }}
+            style={{width: "50px"}}
           />
           <Button variant="outline-primary" onClick={() => setIntegerPart(prev => prev + 1)}>＋</Button>
         </Col>
@@ -314,7 +321,7 @@ const InventoryCreate = () => {
           <Form.Label className="date-label">소비기한</Form.Label>
           <Form.Control type="date"
                         value={inventoryExpDate}
-                        onChange={(e) => setInventoryExpDate(e.target.value)} />
+                        onChange={(e) => setInventoryExpDate(e.target.value)}/>
         </Col>
       </Row>
 
