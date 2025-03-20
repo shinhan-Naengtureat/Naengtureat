@@ -32,7 +32,7 @@
 .recipe-hashtags span {
   display: inline-block;
   margin-right: 8px;
-  background: #e0e0e0;
+  background: #dfdfdf;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 14px;
@@ -202,7 +202,7 @@
   display: block;
   width: 100%;
   margin-top: 8px;
-  background-color: #ff7f50; /* 원하는 색상으로 변경 가능 */
+  background-color: #fe7f2d; /* 원하는 색상으로 변경 가능 */
   color: #fff;
   border: none;
   padding: 12px;
@@ -228,8 +228,6 @@
 /* 모달 창 */
 .modal-content {
   background-color: #fff !important;
-  width: 80%;
-  max-width: 350px;
   border-radius: 15px !important;
   padding: 16px;
   text-align: center;
