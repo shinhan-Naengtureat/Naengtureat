@@ -134,8 +134,9 @@ function Cart() {
             productName: item.productName,
             count: item.count,
             productPrice: item.productPrice,
-            discountPrice: item.discountPrice
+            discountPrice: item.discountPrice ?? item.productPrice // ?? : 널 병합 연산자, null 또는 undefined인 경우에만 오른쪽 값을 반환하는 연산자
         }));
+        console.log('orderItems : ', orderItems);
 
         // OrderDetail.jsx 컴포넌트로 state를 함께 전달
         navigate('/store/order', { state: { orderItems } });
