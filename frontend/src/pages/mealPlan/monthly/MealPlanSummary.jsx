@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { IoHelpCircleOutline } from "react-icons/io5";
 import { calculateMealStats } from "utils/mealPlanUtils";
 
-const AVERAGE_MEAL_COST = 10000;
+const AVERAGE_MEAL_COST = 11_500;
 
 function MealPlanSummary({ mealData, calendarValue }) {
   const [totalMeals, setTotalMeals] = useState(0); // 전체 식단 개수
@@ -40,8 +40,8 @@ function MealPlanSummary({ mealData, calendarValue }) {
           place="top"
           content={
             <span>
-              대한민국의 평균 한 끼 외식 비용은 10,000원입니다.<br />
-              본 금액을 기준으로 예상 외식 비용을 산정하였습니다.
+              대한민국의 평균 한 끼 외식 비용은 11,500원입니다.<br />
+              출처: 행정안전부 외식비 평균가격(서울)
             </span>
           }
           data-html="true"
