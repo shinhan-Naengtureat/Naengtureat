@@ -43,8 +43,12 @@ public class PayController {
     @PostMapping("/naengpay/charge")
     public ResponseEntity<Object> completePayment(@RequestBody PayDTO PayDto) {
         try {
-            payService.completePayment(PayDto);
-            return ResponseEntity.ok(Map.of("status", "PAID"));
+			// 세션에서 로그인된 사용자 정보 가져오기
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+            
+			payService.completePayment(memberId, PayDto);
+            
+			return ResponseEntity.ok(Map.of("status", "PAID"));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
