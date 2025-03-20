@@ -39,7 +39,7 @@
   position: fixed; /* 항상 화면에 고정 */
   bottom: 120px; /* 화면 하단에서 20px 띄움 */
   width: 85%; /* 너비 조정 */
-  max-width: 400px; /* 최대 너비 */
+  max-width: 372px; /* 최대 너비 */
   padding: 14px;
   font-size: 18px;
   font-weight: bold;
@@ -62,5 +62,32 @@
   pointer-events: none; /* 클릭 방지 */
 }
 
+/*  "다음" 버튼 스타일 */
+.floating-next-button2 {
+  position: fixed; /* 항상 화면에 고정 */
+  bottom: 20px; /* 화면 하단에서 20px 띄움 */
+  width: 85%; /* 너비 조정 */
+  max-width: 372px; /* 최대 너비 */
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background-color: #f35c04;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 999;
+  left: 50%; /* 화면 가운데 정렬 */
+  transform: translateX(-50%); /* X축 기준으로 정확히 중앙으로 이동 */
+}
+
+.floating-next-button2:disabled {
+  background-color: gray; /* 클릭 불가능할 때 회색 */
+  cursor: not-allowed; /* 마우스 포인터 변경 */
+  opacity: 0.5; /* 반투명 효과 */
+  pointer-events: none; /* 클릭 방지 */
+}
 /* .floating-next-button:active {
   transform: translateX(-50%) scale(0.98);}  */

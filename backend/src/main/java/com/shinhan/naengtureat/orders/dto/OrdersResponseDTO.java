@@ -29,6 +29,7 @@ public class OrdersResponseDTO {
 	private String productName; // 상품 이름
 	private int ordersDetailCount; // 주문한 상품 개수(수량)
 	private int ordersDetailPrice; // 주문한 상품 가격
+	private int ordersPointPay; // 주문한 사용자가 사용한 포인트
 	
 	private String memberName; // 주문한 사용자 이름
 	private String memberPhone; // 주문한 사용자 전화번호

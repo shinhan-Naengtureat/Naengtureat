@@ -106,10 +106,10 @@ function RecipeDetail() {
         <p>난이도: {recipe.level}</p>
         <p>조리 시간: {recipe.cookingTime}</p>
         {recipe.hashtags && recipe.hashtags.length > 0 && (
-          <p className="recipe-hashtags">
+          <p className="recipe-hashtags" style={{border:'0',padding:'0'}}>
             {" "}
             {recipe.hashtags.map((hash, index) => (
-              <span key={index}>{hash.hashtagKeyword} </span>
+              <span key={index}>#{hash.hashtagKeyword} </span>
             ))}
           </p>
         )}
