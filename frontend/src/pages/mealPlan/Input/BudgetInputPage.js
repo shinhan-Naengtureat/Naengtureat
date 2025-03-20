@@ -10,6 +10,7 @@ const BudgetInputPage = () => {
   const navigate = useNavigate();
 
   return (
+     <div className="home-box-container">
     <div className="budget-container">
       {/* 타이틀 */}
       <h2 className="budget-subtitle">내가 추천 받고 싶은 식단에 대한</h2>
@@ -46,7 +47,7 @@ const BudgetInputPage = () => {
       {/* 다음 버튼 */}
 
        <FloatingNextButton onClick={() => saveBudget(navigate)} disabled={budget.length === 0} />
-
+</div>
     </div>
   );
 };
