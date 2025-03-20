@@ -48,7 +48,7 @@ const ThemeSelectionPage = () => {
   };
 
   const handleBefore = () => {
-    navigate(RouteConfig.categorySelection);
+    navigate(RouteConfig.paths.categorySelection);
   };
   const handleNext = () => {
     if (selectedTheme.length === 0) {
@@ -61,9 +61,11 @@ const ThemeSelectionPage = () => {
   };
 
   return (
+    <div className="home-box-container">
+       <div className="box-container">
     <div className="box-title" style={{ textAlign: "center" }}>
       {/* 뒤로가기 & 타이틀 */}
-      <div className="category-header">
+      <div className="box-header">
         <BackButton onClick={handleBefore} />
       </div>
 
@@ -93,7 +95,9 @@ const ThemeSelectionPage = () => {
         onClick={handleNext}
         disabled={selectedTheme.length === 0}
       />
-    </div>
+        </div>
+        </div>
+      </div>
   );
 };
 

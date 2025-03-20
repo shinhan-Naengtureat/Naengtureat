@@ -49,26 +49,22 @@ const ExcludedIngredientsPage = ( ) => {
   };
   // 뒤로가기기
   const handleBefore = () => {
-    navigate(RouteConfig.paths.themeSelection);
+    navigate(RouteConfig.paths.preferredIngredients);
   };
 
   return (
-    <div className="preferred-ingredients-container">
+    <div className="home-box-container3">
+    <div className="preferred-ingredients-container2">
       {/* 뒤로가기 & 타이틀 */}
       <div className="preferred-header">
         <BackButton onClick={handleBefore} />
       </div>
       <h2 className="preferred-title">취향에 맞는 레시피를 추천해드립니다.</h2>
       <h2 className="preferred-subtitle">제외할 재료를 선택하세요</h2>
-      <h5
-        className="subtitle"
-        style={{ color: "#6b7682", fontWeight: "bold", fontSizesize: "10px" }}
-      >
-        아래에서 선택한 재료를 포함하는 레시피는 추천하지 않습니다.
-      </h5>
+     
 
       {/*  재료 선택 (그리드) */}
-      <div className="ingredient-grid">
+      <div className="ingredient-grid2">
         {ingredientsList.map(({ name, image }) => (
           <IngredientCard
             key={name}
@@ -83,7 +79,8 @@ const ExcludedIngredientsPage = ( ) => {
       <FloatingNextButton
         onClick={handleNext}
         disabled={selectedIngredients.length === 0}
-      />
+        />
+        </div>
     </div>
   );
 };
