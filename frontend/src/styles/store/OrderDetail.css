@@ -34,13 +34,6 @@
     margin-bottom: 8px;
     font-family: var(--font-nanum) !important;
   }
-  
-  /* .payment-option {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-  } */
 
   .payment-option {
     display: flex;
