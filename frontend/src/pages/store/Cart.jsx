@@ -25,6 +25,14 @@ function Cart() {
             }
         };
 
+        sessionStorage.removeItem("ordersDTO");
+        sessionStorage.removeItem("orderDetailDTOList");
+        sessionStorage.removeItem("isPaymentProcessed");
+        sessionStorage.removeItem("responseDtos");
+        sessionStorage.removeItem("isNaengPayCharge");
+        sessionStorage.removeItem("finalPrice");
+        sessionStorage.removeItem("chargeAmount");
+
         fetchCartItems();
     }, []);
 
