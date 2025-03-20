@@ -30,7 +30,7 @@ const UseFirebasePush = (userId) => {
               setToken(currentToken);
 
               // 백엔드로 FCM 토큰 전송
-              axiosInstance.post("/fcm/save-token", {
+              axiosInstance.post("/fcm/token", {
                 userId: userId,
                 token: currentToken
               })
