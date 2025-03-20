@@ -114,7 +114,7 @@ h5.text-start {
 
 
 .delete-multiple-inventory-button {
-  width: 30%;
+  width: 80%;
   max-width: 430px;
   font-size: 18px;
   font-weight: bold;
@@ -127,4 +127,17 @@ h5.text-start {
   border-radius: 0;
   justify-content: center;
   bottom: 120px;
+}
+
+/* 삭제 확인 모달 */
+.inventory-delete-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.inventory-delete-modal .modal-content {
+  transform: translateY(0%);
 }
