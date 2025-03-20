@@ -143,3 +143,6 @@ Temporary Items
 
 # Application properties file
 application.properties
+
+# Firebase 서비스 계정 키 제외
+backend/src/main/resources/serviceAccountKey.json
