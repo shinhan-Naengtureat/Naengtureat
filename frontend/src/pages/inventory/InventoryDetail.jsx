@@ -188,9 +188,13 @@ const InventoryDetail = () => {
   }, [ingredientUnit]);
 
   const handleUpdateInventory = () => {
-    console.log("현재 ingredientId:", ingredientId);  // 재료 ID 확인
     if (!ingredientId) {
       alert("재료 ID가 없습니다.");
+      return;
+    }
+
+    if (integerPart + fractionPart === 0) {
+      toast.error("0개는 등록할 수 없어요!")
       return;
     }
 
