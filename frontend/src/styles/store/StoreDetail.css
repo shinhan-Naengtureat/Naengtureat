@@ -190,3 +190,18 @@
     font-size: 0.85rem;
     font-weight: bold;
 }
+
+/* 모달 전체 스타일 */
+.cart-modal {
+    justify-content: center;
+}
+
+.cart-modal .modal-content {
+    width: 350px;
+    align-items: center;
+}
+
+.cart-modal .modal-footer .btn {
+    padding: 7px 35px;
+    margin: 0 20px;
+}
