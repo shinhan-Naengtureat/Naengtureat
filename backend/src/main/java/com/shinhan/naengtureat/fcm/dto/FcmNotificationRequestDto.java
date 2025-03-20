@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FcmTokenRequest {
+public class FcmNotificationRequestDto {
     private Long userId;
-    private String token;
+    private String title;
+    private String body;
 }
