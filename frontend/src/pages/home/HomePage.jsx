@@ -124,13 +124,19 @@ const HomePage = () => {
                   {recipe.liked ? (
                     <FaHeart
                       className="home-recipe-like icon liked"
-                      onClick={() => handleToggleLike(recipe.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(recipe.id);
+                      }}
                       title="좋아요 토글"
                     />
                   ) : (
                     <FaRegHeart
                       className="home-recipe-like icon"
-                      onClick={() => handleToggleLike(recipe.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(recipe.id);
+                      }}
                       title="좋아요 토글"
                     />
                   )}
