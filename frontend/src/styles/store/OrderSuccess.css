@@ -1,0 +1,107 @@
+.order-success {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px 20px 100px 20px;
+    border-radius: 10px;
+    font-family: var(--font-nanum) !important;
+}
+
+.order-success h3, .order-success h4 {
+    font-family: var(--font-nanum) !important;
+    font-weight: bold;
+}
+
+.store-info p {
+    font-family: var(--font-nanum) !important;
+}
+
+.order-items, .delivery-info {
+    margin-bottom: 20px;
+}
+
+.order-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-table th, .order-table td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.8rem;
+}
+
+.order-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    text-align: center;
+}
+
+.order-table td:nth-child(1) {
+    width: 200px;
+    max-width: 200px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-table td:nth-child(2) {
+    width: 55px;
+    max-width: 55px;
+    text-align: center;
+}
+
+.order-table td:nth-child(3) {
+    text-align: right;
+    width: 90px;
+    max-width: 90px;
+}
+
+.total-price {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.order-success-price {
+    font-weight: bold;
+    font-size: 1.1rem !important;
+}
+
+.delivery-info {
+    text-align: left;
+}
+
+.order-success-title {
+    font-family: var(--font-nanum) !important;
+    text-align: left;
+}
+
+.order-delivery-table td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 0.8rem;
+    min-width: 40px;
+}
+
+.order-delivery-table td:nth-child(2) {
+    padding-left: 10px;
+}
+
+.okay-button {
+    width: 100%;
+    background: #FE7F2D;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+.okay-button:hover {
+    background: #F35C04;
+ }

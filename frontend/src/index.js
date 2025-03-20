@@ -10,11 +10,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
       <AppRouter />
     </BrowserRouter>
-  </React.StrictMode>
 );
 
 // 서비스 워커 등록 (PWA 적용)
