@@ -2,9 +2,10 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {Badge, Button, Col, Container, Form, Placeholder, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "styles/inventory/inventoryList.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import {toast, ToastContainer} from "react-toastify";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
@@ -13,6 +14,10 @@ const InventoryList = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [toastMessage, setToastMessage] = useState(null);
+
+
 
   //아이템 useEffect
   useEffect(() => {
@@ -94,8 +99,23 @@ const InventoryList = () => {
     });
   };
 
+  //토스트 표시
+  useEffect(() => {
+    console.log("📌 location.state:", location.state);
+
+    if (location.state?.message && !toastMessage) {
+      setToastMessage(location.state.message); // 메시지를 상태로 저장
+      toast.success(location.state.message); // 토스트 실행
+
+      setTimeout(() => {
+        navigate(location.pathname, { replace: true });
+      }, 1000); // navigate를 1초 후 실행
+    }
+  }, [location, navigate, toastMessage]);
+
   return (
     <Container className="inventory-container">
+      <ToastContainer />
       <IngredientBigCategoryFilter
         items={categories}
         selectedItems={selectedCategories}
@@ -138,7 +158,7 @@ const InventoryList = () => {
                          style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
                     >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays}
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays == 0 ? "Today" : "D+" + -item.remainingDays }
                       </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />

@@ -4,11 +4,13 @@ import { startOfWeek, addDays, format, isBefore } from "date-fns";
 import { ko } from "date-fns/locale";
 import "styles/mealPlan/WeeklyMealPlan.css";
 import "../../index.css"; 
+import { useNavigate } from "react-router-dom";
+import RouteConfig from "routes/routeConfig";
 
-const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals }) => {
+const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals, updateMealPlan }) => {
     const [mealPlan, setMealPlan] = useState(initialMealPlan);
     const [backupMeals, setBackupMeals] = useState(extraMeals);
-    
+   
     useEffect(() => {
    // console.log(" 초기 MealPlan 상태:", initialMealPlan);
     setMealPlan(initialMealPlan);
@@ -110,26 +112,28 @@ if (sourceMealIndex === -1) {
     };
   }
     setMealPlan(newMealPlan);
+    updateMealPlan(newMealPlan);
 
   };
 
-  // 식단 새로고침 기능 (랜덤 대체)
-  const refreshMeal = (date, mealType) => {
-    if (backupMeals.length === 0) return;
+  // // 식단 새로고침 기능 (랜덤 대체)
+  // const refreshMeal = (date, mealType) => {
+  //   if (backupMeals.length === 0) return;
 
-    const newMealPlan = [...mealPlan];
-    const mealIndex = newMealPlan.findIndex((m) => m.date === date && m.type === mealType);
+  //   const newMealPlan = [...mealPlan];
+  //   const mealIndex = newMealPlan.findIndex((m) => m.date === date && m.type === mealType);
 
-    if (mealIndex !== -1) {
-      const randomExtraMeal = backupMeals[Math.floor(Math.random() * backupMeals.length)];
-      newMealPlan[mealIndex].recipeName = randomExtraMeal.recipeName;
-      setMealPlan(newMealPlan);
-    }
-  };
+  //   if (mealIndex !== -1) {
+  //     const randomExtraMeal = backupMeals[Math.floor(Math.random() * backupMeals.length)];
+  //     newMealPlan[mealIndex].recipeName = randomExtraMeal.recipeName;
+  //     setMealPlan(newMealPlan);
+  //   }
+  // };
 
   return (
+    
     <DragDropContext onDragEnd={handleDragEnd}>
-      <table className="meal-plan-table" style={{margin:"auto"}}>
+      <table className="meal-plan-table" style={{margin:"auto" }}>
         <thead>
           <tr>
             <th> </th>

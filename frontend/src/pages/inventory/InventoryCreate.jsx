@@ -175,7 +175,6 @@ const InventoryCreate = () => {
 
   return (
     <Container className="inventory-detail-container">
-      <h2 className="ingredient-detail-title">재료 등록</h2>
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
