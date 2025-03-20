@@ -17,10 +17,11 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 .shopping-title {
+  font-family: var(--font-nanum) !important;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 
@@ -34,9 +35,13 @@
   border-collapse: collapse;
   margin-bottom: 20px;
 }
-
+.shopping-table tr th{
+   background-color: #fafafa
+   
+}
 .shopping-table th,
 .shopping-table td {
+  font-family: var(--font-nanum) !important;
   padding: 5px;
   border-bottom: 1px solid #ddd;
   text-align: center;
@@ -53,7 +58,7 @@
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: #f35c04;
+  
 }
 
 .shopping-footer {
