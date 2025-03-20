@@ -90,7 +90,7 @@ function RecipeRegister() {
 
   return (
     <div className="recipe-form-container">
-      <h1>레시피 등록</h1>
+      
       <form className="recipe-form" onSubmit={handleSubmit}>
         <OverviewSection
           form={form}
