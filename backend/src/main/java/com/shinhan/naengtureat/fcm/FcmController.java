@@ -2,6 +2,7 @@ package com.shinhan.naengtureat.fcm;
 
 import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.fcm.dto.FcmNotificationRequestDto;
+import com.shinhan.naengtureat.fcm.dto.FcmTokenRequestDto;
 import com.shinhan.naengtureat.fcm.model.FcmNotificationService;
 import com.shinhan.naengtureat.fcm.model.FcmTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,10 @@ public class FcmController {
 
     //FCM 토큰 저장 API
     @PostMapping("/token")
-    public ResponseEntity<Object> saveToken(@RequestParam Long userId, @RequestParam String token) {
-        System.out.println("✅ Redis에 FCM 토큰 저장 시도: userId=" + userId + ", token=" + token);
-        fcmTokenService.saveToken(userId, token);
+    public ResponseEntity<Object> saveToken(@RequestBody FcmTokenRequestDto fcmTokenRequestDto) {
+        System.out.println("✅ Redis에 FCM 토큰 저장 시도: userId=" + fcmTokenRequestDto.getUserId()
+                + ", token=" + fcmTokenRequestDto.getToken());
+        fcmTokenService.saveToken(fcmTokenRequestDto.getUserId(), fcmTokenRequestDto.getToken());
         return ResponseEntity.ok(BaseResponse.builder().message("FCM 토큰 저장 완료!").build());
     }
 
