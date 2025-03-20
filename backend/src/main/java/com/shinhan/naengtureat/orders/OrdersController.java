@@ -116,7 +116,6 @@ public class OrdersController {
 	        	
 	            int ordersDetailCount = ordersDetail.getCount();
 	            int ordersDetailPrice = ordersDetail.getPrice();
-//	            int ordersPointPay = savedOrders.getPointPay();
 	            
 	            String memberName = savedOrders.getMember().getName();
 	            String memberPhone = savedOrders.getMember().getPhone();
