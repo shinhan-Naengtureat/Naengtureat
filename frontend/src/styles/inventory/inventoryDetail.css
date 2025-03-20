@@ -10,12 +10,6 @@
   text-decoration: none;
 }
 
-.title {
-  flex-grow: 1;
-  text-align: center;
-  font-weight: bold;
-}
-
 .ingredient-detail-title .ingredient-detail-sub-title {
   text-align: left!important;
   font-weight: bold;
