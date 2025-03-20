@@ -55,6 +55,6 @@ public class FcmController {
         }
 
         fcmNotificationService.sendNotification(requestDto.getUserId(), requestDto.getTitle(), requestDto.getBody(), token);
-        return ResponseEntity.ok(BaseResponse.builder().message("푸시 알림 전송 완료!"));
+        return ResponseEntity.ok(BaseResponse.builder().message("푸시 알림 전송 완료!").build());
     }
 }
