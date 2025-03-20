@@ -44,6 +44,7 @@ const InventoryMultipleDelete = () => {
     return rawItems.filter(item => selectedCategories.includes(item.ingredientBigCategory));
   }, [rawItems, selectedCategories]);
 
+  // filteredItem 기준 groupedItems 생성
   const groupedItems = useMemo(() => {
     return (filteredItems || []).reduce((acc, item) => {
       if (!acc[item.ingredientBigCategory]) {
@@ -54,22 +55,23 @@ const InventoryMultipleDelete = () => {
     }, {});
   }, [filteredItems]);
 
+  //카테고리 목록 동적 생성
   const categories = useMemo(() => {
-    if (!rawItems.length) return ["전체"];
+    if (!rawItems || rawItems.length === 0) return ["전체"];
     const uniqueCategories = [...new Set(rawItems.map(item => item.ingredientBigCategory))];
     return ["전체", ...uniqueCategories];
   }, [rawItems]);
 
-  // 선택/해제 토글
-  const toggleSelection = (id) => {
-    setSelectedItems((prevSelected) => {
-      const newSelection = new Set(prevSelected);
-      if (newSelection.has(id)) {
-        newSelection.delete(id);
-      } else {
-        newSelection.add(id);
+  // 전체 선택 시 다른 카테고리 해제 & 중복 선택 방지
+  const toggleCategory = (category) => {
+    setSelectedCategories(prev => {
+      if (category === "전체") {
+        return prev.includes("전체") ? prev : ["전체"];
       }
-      return newSelection;
+      if (prev.includes(category)) {
+        return prev.filter(cat => cat !== category);
+      }
+      return prev.includes("전체") ? [category] : [...prev, category];
     });
   };
 
@@ -108,36 +110,29 @@ const InventoryMultipleDelete = () => {
   return (
     <Container className="inventory-container">
       <IngredientBigCategoryFilter
-        items={["전체", ...new Set(rawItems.map(item => item.ingredientBigCategory))]}
+        items={categories}
         selectedItems={selectedCategories}
-        toggleItem={(category) => {
-          setSelectedCategories((prev) =>
-            category === "전체" ? ["전체"] : prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]
-          );
-        }}
+        toggleItem={toggleCategory}
       />
 
       {loading ? (
         <Row className="item-container"><p>로딩 중...</p></Row>
       ) : (
-        Object.keys(
-          rawItems.reduce((acc, item) => {
-            acc[item.ingredientBigCategory] = acc[item.ingredientBigCategory] || [];
-            acc[item.ingredientBigCategory].push(item);
-            return acc;
-          }, {})
-        ).map((category) => (
+        Object.keys(groupedItems).map((category) => (
           <div key={category}>
             <h5 className="text-start mb-4">| {category} |</h5>
             <Row className="item-container">
-              {rawItems.filter(item => item.ingredientBigCategory === category).map((item) => {
+              {groupedItems[category].map((item) => {  // ✅ filteredItems 기반으로 렌더링
                 const isSelected = selectedItems.has(item.id);
-                const isRemoving = removingItems.has(item.id);
                 return (
                   <Col xs={4} key={item.id} className="mb-3">
                     <div
-                      className={`item-box ${isSelected ? "selected" : ""} ${isRemoving ? "removing" : ""}`}
-                      onClick={() => toggleSelection(item.id)}
+                      className={`item-box ${isSelected ? "selected" : ""}`}
+                      onClick={() => {
+                        setSelectedItems(prev =>
+                          prev.has(item.id) ? new Set([...prev].filter(id => id !== item.id)) : new Set(prev.add(item.id))
+                        );
+                      }}
                       style={{
                         cursor: "pointer",
                         border: isSelected ? "3px solid green" : "1px solid #ddd",
@@ -161,7 +156,6 @@ const InventoryMultipleDelete = () => {
           </div>
         ))
       )}
-
       {/* 삭제 버튼 (화면 중앙 고정) */}
       <Button
         variant="danger"
