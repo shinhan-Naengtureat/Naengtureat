@@ -124,13 +124,19 @@ const HomePage = () => {
                   {recipe.liked ? (
                     <FaHeart
                       className="home-recipe-like icon liked"
-                      onClick={() => handleToggleLike(recipe.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(recipe.id);
+                      }}
                       title="좋아요 토글"
                     />
                   ) : (
                     <FaRegHeart
                       className="home-recipe-like icon"
-                      onClick={() => handleToggleLike(recipe.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLike(recipe.id);
+                      }}
                       title="좋아요 토글"
                     />
                   )}
@@ -148,18 +154,35 @@ const HomePage = () => {
       <div className="home-meal-plan-section">
         <h2 className="home-sub-title">오늘의 식단</h2>
         <div className="home-meal-plan">
-          {dailyMealPlan.length > 0 ? (
-            dailyMealPlan.map((meal, idx) => (
-              <div key={idx} className="home-meal-item">
-                <div className="home-meal-card" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", meal.recipeId))}>
-                  <p className="home-meal-time">{meal.type}</p>
-                  <p className="home-meal-content">{meal.recipeName}</p>
+          {["아침", "점심", "저녁"].map((type) => {
+            // dailyMealPlan에서 type(아침/점심/저녁)이 같은 객체를 찾음
+            const meal = dailyMealPlan.find((m) => m.type === type);
+
+            return (
+              <div key={type} className="home-meal-item">
+                <div
+                  className="home-meal-card"
+                  style={{ opacity: meal ? 1 : 0.5 }}
+                  onClick={() =>
+                    meal
+                      ? navigate(
+                          routeConfig.paths.recipeDetail.replace(":recipeId", meal.recipeId)
+                        )
+                      : null
+                  }
+                >
+                  <p className="home-meal-time">{type}</p>
+                  {meal ? (
+                    <p className="home-meal-content">{meal.recipeName}</p>
+                  ) : (
+                    <p className="home-meal-content" >
+                      식단이 없어요😅
+                    </p>
+                  )}
                 </div>
               </div>
-            ))
-          ) : (
-            <p>오늘의 식단 데이터가 없습니다.</p>
-          )}
+            );
+          })}
         </div>
       </div>
     </>
