@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.member.model.MemberService;
 import com.shinhan.naengtureat.orders.dto.OrdersDTO;
 import com.shinhan.naengtureat.orders.dto.OrdersDetailDTO;
 import com.shinhan.naengtureat.orders.dto.OrdersResponseDTO;
@@ -39,6 +41,9 @@ public class OrdersController {
 	
 	@Autowired
 	StoreProductService storeProductService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	// 장바구니에서 주문하기 클릭 시 주문할 상품 정보 세션에 저장
 	@PostMapping("/session")
@@ -85,6 +90,21 @@ public class OrdersController {
 	        String ordersId = savedOrders.getId();
 	        List<OrdersDetail> savedOrdersDetail = ordersDetailService.saveOrderDetailInfo(orderDetailDTOList, ordersId);
 	        
+	        // 회원 포인트 차감 로직 추가
+	        Member member = savedOrders.getMember();
+	        int currentPoint = member.getPoint(); // 현재 보유 포인트
+	        int ordersPointPay = savedOrders.getPointPay(); // 사용한 포인트
+
+	        if (ordersPointPay > 0) {
+	            int newPoint = currentPoint - ordersPointPay;
+	            if (newPoint < 0) {
+	                return ResponseEntity.badRequest().body("보유 포인트가 부족합니다.");
+	            }
+
+	            // 업데이트 실행
+	            memberService.updateMemberPoint(member.getId(), newPoint);
+	        }
+	        
 	        // 각 OrdersDetail에 대해 응답 DTO 생성
 	        List<OrdersResponseDTO> responseDtos = new ArrayList<>();
 	        for (OrdersDetail ordersDetail : savedOrdersDetail) {
@@ -96,7 +116,7 @@ public class OrdersController {
 	        	
 	            int ordersDetailCount = ordersDetail.getCount();
 	            int ordersDetailPrice = ordersDetail.getPrice();
-	            int ordersPointPay = savedOrders.getPointPay();
+//	            int ordersPointPay = savedOrders.getPointPay();
 	            
 	            String memberName = savedOrders.getMember().getName();
 	            String memberPhone = savedOrders.getMember().getPhone();
