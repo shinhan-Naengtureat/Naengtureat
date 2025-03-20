@@ -10,8 +10,8 @@ const InventoryMultipleDelete = () => {
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [rawItems, setRawItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedItems, setSelectedItems] = useState(new Set()); // 선택된 아이템 ID 저장
-  const [removingItems, setRemovingItems] = useState(new Set()); // 삭제 애니메이션 상태 추가
+  const [selectedItems, setSelectedItems] = useState(new Set());
+  const [removingItems, setRemovingItems] = useState(new Set());
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -122,16 +122,22 @@ const InventoryMultipleDelete = () => {
           <div key={category}>
             <h5 className="text-start mb-4">| {category} |</h5>
             <Row className="item-container">
-              {groupedItems[category].map((item) => {  // ✅ filteredItems 기반으로 렌더링
+              {groupedItems[category].map((item) => {
                 const isSelected = selectedItems.has(item.id);
                 return (
                   <Col xs={4} key={item.id} className="mb-3">
                     <div
                       className={`item-box ${isSelected ? "selected" : ""}`}
                       onClick={() => {
-                        setSelectedItems(prev =>
-                          prev.has(item.id) ? new Set([...prev].filter(id => id !== item.id)) : new Set(prev.add(item.id))
-                        );
+                        setSelectedItems(prev => {
+                          const newSet = new Set(prev);
+                          if (newSet.has(item.id)) {
+                            newSet.delete(item.id);
+                          } else {
+                            newSet.add(item.id);
+                          }
+                          return newSet;
+                        });
                       }}
                       style={{
                         cursor: "pointer",
