@@ -4,7 +4,7 @@ import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap
 import {useNavigate, useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import routeConfig from "routes/routeConfig";
 
 const InventoryDetail = () => {
@@ -241,11 +241,17 @@ const InventoryDetail = () => {
     axiosInstance
       .delete(`/inventory/${inventory.id}`)
       .then(() => {
+        const message = `${inventory.nickName} 삭제 완료!`;
+
+        setTimeout(() => {
+          toast.success(message); // 이제 정확한 메시지가 표시됨
+        }, 300);
+
         navigate(routeConfig.paths.inventoryList);
       })
       .catch(error => {
         console.error("재료 삭제 중 오류 발생:", error);
-        toast.error("삭제 중 오류가 발생했습니다.");
+        toast.error("삭제 중 오류 발생!!");
       })
       .finally(() => {
         setIsDeleteModalOpen(false); // 모달 닫기
@@ -262,6 +268,7 @@ const InventoryDetail = () => {
 
   return (
     <Container className="inventory-detail-container">
+      <ToastContainer />
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
