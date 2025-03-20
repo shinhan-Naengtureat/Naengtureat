@@ -35,8 +35,9 @@ function RecipeList() {
     axios
       .get("/recipe")
       .then((res) => {
-        setAllRecipes(res.data);
-        setFilteredRecipes(res.data);
+        const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
+        setAllRecipes(validRecipes);
+        setFilteredRecipes(validRecipes);
         setLoading(false);
       })
       .catch((err) => {
