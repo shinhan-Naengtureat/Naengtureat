@@ -46,8 +46,23 @@ const handleBefore = () => {
     navigate(RouteConfig.paths.notEnoughIngredientList);
   };
 
-  const handleNext = () => {
-    navigate(RouteConfig.paths.cart);
+  const handleNext = async () => {
+    if (!selectedStore) {
+      return;
+    }
+    try {
+      const response = await axiosInstance.post("/store/cart/add",
+        {
+        ingredientIds: selectedIngredients.map(ingredient => ingredient.mealPlanIngredientId), 
+        storeId: selectedStore.storeId,
+      });
+        navigate(RouteConfig.paths.cart);
+    } catch (error) {
+        console.error("장바구니 추가 오류:", error);
+        alert("장바구니에 추가하는데 실패했습니다.");
+    }
+    
+   
 }
   return (
     <div className="shopping-container">
@@ -91,7 +106,7 @@ const handleBefore = () => {
         </table>
       )}
       { /*장바구니 담고 페이지 이동 추가가*/}
-      <FloatingNextButton onClick={handleNext} disabled={selectedIngredients.length === 0} >
+      <FloatingNextButton onClick={handleNext} disabled={!selectedStore} >
       장바구니에 담기
       </FloatingNextButton>
     </div>

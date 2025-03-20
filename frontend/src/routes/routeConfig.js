@@ -77,7 +77,12 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
-
+    [`${BASE_URL}/recipe/:recipeId`]: {
+      title: "상세 레시피",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars/>, alt: "마이페이지" },
+      ],
+    },
   },
 
   notFound: "*",

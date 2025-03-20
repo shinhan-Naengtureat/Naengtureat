@@ -29,7 +29,7 @@ const FrequencyInputPage = () => {
   };
    // 오늘 요일 확인 (format으로 한글 요일 변환)
   const today = format(new Date(), "E", { locale:ko }); 
-  const weekDays = ["월", "화", "수", "목", "금", "토", "일"];
+  const weekDays = ["월", "화", "수", "목", "금", "토", "일","전체"];
   
   //  오늘을 포함한 이전 요일을 비활성화
  const disabledDays = weekDays.slice(0, weekDays.indexOf(today) + 1);
@@ -73,7 +73,8 @@ setUserSelections((prev) => ({
   };
 
     return (
-      
+      <div className="home-box-container2">
+        <div className="preferred-ingredients-container">
       <ContainerFre>
          <div className="preferred-header">
         <BackButton onClick={handleBefore}/>
@@ -124,16 +125,7 @@ setUserSelections((prev) => ({
           </DayButton>
         ))}
       </DayContainer>
-          {/* 요일 선택 (3x3 그리드 형태)
-                <Line />
-      <DayContainer>
-        {["전체", "월", "화", "수", "목", "금", "토", "일"].map((day) => (
-          <DayButton key={day} selected={selectedDays.includes(day)} onClick={() => toggleDay(day)}>
-            {day}
-          </DayButton>
-        ))}
-      </DayContainer> */}
-
+       
 </div>
       {/* 다음 버튼 */}
         <FloatingNextButton
@@ -141,7 +133,8 @@ setUserSelections((prev) => ({
         disabled={totalMeals.length === 0}
       />
     </ContainerFre>
-    
+        </div>
+        </div>
   );
 };
 // Styled Components
@@ -149,13 +142,15 @@ const ContainerFre = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  
 `;
 const Header = styled.div`
+font-family: var(--font-nanum) !important;
   width: 100%;
   text-align: left;
 `;
 const Title1 = styled.h2`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -163,6 +158,7 @@ const Title1 = styled.h2`
   margin-bottom: 5px;
 `;
 const Title2 = styled.h2`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -171,6 +167,7 @@ const Title2 = styled.h2`
 `;
 
 const CountSection = styled.div`
+font-family: var(--font-nanum) !important;
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -179,6 +176,7 @@ const CountSection = styled.div`
 `;
 
 const CountText = styled.div`
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682; 
@@ -188,6 +186,7 @@ const CountText = styled.div`
 `;
 
 const CountNumber = styled.span`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   color: #f35c04; /* 강조된 숫자 */
@@ -195,6 +194,7 @@ const CountNumber = styled.span`
 `;
 
 const CountUnit = styled.span`
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682;
@@ -213,6 +213,7 @@ const Line = styled.div`
 `;
 
 const SubText = styled.p`
+font-family: var(--font-nanum) !important;
   font-size: 14px;
   color: #a0aec0; /* gray-500 */
 `;
