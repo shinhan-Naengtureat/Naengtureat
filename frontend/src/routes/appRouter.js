@@ -30,9 +30,12 @@ import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import Cart from "pages/store/Cart";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
+import useFirebasePush from "hooks/useFirebasePush";
 
 
 const AppRouter = () => {
+  const userId = 3;
+  useFirebasePush(userId);
 
   return (
     <div className="app">
