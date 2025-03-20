@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shinhan.naengtureat.common.response.BaseResponse;
 import com.shinhan.naengtureat.pay.dto.PayDTO;
 import com.shinhan.naengtureat.pay.model.PayService;
 
@@ -56,6 +57,24 @@ public class PayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("결제 완료 처리 중 오류가 발생했습니다.");
         }
+    }
+    
+    // 냉털잇페이로 결제
+    @PostMapping("/naengpay")
+    public ResponseEntity<Object> payNaengpay(@RequestBody int price){
+		try {
+			// 세션에서 로그인된 사용자 정보 가져오기
+			Long memberId = 3L; // security 적용시 코드 수정 필요(WebBoardController SecurityContextHolder, MemberService 참고)
+
+			String result = payService.payNaengpay(memberId, price);
+
+			return ResponseEntity.ok(BaseResponse.builder().message(result).build());
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(BaseResponse.builder().message("냉털잇페이 결제 중 오류 발생했습니다: " + e.getMessage()).build());
+		}
     }
 
 }
