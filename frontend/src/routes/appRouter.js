@@ -31,6 +31,9 @@ import Cart from "pages/store/Cart";
 import { Route, Routes } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
 import useFirebasePush from "hooks/useFirebasePush";
+import OrderDetail from "pages/store/OrderDetail";
+import OrderComplete from "pages/store/OrderComplete";
+import OrderSuccess from "pages/store/OrderSuccess";
 
 
 const AppRouter = () => {
@@ -78,6 +81,9 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />
         <Route path={routeConfig.paths.storeReview} element={<Layout><StoreReviewDetail /></Layout>} />
         <Route path={routeConfig.paths.storeDetail} element={<Layout><StoreDetail /></Layout>} />
+        <Route path={routeConfig.paths.orderDetail} element={<Layout><OrderDetail /></Layout>} />
+        <Route path={routeConfig.paths.orderComplete} element={<OrderComplete />} />
+        <Route path={routeConfig.paths.orderSuccess} element={<OrderSuccess />} />
         <Route path={routeConfig.paths.cart} element={<Layout><Cart /></Layout>} />
 
         {/* 404 Not Found */}
