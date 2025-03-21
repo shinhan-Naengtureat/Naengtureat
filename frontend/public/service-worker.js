@@ -25,7 +25,12 @@ self.addEventListener("fetch", (event) => {
     return; // 여기서 return or 그냥 respondWith를 안 해주면 됨
   }
 
-  // 2) 이후 http/https 요청만 캐싱 로직 처리
+  // 2) POST 요청은 캐싱할 수 없으므로 무시
+  if (event.request.method === "POST") {
+    return;
+  }
+
+  // 3) 이후 http/https 요청만 캐싱 로직 처리
   event.respondWith(
     fetch(event.request)
       .then((response) => {
