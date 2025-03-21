@@ -166,8 +166,10 @@ function Cart() {
                 <p>장바구니가 비어있습니다.</p>
             ) : (
                 <>
-                    <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
-                    <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    <div className='cart-store-info'>
+                        <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
+                        <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    </div>
 
                     <div className="check-actions">
                         {/* 전체 선택 체크박스 */}
@@ -187,15 +189,7 @@ function Cart() {
                                 <div className="product-info">
                                     <div className='product-name-price'>
                                         <span className='productName'>{item.productName}</span>
-                                        <span className='discountPrice'>
-                                            {item.discountPrice ? (
-                                                <>
-                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
-                                                </>
-                                            ) : (
-                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
-                                            )}
-                                        </span>
+                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
                                     </div>
 
                                     <div className="middle-row">
@@ -223,7 +217,15 @@ function Cart() {
                                                 )}
                                             </span>
                                         </div>
-                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
+                                        <span className='discountPrice'>
+                                            {item.discountPrice ? (
+                                                <>
+                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
+                                                </>
+                                            ) : (
+                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className='quantity-container'>
