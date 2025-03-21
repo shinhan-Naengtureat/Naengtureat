@@ -72,20 +72,3 @@ function ChargeComplete(props) {
 }
 
 export default ChargeComplete;
-
-/*
-alert("결제 성공! 결제 ID: " + payment.paymentId);
-// 결제 성공 후 서버에 충전 요청
-const response = await axiosInstance.post("/pay/naengpay/charge", { balance: chargeAmount });
-if (response.data?.status !== "PAID") {
-    throw new Error("서버 업데이트 실패");
-}
-alert("충전 성공! 새로운 잔액을 불러옵니다.");
-// MoneyAnimation을 3초 동안 표시(아직 안되는 애니메이션)
-setShowAnimation(true);
-setTimeout(() => {
-    setShowAnimation(false);
-}, 3000);
-const updatedPayInfo = await axiosInstance.get("/pay");
-setPayInfo(updatedPayInfo.data);
-*/
