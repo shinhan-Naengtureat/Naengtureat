@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinhan.naengtureat.inventory.model.InventoryService;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberService;
 import com.shinhan.naengtureat.orders.dto.OrdersDTO;
@@ -45,9 +44,6 @@ public class OrdersController {
 	
 	@Autowired
 	MemberService memberService;
-	
-	@Autowired
-	InventoryService inventoryService;
 	
 	// 장바구니에서 주문하기 클릭 시 주문할 상품 정보 세션에 저장
 	@PostMapping("/session")
