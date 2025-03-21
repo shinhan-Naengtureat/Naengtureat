@@ -109,6 +109,10 @@ public class OrdersController {
 	        List<OrdersResponseDTO> responseDtos = new ArrayList<>();
 	        for (OrdersDetail ordersDetail : savedOrdersDetail) {
 	        	Long productId = ordersDetail.getProduct().getId();
+	        	
+	        	//구매한 상품 인벤토리에 추가
+	            storeProductService.addProductToInventory(productId, member, ordersDetail.getCount());
+	        	
 	        	// productId로 상품 이름과 스토어 이름 조회
 	        	OrdersResponseDTO responseDTO = storeProductService.getProductNameAndStoreNameById(productId);
 	        	String storePlaceName = responseDTO.getStorePlaceName();
