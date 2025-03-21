@@ -61,6 +61,7 @@ function OrderSuccess() {
         navigate(RouteConfig.paths.home); // 메인으로 이동
         sessionStorage.removeItem("isPaymentProcessed");
         sessionStorage.removeItem("responseDtos");
+        sessionStorage.removeItem("finalPrice");
     }
 
     return (

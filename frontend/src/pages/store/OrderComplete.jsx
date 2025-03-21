@@ -16,7 +16,7 @@ const OrderComplete = () => {
                 if (code && code.includes("FAILURE_TYPE")) {
                     sessionStorage.setItem("isPaymentProcessed", "false");
                     console.log("잘못된 요청");
-                    navigate(RouteConfig.paths.cart);
+                    setTimeout(() => navigate(RouteConfig.paths.cart), 10000);
                     return;
                 }
 
@@ -25,7 +25,7 @@ const OrderComplete = () => {
 
                 if (isPaymentProcessed) {
                     console.log("이미 결제 요청이 처리됨. 성공 페이지로 이동합니다.");
-                    navigate(RouteConfig.paths.orderSuccess);
+                    setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 10000);
                     return;
                 }
 
@@ -37,7 +37,7 @@ const OrderComplete = () => {
                 
                 if (!ordersDTO || !orderDetailDTOList) {
                     console.error("주문 데이터가 유실되었습니다.");
-                    setTimeout(() => navigate(RouteConfig.paths.home), 2000);
+                    setTimeout(() => navigate(RouteConfig.paths.home), 10000);
                     return;
                 }
                 
@@ -50,7 +50,7 @@ const OrderComplete = () => {
 
                     // 1. 냉털잇페이 충전 API 호출
                     const chargeResponse = await axiosInstance.post("/pay/naengpay/charge", { 
-                        memberId: 3,
+                        // memberId: 3,
                         balance: chargeAmount
                      });
 
@@ -71,11 +71,11 @@ const OrderComplete = () => {
                 sessionStorage.setItem("isPaymentProcessed", "true");
                 sessionStorage.setItem("responseDtos", JSON.stringify(response.data));
 
-                setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 2000);
+                setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 10000);
 
             } catch (error) {
                 console.error("주문 처리 중 오류 발생:", error.message);
-                setTimeout(() => navigate(RouteConfig.paths.home), 2000);
+                setTimeout(() => navigate(RouteConfig.paths.home), 10000);
             }
         };
 
