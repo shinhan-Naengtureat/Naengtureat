@@ -132,7 +132,7 @@ const replaceCartWithNewItem = async () => {
       </div>
 
       {/* 제목 */}
-      <h2 className="shopping-title" style={{ textAlign: "center" }}>판매지점 리스트</h2>
+      <h2 className="shopping-title" style={{ textAlign: "center" }}>우리 집 주변 스토어</h2>
 
       {stores.length === 0 ? (
         <p className="no-items">해당 재료를 보유한 스토어가 없습니다.</p>
@@ -174,12 +174,13 @@ const replaceCartWithNewItem = async () => {
            <Modal show={openModal} onHide={() => setOpenModal(false)} centered dialogClassName="cart-modal">
  
                 <Modal.Body>
-                    장바구니에는 같은 가게의 상품만 담을 수 있습니다.<br />
-                    선택하신 상품을 장바구니에 담을 경우 이전에 담은 상품이 삭제됩니다.
+                    <h6 style={{fontWeight:"bold"}}>같은 가게의 상품만 담을 수 있습니다.</h6>
+          <hr/>          
+          선택하신 상품을 장바구니에 담을 경우 <br/>이전에 담은 상품이 <span style={{color:"#f35c04"}}>삭제</span>됩니다.
                 </Modal.Body>
         <Modal.Footer style={{flexWrap: "nowrap"}}>
-                    <Button variant="secondary" onClick={() => setOpenModal(false)}>아니오</Button>
-                    <Button variant="success" onClick={replaceCartWithNewItem}>담기</Button>
+                    <Button style={{margin :"0px"}} variant="secondary" onClick={() => setOpenModal(false)}>아니오</Button>
+                    <Button  className="cart-modal-button2" style={{backgroundColor:"#f35c04",borderColor:"#f35c04"}} onClick={replaceCartWithNewItem}>담기</Button>
                 </Modal.Footer>
             </Modal>
   </div>

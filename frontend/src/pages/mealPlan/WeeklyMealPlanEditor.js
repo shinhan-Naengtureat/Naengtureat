@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { startOfWeek, addDays, format, isBefore } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -11,54 +11,53 @@ import RouteConfig from "routes/routeConfig";
 const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals, updateMealPlan }) => {
     const [mealPlan, setMealPlan] = useState(initialMealPlan);
     const [backupMeals, setBackupMeals] = useState(extraMeals);
-
     const [selectedMeal, setSelectedMeal] = useState(null); // 선택한 식단 저장
     const [showPopover, setShowPopover] = useState(false); // 팝오버 표시 여부
-    const targetRef = useRef(null); // 팝오버 위치 지정
+    const [target, setTarget] = useState(null);
+    const popoverRef = useRef(null);
   
     useEffect(() => {
         setMealPlan(initialMealPlan);
     }, [initialMealPlan]);
 
-    //  팝오버 열기
-    const handleOpenPopover = (event, meal) => {
-        setSelectedMeal(meal);
-        targetRef.current = event.target; // 클릭된 요소를 target으로 설정
-        setShowPopover(true);
+     //  팝오버 열기
+  const handleOpenPopover = (event, meal) => {
+    setSelectedMeal(meal);
+    setTarget(event.target);
+    setShowPopover(true);
   };
   
-    //  식단 삭제
-    const handleDeleteMeal = () => {
-        if (!selectedMeal) return;
-      
-        const newMealPlan = mealPlan.filter(
-            (m) => !(m.date === selectedMeal.date && m.type === selectedMeal.type)
-        );
+     //  식단 삭제
+  const handleDeleteMeal = () => {
+    if (!selectedMeal) return;
+    const newMealPlan = mealPlan.filter(
+      (m) => !(m.date === selectedMeal.date && m.type === selectedMeal.type)
+    );
+    setMealPlan(newMealPlan);
+    updateMealPlan(newMealPlan);
+    setShowPopover(false);
+  };
 
-        setMealPlan(newMealPlan);
-        updateMealPlan(newMealPlan);
-        setShowPopover(false); // 팝오버 닫기
-    };
 
-    // 식단 새로고침 (랜덤 변경)
-    const handleRefreshMeal = () => {
-        if (!selectedMeal || extraMeals.length === 0) return;
+    //  식단 새로고침 (랜덤 변경)
+  const handleRefreshMeal = () => {
+    if (!selectedMeal || extraMeals.length === 0) return;
 
-        const newMealPlan = [...mealPlan];
-        const mealIndex = newMealPlan.findIndex(
-            (m) => m.recipeName === selectedMeal.recipeName //기존 식단과 같은이름 찾기
-        );
+    const newMealPlan = [...mealPlan];
+    const mealIndex = newMealPlan.findIndex(
+      (m) => m.date === selectedMeal.date && m.type === selectedMeal.type
+    );
 
-       if (mealIndex !== -1) {
-    //  기존 식단과 겹치지 않는 extraMeals 필터링
-    const availableMeals = extraMeals.filter(meal => meal !== selectedMeal.recipeName);
+    if (mealIndex !== -1) {
+      // 기존 식단과 겹치지 않는 extraMeals 필터링
+      const availableMeals = extraMeals.filter(meal => meal.recipeName !== selectedMeal.recipeName);
 
-    //  대체할 음식이 없는 경우 기존 음식 유지
-    if (availableMeals.length === 0) {
-      console.warn("새로운 식단이 없습니다. 기존 식단 유지");
-      setShowPopover(false);
-      return;
-         }
+      if (availableMeals.length === 0) {
+        console.warn("새로운 식단이 없습니다. 기존 식단 유지");
+        setShowPopover(false);
+        return;
+      }
+
     //  새로운 랜덤 음식 선택
     const randomExtraMeal = availableMeals[Math.floor(Math.random() * availableMeals.length)];
 
@@ -108,8 +107,6 @@ const WeeklyMealPlanEditor = ({ initialMealPlan, extraMeals, updateMealPlan }) =
 
     const sourceId = result.source.droppableId.split("-");
     const destId = result.destination.droppableId.split("-");
-// console.log(" sourceId:", sourceId); // 확인
-//   console.log( "destId:", destId); // 확인
       
       if (sourceId.length < 2 || destId.length < 2) {
     console.error(" droppableId 값이 잘못되었습니다.", { sourceId, destId });
@@ -247,21 +244,20 @@ if (sourceMealIndex === -1) {
           ))}
         </tbody>
       </table>
+
         {/*  팝오버 */}
-            <Overlay show={showPopover} target={targetRef.current} placement="right">
-                <Popover id="meal-popover">
-                    <Popover.Header as="h3">식단 관리</Popover.Header>
+            <Overlay show={showPopover} target={target} placement="bottom">
+                <Popover id="popover-body">
                     <Popover.Body>
-                        <p>{selectedMeal?.recipeName}</p>
-                        <button className="delete-btn" onClick={handleDeleteMeal}>
-                            삭제
-                        </button>
-                        <button className="refresh-btn" onClick={handleRefreshMeal}>
+                        <p className="delete-meal" onClick={handleDeleteMeal}>
+                            식단삭제
+                        </p><hr/>
+                        <p className="refresh-meal" onClick={handleRefreshMeal}>
                             새로고침
-                        </button>
-                        <button className="close-btn" onClick={() => setShowPopover(false)}>
+                        </p><hr/>
+                        <p className="close-popover" onClick={() => setShowPopover(false)}>
                             닫기
-                        </button>
+                        </p>
                     </Popover.Body>
                 </Popover>
             </Overlay>

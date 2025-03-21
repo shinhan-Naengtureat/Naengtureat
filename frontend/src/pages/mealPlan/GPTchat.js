@@ -9,6 +9,9 @@ import FloatingNextButton from "components/FloatingNextButton";
 import BackButton from "components/BackButton";
 import styled from "styled-components";
 import { ICON_IMAGE_PATH } from "config/pathConfig";
+import {toast} from "react-toastify";
+
+
 
 const GPTChat = () => {
   const { userSelections } = useMealPlanContext();
@@ -154,27 +157,34 @@ const [hasFetched, setHasFetched] = useState(false);
   };
 //  저장 버튼 클릭 시 API 호출
   const saveMealPlan = async () => {
-     console.log(" 저장 직전 mealPlan:", mealPlan); // 저장할 데이터 확인
+     
     try {
       const payload = mealPlan.map(meal => ({
         date: meal.date,
         type: meal.type,
         recipeId: meal.recipeId,
       }));
-console.log("백엔드로 보낼 데이터:", payload);
+
       const response = await axiosInstance.post(
         "/mealplan/save",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );
 
-      console.log(" 식단 저장 성공:", response.data);
-      alert("식단이 성공적으로 저장되었습니다!");
+        toast.success("식단이 저장되었습니다!", {
+          position: "top-center", // 위치 조정 가능
+          autoClose: 3000, // 3초 후 자동 닫힘
+        });
+
       navigate(RouteConfig.paths.mealPlanListDaily);
       
     } catch (error) {
       console.error(" 식단 저장 오류:", error);
-      alert("식단 저장에 실패했습니다.");
+
+      toast.error(" 식단 저장에 실패했습니다. 다시 시도해주세요.", {
+      position: "top-center",
+      autoClose: 3000, 
+    });
     }
   };
 const handleBefore = () => {

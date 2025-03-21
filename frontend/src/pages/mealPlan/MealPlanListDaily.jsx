@@ -6,6 +6,7 @@ import WeeklyMealPlan from "pages/mealPlan/weekly/WeeklyMealPlan";
 import MonthlyMealPlan from "pages/mealPlan/monthly/MonthlyMealPlan";
 import useMealPlan from "hooks/useMealPlan"; // 데이터를 가져오는 훅
 import useMealPlanActions from "hooks/useMealPlanActions"; // 액션 훅
+import { ToastContainer } from "react-toastify";
 
 function MealPlanListDaily() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
@@ -56,7 +57,9 @@ function MealPlanListDaily() {
           setCurrentWeek={setCurrentWeek}
         />
       )}
+      <ToastContainer />
     </div>
+    
   );
 }
 
