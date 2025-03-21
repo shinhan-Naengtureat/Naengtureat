@@ -193,15 +193,18 @@
 
 /* 모달 전체 스타일 */
 .cart-modal {
+    font-family: var(--font-nanum) !important;
     justify-content: center;
 }
 
 .cart-modal .modal-content {
+    font-family: var(--font-nanum) !important;
     width: 350px;
     align-items: center;
 }
 
 .cart-modal .modal-footer .btn {
+    font-family: var(--font-nanum) !important;
     padding: 7px 35px;
     margin: 0 20px;
 }
