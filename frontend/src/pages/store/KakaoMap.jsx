@@ -62,7 +62,6 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
 
             ps.keywordSearch('대형슈퍼', (data, status, _pagination) => {
                 if (status === window.kakao.maps.services.Status.OK) {
-                    console.log('검색 결과 데이터 : ', data);
                     setPlaces(data);
                     setParentPlaces && setParentPlaces(data);
                 } else {
@@ -76,7 +75,7 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
     useEffect(() => {
         if (center && mapRef.current && !panByExecuted.current) {
             setTimeout(() => {
-                mapRef.current.panBy(0, 120); // y 방향으로 170px 이동
+                mapRef.current.panBy(0, 120); // y 방향으로 120px 이동
                 panByExecuted.current = true;
             }, 500);
         }
