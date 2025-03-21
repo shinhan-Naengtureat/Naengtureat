@@ -34,6 +34,8 @@ import useFirebasePush from "hooks/useFirebasePush";
 import OrderDetail from "pages/store/OrderDetail";
 import OrderComplete from "pages/store/OrderComplete";
 import OrderSuccess from "pages/store/OrderSuccess";
+import ChargeComplete from "pages/myPage/ChargeComplete";
+import ChargeSuccess from "pages/myPage/ChargeSuccess";
 
 
 const AppRouter = () => {
@@ -76,6 +78,8 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.recipeEdit} element={<Layout><RecipeEdit/></Layout>} />
         <Route path={routeConfig.paths.InstantCharge} element={<Layout><InstantCharge/></Layout>} />
+        <Route path={routeConfig.paths.chargeComplete} element={<Layout><ChargeComplete/></Layout>} />
+        <Route path={routeConfig.paths.chargeSuccess} element={<Layout><ChargeSuccess/></Layout>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />

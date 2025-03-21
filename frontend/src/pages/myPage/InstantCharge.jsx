@@ -1,102 +1,194 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PortOne from "@portone/browser-sdk/v2";
+import axiosInstance from "api/axios";
+import { FRONT_API_PATH } from "config/pathConfig";
+import RouteConfig from "routes/routeConfig";
+import { toast, ToastContainer } from "react-toastify";
+// import MoneyAnimation from "../../animations/MoneyAnimation"; // 애니메이션 추가(현재 파일 없음)
+// import animationData from "./moneyAnimation.json"; // 애니메이션 추가(현재 파일 없음)
 
 function InstantCharge() {
-  // 예시용 사용자 정보
-  const userName = "홍길동";
-  const userLoginId = "hong123";
-  const payBalance = "7,377원"; // 실제 잔액 예시
-  const points = "1,000P";     // 실제 포인트 예시
+  const [chargeAmount, setChargeAmount] = useState(0); // 충전할 금액
+  const [activeTab, setActiveTab] = useState("money");
+  // const [showAnimation, setShowAnimation] = useState(false);
+  const quickAmounts = [10000, 30000, 50000, 100000, 300000]; // 퀵 충전금액 버튼
+  const [payInfo, setPayInfo] = useState({ // 사용자 Pay 정보
+    balance: 0,
+    point: 0
+  });
 
-  const [chargeAmount, setChargeAmount] = useState(0);
-  const [activeTab, setActiveTab] = useState("money"); 
+  // 로그인한 유저의 Pay 정보 가져오기
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+        try {
+            // `/pay`와 `/member/detail`을 동시에 요청
+            const [payResponse, memberResponse] = await Promise.all([
+                axiosInstance.get("/pay"),
+                axiosInstance.get("/member/detail")
+            ]);
 
-  const quickAmounts = [10000, 30000, 50000, 100000, 300000];
+            // 응답 데이터를 합쳐서 상태 업데이트
+            setPayInfo({
+              balance: payResponse.data.balance || 0,
+              point: memberResponse.data.point,
+            });
+        } catch (error) {
+            console.error("회원 정보 불러오기 실패:", error);
+        }
+    };
 
+    fetchMemberInfo();
+    sessionStorage.removeItem("chargeAmount");
+    sessionStorage.removeItem("isChargeProcessed");
+  }, []);
+  
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
+  
+  // 빠른 충전 버튼 클릭
   const handleQuickCharge = (amount) => {
     setChargeAmount((prev) => prev + amount);
   };
-
+  
+  // 충전 금액 입력 핸들러
   const handleChange = (e) => {
-    setChargeAmount(parseInt(e.target.value, 10) || 0);
+    setChargeAmount(parseInt(e.target.value, 10)); // 올바른 경우 상태 업데이트
   };
+  
+  // 고유 결제 식별자 생성 함수
+  const randomId = () => {
+    return [...crypto.getRandomValues(new Uint32Array(2))]
+    .map((word) => word.toString(16).padStart(8, "0"))
+    .join("");
+  };
+  
+  // 결제 및 충전 요청 처리
+  const handleCharge = async () => {
+    if (!payInfo) {
+      toast.error("사용자 정보를 불러오는 중입니다. 잠시 후 다시 시도하세요.");
+      return;
+    }
+    
+    if (chargeAmount <= 0) {
+      toast.error("충전 금액을 입력해주세요!");
+      return;
+    }
 
-  const handleCharge = () => {
-    if (chargeAmount > 0) {
-      alert(`${chargeAmount.toLocaleString()}원 충전 시도합니다!`);
-      // 실제 충전 로직(서버 API 호출 등)을 여기에 추가하세요.
-    } else {
-      alert("충전 금액을 입력해주세요!");
+    // 입력값이 10,000원 단위인지 확인
+    if (chargeAmount % 10000 !== 0) {
+      toast.error("10,000원 단위로 입력해 주세요!"); // 잘못된 입력 경고
+      return;
+    }
+    
+    try {
+      const paymentId = randomId();
+      
+      const redirectUrl = `${FRONT_API_PATH}`+RouteConfig.paths.chargeComplete;
+      const failRedirectUrl = redirectUrl;
+
+      const storeId = process.env.REACT_APP_PORTONE_STORE_ID;
+      const channelKey = process.env.REACT_APP_PORTONE_CHANNEL_KEY;
+      
+      sessionStorage.setItem("chargeAmount", parseInt(chargeAmount, 10));
+
+      const payment = await PortOne.requestPayment({
+        storeId,
+        channelKey,
+        paymentId,
+        orderName: "페이 충전",
+        totalAmount: chargeAmount,
+        currency: "KRW",
+        payMethod: "CARD",
+        redirectUrl,
+        failRedirectUrl,
+        isMobile: false
+      });
+
+      if (payment.code !== undefined) {
+        toast.error("결제 실패: " + payment.message);
+        return;
+      }
+    } catch (error) {
+      console.error("충전 중 오류 발생", error);
+      toast.error("충전 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <>
-      {/* 외부 CSS보다 우선 적용하도록 .home-container 오버라이드 */}
+      {/* 최상단에 style 태그를 배치하여 .home-container 스타일을 우선 적용 */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
             .home-container {
               width: 100% !important;
               padding: 30px 0 !important;
+              margin-top: 0 !important;
+              margin-bottom: 0 !important;
               max-width: none !important;
             }
           `,
         }}
       />
       <div className="home-container">
-        {/* 커스텀 탭 영역 */}
+        {/* 탭 영역 */}
         <div style={styles.tabContainer}>
-  <div
-    style={{
-      ...styles.tabItem,
-      backgroundColor: activeTab === "money" ? "#fff" : "#f2f2f2",
-      fontWeight: activeTab === "money" ? "bold" : "normal",
-      border: activeTab === "money" ? "2px solid #ff7f0f" : "2px solid transparent",
-    }}
-    onClick={() => handleTabChange("money")}
-  >
-    머니
-  </div>
-  <div
-    style={{
-      ...styles.tabItem,
-      backgroundColor: activeTab === "point" ? "#fff" : "#f2f2f2",
-      fontWeight: activeTab === "point" ? "bold" : "normal",
-      border: activeTab === "point" ? "2px solid #ff7f0f" : "2px solid transparent",
-    }}
-    onClick={() => handleTabChange("point")}
-  >
-    포인트
-  </div>
-</div>
+          <div
+            style={{
+              ...styles.tabItem,
+              backgroundColor: activeTab === "money" ? "#fff" : "#f2f2f2",
+              fontWeight: activeTab === "money" ? "bold" : "normal",
+              border:
+                activeTab === "money"
+                  ? "2px solid #ff7f0f"
+                  : "2px solid transparent",
+            }}
+            onClick={() => handleTabChange("money")}
+          >
+            페이
+          </div>
+          <div
+            style={{
+              ...styles.tabItem,
+              backgroundColor: activeTab === "point" ? "#fff" : "#f2f2f2",
+              fontWeight: activeTab === "point" ? "bold" : "normal",
+              border:
+                activeTab === "point"
+                  ? "2px solid #ff7f0f"
+                  : "2px solid transparent",
+            }}
+            onClick={() => handleTabChange("point")}
+          >
+            포인트
+          </div>
+        </div>
 
-
-        {/* 탭 내용 영역 - 전체 가로 100% */}
-        {activeTab === "money" && (
+        {/* 잔액 정보 */}
+        {payInfo && (
           <div style={styles.moneyWrap}>
-            <div style={styles.moneyLabel}>냉털잇 페이 머니</div>
-            <div style={styles.moneyBalance}>{payBalance}</div>
-            <div style={styles.buttonContainer}>
-      <button style={styles.immediateChargeButton}>즉시충전</button>
-      <button style={styles.regularChargeButton}>정기결제</button>
-    </div>
-
+            <div style={styles.moneyLabel}>
+              {activeTab === "money" ? "냉털잇 페이 머니" : "포인트"}
+            </div>
+            <div style={styles.moneyBalance}>
+              {activeTab === "money"
+                ? `${payInfo?.balance?.toLocaleString() || "0"}원`
+                : `${payInfo?.point?.toLocaleString() || "0"}P`}
+            </div>
+            {activeTab === "money" && (
+              <div style={styles.buttonContainer}>
+                <button style={styles.immediateChargeButton}>
+                  즉시충전
+                </button>
+                <button style={styles.regularChargeButton}>
+                  정기결제
+                </button>
+              </div>
+            )}
           </div>
         )}
-        {activeTab === "point" && (
-          <div style={styles.moneyWrap}>
-            <div style={styles.moneyLabel}>포인트</div>
-            <div style={styles.moneyBalance}>{points}</div>
-          </div>
-        )}
 
-        
-
-        {/* 아래쪽: 기존 충전금액 입력, 빠른 충전 버튼, 안내문구, 충전하기 버튼 */}
+        {/* 충전 입력 */}
         <div style={styles.container}>
           <div style={styles.amountWrap}>
             <span style={styles.label}>충전금액</span>
@@ -105,11 +197,10 @@ function InstantCharge() {
               value={chargeAmount}
               onChange={handleChange}
               style={styles.input}
-              placeholder="0"
+              // placeholder="0"
               step="10000"
             />
             <span style={{ marginLeft: 8 }}>원</span>
-            <div style={styles.infoText}> * 1만원 단위로 충전이 가능합니다.</div>
           </div>
 
           <div style={styles.quickButtonContainer}>
@@ -126,9 +217,10 @@ function InstantCharge() {
 
           <div style={styles.footer}>
             <div style={styles.notice}>
-              • 즉시 충전 결제수단 연동은 '내 통장결제'만 가능합니다다.
-              <br />
-              • 포인트 월 한도는 월 10,000만 포인트 입니다.
+              <ul>
+                <li>충전 결제수단 연동은 '카드결제'만 가능합니다.</li>
+                <li>1만원 단위로 충전이 가능합니다.</li>
+              </ul>
             </div>
             <button style={styles.chargeButton} onClick={handleCharge}>
               충전하기
@@ -136,46 +228,13 @@ function InstantCharge() {
           </div>
         </div>
       </div>
+      {/* {showAnimation && <MoneyAnimation />} */}
+      <ToastContainer />
     </>
   );
 }
 
-
-
 const styles = {
-
-  immediateChargeButton: {
-    flex: 1,
-    backgroundColor: '#fff',
-    color: '#f76300',
-    padding: "8px 16px",  // 수직 패딩 줄이고 좌우 패딩 늘림
-    border: "none",
-    borderRadius: "8px 0 0 8px",  // 왼쪽 버튼: 왼쪽 모서리만 둥글게
-    cursor: "pointer",
-    fontSize: 15,
-    fontWeight: 'bold',
-    width: '150px',
-    height : '50px',
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-  },
-  regularChargeButton: {
-    flex: 1,
-    backgroundColor: '#fff',
-    color: '#f76300',
-    padding: "8px 16px",
-    border: "none",
-    borderLeft: "2.7px solid rgb(164 107 107 / 66%)", // 두 버튼 사이에 직선 구분선 추가
-    borderRadius: "0 8px 8px 0",  // 오른쪽 버튼: 오른쪽 모서리만 둥글게
-    cursor: "pointer",
-    fontSize: 15,
-    fontWeight: 'bold',
-    width: '150px',
-    height : '50px',
-     boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-  },
-
-
-  // 탭 영역: 전체 너비를 사용하며 두 탭이 좌우로 균등 분할됨.
   tabContainer: {
     display: "flex",
     width: "100%",
@@ -197,7 +256,6 @@ const styles = {
     color: "#fff",
     padding: 20,
     marginBottom: 75,
-    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -212,6 +270,40 @@ const styles = {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: "16px",
+  },
+  buttonContainer: {
+    display: "flex",
+    //marginTop: 16,
+    justifyContent: "center",
+  },
+  immediateChargeButton: {
+    flex: 1,
+    backgroundColor: "#fff",
+    color: "#f76300",
+    padding: "6px 20px",
+    border: "none",
+    borderRadius: "8px 0 0 8px",
+    cursor: "pointer",
+    fontSize: 15,
+    fontWeight: "bold",
+    width: "160px",
+    height: "47px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  },
+  regularChargeButton: {
+    flex: 1,
+    backgroundColor: "#fff",
+    color: "#f76300",
+    padding: "6px 20px",
+    border: "none",
+    borderLeft: "2px solid rgba(164,107,107,0.66)",
+    borderRadius: "0 8px 8px 0",
+    cursor: "pointer",
+    fontSize: 15,
+    fontWeight: "bold",
+    width: "160px",
+    height: "47px",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
   },
   container: {
     width: 320,
@@ -236,12 +328,11 @@ const styles = {
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    //margin: 15,
     flexShrink: 0,
   },
   input: {
     flex: 1,
-    width : 100,
+    width: 100,
     height: 40,
     padding: "0 10px",
     fontSize: 14,
@@ -280,6 +371,7 @@ const styles = {
     fontSize: 12,
     color: "#666",
     lineHeight: 1.4,
+    textAlign: "initial"
   },
   chargeButton: {
     width: "100%",
