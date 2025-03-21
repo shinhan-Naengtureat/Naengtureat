@@ -40,6 +40,8 @@ const RouteConfig = {
     cart: `${BASE_URL}/cart`,
     recipeEdit: `${BASE_URL}/recipe/edit/:recipeId`,
     InstantCharge: `${BASE_URL}/instant-charge`,
+    chargeComplete: `${BASE_URL}/charge/complete`,
+    chargeSuccess: `${BASE_URL}/charge/success`,
     notFound: '*',
   },
 
