@@ -1,0 +1,172 @@
+/* 기본 컨테이너 */
+.container-fre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 헤더 */
+.header-fre {
+  font-family: var(--font-nanum) !important;
+  width: 100%;
+  text-align: left;
+}
+
+/* 타이틀 */
+.title1-fre {
+  font-family: var(--font-nanum) !important;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: left;
+  color: #6B7682;
+  margin-bottom: 5px;
+}
+
+.title2-fre {
+  font-family: var(--font-nanum) !important;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: left;
+  color: #343D4C;
+  margin-bottom: 10px;
+}
+
+/* 카운트 섹션 */
+.count-section {
+  font-family: var(--font-nanum) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.count-text {
+  font-family: var(--font-nanum) !important;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6B7682; 
+  display: flex;
+  align-items: center;
+}
+
+.count-number {
+  font-family: var(--font-nanum) !important;
+  font-size: 22px;
+  font-weight: bold;
+  color: #f35c04; /* 강조된 숫자 */
+  margin: 0 4px;
+}
+
+.count-unit {
+  font-family: var(--font-nanum) !important;
+  font-size: 18px;
+  font-weight: bold;
+  color: #6B7682;
+}
+
+.count-line {
+  width: 100%;
+  border-bottom: 2px solid #343D4C;
+  margin: 5px 0 10px;
+}
+
+.line {
+  width: 100%;
+  border-bottom: 2px solid #F2F3F7;
+  margin: 5px 0 10px;
+  margin-bottom: 20px;
+}
+
+/* 서브 텍스트 */
+.sub-text {
+  font-family: var(--font-nanum) !important;
+  font-size: 14px;
+  color: #a0aec0; /* gray-500 */
+}
+
+/* 끼니 선택 컨테이너 */
+.meal-container {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+/* 끼니 선택 버튼 */
+.meal-button {
+  background-color: #f2f2f2;
+  color: #8B94A0;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 85px;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column; /* 이미지 위, 텍스트 아래 */
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+/* 선택된 끼니 버튼 */
+.meal-button[data-selected="true"] {
+  background-color: #54428E;
+  color: white;
+}
+
+/* 끼니 버튼 아이콘 */
+.meal-icon {
+  width: 60px;
+  height: 60px;
+}
+
+/* 요일 선택 컨테이너 */
+.day-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+/* 요일 선택 버튼 */
+.day-button {
+  background-color: #f2f2f2;
+  color: #8B94A0;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+}
+
+/* 선택된 요일 버튼 */
+.day-button[data-selected="true"] {
+  background-color: #54428E;
+  color: white;
+}
+
+/* 다음 버튼 */
+.next-button {
+  width: 80%;
+  max-width: 400px;
+  background-color: #f35c04;
+  color: white;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}

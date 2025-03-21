@@ -2,7 +2,7 @@
 .budget-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* 컨테이너는 중앙 정렬 */
+
   justify-content: center;
   min-height: 40vh;
   text-align: center;
