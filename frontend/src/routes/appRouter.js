@@ -1,6 +1,6 @@
 import BottomNav from "components/common/BottomNav";
 import Layout from "components/common/Layout";
-import { MealPlanProvider } from "context/MealPlanContext";
+import {MealPlanProvider} from "context/MealPlanContext";
 import HomePage from "pages/home/HomePage";
 import InventoryCreate from "pages/inventory/InventoryCreate";
 import InventoryDetail from "pages/inventory/InventoryDetail";
@@ -28,9 +28,8 @@ import Store from "pages/store/Store";
 import StoreDetail from 'pages/store/StoreDetail';
 import StoreReviewDetail from 'pages/store/StoreReviewDetail';
 import Cart from "pages/store/Cart";
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import routeConfig from "routes/routeConfig";
-import useFirebasePush from "hooks/useFirebasePush";
 import OrderDetail from "pages/store/OrderDetail";
 import OrderComplete from "pages/store/OrderComplete";
 import OrderSuccess from "pages/store/OrderSuccess";
@@ -39,8 +38,6 @@ import ChargeSuccess from "pages/myPage/ChargeSuccess";
 
 
 const AppRouter = () => {
-  const userId = 3;
-  useFirebasePush(userId);
 
   return (
     <div className="app">
