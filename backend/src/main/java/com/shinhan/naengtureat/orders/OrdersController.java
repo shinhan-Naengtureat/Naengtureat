@@ -1,11 +1,9 @@
 package com.shinhan.naengtureat.orders;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
 import com.shinhan.naengtureat.inventory.model.InventoryService;
 import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.member.model.MemberService;
@@ -27,8 +24,6 @@ import com.shinhan.naengtureat.orders.entity.Orders;
 import com.shinhan.naengtureat.orders.entity.OrdersDetail;
 import com.shinhan.naengtureat.orders.model.OrdersDetailService;
 import com.shinhan.naengtureat.orders.model.OrdersService;
-import com.shinhan.naengtureat.store.entity.StoreProduct;
-import com.shinhan.naengtureat.store.model.StoreProductRepository;
 import com.shinhan.naengtureat.store.model.StoreProductService;
 
 import jakarta.servlet.http.HttpSession;
@@ -53,9 +48,6 @@ public class OrdersController {
 	
 	@Autowired
 	InventoryService inventoryService;
-	
-	@Autowired
-	StoreProductRepository storeProductRepository;
 	
 	// 장바구니에서 주문하기 클릭 시 주문할 상품 정보 세션에 저장
 	@PostMapping("/session")
