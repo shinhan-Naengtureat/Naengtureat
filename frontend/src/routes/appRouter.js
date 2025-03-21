@@ -39,8 +39,6 @@ import ChargeSuccess from "pages/myPage/ChargeSuccess";
 
 
 const AppRouter = () => {
-  const userId = 3;
-  useFirebasePush(userId);
 
   return (
     <div className="app">
