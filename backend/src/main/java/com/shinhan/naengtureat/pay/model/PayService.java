@@ -39,23 +39,26 @@ public class PayService {
         return mapper.map(pay, PayDTO.class);
     }
 
-	// 결제 완료 후 잔액 업데이트
-    @Transactional
-    public void completePayment(Long memberId, PayDTO PayDto) {
-        // 1. 해당 회원의 Pay 정보 조회
-        Member memberKey = Member.builder().id(PayDto.getMemberId()).build();
-
-        Pay pay = payRepository.findByMember(memberKey);
-        if (pay == null) {
-            throw new NoSuchElementException("해당 회원의 Pay 정보를 찾을 수 없습니다.");
-        }
-        
-        // 2. 충전 금액만큼 잔액 업데이트
-        int chargeAmount = PayDto.getBalance();
-        pay.setBalance(pay.getBalance() + chargeAmount);
-        payRepository.save(pay);
-    }
-    
+	// 결제 완료 후 잔액 업데이트    
+	@Transactional
+	public int completePayment(Long memberId, PayDTO PayDto) {
+	    // 1. 해당 회원의 Pay 정보 조회
+	    Member memberKey = Member.builder().id(memberId).build();
+	      
+	    Pay pay = payRepository.findByMember(memberKey);
+	    if (pay == null) {
+	        throw new NoSuchElementException("해당 회원의 Pay 정보를 찾을 수 없습니다.");
+	    }
+	      
+	    // 2. 충전 금액만큼 잔액 업데이트
+	    int chargeAmount = PayDto.getBalance();
+	    pay.setBalance(pay.getBalance() + chargeAmount);
+	    Pay newPay = payRepository.save(pay);
+	    int newBalance = newPay.getBalance();
+	      
+	    return newBalance;
+	  }
+	
     // 냉털잇페이로 결제
     @Transactional
     public String payNaengpay(Long memberId, int price) {

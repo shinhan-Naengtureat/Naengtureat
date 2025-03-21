@@ -40,7 +40,7 @@ public class PayController {
 	}
 	
 	
-    // 결제 완료 후 잔액 및 포인트 업데이트
+    // 결제 완료 후 잔액 업데이트
     @PostMapping("/naengpay/charge")
     public ResponseEntity<Object> completePayment(@RequestBody PayDTO PayDto) {
         try {
