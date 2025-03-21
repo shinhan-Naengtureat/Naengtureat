@@ -47,17 +47,31 @@
 
 /* 검색바 영역 */
 .store-search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
     margin-bottom: 20px;
 }
 
 /* 검색바 스타일 */
 .search-ingredient {
     width: 100%;
-    padding: 10px 15px;
+    padding: 7px 15px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 25px;
-    font-size: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 검색바 돋보기 아이콘 */
+.search-icon {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+}
+
+.search-icon:hover {
     color: #666;
 }
 
@@ -98,7 +112,9 @@
 
 /* 활성화된(선택된) 카테고리 아이템 */
 .category-item.active {
-    border-color: #333;
+    border-color: #ff7f50;
+    background-color: #ff7f50;
+    color: white;
     font-weight: bold;
 }
 
@@ -193,15 +209,18 @@
 
 /* 모달 전체 스타일 */
 .cart-modal {
+    font-family: var(--font-nanum) !important;
     justify-content: center;
 }
 
 .cart-modal .modal-content {
+    font-family: var(--font-nanum) !important;
     width: 350px;
     align-items: center;
 }
 
 .cart-modal .modal-footer .btn {
+    font-family: var(--font-nanum) !important;
     padding: 7px 35px;
     margin: 0 20px;
 }

@@ -259,34 +259,34 @@ const DayContainer = styled.div`
 `;
 
 const DayButton = styled.button`
-  background-color: ${({ selected }) => (selected ? "#54428E" : "#f2f2f2")};
-  color: ${({ selected }) => (selected ? "white" : "#8B94A0")};
+  background-color: ${({ selected, disabled }) =>
+  disabled ? "#e0e0e0" : selected ? "#54428E" : "#f8f9fa"};
+   color: ${({ selected, disabled }) => 
+    disabled ? "#b0b0b0" : selected ? "white" : "#6c757d"};
   font-size: 17px;
   font-weight: 600;
   padding: 12px;
   border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
+  border: ${({ selected, disabled }) => 
+    disabled ? "none" : selected ? "none" : "2px solid #dee2e6"};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: all 0.3s; ease-in-out;
   width: 60px;
   height: 60px;
   text-align: center;
+   box-shadow: ${({ selected }) => (selected ? "0px 4px 10px rgba(84, 66, 142, 0.3)" : "none")}; /* 활성화 시 그림자 추가 */
+
+ &:hover {
+    background-color: ${({ selected, disabled }) => 
+      disabled ? "#e0e0e0" : selected ? "#443373" : "#e9ecef"};
+    color: ${({ selected, disabled }) => 
+      disabled ? "#b0b0b0" : selected ? "white" : "#495057"};
+  }
+
+  &:active {
+    transform: ${({ disabled }) => (disabled ? "none" : "scale(0.95)")}; /* 클릭 시 약간 눌리는 효과 */
+  }
 `;
 
-
-
-const NextButton = styled.button`
-  width: 80%;
-  max-width: 400px;
-  background-color: #f35c04;
-  color: white;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-`;
 
 export default FrequencyInputPage;

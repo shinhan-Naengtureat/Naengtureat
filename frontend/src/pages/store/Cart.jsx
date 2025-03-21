@@ -3,6 +3,7 @@ import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import routeConfig from 'routes/routeConfig';
 import 'styles/store/Cart.css';
 
 function Cart() {
@@ -16,7 +17,11 @@ function Cart() {
             try {
                 const cartDTOList = await axiosInstance.get('/store/cart');
 
-                setCartItems(cartDTOList.data);
+                // 모든 항목을 기본적으로 선택 상태로 변경
+                const checkedCartItems = cartDTOList.data.map(item => ({ ...item, isCheck: true }));
+
+                setCartItems(checkedCartItems);
+                setCheckAll(true);
             } catch (error) {
                 console.log('장바구니 정보를 가져오는 중 오류 발생 : ', error);
                 toast.error('장바구니 정보를 가져오지 못했습니다.');
@@ -147,7 +152,7 @@ function Cart() {
         console.log('orderItems : ', orderItems);
 
         // OrderDetail.jsx 컴포넌트로 state를 함께 전달
-        navigate('/store/order', { state: { orderItems } });
+        navigate(routeConfig.paths.orderDetail, { state: { orderItems } });
     };
 
     if (loading) {
@@ -161,8 +166,10 @@ function Cart() {
                 <p>장바구니가 비어있습니다.</p>
             ) : (
                 <>
-                    <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
-                    <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    <div className='cart-store-info'>
+                        <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
+                        <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    </div>
 
                     <div className="check-actions">
                         {/* 전체 선택 체크박스 */}
@@ -182,15 +189,7 @@ function Cart() {
                                 <div className="product-info">
                                     <div className='product-name-price'>
                                         <span className='productName'>{item.productName}</span>
-                                        <span className='discountPrice'>
-                                            {item.discountPrice ? (
-                                                <>
-                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
-                                                </>
-                                            ) : (
-                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
-                                            )}
-                                        </span>
+                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
                                     </div>
 
                                     <div className="middle-row">
@@ -218,7 +217,15 @@ function Cart() {
                                                 )}
                                             </span>
                                         </div>
-                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
+                                        <span className='discountPrice'>
+                                            {item.discountPrice ? (
+                                                <>
+                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
+                                                </>
+                                            ) : (
+                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className='quantity-container'>

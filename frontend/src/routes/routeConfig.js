@@ -131,7 +131,20 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
-  
+    [`${BASE_URL}/store/:storeId/detail`]: {
+      title: "스토어 상세",
+      links: [
+        { to: `${BASE_URL}/cart`, icon: <FaShoppingCart />, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/store/:storeId/review`]: {
+      title: "스토어 후기",
+      links: [
+        { to: `${BASE_URL}/cart`, icon: <FaShoppingCart />, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
 
     /*==================마이페이지==================*/
     [`${BASE_URL}/recipe/edit/:recipeId`]: {
