@@ -1,0 +1,78 @@
+/* 전체 알림 컨테이너: 화면 상단 중앙에 고정 */
+.notification-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 350px; /* iOS 알림과 비슷한 폭 */
+  max-width: 90%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* 개별 알림 박스 */
+.notification-item {
+  /* 글라스모피즘(Glassmorphism) - 약간 회색 배경 */
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  background-color: rgba(220, 220, 220, 0.5);  /* 불투명도를 적당히 조절해 회색 느낌 */
+  border: 1px solid rgba(255, 255, 255, 0.2);  /* 흐릿한 테두리 */
+
+  border-radius: 14px;                        /* iOS 알림처럼 둥근 모서리 */
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);  /* 진한 그림자로 살짝 떠 있는 느낌 */
+
+  display: flex;
+  align-items: center;    /* 세로 정렬 (필요시 조정 가능) */
+  padding: 12px 16px;
+  box-sizing: border-box;
+  overflow: hidden;       /* 둥근 모서리에서 넘치는 부분 가리기 */
+}
+
+/* 알림 텍스트/내용을 담는 래퍼 */
+.notification-content {
+  display: flex;
+  flex-direction: column; /* 제목/본문/버튼을 위->아래로 배치 */
+  flex: 1;
+  position: relative;     /* 닫기 버튼 위치 */
+}
+
+/* 알림 제목 (strong) */
+.notification-content strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;            /* 약간 회색 배경 위에서 검정 계열 글자 */
+  margin-bottom: 4px;
+  line-height: 1.3;
+  word-break: break-word;
+  /* 배경이 밝기 때문에 text-shadow는 생략 또는 아주 연하게 */
+}
+
+/* 알림 본문 (p) */
+.notification-content p {
+  font-size: 13px;
+  color: #333;
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* 오른쪽 상단 닫기 버튼 */
+.notification-content button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: #555;            /* 버튼 아이콘도 약간 어두운 톤 */
+}
+
+/* 닫기 버튼 호버 효과 */
+.notification-content button:hover {
+  color: #000;
+  transition: color 0.1s ease;
+}

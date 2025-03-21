@@ -1,14 +1,25 @@
 import TopNav from "components/common/TopNav";
 import BottomNav from "components/common/BottomNav";
-import "styles/common/Layout.css"; // 스타일 적용
+import "styles/common/Layout.css";
+import NotificationList from "components/notification/NotificationList";
+import useFirebasePush from "hooks/useFirebasePush";
+import {useCallback, useState} from "react"; // 스타일 적용
 
 const Layout = ({children}) => {
+  const [notifications, setNotifications] = useState([]);
+
+  const handleReceive = useCallback((notification) => {
+    setNotifications((prev) => [...prev, notification]);
+  }, []);
+
+  useFirebasePush(3, handleReceive);
+
   return (
     <div className="home-container">
-      <TopNav/>
+      <TopNav />
+      <NotificationList notifications={notifications} />
       <div className="content">{children}</div>
-      {/* 페이지별 컨텐츠 렌더링 */}
-      <BottomNav/>
+      <BottomNav />
     </div>
   );
 };

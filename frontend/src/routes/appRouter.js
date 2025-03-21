@@ -37,8 +37,6 @@ import OrderSuccess from "pages/store/OrderSuccess";
 
 
 const AppRouter = () => {
-  const userId = 3;
-  useFirebasePush(userId);
 
   return (
     <div className="app">
