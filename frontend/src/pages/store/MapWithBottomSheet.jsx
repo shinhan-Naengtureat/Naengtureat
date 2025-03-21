@@ -57,7 +57,7 @@ function MapWithBottomSheet({ setPlaces, places }) {
 
     return (
         <div className="map-container">
-            {/* 지도 컴포넌트. setPlaces를 통해 KakaoMap에서 검색 결과가 업데이트됩니다. */}
+            {/* 지도 컴포넌트. setPlaces를 통해 KakaoMap에서 검색 결과 업데이트 */}
             <KakaoMap setPlaces={setPlaces} />
             
             {/* 바텀 시트 영역 */}

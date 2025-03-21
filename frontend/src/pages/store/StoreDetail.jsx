@@ -2,8 +2,10 @@ import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useMemo, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import routeConfig from 'routes/routeConfig';
 import 'styles/store/StoreDetail.css';
 
 function StoreDetail() {
@@ -13,6 +15,7 @@ function StoreDetail() {
     const [selectedCategory, setSelectedCategory] = useState('전체');
     const [openModal, setOpenModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [loading, setLoading] = useState(true); // 최초 데이터 로딩 상태 관리
     const location = useLocation();
     const storeData = location.state; // StoreList.jsx에서 전달한 store 정보 받기
     const navigate = useNavigate();
@@ -24,11 +27,13 @@ function StoreDetail() {
         // 스토어 상품 정보 가져오기
         const fetchStoreProduct = async () => {
             try {
+                setLoading(true); // 데이터 로드 시작
                 const storeProductDTOList = await axiosInstance.get(`/store/${storeId}/product`);
-                console.log("스토어 상품 목록 : ", storeProductDTOList.data);
                 setStoreProductList(storeProductDTOList.data);
             } catch (error) {
                 console.error("스토어 상품 정보를 가져오는 중 오류 발생: ", error);
+            } finally {
+                setLoading(false); // 데이터 로드 완료
             }
         };
 
@@ -44,7 +49,7 @@ function StoreDetail() {
             return;
         }
 
-        navigate(`/store/${storeId}/review`);
+        navigate(routeConfig.paths.storeReview.replace(":storeId", storeId));
     };
 
     // 검색어를 기반으로 상품 검색 요청
@@ -152,6 +157,10 @@ function StoreDetail() {
         }
     };
 
+    if (loading) {
+        return <div>스토어 상품을 불러오는 중입니다.</div>;
+    }
+
     if (!storeProductList || storeProductList.length === 0) {
         return <div>스토어 상품 정보가 없습니다.</div>;
     }
@@ -173,8 +182,9 @@ function StoreDetail() {
 
             {/* 검색바 */}
             <div className='store-search-bar'>
-                <input type="text" placeholder='재료명을 입력하세요.' className='search-ingredient' value={searchKeyword}
+                <input type="text" placeholder='재료(상품)명을 입력하세요.' className='search-ingredient' value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') searchProducts(); }} />
+                <FaSearch className='search-icon' onClick={searchProducts} />
             </div>
 
             {/* 카테고리 */}
@@ -213,7 +223,7 @@ function StoreDetail() {
                                 {/* 할인율 */}
                                 {product.discountPrice != null && product.productPrice && product.discountPrice && (
                                     <span className="discount-rate">
-                                        {Math.round(((product.productPrice - product.discountPrice) / product.productPrice) * 100)}%
+                                        {Math.round(((product.productPrice - product.discountPrice) / product.productPrice) * 100)}%<br />
                                     </span>
                                 )}
 
