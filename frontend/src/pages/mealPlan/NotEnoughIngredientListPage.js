@@ -9,7 +9,7 @@ import RouteConfig from "routes/routeConfig";
 
 const NotEnoughIngredientListPage = () => {
   const [ingredients, setIngredients] = useState([]);
-  const { notEnoughIngredients, loading } = useNotEnoughIngredients(); // 공통 훅 사용
+  const { notEnoughIngredients, loading } = useNotEnoughIngredients(true); // 공통 훅 사용
   const navigate = useNavigate();
 
  //처음에 모든 재료가 선택된 상태로 초기화
@@ -111,9 +111,17 @@ const NotEnoughIngredientListPage = () => {
        {/* 더보기 버튼 */}
       {notEnoughIngredients.length > 7 && (
         <div className="show-more-button" style={{ textAlign: "center", marginTop: "10px" }}>
-          <button onClick={() => setShowAll(!showAll)} className="toggle-button">
-            {showAll ? "접기 ▲" : "더보기 ▼"}
-          </button>
+          <button
+          onClick={() => {
+            if (showAll) {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            setShowAll(!showAll);
+          }}
+          className="toggle-button"
+        >
+          {showAll ? "접기 ▲" : "더보기 ▼"}
+        </button>
         </div>
       )}
       <FloatingNextButton onClick={handleNextPage} disabled={selectedIngredients.length === 0} />
