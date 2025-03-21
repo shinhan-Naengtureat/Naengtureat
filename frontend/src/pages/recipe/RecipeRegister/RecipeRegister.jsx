@@ -67,7 +67,7 @@ function RecipeRegister() {
           content: step.content,
           image: step.image ? step.image.name : ""
         })),
-      hashtags: form.hashtags,
+      hashtagIds: form.hashtags.map(ht => ({id: ht.value})),
     };
     console.log(recipeDto);
 
