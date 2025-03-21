@@ -18,7 +18,7 @@ function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
       setShowNotification(true);
 
       setTimeout(() => setHideAnimation(true), 4500);
-      setTimeout(() => setShowNotification(false), 5100);
+      setTimeout(() => setShowNotification(false), 5250); // 원래 5100
     }
   }, [notEnoughCount]);
 
