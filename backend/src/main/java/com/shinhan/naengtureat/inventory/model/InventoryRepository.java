@@ -71,7 +71,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 	            LEFT JOIN recipe r ON mp.recipe_id = r.recipe_id
 	            LEFT JOIN recipe_ingredient ri ON r.recipe_id = ri.recipe_id
 	            LEFT JOIN ingredient ing ON ri.ingredient_id = ing.ingredient_id
-	            WHERE mp.date BETWEEN :startDate AND :endDate
+	            WHERE mp.date BETWEEN DATE_ADD (:startDate,INTERVAL 1 DAY) AND :endDate
 	            AND ing.big_category NOT IN('조미료','견과류','곡물','기타')
 	            AND mp.member_id = :memberId
 	            GROUP BY ing.ingredient_id
