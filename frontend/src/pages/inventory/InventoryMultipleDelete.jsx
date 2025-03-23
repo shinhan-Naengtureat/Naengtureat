@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {Badge, Button, Col, Container, Modal, Row} from 'react-bootstrap';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Badge, Button, Col, Container, Modal, Placeholder, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
 import {useNavigate} from "react-router-dom";
@@ -16,6 +16,7 @@ const InventoryMultipleDelete = () => {
   const [removingItems, setRemovingItems] = useState(new Set());
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 삭제 확인 모달 상태 추가
   const navigate = useNavigate();
+  const rowRefs = useRef({}); // row 참조 저장용
 
   useEffect(() => {
     let ignore = false;
@@ -120,6 +121,25 @@ const InventoryMultipleDelete = () => {
     }, 500); // 애니메이션이 끝날 때까지 기다림
   };
 
+  // 로딩 끝났을 때 애니메이션 실행
+  useEffect(() => {
+    if (!loading && rowRefs.current) {
+      Object.keys(rowRefs.current).forEach((key, index) => {
+        const ref = rowRefs.current[key];
+        if (ref) {
+          setTimeout(() => {
+            ref.classList.add("visible");
+          }, index * 200);
+        }
+      });
+    }
+  }, [loading, groupedItems]);
+
+  useEffect(() => {
+    // 필터가 바뀔 때마다 refs를 초기화
+    rowRefs.current = [];
+  }, [groupedItems]);
+
   return (
     <Container className="inventory-container">
       <ToastContainer />
@@ -130,12 +150,29 @@ const InventoryMultipleDelete = () => {
       />
 
       {loading ? (
-        <Row className="item-container"><p>로딩 중...</p></Row>
+        <Row className="item-container">
+          {[...Array(6)].map((_, index) => (
+            <Col xs={4} key={index} className="item-box mb-3">
+              <Placeholder as="div" animation="wave">
+                <Placeholder xs={12} className="bg-warning mb-1" style={{ height: "20px", borderRadius: "10px" }} />
+                <div className="border rounded p-2">
+                  <Placeholder xs={6} className="mb-1" />
+                  <Placeholder xs={8} />
+                </div>
+              </Placeholder>
+            </Col>
+          ))}
+        </Row>
       ) : (
-        Object.keys(groupedItems).map((category) => (
+        Object.keys(groupedItems).map((category, idx) => (
           <div key={category}>
             <h5 className="text-start mb-4">| {category} |</h5>
-            <Row className="item-container">
+            <Row
+              className="item-container inventory-list-item-row"
+              ref={(el) => {
+                if (el) rowRefs.current[category] = el;
+              }}
+            >
               {groupedItems[category].map((item) => {
                 const isSelected = selectedItems.has(item.id);
                 return (
