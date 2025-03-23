@@ -23,7 +23,7 @@ public class RecipeStep extends SuperEntity{
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @Column(nullable = false, columnDefinition = "TEXT", length = 1000)
+    @Column(nullable = false, length = 1000)
     private String content;
 
     @Column

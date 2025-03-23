@@ -1,0 +1,118 @@
+/* 2열 그리드 스타일 */
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+  max-width: 400px;
+  margin: auto;
+  padding-bottom: 133px;
+}
+.ingredient-grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5px;
+  max-width: 400px;
+  margin: auto;
+  padding-bottom: 133px;
+  height: 100px;
+}
+
+
+/*  개별 카드 스타일 */
+.ingredient-card {
+  position: relative;
+  display: flex !important;
+  align-items: flex-start; /* 텍스트와 체크박스를 왼쪽 위로 정렬 */
+  justify-content: flex-start;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  background-color: #f8f9fa;
+}
+
+/* 첫 번째 줄(맨 위 2개) border-radius */
+.ingredient-card:first-child,
+.ingredient-card:nth-child(2) {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/*  마지막 줄(맨 아래 2개) border-radius */
+.ingredient-card:nth-last-child(2),
+.ingredient-card:last-child {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.ingredient-card:hover {
+  transform: scale(1.05);
+}
+
+/* 배경 이미지 */
+.ingredient-card img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+    transition: opacity 0.3s ease; /* 애니메이션 추가 */
+
+}
+/* ✨ 비활성 카드의 hover 효과 (색상 유지) */
+.ingredient-card:not(.selected):hover img {
+  opacity: 1 !important; /* hover해도 원래 상태 유지 */
+}
+
+/* ✨ 선택된 카드의 hover 효과 */
+.ingredient-card.selected:hover img {
+  opacity: 1 !important; /* hover해도 원래 상태 유지 */
+}
+/* 선택된 카드의 배경 이미지: 선택 후 (투명도 1) */
+.ingredient-card.selected img {
+  opacity: 1;
+}
+/* 재료명 (왼쪽 상단 배치) */
+.ingredient-name {
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 2;
+  text-shadow: none;
+
+  transition: color 0.3s ease;
+}
+/* 선택된 체크박스 (○ 아이콘) */
+.select-circle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid white;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+/*  체크박스 내부 선택된 원 */
+.ingredient-card.selected .select-circle {
+  background-color: transparent;
+}
+/*  선택된 카드의 재료명 */
+.ingredient-card.selected .ingredient-name {
+  color: white; /*  선택되면 완전 흰색 */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.322);
+}
+.inner-circle {
+  width: 5px;
+  height: 5px;
+  background-color: white;
+  border-radius: 30%;
+}

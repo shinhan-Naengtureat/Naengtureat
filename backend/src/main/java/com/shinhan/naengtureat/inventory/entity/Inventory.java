@@ -6,7 +6,7 @@ import com.shinhan.naengtureat.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -22,7 +22,7 @@ public class Inventory extends SuperEntity {
     private Long id;
 
     @Column(nullable = false)
-    private int quantity;
+    private double quantity;
 
     @Column(nullable = false, length = 30)
     private String nickName;
@@ -30,10 +30,10 @@ public class Inventory extends SuperEntity {
     @Column(length = 300)
     private String memo;
 
-    private LocalDateTime inventoryExpDate;
+    private LocalDate inventoryExpDate;
 
     @Column(nullable = false)
-    private LocalDateTime inputDate;
+    private LocalDate inputDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

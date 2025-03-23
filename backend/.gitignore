@@ -1,5 +1,5 @@
 HELP.md
-.gradle
+/.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -143,3 +143,6 @@ Temporary Items
 
 # Application properties file
 application.properties
+
+# Firebase 서비스 계정 키 제외
+serviceAccountKey.json

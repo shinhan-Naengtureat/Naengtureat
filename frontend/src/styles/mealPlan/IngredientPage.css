@@ -1,0 +1,67 @@
+/* PreferredIngredientsPage 스타일 */
+.preferred-ingredients-container {
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 1200px;
+  width : 365px;
+  text-align: center;
+  background-color: #fff;
+  padding: 0px;
+}
+.preferred-ingredients-container2 {
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  height: 300px;
+  width : 365px;
+  text-align: center;
+  background-color: #fff;
+  padding: 0px;
+}
+/* 뒤로가기 버튼과 헤더 스타일 */
+.preferred-header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* 제목 스타일 */
+.preferred-title {
+   font-family: var(--font-nanum) !important;
+  font-size: 18px;
+  font-weight: bold;
+  color: #f35c04;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.preferred-subtitle {
+   font-family: var(--font-nanum) !important;
+  font-size: 24px;
+  font-weight: bold;
+  color: #343d4c;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+.excluded-subtitle {
+   font-family: var(--font-nanum) !important;
+  font-size: 15px;
+  font-weight: bold;
+  color: #343d4c;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+/* 재료 선택 그리드 */
+.preferred-ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  max-width: 400px;
+  margin: 20px auto;
+}

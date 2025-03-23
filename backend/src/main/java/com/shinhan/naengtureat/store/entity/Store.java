@@ -1,10 +1,14 @@
 package com.shinhan.naengtureat.store.entity;
 
+import java.util.List;
+
 import com.shinhan.naengtureat.common.entities.SuperEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 
 @Entity
@@ -33,9 +37,12 @@ public class Store extends SuperEntity {
     
     private String phone; // 전화번호
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String roadAddressName; // 도로명 주소
     
     @Column(nullable = false)
     private String placeUrl; // http://place.map.kakao.com/16618597
+    
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<StoreReview> storeReviewList; // 스토어 리뷰 리스트
 }
