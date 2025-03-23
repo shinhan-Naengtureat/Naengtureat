@@ -9,6 +9,11 @@ import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
+import { FaCoins } from "react-icons/fa";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
+import { TbToolsKitchen2 } from "react-icons/tb";
+import { BiSolidBowlRice } from "react-icons/bi";
+
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -89,6 +94,24 @@ const HomePage = () => {
 
   return (
     <>
+          <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .home-container {
+              width: 100% !important;
+              padding : 55px 0px;
+            }
+
+          `,
+        }}
+      />
+    <div className ="advertising-bar">
+      <h7>
+      {/* <FaCoins style={{ marginRight: "6px" }} /> */}
+      <MdOutlineWorkspacePremium class="point-icon" />
+      {/* <span className="point-badge">P</span> */}
+        식단을 이행하고 포인트를 적립해보세요!</h7>
+    </div>
       <div className="home-header">
         <h2 className="home-title">오늘, 이 요리 어때요?</h2>
       </div>
@@ -152,7 +175,10 @@ const HomePage = () => {
         </Swiper>)}
       </div>
       <div className="home-meal-plan-section">
-        <h2 className="home-sub-title">오늘의 식단</h2>
+        <h2 className="home-sub-title">오늘의 식단
+        <BiSolidBowlRice class="rice-icon" />
+        {/* <TbToolsKitchen2 style={{ marginLeft: "8px", verticalAlign: "middle" }} /> */}
+        </h2>
         <div className="home-meal-plan">
           {["아침", "점심", "저녁"].map((type) => {
             // dailyMealPlan에서 type(아침/점심/저녁)이 같은 객체를 찾음
