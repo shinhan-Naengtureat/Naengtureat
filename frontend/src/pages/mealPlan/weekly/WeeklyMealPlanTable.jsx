@@ -31,8 +31,6 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
 
   return (
     <>
-    
-
     <DragDropContext onDragEnd={handleDragEnd}>
         <table className="meal-plan-table">
           <thead>
@@ -182,8 +180,8 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
             })}
           </tbody>
         </table>
-      </DragDropContext>
-      {showGif && (
+    </DragDropContext>
+    {showGif && (
       <div className="check-gif-overlay">
         <img src={checkGif} alt="체크 애니메이션" className="check-gif" />
       </div>
