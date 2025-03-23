@@ -30,9 +30,12 @@
   }
   
   .section-title {
+    font-size: 18px;
     font-weight: bold;
     margin-bottom: 8px;
     font-family: var(--font-nanum) !important;
+    display: flex;
+    align-items: center;
   }
 
   .payment-option {
@@ -51,7 +54,7 @@
   .payment-option span {
     font-size: 16px;
     font-weight: bold;
-    height: 20px;
+    /* height: 20px; */
   }
   
   .pay-info {
@@ -105,6 +108,7 @@
   .amount {
     text-align: right;
     flex-shrink: 0; /* 숫자가 줄어들지 않도록 고정 */
+    height: 27px;
   }
 
   .point-input-container {

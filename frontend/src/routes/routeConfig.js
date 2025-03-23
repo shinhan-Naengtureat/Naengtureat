@@ -145,6 +145,13 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+    [`${BASE_URL}/store/order`]: {
+      title: "주문하기",
+      links: [
+        { to: `${BASE_URL}/cart`, icon: <FaShoppingCart />, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
 
     /*==================마이페이지==================*/
     [`${BASE_URL}/recipe/edit/:recipeId`]: {
