@@ -69,7 +69,6 @@ function MyRecipes() {
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
       {/* 상단 헤더 영역 */}
       <header style={{ textAlign: "center", marginBottom: "60px" }}>
-        <h2 style={{ margin: "0", fontSize: "1.5rem" }}>나의 레시피</h2>
         <p style={{ margin: "5px 0", color: "#666" }}>
           등록한 나의 레시피를 확인해 보세요.
         </p>

@@ -1,6 +1,7 @@
 import axiosInstance from 'api/axios';
 import { STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
+import { Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import 'styles/store/StoreList.css';
 
@@ -58,7 +59,11 @@ function StoreList({ places }) {
     };
 
     if (!storeList || storeList.length === 0) {
-        return <div>Loading...</div>;
+        return <div className='store-list-spinner'>
+                <Spinner animation="border" variant="warning" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>;
     };
 
     return (

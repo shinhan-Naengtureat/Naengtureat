@@ -1,4 +1,5 @@
 import axiosInstance from 'api/axios';
+import { ICON_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import 'styles/store/StoreReviewDetail.css';
@@ -12,7 +13,6 @@ function StoreReviewDetail() {
         const fetchStoreReviewDetail = async () => {
             try {
                 const storeReviewDTOList = await axiosInstance.get(`/store/${storeId}/review`);
-                console.log("storeReviewDTOList : ", storeReviewDTOList.data);
                 setStoreReviewList(storeReviewDTOList.data);
             } catch (error) {
                 console.error("스토어 리뷰 정보를 가져오는 중 오류 발생: ", error);
@@ -22,7 +22,12 @@ function StoreReviewDetail() {
         fetchStoreReviewDetail();
     }, [storeId]);
 
-    if (!storeReviewList || storeReviewList.length === 0) return <div>리뷰가 없습니다.</div>;
+    if (!storeReviewList || storeReviewList.length === 0) {
+        return <div className='store-review-empty'>
+                <img src={`${STORE_IMAGE_PATH}/StoreReviewEmpty.jpg`} alt="StoreReviewEmpty" />
+                <b>리뷰가 없어요</b>
+            </div>;
+    }
 
     // 별 개수 생성 함수
     const renderStars = (rate) => {
@@ -48,7 +53,7 @@ function StoreReviewDetail() {
             {storeReviewList.map((review) => (
                 <div key={review.id} className="review-card">
                     <div className="review-header">
-                        <img src={`/assets/images/${review.memberImage || 'user-icon.png'}`} alt="프사" className='member-img'/>
+                        <img src={`${ICON_IMAGE_PATH}/${review.memberImage || 'user-icon.png'}`} alt="프사" className='member-img'/>
 
                         <div className='review-info'>
                             <b className='member-name'>{review.memberName}</b><br />

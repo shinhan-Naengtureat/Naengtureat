@@ -72,3 +72,10 @@
   margin-left: 12px;
   cursor: pointer;
 }
+
+.offcanvas-custom {
+  width: 350px !important;  /* 원하는 너비로 조정 */
+  max-width: 80%; /* 화면 크기에 따라 조정 */
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+}

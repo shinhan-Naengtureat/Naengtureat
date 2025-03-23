@@ -3,6 +3,7 @@ import { addDays, format } from "date-fns";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import RouteConfig from "routes/routeConfig";
 
 function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDeleteMeal, toggleMealCheck, deleteMeal }) {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
                                               <hr />
                                               <p
                                                 className="meal-show-recipe"
-                                                onClick={() => navigate(`/recipe/${meal.recipeId}`)}>
+                                                onClick={() => navigate(RouteConfig.paths.recipeDetail.replace(":recipeId", meal.recipeId))}>
                                                   레시피 보기
                                               </p>
                                               <hr />
