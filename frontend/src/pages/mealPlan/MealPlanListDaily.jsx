@@ -1,6 +1,6 @@
 import { Spinner } from "react-bootstrap";
 import { format, startOfWeek } from "date-fns";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import MealPlanHeader from "pages/mealPlan/MealPlanHeader";
 import WeeklyMealPlan from "pages/mealPlan/weekly/WeeklyMealPlan";
 import MonthlyMealPlan from "pages/mealPlan/monthly/MonthlyMealPlan";
@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 function MealPlanListDaily() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [isMonthlyView, setIsMonthlyView] = useState(false); // 월간보기 상태
+  const [showContent, setShowContent] = useState(false); // 애니메이션 상태
 
   // 주간 조회 - 현재 주의 시작 날짜
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
@@ -34,8 +35,18 @@ function MealPlanListDaily() {
   // mealData 최적화
   const memoizedMeals = useMemo(() => [...mealData], [mealData]);
 
+  // 데이터가 로드된 후 애니메이션 적용
+  useEffect(() => {
+    if (!loading) {
+      setShowContent(true); // 로딩이 끝나면 상태 변경
+    } else {
+      setShowContent(false);
+    }
+  }, [loading]);
+
   return (
-    <div className="body-container">
+    // <div className="body-container">
+    <div className={`body-container ${showContent ? "fade-in" : ""}`}>
       <MealPlanHeader
         isMonthlyView={isMonthlyView}
         setIsMonthlyView={setIsMonthlyView}

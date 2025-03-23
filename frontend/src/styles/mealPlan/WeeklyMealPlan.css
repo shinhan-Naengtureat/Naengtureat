@@ -1,6 +1,27 @@
 .body-container {
   font-family: var(--font-nanum) !important;
   font-weight: bold;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* 데이터 로딩이 끝난 후 적용될 애니메이션 */
+.body-container.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 알림 나타나는 애니메이션 */
+@keyframes fadeIn2 {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .weekly-container {
