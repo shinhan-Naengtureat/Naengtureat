@@ -155,9 +155,6 @@ const InventoryDetail = () => {
 
   // 소분류 선택 시 nickName 자동 입력
   const handleSelectSmallCategory = (category) => {
-    console.log("선택한 소분류:", category.smallCategory);
-    console.log("해당 재료 ID:", category.ingredientId);
-
     setSelectedSmallCategory(category.smallCategory);
     setIngredientId(category.ingredientId);
     setNickName(category.smallCategory);
