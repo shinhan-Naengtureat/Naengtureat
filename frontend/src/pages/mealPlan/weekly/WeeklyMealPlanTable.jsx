@@ -4,11 +4,33 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import RouteConfig from "routes/routeConfig";
+import { useState } from "react";
+import { GIF_IMAGE_PATH } from 'config/pathConfig';
 
 function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDeleteMeal, toggleMealCheck, deleteMeal }) {
   const navigate = useNavigate();
+  const [showGif, setShowGif] = useState(false);
+  const [showPopover, setShowPopover] = useState({});  // 개별 Popover 관리
+  const checkGif = `${GIF_IMAGE_PATH}/checkMeal.gif`;
+
+  // 특정 meal의 Popover 상태를 토글
+  const togglePopover = (mealId) => {
+    setShowPopover((prev) => ({ ...prev, [mealId]: !prev[mealId] }));
+  };
+
+  const handleCheckMeal = (meal) => {
+    if (!meal.check && meal.date === format(new Date(), "yyyy-MM-dd")) {
+      toggleMealCheck(meal);
+      setShowPopover((prev) => ({ ...prev, [meal.id]: false })); // 해당 Popover 닫기
+
+      // GIF 표시 후 2초 후에 숨김
+      setShowGif(true);
+      setTimeout(() => setShowGif(false), 2000);
+    }
+  };
 
   return (
+    <>
     <DragDropContext onDragEnd={handleDragEnd}>
         <table className="meal-plan-table">
           <thead>
@@ -88,6 +110,8 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
                                       <OverlayTrigger
                                         trigger="click"
                                         placement="bottom"
+                                        show={showPopover[meal.id] || false}
+                                        onToggle={() => togglePopover(meal.id)}
                                         overlay={
                                           <Popover
                                             id={`popover-${key}-${mealType}`}
@@ -106,18 +130,7 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
                                                       ? "disabled"
                                                       : ""
                                                   }`}
-                                                  onClick={() => {
-                                                    if (
-                                                      !meal.check &&
-                                                      meal.date ===
-                                                        format(
-                                                          new Date(),
-                                                          "yyyy-MM-dd"
-                                                        )
-                                                    ) {
-                                                      toggleMealCheck(meal);
-                                                    }
-                                                  }}
+                                                  onClick={() => handleCheckMeal(meal)}
                                                 >
                                                   {"이행 여부 체크"}
                                                 </span>
@@ -167,7 +180,13 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
             })}
           </tbody>
         </table>
-      </DragDropContext>
+    </DragDropContext>
+    {showGif && (
+      <div className="check-gif-overlay">
+        <img src={checkGif} alt="체크 애니메이션" className="check-gif" />
+      </div>
+    )}
+    </>
   );
 }
 
