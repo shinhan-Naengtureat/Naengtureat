@@ -137,8 +137,7 @@ const InventoryWastebucket = () => {
                          style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
                     >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays}
-                      </Badge>
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays === 0 ? "Today" : "D+" + -item.remainingDays }                      </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />
                         <div className="item-name">{item.nickName}</div>

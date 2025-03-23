@@ -199,8 +199,7 @@ const InventoryMultipleDelete = () => {
                       }}
                     >
                       <Badge pill className={`badge-position ${item.remainingDays < 0 ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays}
-                      </Badge>
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays === 0 ? "Today" : "D+" + -item.remainingDays }                      </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item"
                              className="inventory-list-item-image"/>
