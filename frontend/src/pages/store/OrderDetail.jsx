@@ -222,7 +222,7 @@ function OrderDetail() {
         <div className="order-container">
             {/* 배송 주소 */}
             <div className="order-section">
-                <h4 className="section-title">배송주소</h4>
+                <p className="section-title">배송주소</p>
                 <p className="bold">
                     <PiMapPinLight style={{ fontSize: "20px" }} />
                     {memberInfo.roadAddressName}
@@ -232,13 +232,13 @@ function OrderDetail() {
 
             {/* 연락처 */}
             <div className="order-section">
-                <h4 className="section-title">내 연락처</h4>
+                <p className="section-title">내 연락처</p>
                 <p>{memberInfo.phone}</p>
             </div>
 
             {/* 결제 수단 */}
             <div className="order-section">
-                <h4 className="section-title">결제수단</h4>
+                <p className="section-title">결제수단</p>
                 <label className="payment-option">
                     <input type="radio" name="payment" value="pay" onChange={() => setPaymentMethod("pay")} checked={paymentMethod === "pay"} />
                     <span>냉털잇페이</span>
@@ -258,8 +258,15 @@ function OrderDetail() {
             {/* 포인트 */}
             <div className="order-section">
                 <div className="flex-between" onClick={() => setIsPointInputOpen(!isPointInputOpen)} style={{ cursor: "pointer" }}>
-                    <h4 className="section-title">포인트</h4>
-                    <span className="bold amount">{memberInfo.point.toLocaleString()}원 보유 <IoIosArrowDown /></span>
+                    <p className="section-title">포인트</p>
+                    <span className="bold amount">{memberInfo.point.toLocaleString()}원 보유 
+                        <IoIosArrowDown 
+                            style={{ 
+                                transition: "transform 0.3s ease", 
+                                transform: isPointInputOpen ? "rotate(180deg)" : "rotate(0deg)" 
+                            }}
+                        />
+                    </span>
                 </div>
                 {isPointInputOpen && (
                     <div className="point-input-container flex-between">
@@ -278,7 +285,7 @@ function OrderDetail() {
             {/* 결제 금액 */}
             <div className="order-section">
                 <div className="flex-between">
-                    <h4 className="section-title">결제금액</h4>
+                    <p className="section-title">결제금액</p>
                     <p className="final-price amount">{finalPrice.toLocaleString()}원</p>
                 </div>
                 <div className="flex-between">
