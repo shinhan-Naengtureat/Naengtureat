@@ -156,7 +156,7 @@ function RecipeList() {
     )}
 
       {loading ? (
-        <div style={{ padding: "16px" }}>로딩중...</div>
+        <div style={{ padding: "16px" }}></div>
       ) : error ? (
         <div style={{ padding: "16px", color: "red" }}>
           오류: {error.message}

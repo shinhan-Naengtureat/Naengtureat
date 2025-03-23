@@ -167,12 +167,12 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 0px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  min-height: 220px;
+  min-height: 280px;
 }
 
 .recipe-card:hover {
@@ -182,28 +182,45 @@
 
 .recipe-card img {
   width: 100%;
-  height: 120px;
+  height: 180px;
   object-fit: cover;
   display: block;
+  border-radius: 8px;
 }
 
 .recipe-info {
   flex: 1;
-  padding: 10px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
 }
 
 .recipe-info h3 {
-  margin: 0 0 5px;
-  font-size: 16px;
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
 }
 
-.recipe-info p {
-  margin: 4px 0;
-  font-size: 14px;
+.recipe-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
   color: #666;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.recipe-member {
+  font-size: 12.5px;
+  color: #888;
 }
 
 .filter-bar {
