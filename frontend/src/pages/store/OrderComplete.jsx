@@ -2,10 +2,13 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosInstance from "api/axios";
 import RouteConfig from "routes/routeConfig";
+import { GIF_IMAGE_PATH } from "config/pathConfig";
+import "styles/store/OrderComplete.css"
 
 const OrderComplete = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const gifPath = `${GIF_IMAGE_PATH}/ReceiptLoading.gif`;
 
     useEffect(() => {
         const processOrder = async () => {
@@ -71,7 +74,11 @@ const OrderComplete = () => {
                 sessionStorage.setItem("isPaymentProcessed", "true");
                 sessionStorage.setItem("responseDtos", JSON.stringify(response.data));
 
-                setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 10000);
+                if(isNaengPayCharge) {
+                    setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 10000); // 충전시에는 충분한 시간 부여
+                } else {
+                    setTimeout(() => navigate(RouteConfig.paths.orderSuccess), 3000); // 바로 결제시에는 3초 대기
+                }
 
             } catch (error) {
                 console.error("주문 처리 중 오류 발생:", error.message);
@@ -82,7 +89,16 @@ const OrderComplete = () => {
         processOrder();
     }, []);
 
-    return <div>주문을 처리 중입니다...</div>;
+    return (
+        <div className="order-complete-container">
+            <img src={gifPath} width="50%"/>
+            <div className="wait-label">
+                주문을 처리 중입니다 <br/>
+                잠시만 기다려주세요
+            </div>
+        </div>
+
+    );
 };
 
 export default OrderComplete;

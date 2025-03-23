@@ -1,3 +1,28 @@
+/* 스피너 */
+.cart-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* 장바구니가 비었을 때 보여줄 이미지 영역 */
+.cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* 장바구니가 비었을 때 보여줄 이미지 */
+.cart-empty img {
+    width: 60%;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .cart-store-info {
     display: flex;
     align-items: center;
