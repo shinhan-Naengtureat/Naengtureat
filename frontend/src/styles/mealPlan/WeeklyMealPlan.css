@@ -230,3 +230,22 @@
   color: #6c757d;
   font-weight: normal;
 }
+
+.check-gif-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 150px);
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.check-gif {
+  width: 150px; /* GIF 크기 조절 */
+  height: auto;
+}
+
