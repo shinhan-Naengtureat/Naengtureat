@@ -1,3 +1,28 @@
+/* 스피너 */
+.store-detail-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* 스토어 상품이 없을 때 보여줄 이미지 영역 */
+.store-product-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* 스토어 상품이 없을 때 보여줄 이미지 */
+.store-product-empty img {
+    width: 60%;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 /* 상단 스토어 정보 영역 */
 .store-detail-info {
     display: flex;
@@ -168,6 +193,8 @@
     cursor: pointer;
     color: #e74c3c;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    z-index: 1;
+    overflow: visible; /* 복제된 + 애니메이션을 위해 */
 }
 
 .add-to-cart:hover {
@@ -175,6 +202,59 @@
     transform: translateY(-2px); /* 살짝 위로 이동하여 입체감 효과 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     color: white;
+}
+
+/* 복제된 + 버튼에 애니메이션 적용 */
+.flying-plus {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background-color: #e74c3c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    animation: floatScaleBlinkFadeReturn 1.5s ease-in-out forwards;
+    z-index: 2;
+}
+
+/* 상품 추가 시 + 버튼에 효과 적용 */
+@keyframes floatScaleBlinkFadeReturn {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+    10% {
+        transform: scale(0.9) translateY(0);
+        opacity: 1;
+    }
+    30% {
+        transform: scale(1) translateY(-20px);
+        opacity: 0.6;
+    }
+    60% {
+        transform: scale(1.1) translateY(-60px);
+        opacity: 0.3;
+    }
+    80% {
+        transform: scale(1) translateY(-80px);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 0;
+    }
+}
+
+.add-to-cart.animate {
+    animation: floatScaleBlinkFadeReturn 1.5s ease-in-out;
 }
 
 /* 상품명 */
