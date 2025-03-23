@@ -1,20 +1,27 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import routeConfig from 'routes/routeConfig';
 import 'styles/store/Cart.css';
 
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 const cartDTOList = await axiosInstance.get('/store/cart');
-                console.log('cartDTOList : ', cartDTOList.data);
-                setCartItems(cartDTOList.data);
+
+                // 모든 항목을 기본적으로 선택 상태로 변경
+                const checkedCartItems = cartDTOList.data.map(item => ({ ...item, isCheck: true }));
+
+                setCartItems(checkedCartItems);
+                setCheckAll(true);
             } catch (error) {
                 console.log('장바구니 정보를 가져오는 중 오류 발생 : ', error);
                 toast.error('장바구니 정보를 가져오지 못했습니다.');
@@ -22,6 +29,14 @@ function Cart() {
                 setLoading(false);
             }
         };
+
+        sessionStorage.removeItem("ordersDTO");
+        sessionStorage.removeItem("orderDetailDTOList");
+        sessionStorage.removeItem("isPaymentProcessed");
+        sessionStorage.removeItem("responseDtos");
+        sessionStorage.removeItem("isNaengPayCharge");
+        sessionStorage.removeItem("finalPrice");
+        sessionStorage.removeItem("chargeAmount");
 
         fetchCartItems();
     }, []);
@@ -41,7 +56,6 @@ function Cart() {
     const deleteCheckedHandler = () => {
         // 체크된 상품의 id 목록
         const checkedIds = cartItems.filter((item) => item.isCheck).map((item) => item.id);
-        console.log('checkedIds : ', checkedIds);
 
         if (checkedIds.length === 0) {
             // 선택된 항목이 없을 경우, 필요한 경우 경고 메시지 등을 표시
@@ -114,6 +128,33 @@ function Cart() {
         })
     }
 
+    // 주문하기 버튼 클릭 핸들러
+    const orderHandler = () => {
+        // 체크박스가 활성화된 항목들만 필터링
+        const selectedItems = cartItems.filter(item => item.isCheck);
+        
+        if (selectedItems.length === 0) {
+            toast.error("선택된 상품이 없습니다.", {
+                position: "top-center",
+                autoClose: 3000,
+            });
+            return;
+        }
+
+        // 선택된 항목에서 필요한 속성만 추출
+        const orderItems = selectedItems.map(item => ({
+            productId: item.productId,
+            productName: item.productName,
+            count: item.count,
+            productPrice: item.productPrice,
+            discountPrice: item.discountPrice ?? item.productPrice // ?? : 널 병합 연산자, null 또는 undefined인 경우에만 오른쪽 값을 반환하는 연산자
+        }));
+        console.log('orderItems : ', orderItems);
+
+        // OrderDetail.jsx 컴포넌트로 state를 함께 전달
+        navigate(routeConfig.paths.orderDetail, { state: { orderItems } });
+    };
+
     if (loading) {
         return <div>장바구니 로딩 중...</div>
     }
@@ -125,8 +166,10 @@ function Cart() {
                 <p>장바구니가 비어있습니다.</p>
             ) : (
                 <>
-                    <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
-                    <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    <div className='cart-store-info'>
+                        <img src={`${STORE_IMAGE_PATH}/${cartItems[0]?.storeImage}`} alt="이미지" className='store-img' />
+                        <span className='cart-store-name'>{cartItems[0]?.storePlaceName}</span>
+                    </div>
 
                     <div className="check-actions">
                         {/* 전체 선택 체크박스 */}
@@ -146,15 +189,7 @@ function Cart() {
                                 <div className="product-info">
                                     <div className='product-name-price'>
                                         <span className='productName'>{item.productName}</span>
-                                        <span className='discountPrice'>
-                                            {item.discountPrice ? (
-                                                <>
-                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
-                                                </>
-                                            ) : (
-                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
-                                            )}
-                                        </span>
+                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
                                     </div>
 
                                     <div className="middle-row">
@@ -182,7 +217,15 @@ function Cart() {
                                                 )}
                                             </span>
                                         </div>
-                                        <button className='cart-delete-button' onClick={() => deleteItemHandler(item.id)}>X</button>
+                                        <span className='discountPrice'>
+                                            {item.discountPrice ? (
+                                                <>
+                                                    <span>{(item.discountPrice * item.count).toLocaleString()}원</span>
+                                                </>
+                                            ) : (
+                                                <span>{(item.productPrice * item.count).toLocaleString()}원</span>
+                                            )}
+                                        </span>
                                     </div>
 
                                     <div className='quantity-container'>
@@ -197,7 +240,7 @@ function Cart() {
                         ))}
                     </div>
 
-                    <button className='order-button'>주문하기</button>
+                    <button className='order-button' onClick={orderHandler}>주문하기</button>
                 </>
             )}
         </div>

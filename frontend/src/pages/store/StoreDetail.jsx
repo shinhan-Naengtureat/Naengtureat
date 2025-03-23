@@ -1,8 +1,11 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useMemo, useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import routeConfig from 'routes/routeConfig';
 import 'styles/store/StoreDetail.css';
 
 function StoreDetail() {
@@ -10,6 +13,9 @@ function StoreDetail() {
     const [storeProductList, setStoreProductList] = useState();
     const [searchKeyword, setSearchKeyword] = useState(''); // 검색어 상태 관리
     const [selectedCategory, setSelectedCategory] = useState('전체');
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [loading, setLoading] = useState(true); // 최초 데이터 로딩 상태 관리
     const location = useLocation();
     const storeData = location.state; // StoreList.jsx에서 전달한 store 정보 받기
     const navigate = useNavigate();
@@ -21,11 +27,13 @@ function StoreDetail() {
         // 스토어 상품 정보 가져오기
         const fetchStoreProduct = async () => {
             try {
+                setLoading(true); // 데이터 로드 시작
                 const storeProductDTOList = await axiosInstance.get(`/store/${storeId}/product`);
-                console.log("스토어 상품 목록 : ", storeProductDTOList.data);
                 setStoreProductList(storeProductDTOList.data);
             } catch (error) {
                 console.error("스토어 상품 정보를 가져오는 중 오류 발생: ", error);
+            } finally {
+                setLoading(false); // 데이터 로드 완료
             }
         };
 
@@ -41,7 +49,7 @@ function StoreDetail() {
             return;
         }
 
-        navigate(`/store/${storeId}/review`);
+        navigate(routeConfig.paths.storeReview.replace(":storeId", storeId));
     };
 
     // 검색어를 기반으로 상품 검색 요청
@@ -74,11 +82,37 @@ function StoreDetail() {
         );
     }, [storeProductList, selectedCategory]);
 
+    // 모달 열기
+    const openModalHandler = (productId) => {
+        setSelectedProduct(productId);
+        setOpenModal(true);
+    };
+
+    // 모달 닫기
+    const closeModalHandler = () => {
+        setOpenModal(false);
+        setSelectedProduct(null);
+    };
+
     // 장바구니에 상품 추가
     const addToCartHandler = async (e, productId) => {
         e.stopPropagation(); // 부모 요소 클릭 이벤트 방지
 
         try {
+            const cartResponse = await axiosInstance.get('/store/cart');
+            const cartItems = cartResponse.data;
+
+            if (cartItems.length > 0) {
+                const currentStoreId = cartItems[0].storeId;
+
+                if (Number(currentStoreId) !== Number(storeId)) {
+                    openModalHandler(productId);
+
+                    return;
+                }
+            }
+
+            // 같은 가게의 상품이거나 장바구니가 비어있으면 추가
             const response = await axiosInstance.post(`/store/cart/${productId}`);
             // react-toastify를 통한 알림
             toast.success(response.data.message, {
@@ -92,6 +126,39 @@ function StoreDetail() {
                 autoClose: 3000,
             });
         }
+    }
+
+    // 기존 장바구니 비우고 새 상품 추가
+    const replaceCartWithNewItem = async () => {
+        try {
+            // 기존 장바구니의 productId 목록 가져오기
+            const cartResponse = await axiosInstance.get('/store/cart');
+            const cartItems = cartResponse.data;
+
+            if (cartItems.length > 0) {
+                const cartIdList = cartItems.map(item => item.id);
+                console.log("cartIdList : ", cartIdList);
+
+                // 기존 장바구니 삭제 요청(RequestBody로 productIds 전달)
+                await axiosInstance.delete('/store/cart', {
+                    data: cartIdList
+                });
+            }
+
+            // 새로운 상품 추가
+            await axiosInstance.post(`/store/cart/${selectedProduct}`);
+            toast.success("기존 상품을 삭제하고 새 상품을 추가했습니다.", { position: "top-center", autoClose: 3000 });
+
+            // 모달 닫기
+            closeModalHandler();
+        } catch (error) {
+            console.error("장바구니 초기화 중 오류 발생", error);
+            toast.error('장바구니를 비우는 데 실패했습니다.', { position: "top-center", autoClose: 3000 });
+        }
+    };
+
+    if (loading) {
+        return <div>스토어 상품을 불러오는 중입니다.</div>;
     }
 
     if (!storeProductList || storeProductList.length === 0) {
@@ -115,8 +182,9 @@ function StoreDetail() {
 
             {/* 검색바 */}
             <div className='store-search-bar'>
-                <input type="text" placeholder='재료명을 입력하세요.' className='search-ingredient' value={searchKeyword}
+                <input type="text" placeholder='재료(상품)명을 입력하세요.' className='search-ingredient' value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') searchProducts(); }} />
+                <FaSearch className='search-icon' onClick={searchProducts} />
             </div>
 
             {/* 카테고리 */}
@@ -155,7 +223,7 @@ function StoreDetail() {
                                 {/* 할인율 */}
                                 {product.discountPrice != null && product.productPrice && product.discountPrice && (
                                     <span className="discount-rate">
-                                        {Math.round(((product.productPrice - product.discountPrice) / product.productPrice) * 100)}%
+                                        {Math.round(((product.productPrice - product.discountPrice) / product.productPrice) * 100)}%<br />
                                     </span>
                                 )}
 
@@ -168,6 +236,18 @@ function StoreDetail() {
                     </div>
                 ))}
             </div>
+
+            {/* 장바구니 단일 스토어의 상품들인지 확인하는 모달창 */}
+            <Modal show={openModal} onHide={closeModalHandler} centered dialogClassName='cart-modal'>
+                <Modal.Body>
+                    장바구니에는 같은 가게의 상품만 담을 수 있습니다.<br />
+                    선택하신 상품을 장바구니에 담을 경우 이전에 담은 상품이 삭제됩니다.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeModalHandler}>취소</Button>
+                    <Button variant="success" onClick={replaceCartWithNewItem}>담기</Button>
+                </Modal.Footer>
+            </Modal>
             <ToastContainer />
         </>
     );
