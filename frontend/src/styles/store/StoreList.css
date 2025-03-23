@@ -1,3 +1,11 @@
+/* 스피너 */
+.store-list-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .store-detail {
     display: flex;
     align-items: center;

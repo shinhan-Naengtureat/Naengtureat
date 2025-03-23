@@ -1,7 +1,7 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useMemo, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -98,6 +98,24 @@ function StoreDetail() {
     const addToCartHandler = async (e, productId) => {
         e.stopPropagation(); // 부모 요소 클릭 이벤트 방지
 
+        const button = e.currentTarget;
+
+        // 1. 복제된 flying + 만들기
+        const clone = button.cloneNode(false);
+        clone.classList.remove("add-to-cart");
+        clone.classList.add("flying-plus");
+        clone.innerText = "+";
+
+        // 2. 버튼에 삽입
+        button.appendChild(clone);
+
+        // 3. 애니메이션 종료 후 제거
+        setTimeout(() => {
+            if (clone && clone.parentNode) {
+            clone.parentNode.removeChild(clone);
+            }
+        }, 1500); // 애니메이션 길이와 맞춰서
+
         try {
             const cartResponse = await axiosInstance.get('/store/cart');
             const cartItems = cartResponse.data;
@@ -117,13 +135,13 @@ function StoreDetail() {
             // react-toastify를 통한 알림
             toast.success(response.data.message, {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 2000,
             });
         } catch (error) {
             console.error("장바구니 추가 중 오류 발생", error);
             toast.error('장바구니 추가에 실패했습니다.', {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 2000,
             });
         }
     }
@@ -147,22 +165,29 @@ function StoreDetail() {
 
             // 새로운 상품 추가
             await axiosInstance.post(`/store/cart/${selectedProduct}`);
-            toast.success("기존 상품을 삭제하고 새 상품을 추가했습니다.", { position: "top-center", autoClose: 3000 });
+            toast.success("기존 상품을 삭제하고 새 상품을 추가했습니다.", { position: "top-center", autoClose: 2000 });
 
             // 모달 닫기
             closeModalHandler();
         } catch (error) {
             console.error("장바구니 초기화 중 오류 발생", error);
-            toast.error('장바구니를 비우는 데 실패했습니다.', { position: "top-center", autoClose: 3000 });
+            toast.error('장바구니를 비우는 데 실패했습니다.', { position: "top-center", autoClose: 2000 });
         }
     };
 
     if (loading) {
-        return <div>스토어 상품을 불러오는 중입니다.</div>;
+        return <div className='store-detail-spinner'>
+                <Spinner animation="border" variant="warning" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>;
     }
 
     if (!storeProductList || storeProductList.length === 0) {
-        return <div>스토어 상품 정보가 없습니다.</div>;
+        return <div className='store-product-empty'>
+                <img src={`${STORE_IMAGE_PATH}/StoreProductEmpty.jpg`} alt="StoreProductEmpty" />
+                <b>스토어가 텅 비었어요</b>
+            </div>;
     }
 
     return (
