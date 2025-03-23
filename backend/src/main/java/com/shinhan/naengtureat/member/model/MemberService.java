@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.shinhan.naengtureat.member.dto.MemberDTO;
 import com.shinhan.naengtureat.member.entity.Member;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MemberService {
 
@@ -22,6 +24,15 @@ public class MemberService {
 		
 		return entityToDTO(memberEntity);
 	}
+	
+	// 사용한 포인트 업데이트
+	@Transactional
+    public void updateMemberPoint(Long memberId, int newPoint) {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+        member.setPoint(newPoint);
+        memberRepository.save(member);
+    }
 
 	// 예산 업데이트
 	public int updateMemberBudgetById(Long id, int newBudget) {

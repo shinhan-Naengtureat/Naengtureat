@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 public interface MealPlanRepository extends JpaRepository<MealPlan, Long> {
 
 	
+	
 	// 식단 일간 조회
 	public List<MealPlan> findByMemberAndDate(Member member, LocalDate day);
 

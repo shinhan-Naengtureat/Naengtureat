@@ -24,7 +24,7 @@
 
 .category-filter button.active,
 .category-filter button:hover {
-  background-color: #ff8c00;
+  background-color: #fe7f2d;
   color: #fff;
 }
 
@@ -117,12 +117,12 @@
 }
 
 .sheet-category-chip:hover {
-  background-color: #ff8c00;
+  background-color: #fe7f2d;
   color: #fff;
 }
 
 .sheet-category-chip.selected {
-  background-color: #ff8c00;
+  background-color: #fe7f2d;
   color: #fff;
 }
 
@@ -145,14 +145,14 @@
 
 .reset-btn {
   background-color: #fff;
-  color: #ff8c00;
-  border: 1px solid #ff8c00;
+  color: #fe7f2d;
+  border: 1px solid #fe7f2d;
 }
 
 .apply-btn {
-  background-color: #ff8c00;
+  background-color: #fe7f2d;
   color: #fff;
-  border: 1px solid #ff8c00;
+  border: 1px solid #fe7f2d;
 }
 
 /* ---------- 레시피 리스트 그리드 ---------- */
