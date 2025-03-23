@@ -1,6 +1,6 @@
-import {FaBars, FaEdit, FaPen, FaSearch, FaShoppingCart} from "react-icons/fa";
-import {FaTrashCan} from "react-icons/fa6";
-import {MdOutlineAutoDelete, MdOutlineDeleteSweep} from "react-icons/md";
+import {FaBars, FaEdit, FaSearch, FaShoppingCart} from "react-icons/fa";
+import {MdOutlineAutoDelete} from "react-icons/md";
+import {BiSelectMultiple} from "react-icons/bi";
 
 const BASE_URL = process.env.PUBLIC_URL;
 
@@ -58,7 +58,7 @@ const RouteConfig = {
     [`${BASE_URL}/inventory`]: {
       title: "재료 관리",
       links: [
-        { to: `${BASE_URL}/multiple-inventory`, icon: <MdOutlineDeleteSweep />, alt: "다중삭제" },
+        { to: `${BASE_URL}/multiple-inventory`, icon: <BiSelectMultiple />, alt: "다중삭제" },
         { to: `${BASE_URL}/wastebucket`, icon: <MdOutlineAutoDelete />, alt: "휴지통"},
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
