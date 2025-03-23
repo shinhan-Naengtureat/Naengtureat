@@ -25,7 +25,6 @@ const InventoryList = () => {
     axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
-          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,

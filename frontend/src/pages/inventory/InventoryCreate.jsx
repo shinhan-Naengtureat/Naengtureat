@@ -229,6 +229,8 @@ const InventoryCreate = () => {
         </Col>
       </Row>
 
+      <hr/>
+
       {/* 모달 (소분류 선택) */}
       <Modal show={isModalOpen}
              onHide={() => setIsModalOpen(false)}
@@ -309,6 +311,7 @@ const InventoryCreate = () => {
       </Row>
 
       {/* 날짜 입력 */}
+      <h5 className="ingredient-detail-sub-title">소비 기한</h5>
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
