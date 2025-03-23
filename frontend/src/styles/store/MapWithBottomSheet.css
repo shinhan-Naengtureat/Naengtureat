@@ -19,6 +19,18 @@
     display: flex;
     flex-direction: column;
     z-index: 1; /* 요소들의 쌓임 순서를 조절, z-index가 높은 요소는 낮은 요소보다 앞쪽에 표시 */
+    transform: translateY(100%); /* 시작 위치: 아래로 숨김 */
+    animation: slideUp 0.4s ease-out forwards; /* 등장 애니메이션, forwards는 애니메이션 종료 후에도 최종 상태(= 올라온 상태)를 유지 */
+}
+
+/* 추가: 스르륵 올라오는 애니메이션 정의 */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 
 /* 드래그 핸들 영역: 사용자가 드래그할 수 있도록 하는 영역 */
