@@ -13,7 +13,7 @@ const InventoryCreate = () => {
   const [filteredSmallCategories, setFilteredSmallCategories] = useState([]); // 선택된 대분류에 따른 소분류 목록
   const [selectedSmallCategory, setSelectedSmallCategory] = useState(""); // 선택된 소분류
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
-  const [integerPart, setIntegerPart] = useState(0);  // 정수 부분
+  const [integerPart, setIntegerPart] = useState(1);  // 정수 부분
   const [fractionPart, setFractionPart] = useState(0); // 소수 부분
   const [ingredientUnit, setIngredientUnit] = useState("");  // 재료 단위 저장
 
