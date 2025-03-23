@@ -141,3 +141,14 @@ h5.text-start {
 .inventory-delete-modal .modal-content {
   transform: translateY(0%);
 }
+
+.inventory-list-item-row {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.inventory-list-item-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

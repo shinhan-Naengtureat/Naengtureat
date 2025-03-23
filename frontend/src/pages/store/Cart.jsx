@@ -1,6 +1,7 @@
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH, STORE_IMAGE_PATH } from 'config/pathConfig';
 import { useEffect, useState } from 'react';
+import { Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import routeConfig from 'routes/routeConfig';
@@ -61,7 +62,7 @@ function Cart() {
             // 선택된 항목이 없을 경우, 필요한 경우 경고 메시지 등을 표시
             toast.error('선택된 상품이 없습니다.', {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 2000,
             });
 
             return;
@@ -136,7 +137,7 @@ function Cart() {
         if (selectedItems.length === 0) {
             toast.error("선택된 상품이 없습니다.", {
                 position: "top-center",
-                autoClose: 3000,
+                autoClose: 2000,
             });
             return;
         }
@@ -156,14 +157,21 @@ function Cart() {
     };
 
     if (loading) {
-        return <div>장바구니 로딩 중...</div>
+        return <div className='cart-spinner'>
+                <Spinner animation="border" variant="warning" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>;
     }
 
     return (
-        <div className="cart-container">
+        <>
             <ToastContainer />
             {cartItems.length === 0 ? (
-                <p>장바구니가 비어있습니다.</p>
+                <div className='cart-empty'>
+                    <img src={`${STORE_IMAGE_PATH}/CartEmpty.jpg`} alt="CartEmpty" />
+                    <b>장바구니가 텅 비었어요</b>
+                </div>
             ) : (
                 <>
                     <div className='cart-store-info'>
@@ -243,7 +251,7 @@ function Cart() {
                     <button className='order-button' onClick={orderHandler}>주문하기</button>
                 </>
             )}
-        </div>
+        </>
     );
 }
 
