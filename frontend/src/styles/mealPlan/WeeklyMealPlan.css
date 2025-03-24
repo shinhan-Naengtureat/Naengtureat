@@ -2,14 +2,12 @@
   font-family: var(--font-nanum) !important;
   font-weight: bold;
   opacity: 0;
-  transform: translateY(-20px);
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 /* 데이터 로딩이 끝난 후 적용될 애니메이션 */
 .body-container.fade-in {
   opacity: 1;
-  transform: translateY(0);
 }
 
 /* 알림 나타나는 애니메이션 */
@@ -64,7 +62,6 @@
   text-align: center;
   padding: 0px !important;
   border-collapse: collapse; /* 테두리를 겹쳐서 얇게 보이게 함 */
-  /* border: 1px solid #dee2e6; 전체 테두리 */
 }
 
 /* 모든 셀에 얇은 회색 선 적용 */
@@ -238,20 +235,21 @@
 }
 
 .check-gif-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: calc(100vh - 150px);
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: center; /* 가운데 정렬 */
   justify-content: center;
-  z-index: 2000;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(249, 189, 152, 0.2);
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .check-gif {
-  width: 150px; /* GIF 크기 조절 */
+  width: 150px; /* GIF 크기 조정 */
   height: auto;
+  margin-bottom: 10px; /* 아래쪽 간격 추가 */
 }
-

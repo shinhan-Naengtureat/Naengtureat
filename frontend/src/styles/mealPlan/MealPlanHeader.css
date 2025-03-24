@@ -76,8 +76,9 @@
   font-weight: bold;
   animation: fadeIn 0.5s ease-in-out;
   opacity: 1;
-  transform: translateX(-50%);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  width: 90%;
+  height: 65px;
 }
 
 .notification.hide {
