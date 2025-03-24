@@ -304,8 +304,22 @@
     align-items: center;
 }
 
+.cart-modal .modal-delete-text {
+    color: #FE7F2D;
+}
+
 .cart-modal .modal-footer .btn {
     font-family: var(--font-nanum) !important;
     padding: 7px 35px;
     margin: 0 20px;
+}
+
+.cart-modal .modal-add-button {
+    background-color: #FE7F2D;
+    border-color: #FE7F2D;
+}
+
+.cart-modal .modal-add-button:hover {
+    background-color: #f35c04;
+    border-color: #f35c04;
 }
