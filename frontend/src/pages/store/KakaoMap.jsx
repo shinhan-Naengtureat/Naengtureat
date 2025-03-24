@@ -2,7 +2,8 @@ import axiosInstance from "api/axios";
 import { STORE_IMAGE_PATH } from "config/pathConfig";
 import useKakaoLoader from "pages/store/useKakaoLoader";
 import { useEffect, useRef, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { Spinner } from "react-bootstrap";
+import { Circle, Map, MapMarker } from "react-kakao-maps-sdk";
 
 function KakaoMap({ setPlaces: setParentPlaces }) {
     const [center, setCenter] = useState(null); // 신한DS 좌표 : { lat: 37.5678148181167, lng: 126.984190577115 }
@@ -62,7 +63,6 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
 
             ps.keywordSearch('대형슈퍼', (data, status, _pagination) => {
                 if (status === window.kakao.maps.services.Status.OK) {
-                    console.log('검색 결과 데이터 : ', data);
                     setPlaces(data);
                     setParentPlaces && setParentPlaces(data);
                 } else {
@@ -74,18 +74,29 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
 
     // center가 설정된 후 panBy 실행
     useEffect(() => {
-        if (mapRef.current && !panByExecuted.current) {
-            mapRef.current.panBy(0, 200); // y 방향으로 200px 이동
-            panByExecuted.current = true;
+        if (center && mapRef.current && !panByExecuted.current) {
+            setTimeout(() => {
+                mapRef.current.panBy(0, 120); // y 방향으로 120px 이동
+                panByExecuted.current = true;
+            }, 500);
         }
     }, [center]); // center가 설정될 때 실행
 
     return (
         <>
-            {center === null ? <div>지도 로딩 중...</div> : // center 값이 있으면 아래 코드 수행
-                <Map center={center} style={{width: "100%", height: "100%"}} level={5} onCreate={(map) => {
+            {center === null ? 
+                <div className='kakaomap-spinner' style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
+                    <Spinner animation="border" variant="warning" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div> : // center 값이 있으면 아래 코드 수행
+
+                <Map center={center} style={{width: "100%", height: "100%"}} level={6} onCreate={(map) => {
                     mapRef.current = map; // mapRef에 Kakao Map 인스턴스 저장
                 }}>
+                    <Circle center={center} radius={1000} strokeWeight={2} strokeColor="#ff7f50" strokeOpacity={1} strokeStyle="solid" fillColor="#FFAE00" fillOpacity={0.1}>
+                    </Circle>
+
                     <MapMarker
                         position={center}
                         image={{src: `${STORE_IMAGE_PATH}/marker-home.png`, size: {width: 35, height: 35}}}

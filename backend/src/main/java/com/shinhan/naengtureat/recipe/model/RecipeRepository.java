@@ -80,7 +80,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	List<Recipe> findByCategoryIn(List<String> categories);
 	
 	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeMainDTO(" +
-		       "r.id, r.name, r.level, r.cookingTime, m.name, r.category, rm.mealName, r.image, r.isDelete, " +
+		       "r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete, " +
 		       "function('group_concat', CONCAT(i.bigCategory, ':', i.smallCategory)), " +
 		       "function('group_concat', h.keyword), " +
 		       "(SELECT COUNT(l) FROM Likes l WHERE l.recipe = r)) " +
@@ -91,6 +91,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 		       "LEFT JOIN ri.ingredient i " +
 		       "LEFT JOIN r.hashtags rh " +
 		       "LEFT JOIN rh.hashtag h " +
-		       "GROUP BY r.id, r.name, r.level, r.cookingTime, m.name, r.category, rm.mealName, r.image, r.isDelete")
+		       "GROUP BY r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete")
 		List<RecipeMainDTO> findRecipeMainDTOs();
 }

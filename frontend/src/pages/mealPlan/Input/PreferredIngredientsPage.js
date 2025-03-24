@@ -39,7 +39,7 @@ const PreferredIngredientsPage = () => {
     );
   };
   const handleBefore = () => {
-    navigate(RouteConfig.themeSelection);
+    navigate(RouteConfig.paths.themeSelection);
   };
 
   const handleNext = () => {
@@ -57,6 +57,7 @@ const PreferredIngredientsPage = () => {
   };
 
   return (
+     <div className="home-box-container2">
     <div className="preferred-ingredients-container">
       {/* 뒤로가기 & 타이틀 */}
       <div className="preferred-header">
@@ -83,7 +84,8 @@ const PreferredIngredientsPage = () => {
         onClick={handleNext}
         disabled={selectedIngredients.length === 0}
       />
-    </div>
+      </div>
+      </div>
   );
 };
 

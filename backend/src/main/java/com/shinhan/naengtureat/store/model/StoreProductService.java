@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.store.model;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -8,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shinhan.naengtureat.inventory.dto.InventoryRequestDTO;
+import com.shinhan.naengtureat.inventory.model.InventoryService;
+import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.orders.dto.OrdersResponseDTO;
 import com.shinhan.naengtureat.store.dto.StoreProductDTO;
 import com.shinhan.naengtureat.store.entity.Store;
@@ -21,6 +25,9 @@ public class StoreProductService {
 	
 	@Autowired
 	StoreProductRepository storeProductRepository;
+	
+	@Autowired
+	InventoryService inventoryService;
 
 	// 스토어 상품 조회
 	public List<StoreProductDTO> getProductByStoreId(Store store) {
@@ -72,5 +79,28 @@ public class StoreProductService {
 		
 		return dto;
 	}
-
+	
+	public void addProductToInventory(Long productId, Member member, int quantity) {
+        // 1. productId를 통해 StoreProduct 엔티티 조회
+        StoreProduct storeProduct = storeProductRepository.findById(productId)
+            .orElseThrow(() -> new NoSuchElementException("상품을 찾을 수 없습니다."));
+        
+        // 2. 연결된 Ingredient의 ID와 관련 정보를 추출
+        Long ingredientId = storeProduct.getIngredient().getId();
+        
+        // 3. InventoryRequestDTO 구성
+        InventoryRequestDTO inventoryRequestDTO = new InventoryRequestDTO();
+        inventoryRequestDTO.setMemberId(member.getId());
+        inventoryRequestDTO.setIngredientId(ingredientId);
+        inventoryRequestDTO.setQuantity(quantity);
+        inventoryRequestDTO.setInputDate(LocalDate.now());
+        inventoryRequestDTO.setNickName(storeProduct.getIngredient().getSmallCategory());
+        
+        // 오늘 기준으로 ingredient의 standardExpDate(일수)를 더해서 유통기한 계산
+        LocalDate inventoryExpDate = LocalDate.now().plusDays(storeProduct.getIngredient().getStandardExpDate());
+        inventoryRequestDTO.setInventoryExpDate(inventoryExpDate);
+        
+        // 4. InventoryService를 통해 인벤토리에 추가
+        inventoryService.createInventory(inventoryRequestDTO);
+    }
 }

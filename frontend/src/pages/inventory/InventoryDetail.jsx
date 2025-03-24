@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axiosInstance from "api/axios";
 import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import {toast, ToastContainer} from "react-toastify";
+import routeConfig from "routes/routeConfig";
 
 const InventoryDetail = () => {
   const {id} = useParams();
@@ -15,6 +17,7 @@ const InventoryDetail = () => {
   const [filteredSmallCategories, setFilteredSmallCategories] = useState([]); // 선택된 대분류에 따른 소분류 목록
   const [selectedSmallCategory, setSelectedSmallCategory] = useState(""); // 선택된 소분류
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 모달 상태 추가
   const [integerPart, setIntegerPart] = useState(0);  // 정수 부분
   const [fractionPart, setFractionPart] = useState(0); // 소수 부분
   const [ingredientUnit, setIngredientUnit] = useState("");  // 재료 단위 저장
@@ -27,8 +30,19 @@ const InventoryDetail = () => {
   const [inputDate, setInputDate] = useState("");
   const [ingredientId, setIngredientId] = useState(null);
 
-  const [searchQuery, setSearchQuery] = useState(""); // 🔹 검색어 상태 추가
+  const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
   const navigate = useNavigate();
+  const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    sectionRefs.current.forEach((ref, index) => {
+      if (ref) {
+        setTimeout(() => {
+          ref.classList.add("visible");
+        }, index * 200);
+      }
+    });
+  }, []);
 
   // 검색어 입력 시 실시간 필터링
   const handleSearch = (e) => {
@@ -132,18 +146,15 @@ const InventoryDetail = () => {
         .then(response => {
           const matchedCategory = response.data.find(item => item.smallCategory === selectedSmallCategory);
           if (matchedCategory) {
-            setIngredientUnit(matchedCategory.ingredientUnit); // ✅ ingredientUnit 업데이트
+            setIngredientUnit(matchedCategory.ingredientUnit); // ingredientUnit 업데이트
           }
         })
-        .catch(error => console.log("🚨 재료 단위 불러오기 실패:", error));
+        .catch(error => console.log("재료 단위 불러오기 실패:", error));
     }
   }, [selectedSmallCategory]);
 
   // 소분류 선택 시 nickName 자동 입력
   const handleSelectSmallCategory = (category) => {
-    console.log("🔹 선택한 소분류:", category.smallCategory);
-    console.log("🔹 해당 재료 ID:", category.ingredientId);
-
     setSelectedSmallCategory(category.smallCategory);
     setIngredientId(category.ingredientId);
     setNickName(category.smallCategory);
@@ -185,9 +196,13 @@ const InventoryDetail = () => {
   }, [ingredientUnit]);
 
   const handleUpdateInventory = () => {
-    console.log("🔹 현재 ingredientId:", ingredientId);  // 재료 ID 확인
     if (!ingredientId) {
       alert("재료 ID가 없습니다.");
+      return;
+    }
+
+    if (integerPart + fractionPart === 0) {
+      toast.error("0개는 등록할 수 없어요!")
       return;
     }
 
@@ -206,7 +221,7 @@ const InventoryDetail = () => {
 
     axiosInstance.put("/inventory", updatedInventory)
       .then(response => {
-        navigate("/inventory");
+        navigate(routeConfig.paths.inventoryList);
       })
       .catch(error => {
         console.error("재료 수정 중 오류 발생:", error);
@@ -227,21 +242,32 @@ const InventoryDetail = () => {
   //삭제 핸들러
   const handleDeleteInventory = () => {
     if (!inventory?.id) {
-      alert("삭제할 재료가 없습니다.");
+      toast.error("삭제할 재료가 없습니다."); // 토스트 오류 메시지
       return;
     }
 
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      axiosInstance.delete(`/inventory/${inventory.id}`)
-        .then(() => {
-          alert("삭제되었습니다.");
-          navigate("/inventory"); // 삭제 후 목록 페이지로 이동
-        })
-        .catch(error => {
-          console.error("재료 삭제 중 오류 발생:", error);
-          alert("삭제 중 오류가 발생했습니다.");
-        });
-    }
+    setIsDeleteModalOpen(true); // 모달 열기
+  };
+
+  const confirmDelete = () => {
+    axiosInstance
+      .delete(`/inventory/${inventory.id}`)
+      .then(() => {
+        const message = `${inventory.nickName} 삭제 완료!`;
+
+        setTimeout(() => {
+          toast.success(message); // 이제 정확한 메시지가 표시됨
+        }, 300);
+
+        navigate(routeConfig.paths.inventoryList);
+      })
+      .catch(error => {
+        console.error("재료 삭제 중 오류 발생:", error);
+        toast.error("삭제 중 오류 발생!!");
+      })
+      .finally(() => {
+        setIsDeleteModalOpen(false); // 모달 닫기
+      });
   };
 
   if (loading) {
@@ -254,7 +280,7 @@ const InventoryDetail = () => {
 
   return (
     <Container className="inventory-detail-container">
-      <h2 className="ingredient-detail-title">재료 상세 정보</h2>
+      <ToastContainer />
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
@@ -307,7 +333,7 @@ const InventoryDetail = () => {
           </Row>
         </Col>
       </Row>
-
+      <hr/>
       {/* 모달 (소분류 선택) */}
       <Modal show={isModalOpen}
              onHide={() => setIsModalOpen(false)}
@@ -354,7 +380,7 @@ const InventoryDetail = () => {
         </Modal.Body>
       </Modal>
 
-      <h3 className="ingredient-detail-sub-title">개수</h3>
+      <h5 className="ingredient-detail-sub-title">개수</h5>
       {/* 수량 조절 (정수 + 소수 부분을 가로로 배치) */}
       <Row className="quantity-row align-items-center">
         {/* 정수 부분 */}
@@ -388,6 +414,7 @@ const InventoryDetail = () => {
       </Row>
 
       {/* 날짜 입력 */}
+      <h5 className="ingredient-detail-sub-title">소비 기한</h5>
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
@@ -410,7 +437,7 @@ const InventoryDetail = () => {
       </Row>
 
       {/* 메모 입력 */}
-      <h3 className="ingredient-detail-sub-title">메모</h3>
+      <h5 className="ingredient-detail-sub-title">메모</h5>
       <Form.Control
         as="textarea"
         defaultValue={inventory.memo}
@@ -432,6 +459,22 @@ const InventoryDetail = () => {
           </Button>
         </Col>
       </Row>
+      {/* 삭제 확인 모달 */}
+      <Modal show={isDeleteModalOpen}
+             onHide={() => setIsDeleteModalOpen(false)}
+             centered
+             className="inventory-delete-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>정말 "<strong>{inventory.nickName}</strong>"을(를) 삭제하시겠습니까?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>취소</Button>
+          <Button variant="danger" onClick={confirmDelete}>삭제</Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   )
     ;

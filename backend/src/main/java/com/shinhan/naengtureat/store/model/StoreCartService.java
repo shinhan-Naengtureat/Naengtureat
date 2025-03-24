@@ -1,5 +1,6 @@
 package com.shinhan.naengtureat.store.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.shinhan.naengtureat.member.entity.Member;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +30,22 @@ public class StoreCartService {
 	
 	@Autowired
 	StoreRepository storeRepository;
+	
+	//장바구니 추가(부족한재료-스토어)
+	@Transactional
+    public List<Map<String, Object>> addMultipleToCart(Long memberId, List<Long> ingredientIds, Long storeId) {
+		List<Map<String,Object>> results = new ArrayList<>();
+        
+		for (Long ingredientId : ingredientIds) {
+	        StoreProduct storeProduct = storeProductRepository.findByIngredientIdAndStoreId(ingredientId, storeId)
+	                .orElseThrow(() -> new IllegalArgumentException("해당 가게에서 재료 ID " + ingredientId + "를 찾을 수 없습니다."));
+
+	        // 기존 `createCartItem` 메서드를 사용하여 장바구니에 추가
+	        results.add(createCartItem(memberId, storeProduct.getId()));
+	    }
+
+	    return results;
+	}
 	
 	// 장바구니 조회
 	public List<CartDTO> getCartByMemberId(Long memberId) {
