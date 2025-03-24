@@ -184,6 +184,7 @@ function WeeklyMealPlanTable({ memoizedMeals, weekStart, handleDragEnd, onDelete
     {showGif && (
       <div className="check-gif-overlay">
         <img src={checkGif} alt="체크 애니메이션" className="check-gif" />
+        <div>5포인트 적립!</div>
       </div>
     )}
     </>
