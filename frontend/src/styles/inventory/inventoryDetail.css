@@ -2,6 +2,7 @@
   max-width: 400px;
   margin: auto;
   padding: 20px;
+  font-family: var(--font-nanum)!important;
 }
 
 .back-button {
