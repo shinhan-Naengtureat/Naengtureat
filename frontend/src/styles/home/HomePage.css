@@ -1,25 +1,12 @@
 .advertising-bar {
-  /* 색상후보
-   background-color: rgb(255 146 57 / 98%); */
-    /* #d65027c2 
-     #eb5f0dc2
-  */
-  background-color: hsla(22, 93%, 48%, 0.761);
-
+  background-color: hsl(13.99deg 95.96% 50.63% / 80%);
   color: #ffffff; 
-  font-size: 13px;
+  font-size: 14px;
   height: 37px;
   padding: 8px;
   margin-bottom: 40px;
 }
 
-/* 뱃지 아이콘 */
-.point-icon {
-  margin-bottom: 5px;
-  margin-right: 4px;
-  font-size: 19px;
-  color: #ffd700; 
-}
 
 /* P아이콘 */
 .point-badge {
@@ -31,11 +18,18 @@
   width: 17px;
   height: 17px;
   text-align: center;
-  line-height: 20px;
+  line-height: 18px;
   font-size: 13px;
   margin-right: 6px;
 }
 
+/* 스푼 아이콘 */
+.spoon-icon {
+  width: 20px;
+  height: 25px;
+  margin-bottom: 10px;
+  margin-left: 9px;
+}
 
 /* Swiper 슬라이드 스타일 */
 .home-recipeSwiper {
@@ -44,7 +38,6 @@
 }
 
 .home-title {
-  /* color: #7a6262; */
   color: #4e4343;
   font-size: 23px;
   font-weight: 600;
@@ -91,7 +84,7 @@
   background-color: rgba(255, 255, 255, 0.95);
   padding: 12px;
   position: absolute;
-  bottom: -30px; /* 이미지에 살짝 걸치게 */
+  bottom: -33px; /* 이미지에 살짝 걸치게 */
   left: 50%;
   transform: translateX(-50%);
   border-radius: 12px;
@@ -108,13 +101,13 @@
 
 /* 제목 스타일 (길면 '...' 표시) */
 .home-recipe-title {
-  font-size: 15px;
-  /* font-weight: bold; */
-  font-weight: 550;
+  font-size: 17px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-top: 2px;
+  margin-bottom: 8px;
   max-width: 80%; /* 너비 제한 */
 }
 
@@ -125,6 +118,7 @@
   cursor: pointer;
   width: 23px;
   height: 20px;
+  margin-bottom: 10px;
 }
 
 /* 태그와 기타 정보 스타일 */
@@ -140,6 +134,7 @@
 .home-recipe-tags {
   flex: 1;
   text-align: left;
+  font-size: 15px;
 }
 
 /* 난이도와 시간 정렬 */
@@ -163,7 +158,7 @@
 
 /* 활성화된 슬라이드는 확대 */
 .home-recipe-slide.swiper-slide-active {
-  /* transform: scale(1.2)!important; */
+  transform: scaleY(1.03)!important;
   opacity: 1;
 }
 
@@ -197,6 +192,15 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.home-meal-content-active{
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.home-meal-content{
+  font-size: 15px;
+}
+
 .swiper {
   height: 398px;
 }
@@ -210,7 +214,7 @@
   display: flex !important;
   gap: 6px !important;
   justify-content: center;
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
 
 /* Swiper 페이지네이션 점 스타일 */

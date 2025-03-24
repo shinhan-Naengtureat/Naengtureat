@@ -9,11 +9,8 @@ import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
-import { FaCoins } from "react-icons/fa";
-import { MdOutlineWorkspacePremium } from "react-icons/md";
-import { TbToolsKitchen2 } from "react-icons/tb";
-import { BiSolidBowlRice } from "react-icons/bi";
-
+import spoonIcon from "./spoon-icon.png";
+import { FiBarChart } from "react-icons/fi";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -106,11 +103,9 @@ const HomePage = () => {
         }}
       />
     <div className ="advertising-bar">
-      <h7>
-      {/* <FaCoins style={{ marginRight: "6px" }} /> */}
-      <MdOutlineWorkspacePremium class="point-icon" />
-      {/* <span className="point-badge">P</span> */}
-        식단을 이행하고 포인트를 적립해보세요!</h7>
+      <p>
+      <span className="point-badge">P</span>
+        식단을 이행하고 포인트를 적립해보세요!</p>
     </div>
       <div className="home-header">
         <h2 className="home-title">오늘, 이 요리 어때요?</h2>
@@ -143,7 +138,7 @@ const HomePage = () => {
               </div>
               <div className="home-recipe-info" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", recipe.id))}>
                 <div className="home-recipe-header">
-                  <h5 className="home-recipe-title">{recipe.name}</h5>
+                  <p className="home-recipe-title">{recipe.name}</p>
                   {recipe.liked ? (
                     <FaHeart
                       className="home-recipe-like icon liked"
@@ -166,7 +161,7 @@ const HomePage = () => {
                 </div>
                 <div className="home-recipe-details">
                   <span className="home-recipe-tags">
-                    #{recipe.level} | {recipe.serving}
+                    <p> <FiBarChart /> {recipe.level} | {recipe.serving}</p>
                   </span>
                 </div>
               </div>
@@ -176,8 +171,7 @@ const HomePage = () => {
       </div>
       <div className="home-meal-plan-section">
         <h2 className="home-sub-title">오늘의 식단
-        <BiSolidBowlRice class="rice-icon" />
-        {/* <TbToolsKitchen2 style={{ marginLeft: "8px", verticalAlign: "middle" }} /> */}
+        <img src={spoonIcon} alt="spoon" class="spoon-icon"/>
         </h2>
         <div className="home-meal-plan">
           {["아침", "점심", "저녁"].map((type) => {
@@ -199,7 +193,7 @@ const HomePage = () => {
                 >
                   <p className="home-meal-time">{type}</p>
                   {meal ? (
-                    <p className="home-meal-content">{meal.recipeName}</p>
+                    <p className="home-meal-content-active">{meal.recipeName}</p>
                   ) : (
                     <p className="home-meal-content" >
                       식단이 없어요😅
