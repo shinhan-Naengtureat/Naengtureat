@@ -1,7 +1,6 @@
 /* 전체 컨테이너 */
 .recipe-detail {
-  padding: 16px;
-  font-family: Arial, sans-serif;
+  font-family:sans-serif;
   color: #333;
   line-height: 1.6;
   text-align: left;
@@ -11,7 +10,7 @@
 .recipe-detail img {
   width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 4px;
   margin-bottom: 16px;
 }
 
@@ -32,7 +31,7 @@
 .recipe-hashtags span {
   display: inline-block;
   margin-right: 8px;
-  background: #e0e0e0;
+  background: #dfdfdf;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 14px;
@@ -79,6 +78,7 @@
    ========================= */
 .ingredient-table {
   margin-top: 24px;
+  margin-bottom: 60px;
 }
 
 /* 재료 섹션의 타이틀 */
@@ -108,39 +108,53 @@
 .ingredient-names {
   width: 50%;
   font-weight: bold;
+  font-family: var(--font-nanum) !important;
 }
 
 /* 오른쪽 수량 */
 .ingredient-quantity {
   width: 50%;
   text-align: left;
+  font-family: var(--font-nanum) !important;
 }
 
 /* =========================
    조리 단계 스타일
    ========================= */
-.recipe-steps {
-  margin-bottom: 16px;      /* 댓글 섹션과 간격을 벌리기 위함 */
-  padding-bottom: 16px;     /* 테두리 안쪽 여백 */
-  border-bottom: 2px solid #ddd;  /* 구분선 */
+.recipe-step {
+  margin-top: 24px;
 }
 
-.recipe-steps ol {
-  margin-left: 20px;
-  padding-left: 0;
+.step-block {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.recipe-steps li {
-  margin-bottom: 12px;
-}
-
-/* 조리 단계 이미지 */
-.recipe-steps img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+.step-title {
+  font-size: 17px;
+  font-weight: 600;
   margin-bottom: 8px;
+  color: #444;
+  font-family: var(--font-nanum) !important;
 }
+
+.step-image {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.step-description {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  font-family: var(--font-nanum) !important;
+}
+
 
 .comment-section {
   margin-top: 20px;
@@ -159,6 +173,7 @@
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
+  font-family: var(--font-nanum) !important;
 }
 
 .comment-header {
@@ -185,6 +200,7 @@
 .comment-input-container {
   margin-top: 16px;
   position: relative;
+  font-family: var(--font-nanum) !important;
 }
 
 .comment-input-container textarea {
@@ -202,7 +218,7 @@
   display: block;
   width: 100%;
   margin-top: 8px;
-  background-color: #ff7f50; /* 원하는 색상으로 변경 가능 */
+  background-color: #fe7f2d; /* 원하는 색상으로 변경 가능 */
   color: #fff;
   border: none;
   padding: 12px;
@@ -228,8 +244,6 @@
 /* 모달 창 */
 .modal-content {
   background-color: #fff !important;
-  width: 80%;
-  max-width: 350px;
   border-radius: 15px !important;
   padding: 16px;
   text-align: center;

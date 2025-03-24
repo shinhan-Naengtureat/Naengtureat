@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Row, Col, Button } from 'react-bootstrap';
 import axiosInstance from 'api/axios';
 import { INGREDIENT_IMAGE_PATH } from 'config/pathConfig';
+import "styles/inventory/inventoryDetail.css";
 
 function IngredientsSection({ form, setForm, open, toggleSection, touched, setTouched }) {
   // 모달 상태 및 필터링을 위한 상태
@@ -142,21 +143,17 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
                     : ""
                 }
               />
-              <select
+              <input
+                type="text"
+                placeholder="단위"
                 value={ingredient.unit}
-                onChange={(e) => handleIngredientChange(idx, 'unit', e.target.value)}
-                onBlur={() => handleIngredientBlur(idx, 'unit')}
+                readOnly
                 className={
                   touched.ingredients[idx] && touched.ingredients[idx].unit
                     ? ingredient.unit.trim() ? "input-valid" : "input-invalid"
                     : ""
                 }
-              >
-                <option value="">단위 선택</option>
-                <option value="개">개</option>
-                <option value="g">g</option>
-                <option value="ml">ml</option>
-              </select>
+              />
             </div>
           ))}
           {/* 버튼: 모달 열기 */}
@@ -171,7 +168,10 @@ function IngredientsSection({ form, setForm, open, toggleSection, touched, setTo
               <select
                 value={bigCategory}
                 onChange={handleBigCategoryChange}
-                style={{ marginRight: '10px' }}
+                style={{ marginRight: '10px', 
+                         border: '1px solid #ccc',
+                         borderRadius: '5px',
+                }}
               >
                 <option value="">전체</option>
                 <option value="과일">과일</option>

@@ -1,0 +1,143 @@
+.order-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+    text-align: left;
+    font-family: var(--font-nanum) !important;
+  }
+  
+  .order-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .order-section {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-family: var(--font-nanum) !important;
+  }
+
+  .order-section p {
+    font-family: var(--font-nanum) !important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-family: var(--font-nanum) !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .payment-option {
+    display: flex;
+    align-items: center; /* 라디오 버튼과 텍스트를 수직 정렬 */
+    gap: 8px; /* 버튼과 텍스트 간격 */
+    cursor: pointer; /* 선택 가능하게 변경 */
+    margin-bottom: 5px;
+  }
+  
+  .payment-option input {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .payment-option span {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .pay-info {
+    font-size: 14px;
+    line-height: 1.4;
+    transition: opacity 0.3s ease-in-out; /* 부드러운 애니메이션 */
+    text-align: center;
+    background-color: #F2F0FD;
+    border-radius: 0.5rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+  
+  .bold {
+    font-weight: bold;
+  }
+  
+  .discount {
+    color: red;
+  }
+  
+  .final-price {
+    font-weight: bold;
+    color: blue;
+  }
+  
+  .order-button {
+    width: 100%;
+    background: #FE7F2D;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .order-button:hover {
+    background: #F35C04;
+  }
+  
+  /* 포인트와 금액을 한 줄에 배치 */
+  .flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* 결제 금액 부분에서 숫자를 우측 정렬 */
+  .amount {
+    text-align: right;
+    flex-shrink: 0; /* 숫자가 줄어들지 않도록 고정 */
+    height: 27px;
+  }
+
+  .point-input-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .point-input {
+    width: 250px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: right;
+  }
+
+  .use-point-btn {
+    background-color: #FE7F2D;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .use-point-btn:hover {
+    background-color: #F35C04;
+  }
+
+  .payment-right {
+    margin-left: auto;
+    font-weight: bold;
+  }
+
