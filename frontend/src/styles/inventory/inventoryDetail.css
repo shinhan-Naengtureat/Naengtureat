@@ -137,10 +137,16 @@
 }
 
 /* 추가 버튼 */
-.add-button {
+.add-button{
   width: 100%;
   font-size: 18px;
   font-weight: bold;
+}
+
+.inventory-add-button {
+  background-color: #F35C04 !important;
+  color: white!important;
+  border: 1px solid #F35C04!important;
 }
 
 .small-category-modal .category-btn {

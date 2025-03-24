@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
 import SearchBar from "pages/recipe/RecipeMain/SearchBar";
 import "styles/recipe/Recipe.css";
+import axiosInstance from "api/axios"; // ✅ axios 인스턴스 import
 
 function RecipeSearchPage() {
   const [recipes, setRecipes] = useState([]);
@@ -9,20 +10,18 @@ function RecipeSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 검색어가 변경될 때마다 바로 API 호출
+  // 검색어 변경 시 API 호출
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setRecipes([]);
       return;
     }
+
     setLoading(true);
-    fetch(`/recipe/search/${encodeURIComponent(searchTerm)}`)
+    axiosInstance
+      .get(`/recipe/search/${encodeURIComponent(searchTerm)}`)
       .then((res) => {
-        if (!res.ok) throw new Error("네트워크 응답 에러");
-        return res.json();
-      })
-      .then((data) => {
-        setRecipes(data);
+        setRecipes(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -36,7 +35,7 @@ function RecipeSearchPage() {
     <div>
       <SearchBar value={searchTerm} onSearch={setSearchTerm} />
       {loading ? (
-        <div className="loading">로딩중...</div>
+        <div className="loading"></div>
       ) : error ? (
         <div className="error">오류: {error.message}</div>
       ) : (
