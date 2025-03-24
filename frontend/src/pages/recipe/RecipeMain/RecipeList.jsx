@@ -6,6 +6,7 @@ import IngredientFilter from "pages/recipe/RecipeMain/IngredientFilter";
 import SortFilter from "pages/recipe/RecipeMain/SortFilter";
 import "styles/recipe/Recipe.css";
 import {ToastContainer } from 'react-toastify';
+import axiosInstance from "api/axios";
 
 
 const sortMapping = {
@@ -34,7 +35,7 @@ function RecipeList() {
   // 컴포넌트 마운트 시 전체 레시피 로딩
   useEffect(() => {
     setLoading(true);
-    axios
+    axiosInstance
       .get(`/recipe`)
       .then((res) => {
         const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
