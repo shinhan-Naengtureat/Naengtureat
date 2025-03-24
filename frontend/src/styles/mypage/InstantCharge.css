@@ -3,6 +3,7 @@
     width: 100% !important;
     margin: 0 ;
     padding: 0;
+    font-family:var(--font-nanum);
   }
 
   .instantcharge-profile-img {
@@ -69,7 +70,7 @@
   
   .instantcharge-money-balance {
     font-size: 35px;
-    font-weight: 550;
+    font-weight: bold;
     margin-left: 170px;
     margin-bottom: 19px;
   }
@@ -85,7 +86,7 @@
   .instantcharge-container {
     width: 320px;
     margin: 0 auto;
-    font-family: sans-serif;
+    font-family:var(--font-nanum);
     display: flex;
     flex-direction: column;
     gap: 16px;
