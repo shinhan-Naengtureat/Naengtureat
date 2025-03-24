@@ -130,6 +130,8 @@
 
 /* 드래그 가능한 식단 아이템 스타일 */
 .meal-item {
+  font-family: var(--font-nanum) !important;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,6 +145,10 @@
   width: 100%;
   padding: 5px; /* 내부 여백 추가 (너무 붙지 않도록) */
   box-sizing: border-box; /* padding이 크기에 영향 주지 않도록 */
+   word-break: keep-all;         /* 단어 기준 줄바꿈 */
+  white-space: normal; 
+   text-overflow: ellipsis;
+    
 }
 
 /* 날짜와 요일을 함께 감싸는 스타일 */

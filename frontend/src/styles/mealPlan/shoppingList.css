@@ -87,7 +87,6 @@
 .home-box-container {
   width: 90%;
   max-width: 430px;
-  height: calc(100vh - 60px);
   margin: 0;
   font-family: "Arial", sans-serif;
   overflow-y: auto;
