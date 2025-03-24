@@ -29,7 +29,9 @@ const InventoryCreate = () => {
 
   // 오늘 날짜 가져오기 함수
   const getTodayDate = () => {
-    return new Date().toISOString().split("T")[0];
+      const now = new Date();
+      now.setHours(now.getHours() + 9); // UTC -> KST 변환
+      return now.toISOString().split("T")[0];
   };
 
   // 대분류 및 소분류 데이터 가져오기

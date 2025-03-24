@@ -17,7 +17,7 @@ const BottomNav = () => {
       <NavLink to="/" className="nav-item home">
         <FaHome />
       </NavLink>
-      <NavLink to="/recipes" className="nav-item">
+      <NavLink to="/recipe" className="nav-item">
         <FaBook />
         <span>레시피</span>
       </NavLink>

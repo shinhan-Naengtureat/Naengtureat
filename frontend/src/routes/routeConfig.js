@@ -10,7 +10,7 @@ const RouteConfig = {
     login: `${BASE_URL}/login`,
     register: `${BASE_URL}/register`,
     myPage: `${BASE_URL}/mypage`,
-    recipeList: `${BASE_URL}/recipes`,
+    recipeList: `${BASE_URL}/recipe`,
     inventoryList: `${BASE_URL}/inventory`,
     inventoryDetail: `${BASE_URL}/inventory/:id`,
     inventoryCreate: `${BASE_URL}/inventory/new`,
@@ -97,7 +97,7 @@ const RouteConfig = {
     },
 
     /*==================레시피==================*/
-    [`${BASE_URL}/recipes`]: {
+    [`${BASE_URL}/recipe`]: {
       title: "테마별 레시피",
       links: [
         { to: `${BASE_URL}/recipe/register`, icon: <FaEdit/>, alt: "레시피 추가" },
@@ -150,6 +150,12 @@ const RouteConfig = {
       title: "주문하기",
       links: [
         { to: `${BASE_URL}/cart`, icon: <FaShoppingCart />, alt: "장바구니" },
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
+    [`${BASE_URL}/cart`]: {
+      title: "장바구니",
+      links: [
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },

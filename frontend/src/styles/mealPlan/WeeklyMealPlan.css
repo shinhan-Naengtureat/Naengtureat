@@ -130,6 +130,8 @@
 
 /* 드래그 가능한 식단 아이템 스타일 */
 .meal-item {
+  font-family: var(--font-nanum) !important;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,6 +145,10 @@
   width: 100%;
   padding: 5px; /* 내부 여백 추가 (너무 붙지 않도록) */
   box-sizing: border-box; /* padding이 크기에 영향 주지 않도록 */
+   word-break: keep-all;         /* 단어 기준 줄바꿈 */
+  white-space: normal; 
+   text-overflow: ellipsis;
+    
 }
 
 /* 날짜와 요일을 함께 감싸는 스타일 */
@@ -230,3 +236,22 @@
   color: #6c757d;
   font-weight: normal;
 }
+
+.check-gif-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 150px);
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.check-gif {
+  width: 150px; /* GIF 크기 조절 */
+  height: auto;
+}
+

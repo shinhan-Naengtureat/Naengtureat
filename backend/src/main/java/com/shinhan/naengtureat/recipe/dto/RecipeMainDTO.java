@@ -22,6 +22,7 @@ public class RecipeMainDTO {
     private String level;
     private String cookingTime;
     private String memberName;
+    private String memberImage;
     private String category;
     private String mealName;
     private String image;
@@ -30,7 +31,7 @@ public class RecipeMainDTO {
     private String aggregatedHashtags;
     private Long likeCount;  
 
-    public RecipeMainDTO(Long id, String name, String level, String cookingTime, String memberName, String category,
+    public RecipeMainDTO(Long id, String name, String level, String cookingTime, String memberName, String memberImage, String category,
                          String mealName, String image, Boolean isDelete, Object aggregatedIngredients, 
                          Object aggregatedHashtags, Long likeCount) {
         this.id = id;
@@ -38,6 +39,7 @@ public class RecipeMainDTO {
         this.level = level;
         this.cookingTime = cookingTime;
         this.memberName = memberName;
+        this.memberImage = memberImage;
         this.category = category;
         this.mealName = mealName;
         this.image = image;

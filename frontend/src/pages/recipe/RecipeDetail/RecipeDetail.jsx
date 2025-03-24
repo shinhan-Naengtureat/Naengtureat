@@ -6,6 +6,8 @@ import "styles/recipe/RecipeDetail.css";
 import CommentsSection from "pages/recipe/RecipeDetail/CommentsSection";
 import MealPlanModal from "pages/recipe/RecipeDetail/MealPlanModal";
 import { RECIPE_IMAGE_PATH } from "config/pathConfig";
+import { FiBarChart } from "react-icons/fi";
+import { IoMdTime } from "react-icons/io";
 
 function RecipeDetail() {
   const { recipeId } = useParams();
@@ -94,7 +96,7 @@ function RecipeDetail() {
     }
   };
 
-  if (loading) return <div className="recipe-detail">로딩중...</div>;
+  if (loading) return <div className="recipe-detail"></div>;
   if (error) return <div className="recipe-detail" style={{ color: "red" }}>오류: {error.message}</div>;
 
   return (
@@ -103,8 +105,8 @@ function RecipeDetail() {
       <div className="recipe-header">
         <img src={`${RECIPE_IMAGE_PATH}/${recipe.image}`} alt={recipe.name} />
         <h1>{recipe.name}</h1>
-        <p>난이도: {recipe.level}</p>
-        <p>조리 시간: {recipe.cookingTime}</p>
+        <p><FiBarChart size={14} /> {recipe.level}</p>
+        <p><IoMdTime size={14} /> {recipe.cookingTime}</p>
         {recipe.hashtags && recipe.hashtags.length > 0 && (
           <p className="recipe-hashtags" style={{border:'0',padding:'0'}}>
             {" "}
@@ -126,7 +128,7 @@ function RecipeDetail() {
         <FaRegComment onClick={handleScrollToComment} className="icon" title="댓글 보기" />
       </div>
 
-      {/* Ingredients Table (인라인) */}
+      {/* Ingredients Table */}
       {recipe.ingredients && recipe.ingredients.length > 0 && (
         <div className="ingredient-table">
           <h2>기본 재료 {recipe.serving}</h2>
@@ -145,20 +147,23 @@ function RecipeDetail() {
         </div>
       )}
 
-      {/* Steps List (인라인) */}
+      {/* Steps List */}
       {recipe.steps && recipe.steps.length > 0 && (
-        <div className="recipe-section recipe-steps">
-          <h2>조리 단계</h2>
-          <ol>
-            {recipe.steps.map((step, index) => (
-              <li key={index}>
-                {step.image && (
-                  <img src={`${RECIPE_IMAGE_PATH}/${step.image}`} alt={`step-${index}`} />
-                )}
-                {step.content}
-              </li>
-            ))}
-          </ol>
+        <div className="recipe-section recipe-step">
+          
+          {recipe.steps.map((step, index) => (
+            <div key={index} className="step-block">
+              <div className="step-title">STEP {index + 1}</div>
+              {step.image && (
+                <img
+                  src={`${RECIPE_IMAGE_PATH}/${step.image}`}
+                  alt={`step-${index}`}
+                  className="step-image"
+                />
+              )}
+              <div className="step-description">{step.content}</div>
+            </div>
+          ))}
         </div>
       )}
 
