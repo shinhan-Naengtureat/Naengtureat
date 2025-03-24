@@ -171,7 +171,7 @@ const HomePage = () => {
       </div>
       <div className="home-meal-plan-section">
         <h2 className="home-sub-title">오늘의 식단
-        <img src={spoonIcon} alt="spoon" class="spoon-icon"/>
+        <img src={spoonIcon} alt="spoon" className="spoon-icon"/>
         </h2>
         <div className="home-meal-plan">
           {["아침", "점심", "저녁"].map((type) => {
