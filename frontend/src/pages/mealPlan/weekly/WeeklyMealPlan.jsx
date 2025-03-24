@@ -88,9 +88,6 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
         deleteMeal={deleteMeal}
       />
       <span className="mealplan-info">
-        ※ 이행여부 체크시 5P 적립됩니다.
-      </span>
-      <span className="mealplan-info">
         ※ 일요일에는 다음주 식단이 생성됩니다.
       </span>
     </div>
