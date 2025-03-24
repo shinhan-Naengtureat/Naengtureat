@@ -55,9 +55,10 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 	            
 	            
 	        FROM (
-	            SELECT i.ingredient_id AS a_ingredient_id, i.quantity AS a_quantity
+	            SELECT i.ingredient_id AS a_ingredient_id, sum(i.quantity) AS a_quantity
 	            FROM inventory i
 	            WHERE i.member_id = :memberId
+	            group by i.ingredient_id
 	        ) A
 	        RIGHT JOIN (
 	            SELECT 
@@ -79,6 +80,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
 	        ON A.a_ingredient_id = B.b_ingredient_id
 	        GROUP BY A.a_ingredient_id,A.a_quantity, B.b_ingredient_id, B.b_unit,B.b_image
 	        HAVING total_b_quantity > 0
+	        order by  B.b_unit desc;
 	        """, nativeQuery = true)
 	    List<Object[]> compareInventoryWithMealPlan(
 	        @Param("memberId") Long memberId,
