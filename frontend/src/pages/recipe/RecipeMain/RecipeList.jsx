@@ -35,7 +35,7 @@ function RecipeList() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/recipe")
+      .get(`/recipe`)
       .then((res) => {
         const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
         setAllRecipes(validRecipes);
