@@ -1,0 +1,17 @@
+.charge-inprogress {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-family: var(--font-nanum) !important;
+}
+
+.charge-inprogress img {
+    width: 100%;
+    margin-bottom: 20px;
+}
