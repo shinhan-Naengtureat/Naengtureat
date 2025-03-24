@@ -14,7 +14,7 @@ import {toast} from "react-toastify";
 
 
 const GPTChat = () => {
-  const { userSelections } = useMealPlanContext();
+  const { userSelections,setUserSelections } = useMealPlanContext();
   const [mealPlan, setMealPlan] = useState([]); // GPT에서 받은 식단
   const [extraMeals, setExtraMeals] = useState([]); // 추가 식단 저장
   const [foodList, setFoodList] = useState([]); // DB에서 가져온 음식 목록
@@ -175,7 +175,17 @@ const [hasFetched, setHasFetched] = useState(false);
           position: "top-center", // 위치 조정 가능
           autoClose: 3000, // 3초 후 자동 닫힘
         });
-
+        //  입력값 초기화 추가
+        setUserSelections({
+          budget: "",
+          category: [],
+          theme: [],
+          preferredIngredients: [],
+          excludedIngredients: [],
+          days: [],
+          mealTimes: [],
+          mealCount: [],
+        });
       navigate(RouteConfig.paths.mealPlanListDaily);
       
     } catch (error) {
