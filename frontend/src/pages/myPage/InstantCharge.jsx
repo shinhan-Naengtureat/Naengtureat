@@ -13,7 +13,8 @@ function InstantCharge() {
   const [payInfo, setPayInfo] = useState({
     name: "",
     balance: 0,
-    userImageUrl: `${PROFILE_IMAGE_PATH}/`
+    userImageUrl: `${PROFILE_IMAGE_PATH}/`,
+    point : 0
   });
 
   useEffect(() => {
@@ -26,7 +27,8 @@ function InstantCharge() {
         setPayInfo({
           name: memberResponse.data.name,
           balance: payResponse.data.balance || 0,
-          userImageUrl: `${PROFILE_IMAGE_PATH}/` + memberResponse.data.image
+          userImageUrl: `${PROFILE_IMAGE_PATH}/` + memberResponse.data.image,
+          point : memberResponse.data.point
         });
       } catch (error) {
         console.error("회원 정보 불러오기 실패:", error);
@@ -103,7 +105,18 @@ function InstantCharge() {
 
   return (
     <>
-      <div className="home-container">
+    <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .home-container {
+              width: 100% !important;
+              padding : 55px 0px;
+            }
+
+          `,
+        }}
+      />
+      <div className="instantcharge-home-container">
 
         {/* 사용자 정보 및 페이머니 표시 */}
         {payInfo && (

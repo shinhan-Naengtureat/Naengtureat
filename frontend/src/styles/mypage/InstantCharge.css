@@ -1,10 +1,8 @@
 /* 공통 컨테이너 */
-.home-container {
+.instantcharge-home-container {
     width: 100% !important;
-    padding: 30px 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    max-width: none !important;
+    margin: 0 ;
+    padding: 0;
   }
 
   .instantcharge-profile-img {
@@ -62,6 +60,10 @@
     margin-bottom: 45px;
     flex-direction: column;
     gap: 8px;
+    display: flex;
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 0;
   }
   
   
@@ -76,7 +78,7 @@
     font-size: 25px;
     font-weight: 500;
     margin-top: 15px;
-    margin-left: 280px;
+    margin-left: 250px;
   }
   
   /* 충전 입력 영역 */
@@ -100,6 +102,7 @@
     margin-bottom: 10px;
     box-shadow: 0 4px 8px rgba(197, 169, 169, 0.2);
     flex-wrap: wrap;
+    padding-right: 40px;
   }
   
   /* 충전금액 텍스트 */
