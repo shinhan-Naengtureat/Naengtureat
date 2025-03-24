@@ -39,5 +39,6 @@ public interface StoreProductRepository extends JpaRepository<StoreProduct, Long
 			+ " GROUP BY s.placeName, s.image "
 			+ " ORDER BY SUM(COALESCE(p.discountPrice,0)) ")
 	List<StorePriceDTO> findStorePricesByIngredients(@Param("ingredientIds") List<Long> ingredientIds);
-	
+	@Query("SELECT sp.id FROM StoreProduct sp WHERE sp.ingredient.id = :ingredientId AND sp.store.id = :storeId")
+	Long findProductIdByIngredientIdAndStoreId(@Param("ingredientId") Long ingredientId, @Param("storeId") Long storeId);
 }
