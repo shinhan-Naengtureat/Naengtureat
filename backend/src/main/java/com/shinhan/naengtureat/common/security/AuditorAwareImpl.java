@@ -7,7 +7,6 @@ import org.springframework.data.domain.AuditorAware;
 public class AuditorAwareImpl implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
-    	
         return Optional.of("system");
 
         /* springSecurity 도입 후 설정
@@ -21,6 +20,5 @@ public class AuditorAwareImpl implements AuditorAware<String> {
             return Optional.of("system");  // 예외 발생 시 기본값 반환
         }
         */
-
     }
 }
