@@ -264,13 +264,15 @@ function StoreDetail() {
 
             {/* 장바구니 단일 스토어의 상품들인지 확인하는 모달창 */}
             <Modal show={openModal} onHide={closeModalHandler} centered dialogClassName='cart-modal'>
+                <Modal.Header>
+                    <b>장바구니에는<br />같은 가게의 상품만 담을 수 있습니다.</b>
+                </Modal.Header>
                 <Modal.Body>
-                    장바구니에는 같은 가게의 상품만 담을 수 있습니다.<br />
-                    선택하신 상품을 장바구니에 담을 경우 이전에 담은 상품이 삭제됩니다.
+                    선택하신 상품을 장바구니에 담을 경우<br />이전에 담은 상품이 <span className='modal-delete-text'>삭제</span>됩니다.
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={closeModalHandler}>취소</Button>
-                    <Button variant="success" onClick={replaceCartWithNewItem}>담기</Button>
+                    <Button variant="success" onClick={replaceCartWithNewItem} className='modal-add-button'>담기</Button>
                 </Modal.Footer>
             </Modal>
             <ToastContainer />
