@@ -19,8 +19,10 @@
   width: 100%;
 }
 
+
 /* 제목 스타일 */
 .box-title {
+    font-family: var(--font-nanum) !important;
    text-align: center;
   font-size: 22px;
   font-weight: 800;
@@ -36,6 +38,7 @@
 
 /* 테마 버튼 목록 */
 .theme-container {
+    font-family: var(--font-nanum) !important;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -49,7 +52,7 @@
 .theme-button {
   width: 100px;
   height: 100px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   color: #8b94a0;
   background-color: #f5f5f5;
@@ -58,12 +61,24 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
-
+/*  비활성 버튼의 hover 효과 (선택되지 않은 경우) */
+.theme-button:hover {
+  background-color: #fce0c2; /* 연한 오렌지색 */
+  border-color: #f35c04;
+  color: #f35c04;
+  transform: scale(1.05); /* 크기 살짝 증가 */
+}
 /* 선택된 테마 버튼 스타일 */
 .theme-button.selected {
   background-color: #f35c04;
   color: white;
   border-color: #f35c04;
+    transform: scale(1.05); /* 선택된 상태에서 약간 더 강조 */
+}
+/* 선택된 버튼의 hover 효과 */
+.theme-button.selected:hover {
+  background-color: #f35c04; /* 더 진한 오렌지색 */
+
 }
 
 /* 로딩 텍스트 */

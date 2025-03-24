@@ -1,10 +1,11 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Badge, Button, Col, Container, Form, Placeholder, Row} from 'react-bootstrap';
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import axiosInstance from "api/axios";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import "styles/inventory/inventoryList.css";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import {toast, ToastContainer} from "react-toastify";
 
 const InventoryList = () => {
   // 다중 선택을 위한 상태 추가
@@ -13,6 +14,9 @@ const InventoryList = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [toastMessage, setToastMessage] = useState(null);
+  const rowRefs = useRef({}); // row 참조 저장용
 
   //아이템 useEffect
   useEffect(() => {
@@ -21,7 +25,6 @@ const InventoryList = () => {
     axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
-          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
@@ -94,8 +97,41 @@ const InventoryList = () => {
     });
   };
 
+  //토스트 표시
+  useEffect(() => {
+    if (location.state?.message && !toastMessage) {
+      setToastMessage(location.state.message); // 메시지를 상태로 저장
+      toast.success(location.state.message); // 토스트 실행
+
+      setTimeout(() => {
+        navigate(location.pathname, { replace: true });
+      }, 1000); // navigate를 1초 후 실행
+    }
+  }, [location, navigate, toastMessage]);
+
+
+// 로딩 끝났을 때 애니메이션 실행
+  useEffect(() => {
+    if (!loading && rowRefs.current) {
+      Object.keys(rowRefs.current).forEach((key, index) => {
+        const ref = rowRefs.current[key];
+        if (ref) {
+          setTimeout(() => {
+            ref.classList.add("visible");
+          }, index * 200);
+        }
+      });
+    }
+  }, [loading, groupedItems]);
+
+  useEffect(() => {
+    // 필터가 바뀔 때마다 refs를 초기화
+    rowRefs.current = [];
+  }, [groupedItems]);
+
   return (
     <Container className="inventory-container">
+      <ToastContainer />
       <IngredientBigCategoryFilter
         items={categories}
         selectedItems={selectedCategories}
@@ -125,10 +161,15 @@ const InventoryList = () => {
           ))}
         </Row>
       ) : (
-        Object.keys(groupedItems).map((category) => (
+        Object.keys(groupedItems).map((category, idx) => (
           <div key={category}>
             <h5 className="text-start mb-4">| {category} |</h5> {/* 마진 추가 */}
-            <Row className="item-container">
+            <Row
+              className="item-container inventory-list-item-row"
+              ref={(el) => {
+                if (el) rowRefs.current[category] = el;
+              }}
+            >
               {groupedItems[category].map((item) => {
                 const isExpired = item.remainingDays < 0;
                 return (
@@ -138,7 +179,7 @@ const InventoryList = () => {
                          style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
                     >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays}
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays === 0 ? "Today" : "D+" + -item.remainingDays }
                       </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />

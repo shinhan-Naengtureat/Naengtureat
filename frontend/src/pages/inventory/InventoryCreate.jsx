@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axiosInstance from "api/axios";
-import { Button, Col, Container, Form, Modal, Row, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 import "styles/inventory/inventoryDetail.css";
-import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import {toast, ToastContainer} from "react-toastify";
 
 const InventoryCreate = () => {
   const [bigCategories, setBigCategories] = useState([]); // 대분류 목록
@@ -12,7 +13,7 @@ const InventoryCreate = () => {
   const [filteredSmallCategories, setFilteredSmallCategories] = useState([]); // 선택된 대분류에 따른 소분류 목록
   const [selectedSmallCategory, setSelectedSmallCategory] = useState(""); // 선택된 소분류
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
-  const [integerPart, setIntegerPart] = useState(0);  // 정수 부분
+  const [integerPart, setIntegerPart] = useState(1);  // 정수 부분
   const [fractionPart, setFractionPart] = useState(0); // 소수 부분
   const [ingredientUnit, setIngredientUnit] = useState("");  // 재료 단위 저장
 
@@ -28,7 +29,9 @@ const InventoryCreate = () => {
 
   // 오늘 날짜 가져오기 함수
   const getTodayDate = () => {
-    return new Date().toISOString().split("T")[0];
+      const now = new Date();
+      now.setHours(now.getHours() + 9); // UTC -> KST 변환
+      return now.toISOString().split("T")[0];
   };
 
   // 대분류 및 소분류 데이터 가져오기
@@ -117,7 +120,7 @@ const InventoryCreate = () => {
             setIngredientUnit(matchedCategory.ingredientUnit);
           }
         })
-        .catch(error => console.log("🚨 재료 단위 불러오기 실패:", error));
+        .catch(error => console.log("재료 단위 불러오기 실패:", error));
     }
   }, [selectedSmallCategory]);
 
@@ -125,6 +128,11 @@ const InventoryCreate = () => {
   const handleCreateInventory = () => {
     if (!ingredientId) {
       alert("재료 ID가 없습니다.");
+      return;
+    }
+
+    if (integerPart + fractionPart === 0) {
+      toast.error("0개는 등록할 수 없어요!")
       return;
     }
 
@@ -175,7 +183,7 @@ const InventoryCreate = () => {
 
   return (
     <Container className="inventory-detail-container">
-      <h2 className="ingredient-detail-title">재료 등록</h2>
+      <ToastContainer/>
       {/* 이미지 & 분류 */}
       <Row className="image-category-row">
         <Col xs={3} className="image-box">
@@ -208,7 +216,7 @@ const InventoryCreate = () => {
               <Form.Control
                 className="category-select"
                 value={selectedSmallCategory} readOnly
-                onClick={() => setIsModalOpen(true)} />
+                onClick={() => setIsModalOpen(true)}/>
             </Col>
             {/* 닉네임 입력 */}
             <Col>
@@ -222,6 +230,8 @@ const InventoryCreate = () => {
           </Row>
         </Col>
       </Row>
+
+      <hr/>
 
       {/* 모달 (소분류 선택) */}
       <Modal show={isModalOpen}
@@ -277,10 +287,10 @@ const InventoryCreate = () => {
           <Button variant="outline-danger" onClick={() => setIntegerPart(prev => Math.max(prev - 1, 0))}>－</Button>
           <Form.Control
             type="number"
-            value={integerPart === "" ? "" : integerPart} // 빈 값 유지
+            value={integerPart === 0 ? 1 : integerPart} // 빈 값 유지
             onChange={handleChangeIntegerPart} // 새로운 핸들러 사용
             className="mx-2 text-center"
-            style={{ width: "50px" }}
+            style={{width: "50px"}}
           />
           <Button variant="outline-primary" onClick={() => setIntegerPart(prev => prev + 1)}>＋</Button>
         </Col>
@@ -303,6 +313,7 @@ const InventoryCreate = () => {
       </Row>
 
       {/* 날짜 입력 */}
+      <h5 className="ingredient-detail-sub-title">소비 기한</h5>
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
@@ -315,7 +326,7 @@ const InventoryCreate = () => {
           <Form.Label className="date-label">소비기한</Form.Label>
           <Form.Control type="date"
                         value={inventoryExpDate}
-                        onChange={(e) => setInventoryExpDate(e.target.value)} />
+                        onChange={(e) => setInventoryExpDate(e.target.value)}/>
         </Col>
       </Row>
 
@@ -329,7 +340,7 @@ const InventoryCreate = () => {
       />
 
       {/* 추가 버튼 */}
-      <Button variant="warning" className="add-button" onClick={handleCreateInventory}>
+      <Button variant="warning" className="add-button inventory-add-button" onClick={handleCreateInventory}>
         등록
       </Button>
     </Container>

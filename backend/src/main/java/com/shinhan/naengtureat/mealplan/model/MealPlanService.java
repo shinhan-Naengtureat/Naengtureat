@@ -26,7 +26,9 @@ import com.shinhan.naengtureat.recipe.model.RecipeHashtagRepository;
 import com.shinhan.naengtureat.recipe.model.RecipeRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class MealPlanService {
 
@@ -49,24 +51,31 @@ public class MealPlanService {
     public void saveMealPlan(List<MealPlanDTO> mealplanDTO) {
 		Member member = memberRepository.findById(3L)
 				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-		
-		 List<MealPlan> mealPlans = mealplanDTO.stream().map(dto -> {
-		Recipe recipe = recipeRepository.findById(dto.getRecipeId())
-				.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
-		 return MealPlan.builder()
-                 .member(member)  // Member 객체 사용
-                 .recipe(recipe)  // Recipe 객체 사용
-                 .date(dto.getDate()) 
-                 .type(dto.getType()) 
-                 .isCheck(false) 
-                 .build();
-     }).collect(Collectors.toList());
 
-        // 한 번에 저장 (bulk insert)
-        mealPlanRepository.saveAll(mealPlans);
-    }
-	
+		List<MealPlan> newMealPlans = mealplanDTO.stream().filter(dto -> {
+			// 해당 회원의 특정 날짜 식단만 조회
+			List<MealPlan> existingMeals = mealPlanRepository.findByMemberAndDate(member, dto.getDate());
 
+			// 같은 date와 type이 존재하는지 확인 후 없으면 저장
+			return existingMeals.stream()
+					.noneMatch(meal -> meal.getType().equals(dto.getType()));
+			})
+				.map(dto -> {
+			Recipe recipe = recipeRepository.findById(dto.getRecipeId())
+					.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+			return MealPlan.builder()
+					.member(member) // Member 객체 사용
+					.recipe(recipe) // Recipe 객체 사용
+					.date(dto.getDate())
+					.type(dto.getType())
+					.isCheck(false).build();
+		}).collect(Collectors.toList());
+
+		// 3. 새로운 식단이 있다면 저장
+		if (!newMealPlans.isEmpty()) {
+			mealPlanRepository.saveAll(newMealPlans);
+		}
+	}
 	
 	public List<String> getCategoryAll() {
 		return recipeRepository.findCategoryAll();
@@ -128,57 +137,68 @@ public class MealPlanService {
 		return weeklyMealPlanList.stream().map(mealPlan -> entityToDTO(mealPlan)).collect(Collectors.toList());
 	}
 	
-	// 식단 이행여부 체크
+	// 식단 이행여부 체크(유효기간 임박순 소진)
 	@Transactional
 	public String checkMealPlan(Long memberId, Long mealPlanId) {
-		Member newMember = Member.builder().id(memberId).build();
-		
-		int result = mealPlanRepository.updateMealPlanCheckStatus(newMember, mealPlanId);
-		
-		if(result == 1) {
-			// 1. 회원 포인트 5점 추가
-	        Member memberEntity = memberRepository.findById(memberId).orElse(null);
-	        memberEntity.setPoint(memberEntity.getPoint() + 5);
-	        memberRepository.save(memberEntity);
-	        
-	        //2. 레시피재료만큼 인벤토리 재료 삭제
-	        MealPlan mealPlan = mealPlanRepository.findById(mealPlanId).orElse(null);
-	        Recipe recipe = mealPlan.getRecipe();
-	        
-	     // 식단의 레시피에 포함된 재료들을 순회하며 회원 인벤토리에서 차감
-	        for (RecipeIngredient ri : recipe.getIngredients()) {
-	        	String smallCategory = ri.getIngredient().getSmallCategory();
-	        	String recipeUnit = ri.getIngredient().getRecipeUnit();
-	        	String ingredientUnit = ri.getIngredient().getIngredientUnit();
-	        	
-	        	// 수량체크안하는 것들
-	        	if(smallCategory.equals("조미료")||smallCategory.equals("견과류")||smallCategory.equals("곡물")||
-	        	   smallCategory.equals("기타")||(!recipeUnit.equals(ingredientUnit))) {
-	        		continue;
-	        	}
-	        	
-	            Long ingredientId = ri.getIngredient().getId();
+	    Member newMember = Member.builder().id(memberId).build();
+	    int result = mealPlanRepository.updateMealPlanCheckStatus(newMember, mealPlanId);
 
-	            // 회원 인벤토리 조회
-	            Inventory inventory = inventoryRepository.findByMemberIdAndIngredientId(memberId, ingredientId);
+	    if (result == 1) {
+	        // 1. 회원 포인트 5점 추가
+	        Member memberEntity = memberRepository.findById(memberId).orElse(null);
+	        if (memberEntity != null) {
+	            memberEntity.setPoint(memberEntity.getPoint() + 5);
+	            memberRepository.save(memberEntity);
+	        }
+
+	        // 2. 레시피 재료만큼 인벤토리 재료 삭제
+	        MealPlan mealPlan = mealPlanRepository.findById(mealPlanId).orElse(null);
+	        if (mealPlan == null) return "식단 정보가 없습니다.";
+
+	        Recipe recipe = mealPlan.getRecipe();
+	        for (RecipeIngredient ri : recipe.getIngredients()) {
+	            String smallCategory = ri.getIngredient().getSmallCategory();
+	            String recipeUnit = ri.getIngredient().getRecipeUnit();
+	            String ingredientUnit = ri.getIngredient().getIngredientUnit();
+
+	            // 수량 체크 안 하는 것들 제외
+	            if (smallCategory.equals("조미료") || smallCategory.equals("견과류") || smallCategory.equals("곡물") ||
+	                smallCategory.equals("기타") || (!recipeUnit.equals(ingredientUnit))) {
+	                continue;
+	            }
+
+	            Long ingredientId = ri.getIngredient().getId();
+	            double requiredQuantity = ri.getQuantity();
 	            
-	            if(inventory != null) {
-	            	double newQuantity = inventory.getQuantity() - ri.getQuantity();
-		            
-	            	if(newQuantity<=0) {
-	            		//남은 수량이 0이하면 인벤토리에서 재료 삭제
-	            		inventoryRepository.delete(inventory);
-	            	} else {
-	            		//남은 수량이 0보다 크면 업데이트 후 저장
-	            		inventory.setQuantity(newQuantity);
-	            		inventoryRepository.save(inventory);
-	            	}
+	            // 유효기간이 임박한 순으로 인벤토리 가져오기
+	            List<Inventory> inventoryList = inventoryRepository.findByMemberIdAndIngredientIdOrderByExpirationDate(memberId, ingredientId);
+	            
+	            for (Inventory inventory : inventoryList) {
+	                if (requiredQuantity <= 0) break; // 차감 완료 시 종료
+	                
+	                double availableQuantity = inventory.getQuantity();
+	                double deductedAmount = Math.min(availableQuantity, requiredQuantity);
+	                
+	                if (availableQuantity <= requiredQuantity) {
+	                    // 전체 차감 후 삭제
+	                    requiredQuantity -= availableQuantity;
+	                    inventoryRepository.delete(inventory);
+	                } else {
+	                    // 필요한 만큼만 차감 후 저장
+	                    inventory.setQuantity(availableQuantity - requiredQuantity);
+	                    inventoryRepository.save(inventory);
+	                    requiredQuantity = 0; // 차감 완료
+	                }
+	            }
+	            
+	            if (requiredQuantity > 0) {
+	                log.warn("{} 재료가 부족하여 {}만큼 충족되지 않음!", ri.getIngredient().getSmallCategory(), requiredQuantity);
 	            }
 	        }
-			return "식단 이행여부 체크, 포인트 업데이트, 인벤토리 차감이 완료되었습니다.";
-		} else {
-			return "식단 이행여부 체크에 실패하였습니다.";
-		}
+	        return "식단 이행여부 체크, 포인트 업데이트, 인벤토리 차감이 완료되었습니다.";
+	    } else {
+	        return "식단 이행여부 체크에 실패하였습니다.";
+	    }
 	}
 	
 	// 저장된 식단 이동

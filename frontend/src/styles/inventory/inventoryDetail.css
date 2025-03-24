@@ -10,15 +10,19 @@
   text-decoration: none;
 }
 
-.title {
-  flex-grow: 1;
-  text-align: center;
+.ingredient-detail-title {
+  text-align: left!important;
   font-weight: bold;
 }
 
-.ingredient-detail-title .ingredient-detail-sub-title {
+.ingredient-detail-sub-title {
   text-align: left!important;
+  font-family: var(--font-serif);
   font-weight: bold;
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: #6c757d;
 }
 
 /* 이미지 & 카테고리 */
@@ -77,8 +81,9 @@
 .quantity-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
+  justify-content: left;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 
 .quantity-button {
@@ -102,13 +107,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 40px;
 }
 
 .date-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
 }
 
@@ -116,7 +120,7 @@
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
-  text-align: center;
+  text-align: left;
 }
 
 .date-input {
@@ -128,15 +132,21 @@
 
 /* 메모 입력 */
 .memo-input {
-  height: 60px;
-  margin-bottom: 20px;
+  height: 80px;  /* 원하는 높이로 조절 */
+  margin-bottom: 40px;
 }
 
 /* 추가 버튼 */
-.add-button {
+.add-button{
   width: 100%;
   font-size: 18px;
   font-weight: bold;
+}
+
+.inventory-add-button {
+  background-color: #F35C04 !important;
+  color: white!important;
+  border: 1px solid #F35C04!important;
 }
 
 .small-category-modal .category-btn {
@@ -152,6 +162,8 @@
   align-items: center;
   transition: all 0.2s ease-in-out; /* 부드러운 효과 */
   justify-content: center;
+  min-width: 80px;
+  min-height: 80px;
 }
 
 
@@ -207,6 +219,19 @@
   width: 100%;
 }
 
+/* 삭제 확인 모달 */
+.inventory-delete-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.inventory-delete-modal .modal-content {
+  transform: translateY(0%);
+}
+
 /* 검색 입력창 */
 .search-container {
   flex-grow: 1;
@@ -245,6 +270,7 @@
   max-width: 50%;
   display: flex;
   justify-content: left;
+  white-space: nowrap;
 }
 
 .text-center.category-col.col-4 {
