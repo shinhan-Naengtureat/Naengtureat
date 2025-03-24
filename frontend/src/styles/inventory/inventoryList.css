@@ -155,3 +155,7 @@ h5.text-start {
   opacity: 1;
   transform: translateY(0);
 }
+
+.item-container .mb-3 {
+  margin-bottom: 2rem !important;
+}
