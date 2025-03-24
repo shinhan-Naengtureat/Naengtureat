@@ -1,0 +1,163 @@
+/* 공통 컨테이너 */
+.home-container {
+    width: 100% !important;
+    padding: 30px 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    max-width: none !important;
+  }
+
+  .instantcharge-profile-img {
+    width: 62px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 13px;
+    margin-left: 50px;
+    margin-right: 20px;
+  }
+
+  .instantcharge-user-name{
+    margin-top: 25px;
+    margin-right: 20px;
+    font-size: 20px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+    font-family:var(--font-nanum);
+  }
+
+
+  /* 탭 영역 */
+  .instantcharge-tab-container {
+    display: flex;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+  }
+  
+  .instantcharge-tab-item {
+    font-size: 14px;
+    flex: 1;
+    /* text-align: center; */
+    padding: 12px 0;
+    cursor: pointer;
+    background-color: #f2f2f2;
+    border: 2px solid transparent;
+  }
+  
+  .instantcharge-tab-item.active {
+    background-color: #fff;
+    font-weight: bold;
+    border: 2px solid #ff7f0f;
+  }
+  
+  /* 잔액 표시 영역 */
+  .instantcharge-money-wrap {
+    width: 100%;
+    height: 235px;
+    background: linear-gradient(263deg, #e93d39, rgb(251 103 58));
+    color: #ffffff; 
+    padding: 20px;
+    margin-bottom: 45px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  
+  .instantcharge-money-balance {
+    font-size: 35px;
+    font-weight: 550;
+    margin-left: 170px;
+    margin-bottom: 19px;
+  }
+
+  .instantcharge-point{
+    font-size: 25px;
+    font-weight: 500;
+    margin-top: 15px;
+    margin-left: 280px;
+  }
+  
+  /* 충전 입력 영역 */
+  .instantcharge-container {
+    width: 320px;
+    margin: 0 auto;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .instantcharge-amount-wrap {
+    display: flex;
+    height: 150px;
+    align-items: center;
+    background: linear-gradient(233deg, rgb(255 147 82), rgb(255 163 48));
+    color: #fff;
+    border-radius: 12px;
+    padding: 35px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(197, 169, 169, 0.2);
+    flex-wrap: wrap;
+  }
+  
+  /* 충전금액 텍스트 */
+  .instantcharge-label {
+    font-size: 16px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  
+  .instantcharge-input {
+    flex: 1;
+    width: 100px;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    margin-left: 25px;
+  }
+  
+  .instantcharge-quick-btn-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .instantcharge-quick-btn {
+    flex: 1;
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    height: 36px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  
+  .instantcharge-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .instantcharge-notice {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+    text-align: initial;
+  }
+  
+  .instantcharge-charge-btn {
+    width: 100%;
+    height: 44px;
+    background-color: #ff7f0f;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
