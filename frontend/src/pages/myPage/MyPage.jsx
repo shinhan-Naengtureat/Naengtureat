@@ -225,8 +225,5 @@ const highlightUnderline = {
   backgroundColor: '#FFE0B2',   // 연한 민트색 배경 (수정 가능)
   zIndex: -1,
   borderRadius: '4px'
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> a44560712f47027b9ea48af0079004f871f62804
+
