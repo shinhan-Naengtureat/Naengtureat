@@ -75,8 +75,8 @@ const AppRouter = () => {
         <Route path={routeConfig.paths.myRecipeList} element={<Layout><MyRecipes/></Layout>} />
         <Route path={routeConfig.paths.recipeEdit} element={<Layout><RecipeEdit/></Layout>} />
         <Route path={routeConfig.paths.InstantCharge} element={<Layout><InstantCharge/></Layout>} />
-        <Route path={routeConfig.paths.chargeComplete} element={<Layout><ChargeComplete/></Layout>} />
-        <Route path={routeConfig.paths.chargeSuccess} element={<Layout><ChargeSuccess/></Layout>} />
+        <Route path={routeConfig.paths.chargeComplete} element={<ChargeComplete/>} />
+        <Route path={routeConfig.paths.chargeSuccess} element={<ChargeSuccess/>} />
 
         {/* store */}
         <Route path={routeConfig.paths.store} element={<Layout><Store/></Layout>} />

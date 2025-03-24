@@ -1,7 +1,9 @@
 import axiosInstance from 'api/axios';
+import { GIF_IMAGE_PATH } from 'config/pathConfig';
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import RouteConfig from 'routes/routeConfig';
+import 'styles/mypage/ChargeComplete.css';
 
 function ChargeComplete(props) {
     const [searchParams] = useSearchParams();
@@ -65,8 +67,9 @@ function ChargeComplete(props) {
     },[]);
 
     return (
-        <div>
-            페이 잔액 충전중입니다...
+        <div className='charge-inprogress'>
+            <img src={`${GIF_IMAGE_PATH}/ChargeInProgress.gif`} alt="ChargeInProgress" />
+            페이 잔액 충전 중
         </div>
     );
 }
