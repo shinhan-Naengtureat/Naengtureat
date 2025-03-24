@@ -108,7 +108,7 @@ export default MyPage;
 const containerStyle = {
   maxWidth: '400px',
   margin: '0 auto',
-  fontFamily: 'sans-serif',
+  fontFamily: `var(--font-nanum)`,
   padding: '13px'
 };
 
