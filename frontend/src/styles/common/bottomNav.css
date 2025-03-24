@@ -15,6 +15,7 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   border-radius: 20px;
+  font-family: var(--font-nanum)!important;
 }
 
 /* 바텀 네비게이션 아래 배경을 연장하는 가상 요소 */

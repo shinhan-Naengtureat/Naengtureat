@@ -1,5 +1,8 @@
+import { GIF_IMAGE_PATH } from 'config/pathConfig';
+import { FaCheckCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import RouteConfig from 'routes/routeConfig';
+import 'styles/mypage/ChargeSuccess.css';
 
 function ChargeSuccess(props) {
     const navigate = useNavigate();
@@ -12,12 +15,18 @@ function ChargeSuccess(props) {
     }
 
     return (
-        <>
-            <div>냉털잇페이 충전 완료</div>
-            <button className="okay-button" onClick={nextButtonHandler}>
-                    확인
+        <div className='charge-complete-wrapper'>
+            <div className='charge-complete'>
+                <img src={`${GIF_IMAGE_PATH}/ChargeComplete.gif`} alt="ChargeComplete" />
+                <div className='charge-text-icon'>
+                    <FaCheckCircle className='charge-check-icon' />
+                    <span className='charge-complete-text'>충전 완료</span>
+                </div>
+            </div>
+            <button className="charge-okay-button" onClick={nextButtonHandler}>
+                확인
             </button>
-        </>
+        </div>
     );
 }
 

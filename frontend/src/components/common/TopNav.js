@@ -80,7 +80,7 @@ function TopNav(props) {
       {/* Offcanvas 컴포넌트 */}
       <Offcanvas show={showOffcanvas} onHide={handleClose} placement="end" className="offcanvas-custom">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>마이페이지</Offcanvas.Title>
+          <Offcanvas.Title style={{ fontFamily: `var(--font-nanum)` }}>마이페이지</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <MyPage handleClose={handleClose} />

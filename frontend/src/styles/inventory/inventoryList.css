@@ -1,6 +1,7 @@
 .inventory-container {
   width: 100%;
   flex: 1;
+  font-family: var(--font-nanum)!important;
 }
 
 .item-container {
@@ -93,12 +94,14 @@ h5.text-start {
   background-color: #fff;
   padding: 6px 14px;
   cursor: pointer;
+  font-family: var(--font-nanum)!important;
 }
 
 .inventory-list-category-btn.active {
   background-color: #F35C04 !important;
   color: white;
   border-color: #F35C04 !important;
+  font-family: var(--font-nanum)!important;
 }
 
 @keyframes shake {
