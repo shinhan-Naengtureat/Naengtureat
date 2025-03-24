@@ -1,6 +1,6 @@
 /* 전체 컨테이너 */
 .recipe-detail {
-  font-family: Arial, sans-serif;
+  font-family:sans-serif;
   color: #333;
   line-height: 1.6;
   text-align: left;
@@ -78,6 +78,7 @@
    ========================= */
 .ingredient-table {
   margin-top: 24px;
+  margin-bottom: 60px;
 }
 
 /* 재료 섹션의 타이틀 */
@@ -107,12 +108,14 @@
 .ingredient-names {
   width: 50%;
   font-weight: bold;
+  font-family: var(--font-nanum) !important;
 }
 
 /* 오른쪽 수량 */
 .ingredient-quantity {
   width: 50%;
   text-align: left;
+  font-family: var(--font-nanum) !important;
 }
 
 /* =========================
@@ -130,10 +133,11 @@
 }
 
 .step-title {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #444;
+  font-family: var(--font-nanum) !important;
 }
 
 .step-image {
@@ -144,10 +148,11 @@
 }
 
 .step-description {
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
   line-height: 1.6;
   white-space: pre-wrap;
+  font-family: var(--font-nanum) !important;
 }
 
 
@@ -168,6 +173,7 @@
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
+  font-family: var(--font-nanum) !important;
 }
 
 .comment-header {
@@ -194,6 +200,7 @@
 .comment-input-container {
   margin-top: 16px;
   position: relative;
+  font-family: var(--font-nanum) !important;
 }
 
 .comment-input-container textarea {

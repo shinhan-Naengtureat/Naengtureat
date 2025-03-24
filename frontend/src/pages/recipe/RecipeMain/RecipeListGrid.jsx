@@ -1,4 +1,4 @@
-import { RECIPE_IMAGE_PATH } from "config/pathConfig";
+import { PROFILE_IMAGE_PATH, RECIPE_IMAGE_PATH } from "config/pathConfig";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
@@ -33,7 +33,14 @@ function RecipeListGrid({ recipes }) {
                 <IoMdTime size={14} /> {recipe.cookingTime}
               </span>
             </div>
-            <div className="recipe-member">{recipe.memberName}</div>
+            <div className="member-info">
+              <img
+                src={`${PROFILE_IMAGE_PATH}/${recipe.memberImage}`}
+                alt={recipe.memberName}
+                className="member-avatar"
+              />
+              <span className="recipe-member">{recipe.memberName}</span>
+            </div>
           </div>
         </div>
       ))}
