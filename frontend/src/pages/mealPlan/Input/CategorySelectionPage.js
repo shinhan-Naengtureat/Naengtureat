@@ -7,6 +7,7 @@ import BackButton from "components/BackButton";
 import "styles/mealPlan/BoxChoice.css";
 import axiosInstance from "api/axios";
 import useMealPlanContext from "hooks/useMealPlanContext";
+import { toast, ToastContainer } from "react-toastify";
 
 const CategorySelectionPage = () => {
   const { userSelections, setUserSelections } = useMealPlanContext(); 
@@ -42,7 +43,7 @@ const CategorySelectionPage = () => {
         // 선택된 항목이 2개 미만일 때만 추가
         return [...prev, category];
       } else {
-        alert("카테고리는 최대 2개까지 선택 가능합니다.");
+        toast.warn("최대 2개까지 선택 가능합니다.");
         return prev;
       }
     });
@@ -54,7 +55,7 @@ const CategorySelectionPage = () => {
   // 다음 버튼 클릭 시 데이터 저장 및 이동
   const handleNext = () => {
     if (selectedCategories.length === 0) {
-      alert("카테고리를 하나 이상 선택해주세요!");
+      toast.info("카테고리를 하나 이상 선택해주세요!");
       return;
     }
 
@@ -138,7 +139,10 @@ const itemVariants = {
         disabled={selectedCategories.length === 0}
       /></motion.div>
       </motion.div>
-     </motion.div>
+            <ToastContainer position="top-center" autoClose={1500} />
+
+    </motion.div>
+    
   );
 };
 export default CategorySelectionPage;

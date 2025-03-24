@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { motion } from "framer-motion";
 import "styles/mealPlan/FrequencyInputPage.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const meals = [
     { id: "아침",icon:`${ICON_IMAGE_PATH}/breakfast.png` },
@@ -62,7 +63,7 @@ const FrequencyInputPage = () => {
   // 다음 버튼 클릭 시 Context에 저장 후 이동
   const handleNext = () => {
     if (selectedMeals.length === 0 || selectedDays.length === 0) {
-      alert("요일과 끼니를 모두 선택해주세요!");
+      toast.info("요일과 끼니를 모두 선택해주세요!");
       return;
     }
     setUserSelections((prev) => ({
@@ -180,6 +181,8 @@ const FrequencyInputPage = () => {
           <FloatingNextButton onClick={handleNext} disabled={totalMeals.length === 0} />
         </motion.div>
       </motion.div>
+            <ToastContainer position="top-center" autoClose={2000} />
+
     </motion.div>
   );
 };

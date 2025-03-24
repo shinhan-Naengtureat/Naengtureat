@@ -7,6 +7,7 @@ import BackButton from "components/BackButton";
 import axiosInstance from "api/axios";
 import useMealPlanContext from "hooks/useMealPlanContext";
 import { motion } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const ThemeSelectionPage = () => {
@@ -43,7 +44,7 @@ const ThemeSelectionPage = () => {
         // 선택된 항목이 2개 미만일 때만 추가
         return [...prev, theme];
       } else {
-        alert("테마는 최대 2개까지 선택 가능합니다.");
+        toast.warn("최대 2개까지 선택 가능합니다.");
         return prev;
       }
     });
@@ -54,7 +55,7 @@ const ThemeSelectionPage = () => {
   };
   const handleNext = () => {
     if (selectedTheme.length === 0) {
-      alert("테마를 선택해주세요!");
+      toast.info("테마를 선택해주세요!");
       return;
     }
     setUserSelections((prev) => ({ ...prev, theme: selectedTheme }));
@@ -133,6 +134,8 @@ const ThemeSelectionPage = () => {
           <FloatingNextButton onClick={handleNext} disabled={selectedTheme.length === 0} />
         </motion.div>
       </motion.div>
+            <ToastContainer position="top-center" autoClose={2000} />
+
     </motion.div>
   );
 };

@@ -201,8 +201,7 @@ const handleBefore = () => {
 
        {isLoading &&
           <div>
-             <p>⏳ 식단을 생성 중입니다...</p>
-            <img src={`${ICON_IMAGE_PATH}/makeplan.gif`} alt="로딩 중..." style={{ width: "385px", height: "200px",borderRadius:"15px" }} />
+            <img src={`${ICON_IMAGE_PATH}/makeplan.gif`} alt="로딩 중..." style={{ width: "385px", height: "auto",borderRadius:"15px" }} />
           </div>
         }
           {error && <p style={{ color: "red" }}>{error}</p>}
