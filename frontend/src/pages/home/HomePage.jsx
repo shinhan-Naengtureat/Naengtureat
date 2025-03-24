@@ -9,6 +9,8 @@ import { RECIPE_IMAGE_PATH } from "config/pathConfig";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
+import riceIcon from "./rice-icon.png";
+import { FiBarChart } from "react-icons/fi";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
@@ -89,6 +91,22 @@ const HomePage = () => {
 
   return (
     <>
+          <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .home-container {
+              width: 100% !important;
+              padding : 55px 0px;
+            }
+
+          `,
+        }}
+      />
+    <div className ="advertising-bar">
+      <p>
+      <span className="point-badge">P</span>
+        식단을 이행하고 포인트를 적립해보세요!</p>
+    </div>
       <div className="home-header">
         <h2 className="home-title">오늘, 이 요리 어때요?</h2>
       </div>
@@ -120,7 +138,7 @@ const HomePage = () => {
               </div>
               <div className="home-recipe-info" onClick={() => navigate(routeConfig.paths.recipeDetail.replace(":recipeId", recipe.id))}>
                 <div className="home-recipe-header">
-                  <h5 className="home-recipe-title">{recipe.name}</h5>
+                  <p className="home-recipe-title">{recipe.name}</p>
                   {recipe.liked ? (
                     <FaHeart
                       className="home-recipe-like icon liked"
@@ -143,7 +161,7 @@ const HomePage = () => {
                 </div>
                 <div className="home-recipe-details">
                   <span className="home-recipe-tags">
-                    #{recipe.level} | {recipe.serving}
+                    <p> <FiBarChart /> {recipe.level} | {recipe.serving}</p>
                   </span>
                 </div>
               </div>
@@ -152,7 +170,9 @@ const HomePage = () => {
         </Swiper>)}
       </div>
       <div className="home-meal-plan-section">
-        <h2 className="home-sub-title">오늘의 식단</h2>
+        <h2 className="home-sub-title">오늘의 식단
+        <img src={riceIcon} alt="rice" className="rice-icon"/>
+        </h2>
         <div className="home-meal-plan">
           {["아침", "점심", "저녁"].map((type) => {
             // dailyMealPlan에서 type(아침/점심/저녁)이 같은 객체를 찾음
@@ -173,7 +193,7 @@ const HomePage = () => {
                 >
                   <p className="home-meal-time">{type}</p>
                   {meal ? (
-                    <p className="home-meal-content">{meal.recipeName}</p>
+                    <p className="home-meal-content-active">{meal.recipeName}</p>
                   ) : (
                     <p className="home-meal-content" >
                       식단이 없어요😅
