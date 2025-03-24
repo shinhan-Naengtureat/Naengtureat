@@ -4,7 +4,7 @@
   font-size: 14px;
   height: 37px;
   padding: 8px;
-  margin-bottom: 40px;
+  margin-bottom: 33px;
 }
 
 
@@ -194,11 +194,11 @@
 
 .home-meal-content-active{
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .home-meal-content{
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .swiper {

@@ -5,11 +5,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "styles/home/HomePage.css";
 import axiosInstance from "api/axios";
-import { RECIPE_IMAGE_PATH } from "config/pathConfig";
+import { RECIPE_IMAGE_PATH, ICON_IMAGE_PATH } from "config/pathConfig";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "routes/routeConfig";
-import riceIcon from "./rice-icon.png";
 import { FiBarChart } from "react-icons/fi";
 
 const HomePage = () => {
@@ -171,7 +170,7 @@ const HomePage = () => {
       </div>
       <div className="home-meal-plan-section">
         <h2 className="home-sub-title">오늘의 식단
-        <img src={riceIcon} alt="rice" className="rice-icon"/>
+        <img src={`${ICON_IMAGE_PATH}/rice-icon.png`} alt="rice" className="rice-icon" />
         </h2>
         <div className="home-meal-plan">
           {["아침", "점심", "저녁"].map((type) => {
