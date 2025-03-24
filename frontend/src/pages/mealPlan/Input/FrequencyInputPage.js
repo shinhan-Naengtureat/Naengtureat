@@ -29,7 +29,7 @@ const FrequencyInputPage = () => {
   };
    // 오늘 요일 확인 (format으로 한글 요일 변환)
   const today = format(new Date(), "E", { locale:ko }); 
-  const weekDays = ["월", "화", "수", "목", "금", "토", "일"];
+  const weekDays = ["월", "화", "수", "목", "금", "토", "일","전체"];
   
   //  오늘을 포함한 이전 요일을 비활성화
  const disabledDays = weekDays.slice(0, weekDays.indexOf(today) + 1);
@@ -73,7 +73,8 @@ setUserSelections((prev) => ({
   };
 
     return (
-      
+      <div className="home-box-container2">
+        <div className="preferred-ingredients-container">
       <ContainerFre>
          <div className="preferred-header">
         <BackButton onClick={handleBefore}/>
@@ -124,16 +125,7 @@ setUserSelections((prev) => ({
           </DayButton>
         ))}
       </DayContainer>
-          {/* 요일 선택 (3x3 그리드 형태)
-                <Line />
-      <DayContainer>
-        {["전체", "월", "화", "수", "목", "금", "토", "일"].map((day) => (
-          <DayButton key={day} selected={selectedDays.includes(day)} onClick={() => toggleDay(day)}>
-            {day}
-          </DayButton>
-        ))}
-      </DayContainer> */}
-
+       
 </div>
       {/* 다음 버튼 */}
         <FloatingNextButton
@@ -141,7 +133,8 @@ setUserSelections((prev) => ({
         disabled={totalMeals.length === 0}
       />
     </ContainerFre>
-    
+        </div>
+        </div>
   );
 };
 // Styled Components
@@ -149,13 +142,15 @@ const ContainerFre = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  
 `;
 const Header = styled.div`
+font-family: var(--font-nanum) !important;
   width: 100%;
   text-align: left;
 `;
 const Title1 = styled.h2`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -163,6 +158,7 @@ const Title1 = styled.h2`
   margin-bottom: 5px;
 `;
 const Title2 = styled.h2`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   text-align: left;
@@ -171,6 +167,7 @@ const Title2 = styled.h2`
 `;
 
 const CountSection = styled.div`
+font-family: var(--font-nanum) !important;
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -179,6 +176,7 @@ const CountSection = styled.div`
 `;
 
 const CountText = styled.div`
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682; 
@@ -188,6 +186,7 @@ const CountText = styled.div`
 `;
 
 const CountNumber = styled.span`
+font-family: var(--font-nanum) !important;
   font-size: 22px;
   font-weight: bold;
   color: #f35c04; /* 강조된 숫자 */
@@ -195,6 +194,7 @@ const CountNumber = styled.span`
 `;
 
 const CountUnit = styled.span`
+font-family: var(--font-nanum) !important;
   font-size: 18px;
    font-weight: bold;
   color: #6B7682;
@@ -213,6 +213,7 @@ const Line = styled.div`
 `;
 
 const SubText = styled.p`
+font-family: var(--font-nanum) !important;
   font-size: 14px;
   color: #a0aec0; /* gray-500 */
 `;
@@ -258,34 +259,34 @@ const DayContainer = styled.div`
 `;
 
 const DayButton = styled.button`
-  background-color: ${({ selected }) => (selected ? "#54428E" : "#f2f2f2")};
-  color: ${({ selected }) => (selected ? "white" : "#8B94A0")};
+  background-color: ${({ selected, disabled }) =>
+  disabled ? "#e0e0e0" : selected ? "#54428E" : "#f8f9fa"};
+   color: ${({ selected, disabled }) => 
+    disabled ? "#b0b0b0" : selected ? "white" : "#6c757d"};
   font-size: 17px;
   font-weight: 600;
   padding: 12px;
   border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
+  border: ${({ selected, disabled }) => 
+    disabled ? "none" : selected ? "none" : "2px solid #dee2e6"};
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  transition: all 0.3s; ease-in-out;
   width: 60px;
   height: 60px;
   text-align: center;
+   box-shadow: ${({ selected }) => (selected ? "0px 4px 10px rgba(84, 66, 142, 0.3)" : "none")}; /* 활성화 시 그림자 추가 */
+
+ &:hover {
+    background-color: ${({ selected, disabled }) => 
+      disabled ? "#e0e0e0" : selected ? "#443373" : "#e9ecef"};
+    color: ${({ selected, disabled }) => 
+      disabled ? "#b0b0b0" : selected ? "white" : "#495057"};
+  }
+
+  &:active {
+    transform: ${({ disabled }) => (disabled ? "none" : "scale(0.95)")}; /* 클릭 시 약간 눌리는 효과 */
+  }
 `;
 
-
-
-const NextButton = styled.button`
-  width: 80%;
-  max-width: 400px;
-  background-color: #f35c04;
-  color: white;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-`;
 
 export default FrequencyInputPage;

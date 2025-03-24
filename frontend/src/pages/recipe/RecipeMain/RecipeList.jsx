@@ -5,6 +5,8 @@ import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
 import IngredientFilter from "pages/recipe/RecipeMain/IngredientFilter";
 import SortFilter from "pages/recipe/RecipeMain/SortFilter";
 import "styles/recipe/Recipe.css";
+import {ToastContainer } from 'react-toastify';
+
 
 const sortMapping = {
   추천순: "recommend",
@@ -35,8 +37,9 @@ function RecipeList() {
     axios
       .get("/recipe")
       .then((res) => {
-        setAllRecipes(res.data);
-        setFilteredRecipes(res.data);
+        const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
+        setAllRecipes(validRecipes);
+        setFilteredRecipes(validRecipes);
         setLoading(false);
       })
       .catch((err) => {
@@ -129,6 +132,29 @@ function RecipeList() {
         />
       </div>
 
+      {/* 선택된 재료 대분류를 보여주는 영역 */}
+    {selectedBigCategories.length > 0 && (
+      <div className="selected-big-categories" style={{ margin: "16px", textAlign: "left", marginLeft:"15px"}}>
+        <strong>선택한 식재료: </strong>
+        {selectedBigCategories.map((category, index) => (
+          <span
+            key={index}
+            className="selected-category-chip"
+            style={{
+              color:"#fff",
+              marginRight: "8px",
+              padding: "8px 12px",
+              border: "1px solid #ddd",
+              background: "#fe7f2d",
+              borderRadius: "50px",
+            }}
+          >
+            {category}
+          </span>
+        ))}
+      </div>
+    )}
+
       {loading ? (
         <div style={{ padding: "16px" }}>로딩중...</div>
       ) : error ? (
@@ -138,6 +164,8 @@ function RecipeList() {
       ) : (
         <RecipeListGrid recipes={filteredRecipes} />
       )}
+      <ToastContainer />
+
     </div>
   );
 }

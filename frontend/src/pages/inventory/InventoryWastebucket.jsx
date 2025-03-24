@@ -1,9 +1,10 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axiosInstance from "api/axios";
 import {Badge, Button, Col, Container, Placeholder, Row} from "react-bootstrap";
 import IngredientBigCategoryFilter from "components/filter/IngredientBigCategoryFilter";
 import {INGREDIENT_IMAGE_PATH} from "config/pathConfig";
+import "styles/inventory/inventoryList.css";
 
 const InventoryWastebucket = () => {
   // 다중 선택을 위한 상태 추가
@@ -11,6 +12,7 @@ const InventoryWastebucket = () => {
   const [rawItems, setRawItems] = useState();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const rowRefs = useRef({});
 
   //아이템 useEffect
   useEffect(() => {
@@ -75,6 +77,25 @@ const InventoryWastebucket = () => {
     });
   };
 
+  // 로딩 끝났을 때 애니메이션 실행
+  useEffect(() => {
+    if (!loading && rowRefs.current) {
+      Object.keys(rowRefs.current).forEach((key, index) => {
+        const ref = rowRefs.current[key];
+        if (ref) {
+          setTimeout(() => {
+            ref.classList.add("visible");
+          }, index * 200);
+        }
+      });
+    }
+  }, [loading, groupedItems]);
+
+  useEffect(() => {
+    // 필터가 바뀔 때마다 refs를 초기화
+    rowRefs.current = [];
+  }, [groupedItems]);
+
   return (
     <Container className="inventory-container">
       <IngredientBigCategoryFilter
@@ -98,10 +119,15 @@ const InventoryWastebucket = () => {
           ))}
         </Row>
       ) : (
-        Object.keys(groupedItems).map((category) => (
+        Object.keys(groupedItems).map((category, idx) => (
           <div key={category}>
             <h5 className="text-start mb-4">| {category} |</h5> {/* 마진 추가 */}
-            <Row className="item-container">
+            <Row
+              className="item-container inventory-list-item-row"
+              ref={(el) => {
+                if (el) rowRefs.current[category] = el;
+              }}
+            >
               {groupedItems[category].map((item) => {
                 const isExpired = item.remainingDays < 0;
                 return (
@@ -111,8 +137,7 @@ const InventoryWastebucket = () => {
                          style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
                     >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays}
-                      </Badge>
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays === 0 ? "Today" : "D+" + -item.remainingDays }                      </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />
                         <div className="item-name">{item.nickName}</div>
