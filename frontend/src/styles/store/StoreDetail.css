@@ -13,6 +13,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    font-family: var(--font-nanum) !important;
 }
 
 /* 스토어 상품이 없을 때 보여줄 이미지 */
@@ -28,6 +29,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    font-family: var(--font-nanum) !important;
 }
 
 .store-detail-header {
@@ -76,6 +78,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    font-family: var(--font-nanum) !important;
 }
 
 /* 검색바 스타일 */
@@ -105,6 +108,7 @@
     margin-bottom: 20px;
     overflow-x: auto; /* 가로 스크롤 필요 시 */
     white-space: nowrap; /* 요소가 줄바꿈되지 않고 가로로 이어지도록 */
+    font-family: var(--font-nanum) !important;
 }
 
 /* 카테고리 목록 */
@@ -148,6 +152,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3열 고정 */
     gap: 10px; /* 카드 사이 간격 */
+    font-family: var(--font-nanum) !important;
 }
 
 /* 개별 상품 카드 */
