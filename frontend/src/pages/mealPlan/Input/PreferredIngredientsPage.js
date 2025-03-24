@@ -45,18 +45,13 @@ const PreferredIngredientsPage = () => {
   };
 
   const handleNext = () => {
-    if (selectedIngredients.length === 0) {
-      alert("선호하는 재료를 하나 이상 선택해주세요!");
-      return;
-    }
+  setUserSelections((prev) => ({
+    ...prev,
+    preferredIngredients: selectedIngredients.length > 0 ? selectedIngredients : [],
+  }));
 
-    setUserSelections((prev) => ({
-      ...prev,
-      preferredIngredients: selectedIngredients,
-    }));
-
-    navigate(RouteConfig.paths.excludedIngredients);
-  };
+  navigate(RouteConfig.paths.excludedIngredients);
+};
   const pageVariants = {
     initial: { opacity: 0, x: 100 }, // 페이지가 오른쪽에서 등장
     animate: { opacity: 1, x: 0 },   // 제자리로 이동
@@ -125,7 +120,7 @@ const PreferredIngredientsPage = () => {
 
         {/* 다음 버튼 */}
         <motion.div variants={itemVariants} className="button-container">
-          <FloatingNextButton onClick={handleNext} disabled={selectedIngredients.length === 0} />
+          <FloatingNextButton onClick={handleNext} disabled={false} />
         </motion.div>
       </motion.div>
     </motion.div>
