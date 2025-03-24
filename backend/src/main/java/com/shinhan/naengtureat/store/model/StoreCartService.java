@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.shinhan.naengtureat.member.dto.CartDTO;
 import com.shinhan.naengtureat.member.entity.Cart;
 import com.shinhan.naengtureat.member.entity.Member;
+import com.shinhan.naengtureat.store.dto.IngredientQuantityDTO;
 import com.shinhan.naengtureat.store.entity.Store;
 import com.shinhan.naengtureat.store.entity.StoreProduct;
 
@@ -101,6 +102,76 @@ public class StoreCartService {
 		response.put("message", message);
 		
 		return response;
+	}
+	
+	//장바구니 추가(모자란만큼)
+	public List<Map<String, Object>> addMultipleToCartWithQuantity(Long memberId, List<IngredientQuantityDTO> ingredients, Long storeId) {
+	    List<Map<String, Object>> result = new ArrayList<>();
+
+	    for (IngredientQuantityDTO iq : ingredients) {
+	        Long ingredientId = iq.getIngredientId();
+	        int quantity = iq.getQuantity();
+
+	        if (quantity <= 0) continue; // 수량이 0 이하이면 스킵
+
+	        // ingredient_id + store_id로 product_id 조회
+	        Long productId = storeProductRepository.findProductIdByIngredientIdAndStoreId(ingredientId, storeId);
+	        if (productId == null) {
+	            throw new IllegalArgumentException("해당 ingredient와 store에 대한 product가 없습니다.");
+	        }
+
+	        // 수량만큼 한 번에 추가
+	        result.add(createCartItemWithQuantity(memberId, productId, quantity));
+	    }
+
+	    return result;
+	}
+	//장바구니 다중 증가
+	public Map<String, Object> createCartItemWithQuantity(Long memberId, Long productId, int quantity) {
+	    if (quantity <= 0) {
+	        throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+	    }
+
+	    Cart existingCartItem = storeCartRepository.findByMemberIdAndProductId(memberId, productId);
+
+	    Cart savedCart;
+	    String message;
+
+	    if (existingCartItem != null) {
+	        existingCartItem.setCount(existingCartItem.getCount() + quantity);
+	        savedCart = storeCartRepository.save(existingCartItem);
+	        message = quantity + "개 수량이 기존 장바구니 항목에 추가되었습니다.";
+	    } else {
+	        Member member = Member.builder().id(memberId).build();
+	        StoreProduct storeProduct = StoreProduct.builder().id(productId).build();
+
+	        Cart cartEntity = Cart.builder()
+	                .count(quantity)
+	                .isCheck(false)
+	                .member(member)
+	                .product(storeProduct)
+	                .build();
+
+	        savedCart = storeCartRepository.save(cartEntity);
+	        message = "장바구니에 " + quantity + "개 상품이 추가되었습니다.";
+	    }
+
+	    // DTO 변환 및 store 정보 추가
+	    CartDTO cartDTO = entityToDTO(savedCart);
+	    StoreProduct storeProduct = storeProductRepository.findById(productId)
+	            .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다."));
+	    Store store = storeRepository.findById(storeProduct.getStore().getId())
+	            .orElseThrow(() -> new NoSuchElementException("해당 스토어를 찾을 수 없습니다."));
+	    cartDTO.setStoreId(store.getId());
+	    cartDTO.setStoreImage(store.getImage());
+	    cartDTO.setStorePlaceName(store.getPlaceName());
+
+	    // 응답 Map 구성
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("cartDTO", cartDTO);
+	    response.put("message", message);
+
+	    return response;
 	}
 
 	// 장바구니 재료 삭제(단건, 여러 건 둘 다 가능)

@@ -79,10 +79,13 @@ const handleBefore = () => {
       }
       }
       //  동일한 storeId면 상품 추가 가능
-    await axiosInstance.post("/store/cart/add", {
-      ingredientIds: selectedIngredients.map(ingredient => ingredient.mealPlanIngredientId),
-      storeId: selectedStore.storeId,
-    });
+  await axiosInstance.post("/store/cart/add", {
+  storeId: selectedStore.storeId,
+  ingredients: selectedIngredients.map(item => ({
+    ingredientId: item.mealPlanIngredientId,
+    quantity: item.mealPlanQuantity - item.memberQuantity
+  }))
+});
      
       // 장바구니 페이지로 이동
       toast.success("상품이 장바구니에 추가되었습니다.", { position: "top-center", autoClose: 3000 });
