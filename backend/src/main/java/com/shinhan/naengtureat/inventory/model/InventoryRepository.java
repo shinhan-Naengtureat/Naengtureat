@@ -89,4 +89,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long>,
     List<Inventory> findAllByMemberId(Long memberId);
     
     Inventory findByMemberIdAndIngredientId(Long memberId, Long ingredientId);
+    
+    @Query("SELECT i FROM Inventory i WHERE i.member.id = :memberId AND i.ingredient.id = :ingredientId ORDER BY i.inventoryExpDate ASC")
+    List<Inventory> findByMemberIdAndIngredientIdOrderByExpirationDate(@Param("memberId") Long memberId, @Param("ingredientId") Long ingredientId);
+
 }

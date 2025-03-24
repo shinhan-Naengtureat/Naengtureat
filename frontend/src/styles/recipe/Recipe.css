@@ -10,6 +10,7 @@
   overflow-x: auto; /* 가로 스크롤 활성화 */
   white-space: nowrap; /* 한 줄로 나열 */
   -webkit-overflow-scrolling: touch;
+  font-family: var(--font-nanum) !important;
 }
 
 .category-filter button {
@@ -39,6 +40,7 @@
   background-color: #fff;
   cursor: pointer;
   border-radius: 4px;
+  font-family: var(--font-nanum) !important;
 }
 
 /* ---------- 바텀시트 (식재료 필터 모달) ---------- */
@@ -55,7 +57,7 @@
 .bottom-sheet {
   position: fixed;
   bottom: 0;
-  left: 50%;
+  left: 0%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 430px;
@@ -65,6 +67,7 @@
   z-index: 9999;
   padding: 20px;
   animation: slideUp 0.3s ease forwards;
+  font-family: var(--font-nanum) !important;
 }
 
 @keyframes slideUp {
@@ -141,6 +144,7 @@
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
+  font-family: var(--font-nanum) !important;
 }
 
 .reset-btn {
@@ -161,18 +165,19 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   padding: 0 16px 16px;
+  font-family: var(--font-serif) !important;
 }
 
 .recipe-card {
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 0px solid #ddd;
+  border-radius: 3px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  min-height: 220px;
+  min-height: 280px;
 }
 
 .recipe-card:hover {
@@ -182,28 +187,45 @@
 
 .recipe-card img {
   width: 100%;
-  height: 120px;
+  height: 180px;
   object-fit: cover;
   display: block;
+  border-radius: 3px;
 }
 
 .recipe-info {
   flex: 1;
-  padding: 10px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
 }
 
 .recipe-info h3 {
-  margin: 0 0 5px;
-  font-size: 16px;
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
 }
 
-.recipe-info p {
-  margin: 4px 0;
-  font-size: 14px;
+.recipe-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
   color: #666;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.recipe-member {
+  font-size: 12.5px;
+  color: #888;
 }
 
 .filter-bar {
@@ -235,4 +257,21 @@
   padding: 16px;
   text-align: center;
   font-size: 16px;
+}
+
+.member-avatar {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sort-filter-container {
+  font-family: var(--font-nanum) !important;
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "react-toggle/style.css";
+import RouteConfig from "routes/routeConfig";
 import "styles/mealPlan/MealPlanHeader.css";
 
 function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
@@ -17,7 +18,7 @@ function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
       setShowNotification(true);
 
       setTimeout(() => setHideAnimation(true), 4500);
-      setTimeout(() => setShowNotification(false), 5100);
+      setTimeout(() => setShowNotification(false), 5250); // 원래 5100
     }
   }, [notEnoughCount]);
 
@@ -32,7 +33,7 @@ function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
           <Button
             variant="outline-danger"
             size="sm"
-            onClick={() => navigate("/shopping-container")}
+            onClick={() => navigate(RouteConfig.paths.notEnoughIngredientList)}
           >
             확인하기
           </Button>
@@ -42,7 +43,7 @@ function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
         <Button
           className="make-mealplan"
           variant="outline-primary"
-          onClick={() => navigate("/budget")}
+          onClick={() => navigate(RouteConfig.paths.budgetInput)}
         >
           식단 생성
         </Button>

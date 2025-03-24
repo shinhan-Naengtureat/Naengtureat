@@ -2,6 +2,7 @@ import axiosInstance from "api/axios";
 import { STORE_IMAGE_PATH } from "config/pathConfig";
 import useKakaoLoader from "pages/store/useKakaoLoader";
 import { useEffect, useRef, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { Circle, Map, MapMarker } from "react-kakao-maps-sdk";
 
 function KakaoMap({ setPlaces: setParentPlaces }) {
@@ -83,7 +84,13 @@ function KakaoMap({ setPlaces: setParentPlaces }) {
 
     return (
         <>
-            {center === null ? <div>지도 로딩 중...</div> : // center 값이 있으면 아래 코드 수행
+            {center === null ? 
+                <div className='kakaomap-spinner' style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
+                    <Spinner animation="border" variant="warning" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div> : // center 값이 있으면 아래 코드 수행
+
                 <Map center={center} style={{width: "100%", height: "100%"}} level={6} onCreate={(map) => {
                     mapRef.current = map; // mapRef에 Kakao Map 인스턴스 저장
                 }}>
