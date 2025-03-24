@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "api/axios";
 import { endOfWeek, format, startOfWeek } from "date-fns";
 
-const useNotEnoughIngredients = () => {
+const useNotEnoughIngredients = (useTodayAsStart =false) => {
   const [notEnoughIngredients, setNotEnoughIngredients] = useState([]);
   const [notEnoughCount, setNotEnoughCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -11,9 +11,12 @@ const useNotEnoughIngredients = () => {
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 1 });
+  const today = new Date();
+  const startDate = format(useTodayAsStart ? today : weekStart, "yyyy-MM-dd");
+  const endDate = format(endOfWeek(currentWeek, { weekStartsOn: 1 }), "yyyy-MM-dd");
 
-  const startDate = format(weekStart, "yyyy-MM-dd");
-  const endDate = format(weekEnd, "yyyy-MM-dd");
+ //const startDate = format(weekStart, "yyyy-MM-dd");
+  //const endDate = format(weekEnd, "yyyy-MM-dd");
 
   useEffect(() => {
     const fetchNotEnoughIngredients = async () => {

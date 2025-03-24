@@ -1,6 +1,7 @@
 package com.shinhan.naengtureat.store.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,10 @@ import com.shinhan.naengtureat.store.entity.StoreProduct;
 
 public interface StoreProductRepository extends JpaRepository<StoreProduct, Long> {
 
+	
+	
+	// 스토어상품번호 조회
+	  Optional<StoreProduct> findByIngredientIdAndStoreId(Long ingredientId, Long storeId);
 	// 스토어 상품 조회
 	List<StoreProduct> findAllByStore(Store store);
 	
@@ -26,7 +31,8 @@ public interface StoreProductRepository extends JpaRepository<StoreProduct, Long
 
 	@Query("SELECT new com.shinhan.naengtureat.store.dto.StorePriceDTO(s.placeName, "
 			+ " SUM(p.productPrice), "
-			+ " SUM(COALESCE(p.discountPrice,0)), s.image) "
+			+ " SUM(COALESCE(p.discountPrice,0)), s.image, "
+			+ " p.store.id) "
 			+ " FROM Store s "
 			+ " JOIN StoreProduct p ON s.id = p.store.id "
 			+ " WHERE p.ingredient.id IN :ingredientIds "

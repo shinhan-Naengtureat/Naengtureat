@@ -33,7 +33,7 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
   };
 
   // 숫자를 한글로 변환하는 배열
-  const koreanWeekNames = ["첫째", "둘째", "셋째", "넷째", "다섯째"];
+  const koreanWeekNames = ["첫째", "둘째", "셋째", "넷째", "다섯째", "여섯째"];
 
   // 현재 주의 월과 주차 표시
   const weekIndex = getWeekOfMonthMondayStart(currentWeek) - 1; // 배열 인덱스 맞추기

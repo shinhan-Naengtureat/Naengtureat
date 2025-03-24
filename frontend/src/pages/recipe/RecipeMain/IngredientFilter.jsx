@@ -48,7 +48,7 @@ function IngredientFilter({ onApplyCategories }) {
     <div className="ingredient-filter-container">
       {/* 식재료 버튼 (왼쪽) */}
       <button
-        className="ingredient-filter-button"
+        className="btn btn-light ingredient-filter-button"
         onClick={() => setIsModalOpen(true)}
       >
         식재료
