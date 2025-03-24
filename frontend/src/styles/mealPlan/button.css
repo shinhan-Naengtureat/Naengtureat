@@ -36,8 +36,9 @@
 
 /*  "다음" 버튼 스타일 */
 .floating-next-button {
+    font-family: var(--font-nanum) !important;
   width: 100%;
-  max-width: 372px;
+  max-width: 365px;
   padding: 14px;
   font-size: 18px;
   font-weight: bold;
@@ -50,6 +51,21 @@
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
+.floating-next-button4 {
+    font-family: var(--font-nanum) !important;
+  width: 100%;
+  max-width: 330px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background-color: #f35c04;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
 .floating-next-button:disabled {
   background-color: gray; /* 클릭 불가능할 때 회색 */
   cursor: not-allowed; /* 마우스 포인터 변경 */

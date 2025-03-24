@@ -2,6 +2,7 @@
 .budget-container {
   display: flex;
   flex-direction: column;
+  font-family: var(--font-nanum) !important;
 
   justify-content: center;
   min-height: 40vh;
@@ -35,7 +36,7 @@
 
 /* 예산 입력 영역 */
 .budget-input-container {
-    font-family: var(--font-nanum) !important;
+  font-family: var(--font-nanum) !important;
   width: 100%;
   max-width: 350px;
   text-align: left;

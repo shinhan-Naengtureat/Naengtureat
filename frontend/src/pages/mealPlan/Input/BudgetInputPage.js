@@ -51,8 +51,8 @@ const itemVariants = {
       
       {/* 예산입력 */}
       <motion.div variants={itemVariants} className="budget-input-container">
-        <motion.h3 variants={itemVariants} className="budget-heading" />1주일 식단
-        <motion.h2 variants={itemVariants} className="budget-label" />예산을 입력해주세요
+        <motion.h3 variants={itemVariants} className="budget-heading">1주일 식단</motion.h3>
+        <motion.h2 variants={itemVariants} className="budget-label">예산을 입력해주세요</motion.h2>
 
         {/* 예산 입력 필드 */}
         <motion.div variants={itemVariants} className="budget-input-wrapper">

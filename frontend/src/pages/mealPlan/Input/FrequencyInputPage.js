@@ -125,8 +125,8 @@ const FrequencyInputPage = () => {
 
         {/* 타이틀 */}
         <motion.div variants={itemVariants} className="header-fre">
-          <motion.h2 variants={itemVariants} className="title1">이번주</motion.h2>
-          <motion.h2 variants={itemVariants} className="title2">몇 개의 식단을 만들어드릴까요?</motion.h2>
+          <motion.h2 variants={itemVariants} className="title1-fre">이번주</motion.h2>
+          <motion.h2 variants={itemVariants} className="title2-fre">몇 개의 식단을 만들어드릴까요?</motion.h2>
           <motion.div variants={itemVariants} className="count-section">
             <motion.div variants={itemVariants} className="count-text">
               총 <motion.span className="count-number">{totalMeals}</motion.span>
@@ -162,6 +162,7 @@ const FrequencyInputPage = () => {
               variants={buttonVariants}
               className="day-button"
               data-selected={selectedDays.includes(day)}
+              data-disabled={disabledDays.includes(day)}
               disabled={disabledDays.includes(day)}
               style={{
                 opacity: disabledDays.includes(day) ? 0.5 : 1,
@@ -175,7 +176,7 @@ const FrequencyInputPage = () => {
         </motion.div>
 
         {/* 다음 버튼 */}
-        <motion.div variants={itemVariants} className="button-container">
+        <motion.div variants={itemVariants} className="button-container" style={{width:"327px"}}>
           <FloatingNextButton onClick={handleNext} disabled={totalMeals.length === 0} />
         </motion.div>
       </motion.div>

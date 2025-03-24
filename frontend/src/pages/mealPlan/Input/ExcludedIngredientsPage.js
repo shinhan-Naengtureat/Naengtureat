@@ -37,16 +37,10 @@ const ExcludedIngredientsPage = () => {
 
   //  다음 버튼 클릭 시 저장 & 이동
   const handleNext = () => {
-    if (selectedIngredients.length === 0) {
-      alert("제외할 재료를 선택해주세요!");
-      return;
-    }
-
-    setUserSelections((prev) => ({
+    setSelectedIngredients((prev) => ({
       ...prev,
-      excludedIngredients: selectedIngredients,
+      excludedIngredients: selectedIngredients > 0? selectedIngredients:[],
     }));
-    
 
     navigate(RouteConfig.paths.frequencyMealPlan); // 횟수입력 페이지로 이동
   };
@@ -107,7 +101,7 @@ const ExcludedIngredientsPage = () => {
 
         {/* 재료 선택 (그리드) */}
         <motion.div variants={containerVariants} className="ingredient-grid2">
-          {ingredientsList.map(({ name, image }) => (
+          {Array.isArray(selectedIngredients)&&ingredientsList.map(({ name, image }) => (
             <motion.div key={name} variants={cardVariants}>
               <IngredientCard
                 name={name}
@@ -121,7 +115,8 @@ const ExcludedIngredientsPage = () => {
 
         {/* 다음 버튼 */}
         <motion.div variants={itemVariants} className="button-container">
-          <FloatingNextButton onClick={handleNext} disabled={selectedIngredients.length === 0} />
+          <FloatingNextButton onClick={handleNext}
+            disabled={false} />
         </motion.div>
       </motion.div>
     </motion.div>
