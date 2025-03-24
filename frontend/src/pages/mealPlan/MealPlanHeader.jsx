@@ -39,7 +39,7 @@ function MealPlanHeader({ isMonthlyView, setIsMonthlyView }) {
           </Button>
         </Alert>
       )}
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex justify-content-between align-items-center mb-3 mealplan-header">
         <Button
           className="make-mealplan"
           variant="outline-primary"

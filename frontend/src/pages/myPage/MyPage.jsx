@@ -1,5 +1,6 @@
 import axiosInstance from 'api/axios';
 import { PROFILE_IMAGE_PATH } from 'config/pathConfig';
+import { px } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { FaChevronRight, FaHeart, FaHistory, FaShoppingCart, FaSignOutAlt, FaUserEdit, FaUtensils } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
@@ -51,8 +52,10 @@ function MyPage({handleClose}) {
       <div style={headerStyle}>
         <img src={memberInfo.userImageUrl} alt="User" style={profileImageStyle} />
         <div style={userInfoStyle}>
-          <p style={userInfoStyle}>{memberInfo.name}</p>
-          <p style={userInfoStyle}>{memberInfo.loginId}</p>
+          <p style={nameHighlightStyle}>
+            {memberInfo.name}
+            <span style={highlightUnderline}></span>
+          </p>
         </div>
       </div>
 
@@ -200,4 +203,26 @@ const menuItemStyle = {
   color: 'rgb(91 88 88)',       // 연한 컬러 적용
   padding: '12px 0',
   borderBottom: '1px solid #ddd'
+};
+
+const nameHighlightStyle = {
+  fontSize: '18px',            // 기존보다 더 크게
+  fontWeight: 'bold',          // 진하게
+  position: 'relative',        // 밑줄 배경용
+  display: 'inline-block',     // 줄 높이만큼 크기 적용
+  paddingBottom: '4px',
+  marginTop: "13px",
+  fontFamily:"var(--font-nanum)"
+};
+
+const highlightUnderline = {
+  content: "''",
+  position: 'absolute',
+  bottom: "5px",
+  left: 0,
+  width: '100%',
+  height: '10px',                // 밑줄 높이
+  backgroundColor: '#FFE0B2',   // 연한 민트색 배경 (수정 가능)
+  zIndex: -1,
+  borderRadius: '4px'
 };

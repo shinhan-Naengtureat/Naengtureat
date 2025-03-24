@@ -33,7 +33,7 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
   };
 
   // 숫자를 한글로 변환하는 배열
-  const koreanWeekNames = ["첫째", "둘째", "셋째", "넷째", "다섯째"];
+  const koreanWeekNames = ["첫째", "둘째", "셋째", "넷째", "다섯째", "여섯째"];
 
   // 현재 주의 월과 주차 표시
   const weekIndex = getWeekOfMonthMondayStart(currentWeek) - 1; // 배열 인덱스 맞추기
@@ -87,9 +87,6 @@ function WeeklyMealPlan({ memoizedMeals, handleDragEnd, weekStart, onUpdateMeal,
         toggleMealCheck={toggleMealCheck}
         deleteMeal={deleteMeal}
       />
-      <span className="mealplan-info">
-        ※ 이행여부 체크시 5P 적립됩니다.
-      </span>
       <span className="mealplan-info">
         ※ 일요일에는 다음주 식단이 생성됩니다.
       </span>
