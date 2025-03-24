@@ -201,8 +201,7 @@ const handleBefore = () => {
 
        {isLoading &&
           <div>
-             <p>⏳ 식단을 생성 중입니다...</p>
-            <img src={`${ICON_IMAGE_PATH}/makeplan.gif`} alt="로딩 중..." style={{ width: "200px", height: "200px" }} />
+            <img src={`${ICON_IMAGE_PATH}/makeplan.gif`} alt="로딩 중..." style={{ width: "385px", height: "auto",borderRadius:"15px" }} />
           </div>
         }
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -210,7 +209,8 @@ const handleBefore = () => {
       {!isLoading && !error && (
         <>
         <WeeklyMealPlanEditor initialMealPlan={mealPlan} extraMeals={extraMeals} updateMealPlan={updateMealPlan} />
-        <FloatingNextButton onClick={saveMealPlan} style={{ marginTop: "20px", padding: "10px 20px" }}>
+        <br></br>
+            <FloatingNextButton onClick={saveMealPlan} style={{ marginTop: "20px", padding: "10px 20px" }}>
              식단 저장하기
        </FloatingNextButton>
         </>

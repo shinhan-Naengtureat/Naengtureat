@@ -44,7 +44,6 @@ const useMealPlanInput = () => {
   //  예산 저장 후 상태 업데이트
   const saveBudget = async (navigate) => {
     if (!budget || isNaN(budget)) {
-      alert("올바른 숫자를 입력해주세요!");
       return;
     }
 
@@ -54,14 +53,13 @@ const useMealPlanInput = () => {
       });
 
       if (response.status === 200) {
-        console.log("예산 저장 성공", response.data);
         setUserSelections((prev) => ({ ...prev, budget }));
         navigate("/category"); //  다음 페이지 이동
       } else {
-        console.error("예산 업데이트 실패:", response);
+       
       }
     } catch (error) {
-      console.error("예산 업데이트 실패", error);
+     
     }
   };
 

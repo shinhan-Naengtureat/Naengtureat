@@ -4,6 +4,7 @@
     width: 100%;
     height: 673px;
     overflow: hidden;
+    font-family: var(--font-nanum) !important;
 }
 
 /* 바텀 시트: 지도 하단에 오버레이 */

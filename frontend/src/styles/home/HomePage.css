@@ -1,3 +1,36 @@
+.advertising-bar {
+  background-color: hsl(13.99deg 95.96% 50.63% / 80%);
+  color: #ffffff; 
+  font-size: 14px;
+  height: 37px;
+  padding: 8px;
+  margin-bottom: 40px;
+}
+
+
+/* P아이콘 */
+.point-badge {
+  display: inline-block;
+  background-color: #ffae00;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  text-align: center;
+  line-height: 18px;
+  font-size: 13px;
+  margin-right: 6px;
+}
+
+/* 밥공기 아이콘 */
+.rice-icon {
+  width: 20px;
+  height: 25px;
+  margin-bottom: 10px;
+  margin-left: 9px;
+}
+
 /* Swiper 슬라이드 스타일 */
 .home-recipeSwiper {
   width: 100%;
@@ -5,13 +38,24 @@
 }
 
 .home-title {
+  color: #4e4343;
+  font-size: 23px;
+  font-weight: 600;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .home-sub-title {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  color: #4e4343;
+  font-size: 20px;
+  margin-top: 6px;
+  margin-bottom: 17px;
+}
+
+.rice-icon {
+  margin-bottom: 5px;
+  margin-left: 8px;
+  font-size: 19px;
 }
 
 /* 레시피 카드 */
@@ -27,22 +71,24 @@
 /* 정방형 이미지 */
 .home-recipe-image {
   width: 100%;
-  height: 235px; /* 정방형 유지 */
+  height: 250px; 
   object-fit: cover;
   border-radius: 10px;
+  transition: height 0.3s;
 }
 
 /* 레시피 정보 전체 스타일 */
 .home-recipe-info {
-  width: 70%;
+  width: 72%;
+  height: 83px;
   background-color: rgba(255, 255, 255, 0.95);
-  padding: 10px;
+  padding: 12px;
   position: absolute;
-  bottom: -9px; /* 이미지에 살짝 걸치게 */
+  bottom: -33px; /* 이미지에 살짝 걸치게 */
   left: 50%;
   transform: translateX(-50%);
   border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* 제목과 좋아요(하트) 정렬 */
@@ -55,11 +101,13 @@
 
 /* 제목 스타일 (길면 '...' 표시) */
 .home-recipe-title {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 17px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-top: 2px;
+  margin-bottom: 8px;
   max-width: 80%; /* 너비 제한 */
 }
 
@@ -68,6 +116,9 @@
 .home-recipe-like {
   font-size: 18px;
   cursor: pointer;
+  width: 23px;
+  height: 20px;
+  margin-bottom: 10px;
 }
 
 /* 태그와 기타 정보 스타일 */
@@ -83,6 +134,7 @@
 .home-recipe-tags {
   flex: 1;
   text-align: left;
+  font-size: 15px;
 }
 
 /* 난이도와 시간 정렬 */
@@ -95,19 +147,25 @@
 /* Swiper 슬라이드 효과 */
 .home-recipe-slide {
   width: 280px;
-  height: 280px;
+  height: 290px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.3s, opacity 0.3s;
+  transform: scale(1) !important;
   opacity: 0.7;
-  transform: scale(0.85)!important;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
 /* 활성화된 슬라이드는 확대 */
 .home-recipe-slide.swiper-slide-active {
-  transform: scale(1.2)!important;
+  transform: scaleY(1.03)!important;
   opacity: 1;
+}
+
+/* 슬라이드가 활성화될 때 카드만 확대 */
+.home-recipe-slide.swiper-slide-active .home-recipe-card {
+  transform: scale(1.15);
+  transition: transform 0.3s;
 }
 
 /* 오늘의 식단 카드 */
@@ -123,30 +181,40 @@
 }
 
 .home-meal-card {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
+  background-color: #f4d1b57a;
   padding: 14px;
   border-radius: 12px;
-  width: 100%;
-  height:110px;
+  width: 105%;
+  height:105px;
   text-align: center;
   font-size: 14px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+.home-meal-content-active{
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.home-meal-content{
+  font-size: 15px;
+}
+
 .swiper {
-  height: 400px;
+  height: 398px;
 }
 
 /* Swiper 페이지네이션 위치 변경 */
 .swiper-pagination {
   position: absolute !important;
-  /*bottom: -5px!important;*/
+  bottom: 10px!important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   display: flex !important;
   gap: 6px !important;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 /* Swiper 페이지네이션 점 스타일 */

@@ -203,7 +203,7 @@ if (sourceMealIndex === -1) {
                                             cursor: "not-allowed",
                                         }}
                                     >
-                    {meals[mealType] ? meals[mealType].recipeName : "x"}
+                    {meals[mealType] ? meals[mealType].recipeName : "-"}
                     </td>
                     ):(
                 <Droppable key={`${date}-${mealType}`} droppableId={`${date}-${mealType}`}>

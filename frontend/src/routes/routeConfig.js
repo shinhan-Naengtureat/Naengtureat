@@ -153,6 +153,12 @@ const RouteConfig = {
         { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
       ],
     },
+    [`${BASE_URL}/cart`]: {
+      title: "장바구니",
+      links: [
+        { to: `${BASE_URL}/mypage`, icon: <FaBars />, alt: "마이페이지" },
+      ],
+    },
 
     /*==================마이페이지==================*/
     [`${BASE_URL}/recipe/edit/:recipeId`]: {

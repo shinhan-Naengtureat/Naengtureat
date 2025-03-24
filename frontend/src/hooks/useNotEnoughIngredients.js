@@ -10,7 +10,7 @@ const useNotEnoughIngredients = (useTodayAsStart =false) => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
 
   const weekStart = startOfWeek(currentWeek, { weekStartsOn: 1 });
-  //const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 1 });
+  const weekEnd = endOfWeek(currentWeek, { weekStartsOn: 1 });
   const today = new Date();
   const startDate = format(useTodayAsStart ? today : weekStart, "yyyy-MM-dd");
   const endDate = format(endOfWeek(currentWeek, { weekStartsOn: 1 }), "yyyy-MM-dd");
