@@ -23,7 +23,7 @@ function RecipeList() {
   // 필터 관련 상태
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [selectedBigCategories, setSelectedBigCategories] = useState([]);
-  const [selectedSortFilter, setSelectedSortFilter] = useState("");
+  const [selectedSortFilter, setSelectedSortFilter] = useState("추천순");
 
   // 로딩 및 에러 상태
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ function RecipeList() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("/recipe")
+      .get(`/recipe`)
       .then((res) => {
         const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
         setAllRecipes(validRecipes);
