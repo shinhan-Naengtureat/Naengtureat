@@ -25,7 +25,6 @@ const InventoryList = () => {
     axiosInstance.get(`/inventory`)
       .then(response => {
         if (!ignore) {
-          console.log(response.data);
           const extractedItems = response.data.map(item => ({
             id: item.id,
             nickName: item.nickName,
@@ -180,7 +179,7 @@ const InventoryList = () => {
                          style={{ cursor: "pointer" }} // 마우스 오버 시 포인터 변경
                     >
                       <Badge pill className={`badge-position ${isExpired ? 'bg-danger' : 'bg-success'}`}>
-                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays == 0 ? "Today" : "D+" + -item.remainingDays }
+                        {item.remainingDays > 0 ? "D-" + item.remainingDays : item.remainingDays === 0 ? "Today" : "D+" + -item.remainingDays }
                       </Badge>
                       <div className="item-content">
                         <img src={`${INGREDIENT_IMAGE_PATH}/${item.ingredientStandardImage}`} alt="item" className="inventory-list-item-image" />

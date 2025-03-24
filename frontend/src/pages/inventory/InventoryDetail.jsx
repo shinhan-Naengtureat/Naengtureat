@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axiosInstance from "api/axios";
 import {Button, Col, Container, Form, Modal, Row, Spinner} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
@@ -32,6 +32,17 @@ const InventoryDetail = () => {
 
   const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
   const navigate = useNavigate();
+  const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    sectionRefs.current.forEach((ref, index) => {
+      if (ref) {
+        setTimeout(() => {
+          ref.classList.add("visible");
+        }, index * 200);
+      }
+    });
+  }, []);
 
   // 검색어 입력 시 실시간 필터링
   const handleSearch = (e) => {
@@ -144,9 +155,6 @@ const InventoryDetail = () => {
 
   // 소분류 선택 시 nickName 자동 입력
   const handleSelectSmallCategory = (category) => {
-    console.log("선택한 소분류:", category.smallCategory);
-    console.log("해당 재료 ID:", category.ingredientId);
-
     setSelectedSmallCategory(category.smallCategory);
     setIngredientId(category.ingredientId);
     setNickName(category.smallCategory);
@@ -325,7 +333,7 @@ const InventoryDetail = () => {
           </Row>
         </Col>
       </Row>
-
+      <hr/>
       {/* 모달 (소분류 선택) */}
       <Modal show={isModalOpen}
              onHide={() => setIsModalOpen(false)}
@@ -372,7 +380,7 @@ const InventoryDetail = () => {
         </Modal.Body>
       </Modal>
 
-      <h3 className="ingredient-detail-sub-title">개수</h3>
+      <h5 className="ingredient-detail-sub-title">개수</h5>
       {/* 수량 조절 (정수 + 소수 부분을 가로로 배치) */}
       <Row className="quantity-row align-items-center">
         {/* 정수 부분 */}
@@ -406,6 +414,7 @@ const InventoryDetail = () => {
       </Row>
 
       {/* 날짜 입력 */}
+      <h5 className="ingredient-detail-sub-title">소비 기한</h5>
       <Row className="date-group">
         <Col xs={6} className="date-item">
           <Form.Label className="date-label">인입일</Form.Label>
@@ -428,7 +437,7 @@ const InventoryDetail = () => {
       </Row>
 
       {/* 메모 입력 */}
-      <h3 className="ingredient-detail-sub-title">메모</h3>
+      <h5 className="ingredient-detail-sub-title">메모</h5>
       <Form.Control
         as="textarea"
         defaultValue={inventory.memo}
