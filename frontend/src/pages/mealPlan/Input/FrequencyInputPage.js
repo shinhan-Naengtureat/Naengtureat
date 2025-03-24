@@ -8,6 +8,10 @@ import RouteConfig from "routes/routeConfig";
 import styled from "styled-components";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { motion } from "framer-motion";
+import "styles/mealPlan/FrequencyInputPage.css";
+import { toast, ToastContainer } from "react-toastify";
+
 const meals = [
     { id: "아침",icon:`${ICON_IMAGE_PATH}/breakfast.png` },
     { id: "점심",icon:`${ICON_IMAGE_PATH}/lunch.png` },
@@ -27,12 +31,12 @@ const FrequencyInputPage = () => {
       prev.includes(meal) ? prev.filter((m) => m !== meal) : [...prev, meal]
     );
   };
-   // 오늘 요일 확인 (format으로 한글 요일 변환)
-  const today = format(new Date(), "E", { locale:ko }); 
-  const weekDays = ["월", "화", "수", "목", "금", "토", "일","전체"];
+  // 오늘 요일 확인 (format으로 한글 요일 변환)
+  const today = format(new Date(), "E", { locale: ko });
+  const weekDays = ["월", "화", "수", "목", "금", "토", "일", "전체"];
   
   //  오늘을 포함한 이전 요일을 비활성화
- const disabledDays = weekDays.slice(0, weekDays.indexOf(today) + 1);
+  const disabledDays = weekDays.slice(0, weekDays.indexOf(today) + 1);
 
   const toggleDay = (day) => {
     if (disabledDays.includes(day)) return; // 이전 요일 선택 방지
@@ -42,27 +46,27 @@ const FrequencyInputPage = () => {
         prev.includes("전체") ? [] : ["전체", "월", "화", "수", "목", "금", "토", "일"].filter(d => !disabledDays.includes(d))
       );
     } else {
-        setSelectedDays((prev) =>{
+      setSelectedDays((prev) => {
         const filteredDays = prev.filter((d) => d !== "전체");
-            return prev.includes(day) ? filteredDays.filter((d) => d !== day) : [...filteredDays, day];
-        });
+        return prev.includes(day) ? filteredDays.filter((d) => d !== day) : [...filteredDays, day];
+      });
     }
   };
  
   const totalMeals = selectedMeals.length * (selectedDays.includes("전체") ? 7 - disabledDays.length : selectedDays.length);
 
-// 뒤로가기기
+  // 뒤로가기기
   const handleBefore = () => {
     navigate(RouteConfig.paths.excludedIngredients);
   };
 
-   // 다음 버튼 클릭 시 Context에 저장 후 이동
+  // 다음 버튼 클릭 시 Context에 저장 후 이동
   const handleNext = () => {
     if (selectedMeals.length === 0 || selectedDays.length === 0) {
-      alert("요일과 끼니를 모두 선택해주세요!");
+      toast.info("요일과 끼니를 모두 선택해주세요!");
       return;
     }
-setUserSelections((prev) => ({
+    setUserSelections((prev) => ({
       ...prev,
       mealTimes: selectedMeals, //  선택한 식사 저장
       days: selectedDays, //  선택한 요일 저장
@@ -71,222 +75,116 @@ setUserSelections((prev) => ({
 
     navigate(RouteConfig.paths.makeMealPlan); //  GPTChat 페이지로 이동
   };
+  //  페이지 슬라이드 인 효과
+  const pageVariants = {
+    initial: { opacity: 0, x: 100 }, // 페이지가 오른쪽에서 등장
+    animate: { opacity: 1, x: 0 },   // 정위치로 이동
+    exit: { opacity: 0, x: -100 },   // 왼쪽으로 나가기
+  };
 
-    return (
-      <div className="home-box-container2">
-        <div className="preferred-ingredients-container">
-      <ContainerFre>
-         <div className="preferred-header">
-        <BackButton onClick={handleBefore}/>
-      </div>
-          <div>
-              
-          <Header>
-          <Title1>이번주</Title1>
-              <Title2>몇개의 식단을 만들어드릴까요?</Title2>
-          <CountSection>
-              <CountText>
-                총 <CountNumber>{totalMeals}</CountNumber><CountUnit>회</CountUnit>
-              </CountText>
-              <CountLine />
-              <SubText>를 선택하셨어요</SubText>
-            </CountSection>
-          </Header>
+  //  컨테이너 (부모 요소) 애니메이션 - 요소들이 순차적으로 등장
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }, // 요소들이 순차적으로 등장
+    },
+  };
 
-      {/* 끼니 선택 */}
-      <MealContainer>
-        {meals.map((meal) => (
-            <MealButton
-            key={meal.id}
-            selected={selectedMeals.includes(meal.id)}
-            onClick={() => toggleMeal(meal.id)}
+  //  일반 텍스트 요소 (제목, 설명)
+  const itemVariants = {
+    hidden: { opacity: 0, y: -50 },  // 위에서 떨어지는 효과
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
+  //  버튼 스타일 애니메이션 (끼니 선택, 요일 선택)
+  const buttonVariants = {
+    hidden: { opacity: 0, y: -30, scale: 0.9 }, // 약간 축소된 상태에서 위에서 등장
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: "easeOut" } },
+  };
+
+  return (
+    <motion.div
+      className="home-box-container2"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.5 }}
+    >
+      
+        {/* 뒤로가기 버튼 */}
+        <motion.div variants={itemVariants} className="preferred-header">
+          <BackButton onClick={handleBefore} />
+        </motion.div>
+      <motion.div
+        className="container-fre"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+
+        {/* 타이틀 */}
+        <motion.div variants={itemVariants} className="header-fre">
+          <motion.h2 variants={itemVariants} className="title1-fre">이번주</motion.h2>
+          <motion.h2 variants={itemVariants} className="title2-fre">몇 개의 식단을 만들어드릴까요?</motion.h2>
+          <motion.div variants={itemVariants} className="count-section">
+            <motion.div variants={itemVariants} className="count-text">
+              총 <motion.span className="count-number">{totalMeals}</motion.span>
+              <motion.span className="count-unit">회</motion.span>
+            </motion.div>
+            <motion.div variants={itemVariants} className="count-line"></motion.div>
+            <motion.p variants={itemVariants} className="sub-text">를 선택하셨어요</motion.p>
+          </motion.div>
+        </motion.div>
+
+        {/* 끼니 선택 */}
+        <motion.div variants={containerVariants} className="meal-container">
+          {meals.map((meal) => (
+            <motion.button
+              key={meal.id}
+              variants={buttonVariants}
+              className="meal-button"
+              data-selected={selectedMeals.includes(meal.id)}
+              onClick={() => toggleMeal(meal.id)}
             >
-            <MealIcon src={meal.icon} alt={meal.id} />
-                {meal.id}
-            </MealButton>
-            
-        ))}
-      </MealContainer>
- {/* 요일 선택 */}
-      <Line />
-      <DayContainer>
-        {weekDays.map((day) => (
-          <DayButton
-            key={day}
-            selected={selectedDays.includes(day)}
-            disabled={disabledDays.includes(day)} // 🔹 오늘 이전 요일 비활성화
-            style={{
-              opacity: disabledDays.includes(day) ? 0.5 : 1, // 🔹 어둡게 처리
-              cursor: disabledDays.includes(day) ? "not-allowed" : "pointer", // 클릭 방지
-            }}
-            onClick={() => toggleDay(day)}
-          >
-            {day}
-          </DayButton>
-        ))}
-      </DayContainer>
-       
-</div>
-      {/* 다음 버튼 */}
-        <FloatingNextButton
-        onClick={handleNext}
-        disabled={totalMeals.length === 0}
-      />
-    </ContainerFre>
-        </div>
-        </div>
+              <motion.img className="meal-icon" src={meal.icon} alt={meal.id} />
+              {meal.id}
+            </motion.button>
+          ))}
+        </motion.div>
+
+        {/* 요일 선택 */}
+        <motion.div variants={itemVariants} className="line"></motion.div>
+        <motion.div variants={containerVariants} className="day-container">
+          {weekDays.map((day) => (
+            <motion.button
+              key={day}
+              variants={buttonVariants}
+              className="day-button"
+              data-selected={selectedDays.includes(day)}
+              data-disabled={disabledDays.includes(day)}
+              disabled={disabledDays.includes(day)}
+              style={{
+                opacity: disabledDays.includes(day) ? 0.5 : 1,
+                cursor: disabledDays.includes(day) ? "not-allowed" : "pointer",
+              }}
+              onClick={() => toggleDay(day)}
+            >
+              {day}
+            </motion.button>
+          ))}
+        </motion.div>
+
+        {/* 다음 버튼 */}
+        <motion.div variants={itemVariants} className="button-container" style={{width:"327px"}}>
+          <FloatingNextButton onClick={handleNext} disabled={totalMeals.length === 0} />
+        </motion.div>
+      </motion.div>
+            <ToastContainer position="top-center" autoClose={2000} />
+
+    </motion.div>
   );
 };
-// Styled Components
-const ContainerFre = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  
-`;
-const Header = styled.div`
-font-family: var(--font-nanum) !important;
-  width: 100%;
-  text-align: left;
-`;
-const Title1 = styled.h2`
-font-family: var(--font-nanum) !important;
-  font-size: 22px;
-  font-weight: bold;
-  text-align: left;
-  color: #6B7682;
-  margin-bottom: 5px;
-`;
-const Title2 = styled.h2`
-font-family: var(--font-nanum) !important;
-  font-size: 22px;
-  font-weight: bold;
-  text-align: left;
-  color: #343D4C;
-  margin-bottom: 10px;
-`;
-
-const CountSection = styled.div`
-font-family: var(--font-nanum) !important;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  margin-bottom: 20px;
-  width: 100%;
-`;
-
-const CountText = styled.div`
-font-family: var(--font-nanum) !important;
-  font-size: 18px;
-   font-weight: bold;
-  color: #6B7682; 
-  display: flex;
-  align-items: center;
-
-`;
-
-const CountNumber = styled.span`
-font-family: var(--font-nanum) !important;
-  font-size: 22px;
-  font-weight: bold;
-  color: #f35c04; /* 강조된 숫자 */
-  margin: 0 4px;
-`;
-
-const CountUnit = styled.span`
-font-family: var(--font-nanum) !important;
-  font-size: 18px;
-   font-weight: bold;
-  color: #6B7682;
-`;
-
-const CountLine = styled.div`
-  width: 100%;
-  border-bottom: 2px solid #343D4C;
-  margin: 5px 0 10px;
-`;
-const Line = styled.div`
-  width: 100%;
-  border-bottom: 2px solid #F2F3F7;
-  margin: 5px 0 10px;
-  margin-bottom: 20px;
-`;
-
-const SubText = styled.p`
-font-family: var(--font-nanum) !important;
-  font-size: 14px;
-  color: #a0aec0; /* gray-500 */
-`;
-
-const MealContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  margin-bottom: 20px;
-`;
-
-const MealButton = styled.button`
-  background-color: ${({ selected }) => (selected ? "#54428E" : "#f2f2f2")};
-  color: ${({ selected }) => (selected ? "white" : "#8B94A0")};
-  font-size: 15px;
-  font-weight: bold;
-  padding: 15px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-  width: 85px;
-  height: 100px;
-  text-align: center;
-  
-
-  display: flex;
-  flex-direction: column; /* 이미지 위, 텍스트 아래 */
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-`;
-
-const MealIcon = styled.img`
-  width: 60px;
-  height: 60px;
-`;
-const DayContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
-`;
-
-const DayButton = styled.button`
-  background-color: ${({ selected, disabled }) =>
-  disabled ? "#e0e0e0" : selected ? "#54428E" : "#f8f9fa"};
-   color: ${({ selected, disabled }) => 
-    disabled ? "#b0b0b0" : selected ? "white" : "#6c757d"};
-  font-size: 17px;
-  font-weight: 600;
-  padding: 12px;
-  border-radius: 10px;
-  border: ${({ selected, disabled }) => 
-    disabled ? "none" : selected ? "none" : "2px solid #dee2e6"};
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  transition: all 0.3s; ease-in-out;
-  width: 60px;
-  height: 60px;
-  text-align: center;
-   box-shadow: ${({ selected }) => (selected ? "0px 4px 10px rgba(84, 66, 142, 0.3)" : "none")}; /* 활성화 시 그림자 추가 */
-
- &:hover {
-    background-color: ${({ selected, disabled }) => 
-      disabled ? "#e0e0e0" : selected ? "#443373" : "#e9ecef"};
-    color: ${({ selected, disabled }) => 
-      disabled ? "#b0b0b0" : selected ? "white" : "#495057"};
-  }
-
-  &:active {
-    transform: ${({ disabled }) => (disabled ? "none" : "scale(0.95)")}; /* 클릭 시 약간 눌리는 효과 */
-  }
-`;
-
 
 export default FrequencyInputPage;

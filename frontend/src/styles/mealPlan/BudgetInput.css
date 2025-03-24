@@ -2,7 +2,8 @@
 .budget-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* 컨테이너는 중앙 정렬 */
+  font-family: var(--font-nanum) !important;
+
   justify-content: center;
   min-height: 40vh;
   text-align: center;
@@ -35,7 +36,7 @@
 
 /* 예산 입력 영역 */
 .budget-input-container {
-    font-family: var(--font-nanum) !important;
+  font-family: var(--font-nanum) !important;
   width: 100%;
   max-width: 350px;
   text-align: left;

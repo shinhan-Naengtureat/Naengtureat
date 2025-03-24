@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BackButton from "components/BackButton";
 import "styles/mealPlan/shoppingList.css"; // CSS 파일
-import { INGREDIENT_IMAGE_PATH } from "config/pathConfig";
+import { ICON_IMAGE_PATH, INGREDIENT_IMAGE_PATH } from "config/pathConfig";
 import useNotEnoughIngredients from "hooks/useNotEnoughIngredients";
 import { useNavigate } from "react-router-dom"; 
 import FloatingNextButton from "components/FloatingNextButton";
@@ -57,7 +57,13 @@ const NotEnoughIngredientListPage = () => {
       <h2 className="shopping-title" style={{ textAlign: "center" ,marginBottom:"30px"}}>필요한 재료 리스트</h2>
 
       {notEnoughIngredients.length === 0 ? (
-        <p className="no-items">부족한 재료가 없습니다 🎉</p>
+        <div className="no-items-wrapper" style={{justifyContentcontent: "center",
+  alignItems:"center"}}>
+        <p className="no-items">부족한 재료가 없습니다</p>
+          <img src={`${ICON_IMAGE_PATH}/enough.png`}
+            alt="enough"
+            style={{width:"360px",heigth:"auto", marginBottom:"10px",borderRadius:"15px"} } />
+          </div>
       ) : (
         <table className="shopping-table">
           <thead>
