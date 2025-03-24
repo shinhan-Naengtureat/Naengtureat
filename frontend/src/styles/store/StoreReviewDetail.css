@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    font-family: var(--font-nanum) !important;
 }
 
 /* 스토어 리뷰가 없을 때 보여줄 이미지 */
@@ -22,6 +23,7 @@
     margin: auto;
     padding: 10px;
     background: #f8f9fa;
+    font-family: var(--font-nanum) !important;
 }
 
 /* 스토어 이름 */
