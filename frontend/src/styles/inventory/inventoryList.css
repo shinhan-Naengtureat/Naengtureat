@@ -84,6 +84,7 @@ h5.text-start {
   font-size: 24px;
   font-weight: bold;
   color: #fff;
+  background-color: #F35C04 !important;
 }
 
 .inventory-list-category-btn {

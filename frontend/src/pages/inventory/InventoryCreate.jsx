@@ -338,7 +338,7 @@ const InventoryCreate = () => {
       />
 
       {/* 추가 버튼 */}
-      <Button variant="warning" className="add-button" onClick={handleCreateInventory}>
+      <Button variant="warning" className="add-button inventory-add-button" onClick={handleCreateInventory}>
         등록
       </Button>
     </Container>
