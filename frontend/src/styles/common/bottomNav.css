@@ -1,6 +1,6 @@
 .bottom-nav {
   position: fixed;
-  bottom: 20px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%; /* iPhone 13 Pro Max 너비 */
@@ -15,6 +15,7 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   border-radius: 20px;
+  font-family: var(--font-nanum)!important;
 }
 
 /* 바텀 네비게이션 아래 배경을 연장하는 가상 요소 */
@@ -38,21 +39,30 @@
   color: #666;
   font-size: 13px; /* 텍스트 크기 증가 */
   transition: color 0.3s ease-in-out;
+  width : 60px;
+  height: 60px;
 }
 
 .nav-item svg {
   font-size: 24px; /* 아이콘 크기 증가 */
   margin-bottom: 4px;
+  
 }
 
 .nav-item.home {
   background: #ffffff;
-  padding: 12px;
+  padding: 15px;
   border-radius: 50%;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: -10px;
-}
+  margin-bottom: 10px;
 
+}
+.nav-item.home svg {
+  width: 50px;
+  height: 50px;
+
+}
 .nav-item.active {
   color: #ff7f50; /* 선택된 아이콘 색상 */
 }

@@ -1,0 +1,60 @@
+.charge-complete-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: calc(100vh - 90px);
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.charge-complete {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 60%;
+    font-family: var(--font-nanum) !important;
+    color: #4e4343;
+    font-size: 26px;
+}
+
+.charge-complete img {
+    width: 100%;
+}
+
+.charge-text-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* 글씨와 아이콘 사이 간격 */
+    margin-top: 2rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.charge-check-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.charge-complete-text {
+    color: #4e4343 !important;
+    font-size: 26px;
+}
+
+.charge-okay-button {
+    width: 100%;
+    background: #FE7F2D;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.charge-okay-button:hover {
+    background-color: #F35C04;
+}

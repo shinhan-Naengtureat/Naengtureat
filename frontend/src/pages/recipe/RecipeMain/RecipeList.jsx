@@ -5,6 +5,9 @@ import RecipeListGrid from "pages/recipe/RecipeMain/RecipeListGrid";
 import IngredientFilter from "pages/recipe/RecipeMain/IngredientFilter";
 import SortFilter from "pages/recipe/RecipeMain/SortFilter";
 import "styles/recipe/Recipe.css";
+import {ToastContainer } from 'react-toastify';
+import axiosInstance from "api/axios";
+
 
 const sortMapping = {
   추천순: "recommend",
@@ -21,7 +24,7 @@ function RecipeList() {
   // 필터 관련 상태
   const [selectedCategories, setSelectedCategories] = useState(["전체"]);
   const [selectedBigCategories, setSelectedBigCategories] = useState([]);
-  const [selectedSortFilter, setSelectedSortFilter] = useState("");
+  const [selectedSortFilter, setSelectedSortFilter] = useState("추천순");
 
   // 로딩 및 에러 상태
   const [loading, setLoading] = useState(false);
@@ -32,11 +35,12 @@ function RecipeList() {
   // 컴포넌트 마운트 시 전체 레시피 로딩
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("/recipe")
+    axiosInstance
+      .get(`/recipe`)
       .then((res) => {
-        setAllRecipes(res.data);
-        setFilteredRecipes(res.data);
+        const validRecipes = res.data.filter((recipe) => !recipe.isDelete);
+        setAllRecipes(validRecipes);
+        setFilteredRecipes(validRecipes);
         setLoading(false);
       })
       .catch((err) => {
@@ -129,8 +133,31 @@ function RecipeList() {
         />
       </div>
 
+      {/* 선택된 재료 대분류를 보여주는 영역 */}
+    {selectedBigCategories.length > 0 && (
+      <div className="selected-big-categories" style={{ margin: "16px", textAlign: "left", marginLeft:"15px"}}>
+        <strong>선택한 식재료: </strong>
+        {selectedBigCategories.map((category, index) => (
+          <span
+            key={index}
+            className="selected-category-chip"
+            style={{
+              color:"#fff",
+              marginRight: "8px",
+              padding: "8px 12px",
+              border: "1px solid #ddd",
+              background: "#fe7f2d",
+              borderRadius: "50px",
+            }}
+          >
+            {category}
+          </span>
+        ))}
+      </div>
+    )}
+
       {loading ? (
-        <div style={{ padding: "16px" }}>로딩중...</div>
+        <div style={{ padding: "16px" }}></div>
       ) : error ? (
         <div style={{ padding: "16px", color: "red" }}>
           오류: {error.message}
@@ -138,6 +165,8 @@ function RecipeList() {
       ) : (
         <RecipeListGrid recipes={filteredRecipes} />
       )}
+      <ToastContainer />
+
     </div>
   );
 }
