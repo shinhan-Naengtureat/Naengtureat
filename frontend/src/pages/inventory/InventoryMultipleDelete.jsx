@@ -220,7 +220,8 @@ const InventoryMultipleDelete = () => {
           <Modal.Title>삭제 확인</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>정말 선택한 <strong>{selectedItems.size}개</strong>의 재료를 삭제하시겠습니까?</p>
+          <p style={{ marginBottom: "5px" }}>정말 선택한 <strong>{selectedItems.size}개</strong>의 재료를</p>
+          <p style={{ marginBottom: "5px" }}>삭제하시겠습니까?</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setIsDeleteModalOpen(false)}>

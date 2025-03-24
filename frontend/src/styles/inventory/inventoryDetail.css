@@ -230,6 +230,7 @@
 
 .inventory-delete-modal .modal-content {
   transform: translateY(0%);
+  height: auto;
 }
 
 /* 검색 입력창 */
