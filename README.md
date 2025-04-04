@@ -8,32 +8,32 @@
 <table>
   <tr>
          <td align="center" width="16%">
-            <a href="https://github.com/jamm0316"><img width="75%" src="readme/jm.png"/></a>
+            <a href="https://github.com/jamm0316"><img width="75%" src="readme/jm.jpg"/></a>
             <br />
             <a href="https://github.com/jamm0316">송재명</a>
         </td>
          <td align="center" width="16%">
-            <a href="https://github.com/2th-millie"><img width="75%" src="readme/th.png"/></a>
+            <a href="https://github.com/2th-millie"><img width="75%" src="readme/th.jpg"/></a>
             <br />
             <a href="https://github.com/2th-millie">이태한</a>
         </td>
          <td align="center" width="16%">
-            <a href="https://github.com/GJKim-James"><img width="75%" src="readme/gj.png"/></a>
+            <a href="https://github.com/GJKim-James"><img width="75%" src="readme/gj.jpg"/></a>
             <br />
             <a href="https://github.com/GJKim-James">김광진</a>
         </td>
          <td align="center" width="16%">
-            <a href="https://github.com/eunziCode"><img width="75%" src="readme/eg.png"/></a>
+            <a href="https://github.com/eunziCode"><img width="75%" src="readme/ej.jpg"/></a>
             <br />
             <a href="https://github.com/eunziCode">박은지</a>
         </td>
          <td align="center" width="16%">
-            <a href="https://github.com/Woong0405"><img width="75%" src="readme/su.png"/></a>
+            <a href="https://github.com/Woong0405"><img width="75%" src="readme/su.jpg"/></a>
             <br />
             <a href="https://github.com/Woong0405">윤성웅</a>
         </td>
          <td align="center" width="16%">
-            <a href="https://github.com/hyejinn916"><img width="75%" src="readme/hj.png"/></a>
+            <a href="https://github.com/hyejinn916"><img width="75%" src="readme/hj.jpg"/></a>
             <br />
             <a href="https://github.com/hyejinn916">류혜진</a>
         </td>
