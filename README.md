@@ -62,14 +62,14 @@
 `OS` mac, window
 
 ## 유저저니맵
-<img width="950" alt="image" src="https://github.com/user-attachments/assets/42fb63a4-22a9-4ccd-94ee-f855ee5d50d9" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/42fb63a4-22a9-4ccd-94ee-f855ee5d50d9" />
 
 
 ## 스크린샷
 
 ### 냉페이 충전
 - 사용자가 충전을 원하는 금액을 입력한 후 충전하기버튼을 결제를 진행한 후 해당 금액만큼 페이머니를 충전합니다.
-![01 페이충전](https://github.com/user-attachments/assets/2b1faed1-0f02-49ce-b581-9a9ef71a4a07)
+<img width="500" src="![01 페이충전](https://github.com/user-attachments/assets/2b1faed1-0f02-49ce-b581-9a9ef71a4a07)" />
 
 ### 식단 생성
 - 1주에 쓸 예산과 선호, 비선호 재료, 식단 희망 날짜 등을 입력하면 AI가 맞춤형 식단을 생성해줍니다.
