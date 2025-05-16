@@ -2,6 +2,7 @@ package com.shinhan.naengtureat.recipe.model;
 import java.util.List;
 import java.util.Optional;
 
+import com.shinhan.naengtureat.recipe.dto.RecipeMainBaseDTO;
 import com.shinhan.naengtureat.recipe.dto.TopRecipeResponseDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 	// 필터 후 레시피 및 관련 정보 조회
 	@Query(value = "SELECT r.recipe_id AS id, r.name, " +
 		       "CAST(FLOOR(r.price / CAST(SUBSTRING(r.serving, 1, LENGTH(r.serving)-2) AS UNSIGNED)) AS SIGNED) AS price, " +
-		       "GROUP_CONCAT(DISTINCT r.category SEPARATOR ', ') AS category, " + 
+		       "GROUP_CONCAT(DISTINCT r.category SEPARATOR ', ') AS category, " +
 		       "GROUP_CONCAT(DISTINCT CASE WHEN ing.big_category <> '조미료' THEN ing.small_category END SEPARATOR ', ') AS smallCategory, " +
 		       "GROUP_CONCAT(DISTINCT h.keyword SEPARATOR ', ') AS keyword " +
 		       "FROM recipe r " +
@@ -29,7 +30,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 		       nativeQuery = true)
 		public List<Object[]> findFilteredRecipes(@Param ("excludeIngredients") List<String> excludeIngredients);
 
-	
+
 	// 사용자가 작성한 레시피 중 삭제되지 않은 레시피만 조회
 	@Query("SELECT r FROM Recipe r WHERE r.member.id = :memberId AND r.isDelete = false")
 	List<Recipe> findByMemberId(@Param("memberId") Long memberId);
@@ -75,22 +76,61 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 			+ "OR LOWER(i.smallCategory) LIKE LOWER(CONCAT('%', :keyword, '%')) "
 			+ "OR LOWER(m.mealName) LIKE LOWER(CONCAT('%', :keyword, '%'))")
 	List<Recipe> searchRecipes(@Param("keyword") String keyword);
-	
+
 	// 카테고리 필터(한식,중식 등)
 	List<Recipe> findByCategoryIn(List<String> categories);
-	
-	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeMainDTO(" +
-		       "r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete, " +
-		       "function('group_concat', CONCAT(i.bigCategory, ':', i.smallCategory)), " +
-		       "function('group_concat', h.keyword), " +
-		       "(SELECT COUNT(l) FROM Likes l WHERE l.recipe = r)) " +
-		       "FROM Recipe r " +
-		       "JOIN r.member m " +
-		       "JOIN r.meal rm " +
-		       "LEFT JOIN r.ingredients ri " +
-		       "LEFT JOIN ri.ingredient i " +
-		       "LEFT JOIN r.hashtags rh " +
-		       "LEFT JOIN rh.hashtag h " +
-		       "GROUP BY r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete")
-		List<RecipeMainDTO> findRecipeMainDTOs();
+
+//	@Query("SELECT new com.shinhan.naengtureat.recipe.dto.RecipeMainDTO(" +
+//		       "r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete, " +
+//		       "function('group_concat', CONCAT(i.bigCategory, ':', i.smallCategory)), " +
+//		       "function('group_concat', h.keyword), " +
+//		       "(SELECT COUNT(l) FROM Likes l WHERE l.recipe = r)) " +
+//		       "FROM Recipe r " +
+//		       "JOIN r.member m " +
+//		       "JOIN r.meal rm " +
+//		       "LEFT JOIN r.ingredients ri " +
+//		       "LEFT JOIN ri.ingredient i " +
+//		       "LEFT JOIN r.hashtags rh " +
+//		       "LEFT JOIN rh.hashtag h " +
+//		       "GROUP BY r.id, r.name, r.level, r.cookingTime, m.name, m.image, r.category, rm.mealName, r.image, r.isDelete")
+//		List<RecipeMainDTO> findRecipeMainDTOs();
+
+	//레시피 기본정보 조회
+	@Query("""
+			select new com.shinhan.naengtureat.recipe.dto.RecipeMainBaseDTO(
+				r.id, r.name, r.level, r.cookingTime,
+				m.name, m.image, r.category, rm.mealName,
+				r.image, r.isDelete
+				)
+				from Recipe r
+				join r.member m
+				join r.meal rm
+	""")
+	List<RecipeMainBaseDTO> findAllRecipeBases();
+
+	//재료조회
+	@Query("""
+					select r.id, CONCAT(i.bigCategory, ':', i.smallCategory) 
+					from Recipe r
+					join r.ingredients ri
+					join ri.ingredient i
+			""")
+	List<Object[]> findAllRecipeIngredients();
+
+	//해시태그 조회
+	@Query("""
+			select  r.id, h.keyword
+			from Recipe r
+			join r.hashtags rh
+			join rh.hashtag h
+			""")
+	List<Object[]> findAllRecipeHashTags();
+
+	//좋아요 수
+	@Query("""
+			select r.id, count(l)
+			from Likes l
+			join l.recipe r group by  r.id
+			""")
+	List<Object[]> findAllLikeCount();
 }
