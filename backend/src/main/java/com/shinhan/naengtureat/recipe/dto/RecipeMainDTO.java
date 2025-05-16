@@ -48,7 +48,7 @@ public class RecipeMainDTO {
         this.aggregatedHashtags = removeDuplicates(aggregatedHashtags != null ? aggregatedHashtags.toString() : null);
         this.likeCount = likeCount;
     }
-    
+
     private String removeDuplicates(String input) {
         if (input == null || input.isEmpty()) return input;
         String[] parts = input.split(",");

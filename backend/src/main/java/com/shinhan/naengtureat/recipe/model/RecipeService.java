@@ -1,10 +1,7 @@
 package com.shinhan.naengtureat.recipe.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.shinhan.naengtureat.recipe.dto.*;
@@ -47,407 +44,447 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class RecipeService {
 
-	@Autowired
-	private RecipeRepository recipeRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
-	@Autowired
-	private RecipeStepRepository recipeStepRepository;
+    @Autowired
+    private RecipeStepRepository recipeStepRepository;
 
-	@Autowired
-	private RecipeIngredientRepository recipeIngredientRepository;
+    @Autowired
+    private RecipeIngredientRepository recipeIngredientRepository;
 
-	@Autowired
-	private RecipeHashtagRepository recipeHashtagRepository;
+    @Autowired
+    private RecipeHashtagRepository recipeHashtagRepository;
 
-	@Autowired
-	private IngredientRepository ingredientRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
-	@Autowired
-	private CommentRepository commentRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
-	@Autowired
-	private MemberRepository memberRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
-	@Autowired
-	private HashtagRepository hashtagRepository;
+    @Autowired
+    private HashtagRepository hashtagRepository;
 
-	@Autowired
-	private MealPlanRepository mealPlanRepository;
-	
-	@Autowired
-	private MealRepository mealRepository;
-	
-	@Autowired
-	private LikesService likesService;
-	
-	private ModelMapper mapper = new ModelMapper();
+    @Autowired
+    private MealPlanRepository mealPlanRepository;
 
+    @Autowired
+    private MealRepository mealRepository;
 
-	// 필터 후 레시피 및 관련 정보 조회
-	public List<RecipeSimpleDTO> getFilteredRecipes(List<String> excludedIngredients) {
-	    List<Object[]> results = recipeRepository.findFilteredRecipes(excludedIngredients);
-		return results.stream().map(row -> new RecipeSimpleDTO(
-		        (Long) row[0],       // id
-		        (String) row[1],     // name
-		        ((Number) row[2]).intValue(),     // category
-		        (String) row[3],        // price (Integer로 변환)
-		        (String) row[4],     // keyword
-		        (String) row[5]      // smallCategory
-		    )).collect(Collectors.toList());
-	};
+    @Autowired
+    private LikesService likesService;
+
+    private ModelMapper mapper = new ModelMapper();
 
 
-	// 전체 레시피 조회
-	public List<RecipeMainDTO> getAllRecipes() {
-		List<RecipeMainDTO> recipes = recipeRepository.findRecipeMainDTOs();
-		return recipes;
-	}
+    // 필터 후 레시피 및 관련 정보 조회
+    public List<RecipeSimpleDTO> getFilteredRecipes(List<String> excludedIngredients) {
+        List<Object[]> results = recipeRepository.findFilteredRecipes(excludedIngredients);
+        return results.stream().map(row -> new RecipeSimpleDTO(
+                (Long) row[0],       // id
+                (String) row[1],     // name
+                ((Number) row[2]).intValue(),     // category
+                (String) row[3],        // price (Integer로 변환)
+                (String) row[4],     // keyword
+                (String) row[5]      // smallCategory
+        )).collect(Collectors.toList());
+    }
 
-	@Transactional
-	public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
-		// 1. Recipe 생성 및 저장
-		Recipe recipe = new Recipe();
-		recipe.setName(recipeDto.getName());
-		recipe.setLevel(recipeDto.getLevel());
-		recipe.setCookingTime(recipeDto.getCookingTime());
-		recipe.setServing(recipeDto.getServing());
-		recipe.setImage(recipeDto.getImage());
-		recipe.setCategory(recipeDto.getCategory());
+    ;
 
-		// Meal 설정: DB에서 Meal을 조회하여 할당
-	    Meal meal = mealRepository.findById(recipeDto.getMealId())
-	                  .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Meal입니다."));
-	    recipe.setMeal(meal);
 
-		// Member 설정
-		Member member = new Member();
-		member.setId(memberId);
-		recipe.setMember(member);
+    // 전체 레시피 조회
+    public List<RecipeMainDTO> getAllRecipes() {
+//		List<RecipeMainDTO> recipes = recipeRepository.findRecipeMainDTOs();
+        List<RecipeMainBaseDTO> bases = recipeRepository.findAllRecipeBases();
 
-		// 레시피 먼저 저장
-		recipe = recipeRepository.save(recipe);
+        Map<Long, List<String>> ingredientMap = toMultiMap(recipeRepository.findAllRecipeIngredients());
+        Map<Long, List<String>> hashtagMap = toMultiMap(recipeRepository.findAllRecipeHashTags());
+        Map<Long, Long> likeCountMap = toMap(recipeRepository.findAllLikeCount());
 
-		// 2. RecipeIngredient 저장 및 가격 계산
-		double totalPrice = 0;
-		for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
-			RecipeIngredient recipeIngredient = new RecipeIngredient();
-			Ingredient ingredient = ingredientRepository.findById(ingredientDto.getIngredientId()).orElseThrow(
-					() -> new IllegalArgumentException("존재하지 않는 재료 ID: " + ingredientDto.getIngredientId()));
+        return bases.stream()
+                .map(base -> new RecipeMainDTO(
+                        base.getId(),
+                        base.getName(),
+                        base.getLevel(),
+                        base.getCookingTime(),
+                        base.getMemberName(),
+                        base.getMemberImage(),
+                        base.getCategory(),
+                        base.getMealName(),
+                        base.getImage(),
+                        base.getIsDelete(),
+                        String.join(",", new LinkedHashSet<>(ingredientMap.getOrDefault(base.getId(), List.of()))),
+                        String.join(",", new LinkedHashSet<>(hashtagMap.getOrDefault(base.getId(), List.of()))),
+                        likeCountMap.getOrDefault(base.getId(), 0L)
+                ))
+                .toList();
+    }
 
-			double ingredientPrice = (double) ingredient.getStandardPrice();
-			double quantity = ingredientDto.getQuantity();
+    private Map<Long, List<String>> toMultiMap(List<Object[]> raw) {
+        return raw.stream()
+                .collect(Collectors.groupingBy(
+                        row -> (Long) row[0],
+                        Collectors.mapping(row -> (String) row[1], Collectors.toList())
+                ));
+    }
 
-			totalPrice += (double) (ingredientPrice * quantity);
+    private Map<Long, Long> toMap(List<Object[]> raw) {
+        return raw.stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],
+                        row -> (Long) row[1]
+                ));
+    }
 
-			recipeIngredient.setIngredient(ingredient);
-			recipeIngredient.setRecipe(recipe); // Recipe 저장된 객체 사용
-			recipeIngredient.setQuantity((double) quantity);
+    @Transactional
+    public void registerRecipe(RecipeDTO recipeDto, Long memberId) {
+        // 1. Recipe 생성 및 저장
+        Recipe recipe = new Recipe();
+        recipe.setName(recipeDto.getName());
+        recipe.setLevel(recipeDto.getLevel());
+        recipe.setCookingTime(recipeDto.getCookingTime());
+        recipe.setServing(recipeDto.getServing());
+        recipe.setImage(recipeDto.getImage());
+        recipe.setCategory(recipeDto.getCategory());
 
-			recipeIngredientRepository.save(recipeIngredient);
-		}
+        // Meal 설정: DB에서 Meal을 조회하여 할당
+        Meal meal = mealRepository.findById(recipeDto.getMealId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Meal입니다."));
+        recipe.setMeal(meal);
 
-		// 최종 price 설정 후 업데이트
-		int roundedTotalPrice = (int) Math.round(totalPrice);
-		recipe.setPrice(roundedTotalPrice);
-		recipeRepository.save(recipe); // 최종 가격 저장
+        // Member 설정
+        Member member = new Member();
+        member.setId(memberId);
+        recipe.setMember(member);
 
-		// 3. RecipeStep 저장
-		for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
-			RecipeStep recipeStep = new RecipeStep();
-			recipeStep.setRecipe(recipe);
-			recipeStep.setContent(stepDto.getContent());
-			recipeStep.setImage(stepDto.getImage());
-			recipeStepRepository.save(recipeStep);
-		}
+        // 레시피 먼저 저장
+        recipe = recipeRepository.save(recipe);
 
-		// 4. RecipeHashtag 저장
-		List<RecipeHashtagDTO> hashtagDTOs = recipeDto.getHashtagIds();
-		if (hashtagDTOs == null) {
-			hashtagDTOs = new ArrayList<>(); // null 방지
-		}
-		for (RecipeHashtagDTO hashtagDTO : hashtagDTOs) {
-			RecipeHashtag recipeHashtag = new RecipeHashtag();
-			Hashtag hashtag = new Hashtag();
-			hashtag.setId(hashtagDTO.getId()); // RecipeHashtagDTO에서 id 가져오기
-			recipeHashtag.setRecipe(recipe);
-			recipeHashtag.setHashtag(hashtag);
-			recipeHashtagRepository.save(recipeHashtag);
-		}
-	}
-	
-	public List<HashtagDTO> getAllHashtags() {
+        // 2. RecipeIngredient 저장 및 가격 계산
+        double totalPrice = 0;
+        for (RecipeIngredientDTO ingredientDto : recipeDto.getIngredients()) {
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            Ingredient ingredient = ingredientRepository.findById(ingredientDto.getIngredientId()).orElseThrow(
+                    () -> new IllegalArgumentException("존재하지 않는 재료 ID: " + ingredientDto.getIngredientId()));
+
+            double ingredientPrice = (double) ingredient.getStandardPrice();
+            double quantity = ingredientDto.getQuantity();
+
+            totalPrice += (double) (ingredientPrice * quantity);
+
+            recipeIngredient.setIngredient(ingredient);
+            recipeIngredient.setRecipe(recipe); // Recipe 저장된 객체 사용
+            recipeIngredient.setQuantity((double) quantity);
+
+            recipeIngredientRepository.save(recipeIngredient);
+        }
+
+        // 최종 price 설정 후 업데이트
+        int roundedTotalPrice = (int) Math.round(totalPrice);
+        recipe.setPrice(roundedTotalPrice);
+        recipeRepository.save(recipe); // 최종 가격 저장
+
+        // 3. RecipeStep 저장
+        for (RecipeStepDTO stepDto : recipeDto.getSteps()) {
+            RecipeStep recipeStep = new RecipeStep();
+            recipeStep.setRecipe(recipe);
+            recipeStep.setContent(stepDto.getContent());
+            recipeStep.setImage(stepDto.getImage());
+            recipeStepRepository.save(recipeStep);
+        }
+
+        // 4. RecipeHashtag 저장
+        List<RecipeHashtagDTO> hashtagDTOs = recipeDto.getHashtagIds();
+        if (hashtagDTOs == null) {
+            hashtagDTOs = new ArrayList<>(); // null 방지
+        }
+        for (RecipeHashtagDTO hashtagDTO : hashtagDTOs) {
+            RecipeHashtag recipeHashtag = new RecipeHashtag();
+            Hashtag hashtag = new Hashtag();
+            hashtag.setId(hashtagDTO.getId()); // RecipeHashtagDTO에서 id 가져오기
+            recipeHashtag.setRecipe(recipe);
+            recipeHashtag.setHashtag(hashtag);
+            recipeHashtagRepository.save(recipeHashtag);
+        }
+    }
+
+    public List<HashtagDTO> getAllHashtags() {
         List<Hashtag> hashtags = hashtagRepository.findAll();
         return hashtags.stream()
-                       .map(hashtag -> mapper.map(hashtag, HashtagDTO.class))
-                       .collect(Collectors.toList());
+                .map(hashtag -> mapper.map(hashtag, HashtagDTO.class))
+                .collect(Collectors.toList());
     }
-	
-	public List<MealDTO> getAllMeals() {
+
+    public List<MealDTO> getAllMeals() {
         List<Meal> meals = mealRepository.findAll();
         return meals.stream()
-                    .map(meal -> mapper.map(meal, MealDTO.class))
-                    .collect(Collectors.toList());
+                .map(meal -> mapper.map(meal, MealDTO.class))
+                .collect(Collectors.toList());
     }
 
-	public List<MyRecipeDTO> getMyRecipe(Long memberId) {
-		// 특정 memberId를 가진 레시피 목록 조회
-		List<Recipe> recipeList = recipeRepository.findByMemberId(memberId);
+    public List<MyRecipeDTO> getMyRecipe(Long memberId) {
+        // 특정 memberId를 가진 레시피 목록 조회
+        List<Recipe> recipeList = recipeRepository.findByMemberId(memberId);
 
-		// Recipe → MyRecipeDTO 변환
-		return recipeList.stream().map(
-				recipe -> new MyRecipeDTO(recipe.getId(), recipe.getName(), recipe.getImage(), recipe.getCategory()))
-				.collect(Collectors.toList());
-	}
+        // Recipe → MyRecipeDTO 변환
+        return recipeList.stream().map(
+                        recipe -> new MyRecipeDTO(recipe.getId(), recipe.getName(), recipe.getImage(), recipe.getCategory()))
+                .collect(Collectors.toList());
+    }
 
-	// Member의 나의 Recipe 삭제
-	public String deleteMyRecipe(Long memberId, Long recipeId) {
-		// 해당 recipeId로 레시피 조회 (삭제되지 않은 레시피만 조회)
-		Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeId)
-				.orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 이미 삭제된 상태입니다."));
+    // Member의 나의 Recipe 삭제
+    public String deleteMyRecipe(Long memberId, Long recipeId) {
+        // 해당 recipeId로 레시피 조회 (삭제되지 않은 레시피만 조회)
+        Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeId)
+                .orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 이미 삭제된 상태입니다."));
 
-		// 해당 레시피의 작성자와 로그인된 사용자가 일치하는지 확인
-		if (!recipe.getMember().getId().equals(memberId)) {
-			throw new RuntimeException("본인의 레시피만 삭제할 수 있습니다.");
-		}
+        // 해당 레시피의 작성자와 로그인된 사용자가 일치하는지 확인
+        if (!recipe.getMember().getId().equals(memberId)) {
+            throw new RuntimeException("본인의 레시피만 삭제할 수 있습니다.");
+        }
 
-		// 논리적 삭제 수행 (isDeleted = true 설정)
-		recipe.setDelete(true);
-		recipeRepository.save(recipe);
+        // 논리적 삭제 수행 (isDeleted = true 설정)
+        recipe.setDelete(true);
+        recipeRepository.save(recipe);
 
-		return "레시피 삭제 성공";
-	}
+        return "레시피 삭제 성공";
+    }
 
-	// Member의 나의 Recipe 수정
-	@Transactional
-	public String updateRecipe(Long memberId, RecipeDTO recipeDTO) {
-	    Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeDTO.getId())
-	            .orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 삭제된 레시피입니다."));
-	    if (!recipe.getMember().getId().equals(memberId)) {
-	        throw new RuntimeException("본인의 레시피만 수정할 수 있습니다.");
-	    }
-	    
-	    recipe.setName(recipeDTO.getName());
-	    recipe.setLevel(recipeDTO.getLevel());
-	    recipe.setCookingTime(recipeDTO.getCookingTime());
-	    recipe.setServing(recipeDTO.getServing());
-	    recipe.setImage(recipeDTO.getImage());
-	    recipe.setCategory(recipeDTO.getCategory());
-	    
-	    Meal meal = mealRepository.findById(recipeDTO.getMealId())
-	            .orElseThrow(() -> new RuntimeException("존재하지 않는 Meal입니다."));
-	    recipe.setMeal(meal);
-	    
-	    recipeRepository.save(recipe);
-	    
-	    recipeIngredientRepository.deleteByRecipeId(recipe.getId());
-	    recipeIngredientRepository.flush();
-	    double totalPrice = 0;
-	    for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
-	        Ingredient ingredient = ingredientRepository.findById(ingredientDTO.getIngredientId())
-	                .orElseThrow(() -> new RuntimeException("존재하지 않는 ingredientId입니다."));
-	        RecipeIngredient recipeIngredient = new RecipeIngredient();
-	        recipeIngredient.setIngredient(ingredient);
-	        recipeIngredient.setQuantity(ingredientDTO.getQuantity());
-	        recipeIngredient.setRecipe(recipe);
-	        totalPrice += ingredient.getStandardPrice() * ingredientDTO.getQuantity();
-	        recipeIngredientRepository.save(recipeIngredient);
-	    }
-	    int roundedTotalPrice = (int) Math.round(totalPrice);
-	    recipe.setPrice(roundedTotalPrice);
-	    recipeRepository.save(recipe);
-	    
-	    recipeStepRepository.deleteByRecipeId(recipe.getId());
-	    for (RecipeStepDTO stepDTO : recipeDTO.getSteps()) {
-	        RecipeStep step = new RecipeStep();
-	        step.setContent(stepDTO.getContent());
-	        step.setImage(stepDTO.getImage());
-	        step.setRecipe(recipe);
-	        recipeStepRepository.save(step);
-	    }
-	    
-	    recipeHashtagRepository.deleteByRecipeId(recipe.getId());
-	    List<RecipeHashtagDTO> hashtagDTOs = recipeDTO.getHashtagIds();
-		if (hashtagDTOs == null) {
-			hashtagDTOs = new ArrayList<>(); // null 방지
-		}
-		for (RecipeHashtagDTO hashtagDTO : hashtagDTOs) {
-			RecipeHashtag recipeHashtag = new RecipeHashtag();
-			Hashtag hashtag = new Hashtag();
-			hashtag.setId(hashtagDTO.getId()); // RecipeHashtagDTO에서 id 가져오기
-			recipeHashtag.setRecipe(recipe);
-			recipeHashtag.setHashtag(hashtag);
-			recipeHashtagRepository.save(recipeHashtag);
-		}
-	    
-	    return "레시피 수정 성공";
-	}
+    // Member의 나의 Recipe 수정
+    @Transactional
+    public String updateRecipe(Long memberId, RecipeDTO recipeDTO) {
+        Recipe recipe = recipeRepository.findByIdAndIsDeleteFalse(recipeDTO.getId())
+                .orElseThrow(() -> new RuntimeException("레시피를 찾을 수 없거나 삭제된 레시피입니다."));
+        if (!recipe.getMember().getId().equals(memberId)) {
+            throw new RuntimeException("본인의 레시피만 수정할 수 있습니다.");
+        }
 
-	@Transactional
-	public CommentDTO addComment(Long recipeId, Long memberId, String content) {
-		Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("Recipe not found"));
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+        recipe.setName(recipeDTO.getName());
+        recipe.setLevel(recipeDTO.getLevel());
+        recipe.setCookingTime(recipeDTO.getCookingTime());
+        recipe.setServing(recipeDTO.getServing());
+        recipe.setImage(recipeDTO.getImage());
+        recipe.setCategory(recipeDTO.getCategory());
 
-		Comment comment = Comment.builder().recipe(recipe).member(member).content(content).build();
+        Meal meal = mealRepository.findById(recipeDTO.getMealId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 Meal입니다."));
+        recipe.setMeal(meal);
 
-		commentRepository.save(comment);
+        recipeRepository.save(recipe);
 
-		return new CommentDTO(comment.getId(), comment.getContent(), comment.getMember().getName()); // memberName 추가
-	}
+        recipeIngredientRepository.deleteByRecipeId(recipe.getId());
+        recipeIngredientRepository.flush();
+        double totalPrice = 0;
+        for (RecipeIngredientDTO ingredientDTO : recipeDTO.getIngredients()) {
+            Ingredient ingredient = ingredientRepository.findById(ingredientDTO.getIngredientId())
+                    .orElseThrow(() -> new RuntimeException("존재하지 않는 ingredientId입니다."));
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            recipeIngredient.setIngredient(ingredient);
+            recipeIngredient.setQuantity(ingredientDTO.getQuantity());
+            recipeIngredient.setRecipe(recipe);
+            totalPrice += ingredient.getStandardPrice() * ingredientDTO.getQuantity();
+            recipeIngredientRepository.save(recipeIngredient);
+        }
+        int roundedTotalPrice = (int) Math.round(totalPrice);
+        recipe.setPrice(roundedTotalPrice);
+        recipeRepository.save(recipe);
 
-	@Transactional
-	public CommentDTO updateComment(Long commentId, CommentDTO commentDto) {
-		Comment comment = commentRepository.findById(commentId).orElse(null);
-		comment.setContent(commentDto.getContent());
-		commentRepository.save(comment);
+        recipeStepRepository.deleteByRecipeId(recipe.getId());
+        for (RecipeStepDTO stepDTO : recipeDTO.getSteps()) {
+            RecipeStep step = new RecipeStep();
+            step.setContent(stepDTO.getContent());
+            step.setImage(stepDTO.getImage());
+            step.setRecipe(recipe);
+            recipeStepRepository.save(step);
+        }
 
-		// CommentDTO로 변환하여 반환
-		return new CommentDTO(comment.getId(), comment.getContent(), comment.getMember().getName());
-	}
+        recipeHashtagRepository.deleteByRecipeId(recipe.getId());
+        List<RecipeHashtagDTO> hashtagDTOs = recipeDTO.getHashtagIds();
+        if (hashtagDTOs == null) {
+            hashtagDTOs = new ArrayList<>(); // null 방지
+        }
+        for (RecipeHashtagDTO hashtagDTO : hashtagDTOs) {
+            RecipeHashtag recipeHashtag = new RecipeHashtag();
+            Hashtag hashtag = new Hashtag();
+            hashtag.setId(hashtagDTO.getId()); // RecipeHashtagDTO에서 id 가져오기
+            recipeHashtag.setRecipe(recipe);
+            recipeHashtag.setHashtag(hashtag);
+            recipeHashtagRepository.save(recipeHashtag);
+        }
 
-	public void deleteComment(Long commentId) {
-		commentRepository.deleteById(commentId);
-	}
+        return "레시피 수정 성공";
+    }
 
-	@Transactional
-	public List<CommentDTO> getComments(Long recipeId) {
-		List<Comment> comments = commentRepository.findByRecipeId(recipeId);
+    @Transactional
+    public CommentDTO addComment(Long recipeId, Long memberId, String content) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("Recipe not found"));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-		return comments.stream().map(comment -> entityToDTO(comment)).collect(Collectors.toList());
-	}
+        Comment comment = Comment.builder().recipe(recipe).member(member).content(content).build();
 
-	// 카테고리별 레시피 조회
-	public List<RecipeDTO> getRecipesByCategory(List<String> categories) {
-	    // 선택된 여러 카테고리 중 하나라도 해당하는 레시피 조회
-	    List<Recipe> recipes = recipeRepository.findByCategoryIn(categories);
+        commentRepository.save(comment);
 
-	    // Recipe 엔티티를 RecipeDTO로 변환하여 반환
-	    return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
-	}
+        return new CommentDTO(comment.getId(), comment.getContent(), comment.getMember().getName()); // memberName 추가
+    }
 
-	@Transactional
-	public RecipeDetailDTO getRecipeDetail(Long recipeId, Long memberId) {
+    @Transactional
+    public CommentDTO updateComment(Long commentId, CommentDTO commentDto) {
+        Comment comment = commentRepository.findById(commentId).orElse(null);
+        comment.setContent(commentDto.getContent());
+        commentRepository.save(comment);
 
-		ModelMapper mapper = new ModelMapper();
-		Recipe recipe = recipeRepository.findById(recipeId)
-				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+        // CommentDTO로 변환하여 반환
+        return new CommentDTO(comment.getId(), comment.getContent(), comment.getMember().getName());
+    }
 
-		RecipeDetailDTO recipeDetailDTO = mapper.map(recipe, RecipeDetailDTO.class);
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 
-		recipeDetailDTO.setIngredients(recipe.getIngredients().stream()
-				.map(ri -> mapper.map(ri, RecipeIngredientDTO.class)).collect(Collectors.toList()));
+    @Transactional
+    public List<CommentDTO> getComments(Long recipeId) {
+        List<Comment> comments = commentRepository.findByRecipeId(recipeId);
 
-		recipeDetailDTO.setSteps(recipe.getSteps().stream().map(step -> mapper.map(step, RecipeStepDTO.class))
-				.collect(Collectors.toList()));
+        return comments.stream().map(comment -> entityToDTO(comment)).collect(Collectors.toList());
+    }
 
-		recipeDetailDTO.setHashtags(recipe.getHashtags().stream().map(ht -> mapper.map(ht, RecipeHashtagDTO.class))
-				.collect(Collectors.toList()));
-		// 좋아요 여부 체크 (좋아요를 했다면 true, 아니면 false)
-	    boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
-	    recipeDetailDTO.setLiked(liked);
+    // 카테고리별 레시피 조회
+    public List<RecipeDTO> getRecipesByCategory(List<String> categories) {
+        // 선택된 여러 카테고리 중 하나라도 해당하는 레시피 조회
+        List<Recipe> recipes = recipeRepository.findByCategoryIn(categories);
 
-		return recipeDetailDTO;
-	}
+        // Recipe 엔티티를 RecipeDTO로 변환하여 반환
+        return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
 
-	public RecipeDTO entityToDTO(Recipe recipe) {
-		ModelMapper mapper = new ModelMapper();
-		RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
-		return dto;
-	}
+    @Transactional
+    public RecipeDetailDTO getRecipeDetail(Long recipeId, Long memberId) {
 
-	public CommentDTO entityToDTO(Comment comment) {
-		ModelMapper mapper = new ModelMapper();
-		CommentDTO dto = mapper.map(comment, CommentDTO.class);
-		return dto;
-	}
+        ModelMapper mapper = new ModelMapper();
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 
-	@Transactional
-	public MealPlanDTO createOrUpdateMealPlan(Long memberId, Long recipeId, LocalDate date, String type) {
-		Optional<MealPlan> existingMealPlan = mealPlanRepository.findByMemberIdAndDateAndType(memberId, date, type);
-		existingMealPlan.ifPresent(mealPlanRepository::delete);
+        RecipeDetailDTO recipeDetailDTO = mapper.map(recipe, RecipeDetailDTO.class);
 
-		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-		Recipe recipe = recipeRepository.findById(recipeId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
+        recipeDetailDTO.setIngredients(recipe.getIngredients().stream()
+                .map(ri -> mapper.map(ri, RecipeIngredientDTO.class)).collect(Collectors.toList()));
 
-		MealPlan newMealPlan = MealPlan.builder().member(member).recipe(recipe).date(date).type(type).isCheck(false)
-				.build();
+        recipeDetailDTO.setSteps(recipe.getSteps().stream().map(step -> mapper.map(step, RecipeStepDTO.class))
+                .collect(Collectors.toList()));
 
-		MealPlan savedMealPlan = mealPlanRepository.save(newMealPlan);
+        recipeDetailDTO.setHashtags(recipe.getHashtags().stream().map(ht -> mapper.map(ht, RecipeHashtagDTO.class))
+                .collect(Collectors.toList()));
+        // 좋아요 여부 체크 (좋아요를 했다면 true, 아니면 false)
+        boolean liked = likesService.checkLikes(recipeId, memberId).isPresent();
+        recipeDetailDTO.setLiked(liked);
 
-		// Hibernate 프록시 초기화 방지
-		Long savedRecipeId = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getId() : null;
-		String savedRecipeName = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getName() : null;
+        return recipeDetailDTO;
+    }
 
-		return new MealPlanDTO(savedMealPlan.getId(), savedRecipeId, savedRecipeName, savedMealPlan.getDate(),
-				savedMealPlan.getType(), savedMealPlan.isCheck());
-	}
+    public RecipeDTO entityToDTO(Recipe recipe) {
+        ModelMapper mapper = new ModelMapper();
+        RecipeDTO dto = mapper.map(recipe, RecipeDTO.class);
+        return dto;
+    }
 
-	@Transactional
-	public List<RecipeDTO> getRecipesByBigCategory(List<String> bigCategories) {
-		// RecipeRepository의 메서드를 통해 해당 bigCategories에 해당하는 Recipe 목록 조회
-		List<Recipe> recipes = recipeRepository.findDistinctByIngredients_Ingredient_BigCategoryIn(bigCategories);
-		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
-	}
+    public CommentDTO entityToDTO(Comment comment) {
+        ModelMapper mapper = new ModelMapper();
+        CommentDTO dto = mapper.map(comment, CommentDTO.class);
+        return dto;
+    }
 
-	@Transactional
-	public List<RecipeDTO> getRecipesSorted(String sortType) {
-		List<Recipe> recipes;
+    @Transactional
+    public MealPlanDTO createOrUpdateMealPlan(Long memberId, Long recipeId, LocalDate date, String type) {
+        Optional<MealPlan> existingMealPlan = mealPlanRepository.findByMemberIdAndDateAndType(memberId, date, type);
+        existingMealPlan.ifPresent(mealPlanRepository::delete);
 
-		switch (sortType.toLowerCase()) {
-		case "recommend":
-			// 추천순: 좋아요 수 기준 내림차순
-			recipes = recipeRepository.findAllOrderByLikesCountDesc();
-			break;
-		case "latest":
-			// 최신순(등록일순): id가 순차적으로 생기기때문에 id내림차순으로 정렬함
-			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-			break;
-		case "difficulty":
-			// 난이도순: level 필드 기준 오름차순
-			recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
-			break;
-		case "cookingtime":
-			// 조리시간순: 커스텀 정렬 로직을 통해 cookingTime을 실제 분 단위로 변환하여 오름차순 정렬
-			recipes = recipeRepository.findAll();
-			recipes.sort(Comparator.comparingInt(r -> convertCookingTimeToMinutes(r.getCookingTime())));
-			break;
-		default:
-			// sortType이 올바르지 않으면 전체 조회
-			recipes = recipeRepository.findAll();
-			break;
-		}
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 레시피가 존재하지 않습니다."));
 
-		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
-	}
+        MealPlan newMealPlan = MealPlan.builder().member(member).recipe(recipe).date(date).type(type).isCheck(false)
+                .build();
 
-	// 조리시간순으로 정렬하기 위해 15분이내, 2시간이내 같이 저장되어있는 데이터를 int로 바꿔주는 함수
-	private int convertCookingTimeToMinutes(String cookingTime) {
-		if (cookingTime == null || cookingTime.isEmpty()) {
-			return Integer.MAX_VALUE; // 정렬 시 뒤로 배치
-		}
-		try {
-			if (cookingTime.contains("분 이내")) {
-				String numStr = cookingTime.replace("분 이내", "").trim();
-				return Integer.parseInt(numStr);
-			} else if (cookingTime.contains("시간 이내")) {
-				String numStr = cookingTime.replace("시간 이내", "").trim();
-				return Integer.parseInt(numStr) * 60;
-			} else {
-				return Integer.MAX_VALUE;
-			}
-		} catch (NumberFormatException e) {
-			return Integer.MAX_VALUE;
-		}
-	}
+        MealPlan savedMealPlan = mealPlanRepository.save(newMealPlan);
 
-	@Transactional
-	public List<RecipeDTO> searchRecipes(String keyword) {
-		List<Recipe> recipes = recipeRepository.searchRecipes(keyword);
-		return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
-	}
+        // Hibernate 프록시 초기화 방지
+        Long savedRecipeId = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getId() : null;
+        String savedRecipeName = savedMealPlan.getRecipe() != null ? savedMealPlan.getRecipe().getName() : null;
 
-	public List<TopRecipeResponseDTO> getTopRecipeByLikes(Long memberId) {
-		return  recipeRepository.findTopByLikes(memberId,PageRequest.of(0, 7));
-	}
+        return new MealPlanDTO(savedMealPlan.getId(), savedRecipeId, savedRecipeName, savedMealPlan.getDate(),
+                savedMealPlan.getType(), savedMealPlan.isCheck());
+    }
+
+    @Transactional
+    public List<RecipeDTO> getRecipesByBigCategory(List<String> bigCategories) {
+        // RecipeRepository의 메서드를 통해 해당 bigCategories에 해당하는 Recipe 목록 조회
+        List<Recipe> recipes = recipeRepository.findDistinctByIngredients_Ingredient_BigCategoryIn(bigCategories);
+        return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<RecipeDTO> getRecipesSorted(String sortType) {
+        List<Recipe> recipes;
+
+        switch (sortType.toLowerCase()) {
+            case "recommend":
+                // 추천순: 좋아요 수 기준 내림차순
+                recipes = recipeRepository.findAllOrderByLikesCountDesc();
+                break;
+            case "latest":
+                // 최신순(등록일순): id가 순차적으로 생기기때문에 id내림차순으로 정렬함
+                recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+                break;
+            case "difficulty":
+                // 난이도순: level 필드 기준 오름차순
+                recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
+                break;
+            case "cookingtime":
+                // 조리시간순: 커스텀 정렬 로직을 통해 cookingTime을 실제 분 단위로 변환하여 오름차순 정렬
+                recipes = recipeRepository.findAll();
+                recipes.sort(Comparator.comparingInt(r -> convertCookingTimeToMinutes(r.getCookingTime())));
+                break;
+            default:
+                // sortType이 올바르지 않으면 전체 조회
+                recipes = recipeRepository.findAll();
+                break;
+        }
+
+        return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
+    // 조리시간순으로 정렬하기 위해 15분이내, 2시간이내 같이 저장되어있는 데이터를 int로 바꿔주는 함수
+    private int convertCookingTimeToMinutes(String cookingTime) {
+        if (cookingTime == null || cookingTime.isEmpty()) {
+            return Integer.MAX_VALUE; // 정렬 시 뒤로 배치
+        }
+        try {
+            if (cookingTime.contains("분 이내")) {
+                String numStr = cookingTime.replace("분 이내", "").trim();
+                return Integer.parseInt(numStr);
+            } else if (cookingTime.contains("시간 이내")) {
+                String numStr = cookingTime.replace("시간 이내", "").trim();
+                return Integer.parseInt(numStr) * 60;
+            } else {
+                return Integer.MAX_VALUE;
+            }
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    @Transactional
+    public List<RecipeDTO> searchRecipes(String keyword) {
+        List<Recipe> recipes = recipeRepository.searchRecipes(keyword);
+        return recipes.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
+    public List<TopRecipeResponseDTO> getTopRecipeByLikes(Long memberId) {
+        return recipeRepository.findTopByLikes(memberId, PageRequest.of(0, 7));
+    }
 }
